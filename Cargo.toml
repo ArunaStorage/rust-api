@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 tonic = "0.4"
 prost = "0.7"
+prost-types = "0.7"
 
 [build-dependencies]
 tonic-build = "0.4"
