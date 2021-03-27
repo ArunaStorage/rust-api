@@ -1,5 +1,5 @@
 [package]
-name = "rust-api"
+name = "scienceobjectsdb_rust_client"
 version = "0.1.0"
 authors = ["Marius <mariusdieckmann90@gmail.com>"]
 edition = "2018"
