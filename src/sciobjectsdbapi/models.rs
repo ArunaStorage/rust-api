@@ -93,6 +93,25 @@ pub struct User {
     pub resource: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Metadata {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub labels: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag = "3")]
+    pub metadata: ::prost::alloc::string::String,
+    #[prost(oneof = "metadata::Schema", tags = "4")]
+    pub schema: ::core::option::Option<metadata::Schema>,
+}
+/// Nested message and enum types in `Metadata`.
+pub mod metadata {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Schema {
+        #[prost(string, tag = "4")]
+        SimpleSchema(::prost::alloc::string::String),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Empty {}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -136,6 +155,8 @@ pub struct ProjectEntry {
     pub project_name: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "5")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "6")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectHeritage {
@@ -148,6 +169,8 @@ pub struct ObjectHeritage {
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "9")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "11")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetObjectGroup {
@@ -175,6 +198,8 @@ pub struct DatasetObjectGroup {
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(enumeration = "Status", tag = "11")]
     pub status: i32,
+    #[prost(message, repeated, tag = "12")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetObjectEntry {
@@ -205,6 +230,8 @@ pub struct DatasetObjectEntry {
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
     #[prost(string, tag = "9")]
     pub upload_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "11")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetEntry {
@@ -230,6 +257,8 @@ pub struct DatasetEntry {
     pub description: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "9")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "10")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetVersionEntry {
@@ -266,6 +295,8 @@ pub struct DatasetVersionEntry {
     pub object_i_ds: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "12")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "13")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenList {

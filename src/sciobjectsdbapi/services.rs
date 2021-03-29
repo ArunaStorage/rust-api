@@ -14,6 +14,8 @@ pub struct CreateDatasetRequest {
     pub project_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "4")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "5")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetVersionList {
@@ -245,6 +247,8 @@ pub struct CreateObjectHeritageRequest {
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "4")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRequest {
@@ -261,6 +265,8 @@ pub struct CreateObjectGroupRequest {
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
     #[prost(string, tag = "6")]
     pub dataset_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "7")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
@@ -276,10 +282,12 @@ pub struct CreateObjectRequest {
     pub content_len: i64,
     #[prost(message, repeated, tag = "6")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    /// Additional metadata of the object
+    /// Additional metadata of the object#
     #[prost(map = "string, message", tag = "7")]
     pub additional_metadata:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
+    #[prost(message, repeated, tag = "8")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[doc = r" Generated client implementations."]
 pub mod dataset_objects_service_client {
@@ -403,6 +411,8 @@ pub struct CreateProjectRequest {
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectRequest {
