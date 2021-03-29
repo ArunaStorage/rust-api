@@ -1,4 +1,7 @@
+extern crate tonic_build;
+
 use std::fs;
+
 
 fn main() -> Result<(), Box<dyn std::error::Error>>{
     let mut protos:Vec<String> = Vec::new();
