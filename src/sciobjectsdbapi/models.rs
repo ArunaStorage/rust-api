@@ -96,8 +96,8 @@ pub struct User {
 pub struct Metadata {
     #[prost(string, tag = "1")]
     pub key: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "2")]
-    pub labels: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "2")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
     #[prost(string, tag = "3")]
     pub metadata: ::prost::alloc::string::String,
     #[prost(oneof = "metadata::Schema", tags = "4")]
