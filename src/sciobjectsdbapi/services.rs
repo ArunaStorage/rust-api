@@ -232,6 +232,386 @@ pub mod dataset_service_client {
         }
     }
 }
+#[doc = r" Generated server implementations."]
+pub mod dataset_service_server {
+    #![allow(unused_variables, dead_code, missing_docs)]
+    use tonic::codegen::*;
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetServiceServer."]
+    #[async_trait]
+    pub trait DatasetService: Send + Sync + 'static {
+        #[doc = " CreateNewDataset Creates a new dataset and associates it with a dataset"]
+        async fn create_new_dataset(
+            &self,
+            request: tonic::Request<super::CreateDatasetRequest>,
+        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status>;
+        #[doc = " Dataset Returns a specific dataset"]
+        async fn dataset(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status>;
+        #[doc = " Lists Versions of a dataset"]
+        async fn dataset_versions(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::DatasetVersionList>, tonic::Status>;
+        async fn dataset_object_groups(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status>;
+        #[doc = " Updates a field of a dataset"]
+        async fn update_dataset_field(
+            &self,
+            request: tonic::Request<super::super::models::UpdateFieldsRequest>,
+        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status>;
+        #[doc = " DeleteDataset Delete a dataset"]
+        async fn delete_dataset(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
+        #[doc = "ReleaseDatasetVersion Release a new dataset version"]
+        async fn release_dataset_version(
+            &self,
+            request: tonic::Request<super::ReleaseDatasetVersionRequest>,
+        ) -> Result<tonic::Response<super::super::models::DatasetVersionEntry>, tonic::Status>;
+        async fn dataset_version_object_groups(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status>;
+    }
+    #[doc = " Dataset management service"]
+    #[doc = " Manages all dataset related services"]
+    #[doc = " All data objects are associated with one data dataset"]
+    #[doc = " Dataset versions group these data objects, which makes them reusable"]
+    #[derive(Debug)]
+    pub struct DatasetServiceServer<T: DatasetService> {
+        inner: _Inner<T>,
+    }
+    struct _Inner<T>(Arc<T>, Option<tonic::Interceptor>);
+    impl<T: DatasetService> DatasetServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, None);
+            Self { inner }
+        }
+        pub fn with_interceptor(inner: T, interceptor: impl Into<tonic::Interceptor>) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, Some(interceptor.into()));
+            Self { inner }
+        }
+    }
+    impl<T, B> Service<http::Request<B>> for DatasetServiceServer<T>
+    where
+        T: DatasetService,
+        B: HttpBody + Send + Sync + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = Never;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/services.DatasetService/CreateNewDataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateNewDatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::CreateDatasetRequest>
+                        for CreateNewDatasetSvc<T>
+                    {
+                        type Response = super::super::models::DatasetEntry;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateDatasetRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_new_dataset(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateNewDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/Dataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct DatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id> for DatasetSvc<T> {
+                        type Response = super::super::models::DatasetEntry;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).dataset(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/DatasetVersions" => {
+                    #[allow(non_camel_case_types)]
+                    struct DatasetVersionsSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for DatasetVersionsSvc<T>
+                    {
+                        type Response = super::DatasetVersionList;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).dataset_versions(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DatasetVersionsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/DatasetObjectGroups" => {
+                    #[allow(non_camel_case_types)]
+                    struct DatasetObjectGroupsSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for DatasetObjectGroupsSvc<T>
+                    {
+                        type Response = super::ObjectGroupList;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).dataset_object_groups(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DatasetObjectGroupsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/UpdateDatasetField" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateDatasetFieldSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService>
+                        tonic::server::UnaryService<super::super::models::UpdateFieldsRequest>
+                        for UpdateDatasetFieldSvc<T>
+                    {
+                        type Response = super::super::models::DatasetEntry;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::UpdateFieldsRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).update_dataset_field(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = UpdateDatasetFieldSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/DeleteDataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteDatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for DeleteDatasetSvc<T>
+                    {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).delete_dataset(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DeleteDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/ReleaseDatasetVersion" => {
+                    #[allow(non_camel_case_types)]
+                    struct ReleaseDatasetVersionSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService>
+                        tonic::server::UnaryService<super::ReleaseDatasetVersionRequest>
+                        for ReleaseDatasetVersionSvc<T>
+                    {
+                        type Response = super::super::models::DatasetVersionEntry;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::ReleaseDatasetVersionRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).release_dataset_version(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = ReleaseDatasetVersionSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/DatasetVersionObjectGroups" => {
+                    #[allow(non_camel_case_types)]
+                    struct DatasetVersionObjectGroupsSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for DatasetVersionObjectGroupsSvc<T>
+                    {
+                        type Response = super::ObjectGroupList;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).dataset_version_object_groups(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DatasetVersionObjectGroupsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(tonic::body::BoxBody::empty())
+                        .unwrap())
+                }),
+            }
+        }
+    }
+    impl<T: DatasetService> Clone for DatasetServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self { inner }
+        }
+    }
+    impl<T: DatasetService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(self.0.clone(), self.1.clone())
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: DatasetService> tonic::transport::NamedService for DatasetServiceServer<T> {
+        const NAME: &'static str = "services.DatasetService";
+    }
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLinkResponse {
     #[prost(string, tag = "1")]
@@ -405,6 +785,232 @@ pub mod dataset_objects_service_client {
         }
     }
 }
+#[doc = r" Generated server implementations."]
+pub mod dataset_objects_service_server {
+    #![allow(unused_variables, dead_code, missing_docs)]
+    use tonic::codegen::*;
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetObjectsServiceServer."]
+    #[async_trait]
+    pub trait DatasetObjectsService: Send + Sync + 'static {
+        #[doc = "CreateObjectHeritage Creates a new object heritage"]
+        async fn create_object_heritage(
+            &self,
+            request: tonic::Request<super::CreateObjectHeritageRequest>,
+        ) -> Result<tonic::Response<super::super::models::ObjectHeritage>, tonic::Status>;
+        #[doc = "CreateObjectGroup Creates a new object group"]
+        async fn create_object_group(
+            &self,
+            request: tonic::Request<super::CreateObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::super::models::DatasetObjectGroup>, tonic::Status>;
+        async fn get_object_group(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::DatasetObjectGroup>, tonic::Status>;
+        #[doc = "FinishObjectUpload Finishes the upload process for an object"]
+        async fn finish_object_upload(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
+    }
+    #[derive(Debug)]
+    pub struct DatasetObjectsServiceServer<T: DatasetObjectsService> {
+        inner: _Inner<T>,
+    }
+    struct _Inner<T>(Arc<T>, Option<tonic::Interceptor>);
+    impl<T: DatasetObjectsService> DatasetObjectsServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, None);
+            Self { inner }
+        }
+        pub fn with_interceptor(inner: T, interceptor: impl Into<tonic::Interceptor>) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, Some(interceptor.into()));
+            Self { inner }
+        }
+    }
+    impl<T, B> Service<http::Request<B>> for DatasetObjectsServiceServer<T>
+    where
+        T: DatasetObjectsService,
+        B: HttpBody + Send + Sync + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = Never;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/services.DatasetObjectsService/CreateObjectHeritage" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateObjectHeritageSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::CreateObjectHeritageRequest>
+                        for CreateObjectHeritageSvc<T>
+                    {
+                        type Response = super::super::models::ObjectHeritage;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateObjectHeritageRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_object_heritage(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateObjectHeritageSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetObjectsService/CreateObjectGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::CreateObjectGroupRequest>
+                        for CreateObjectGroupSvc<T>
+                    {
+                        type Response = super::super::models::DatasetObjectGroup;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateObjectGroupRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_object_group(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateObjectGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetObjectsService/GetObjectGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::super::models::Id>
+                        for GetObjectGroupSvc<T>
+                    {
+                        type Response = super::super::models::DatasetObjectGroup;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_object_group(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = GetObjectGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetObjectsService/FinishObjectUpload" => {
+                    #[allow(non_camel_case_types)]
+                    struct FinishObjectUploadSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::super::models::Id>
+                        for FinishObjectUploadSvc<T>
+                    {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).finish_object_upload(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = FinishObjectUploadSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(tonic::body::BoxBody::empty())
+                        .unwrap())
+                }),
+            }
+        }
+    }
+    impl<T: DatasetObjectsService> Clone for DatasetObjectsServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self { inner }
+        }
+    }
+    impl<T: DatasetObjectsService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(self.0.clone(), self.1.clone())
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: DatasetObjectsService> tonic::transport::NamedService for DatasetObjectsServiceServer<T> {
+        const NAME: &'static str = "services.DatasetObjectsService";
+    }
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectRequest {
     #[prost(string, tag = "1")]
@@ -560,6 +1166,266 @@ pub mod project_api_client {
         }
     }
 }
+#[doc = r" Generated server implementations."]
+pub mod project_api_server {
+    #![allow(unused_variables, dead_code, missing_docs)]
+    use tonic::codegen::*;
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with ProjectApiServer."]
+    #[async_trait]
+    pub trait ProjectApi: Send + Sync + 'static {
+        #[doc = "CreateProject creates a new projects"]
+        async fn create_project(
+            &self,
+            request: tonic::Request<super::CreateProjectRequest>,
+        ) -> Result<tonic::Response<super::super::models::ProjectEntry>, tonic::Status>;
+        #[doc = "AddUserToProject Adds a new user to a given project"]
+        async fn add_user_to_project(
+            &self,
+            request: tonic::Request<super::AddUserToProjectRequest>,
+        ) -> Result<tonic::Response<super::super::models::ProjectEntry>, tonic::Status>;
+        #[doc = "GetProjectDatasets Returns all datasets that belong to a certain project"]
+        async fn get_project_datasets(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::DatasetList>, tonic::Status>;
+        #[doc = "GetUserProjects Returns all projects that a specified user has access to"]
+        async fn get_user_projects(
+            &self,
+            request: tonic::Request<super::super::models::Empty>,
+        ) -> Result<tonic::Response<super::ProjectEntryList>, tonic::Status>;
+        #[doc = "DeleteProject Deletes a specific project"]
+        #[doc = "Will also delete all associated resources (Datasets/Objects/etc...) both from objects storage and the database"]
+        async fn delete_project(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
+    }
+    #[derive(Debug)]
+    pub struct ProjectApiServer<T: ProjectApi> {
+        inner: _Inner<T>,
+    }
+    struct _Inner<T>(Arc<T>, Option<tonic::Interceptor>);
+    impl<T: ProjectApi> ProjectApiServer<T> {
+        pub fn new(inner: T) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, None);
+            Self { inner }
+        }
+        pub fn with_interceptor(inner: T, interceptor: impl Into<tonic::Interceptor>) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, Some(interceptor.into()));
+            Self { inner }
+        }
+    }
+    impl<T, B> Service<http::Request<B>> for ProjectApiServer<T>
+    where
+        T: ProjectApi,
+        B: HttpBody + Send + Sync + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = Never;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/services.ProjectAPI/CreateProject" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateProjectSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::CreateProjectRequest>
+                        for CreateProjectSvc<T>
+                    {
+                        type Response = super::super::models::ProjectEntry;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateProjectRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_project(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateProjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ProjectAPI/AddUserToProject" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddUserToProjectSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::AddUserToProjectRequest>
+                        for AddUserToProjectSvc<T>
+                    {
+                        type Response = super::super::models::ProjectEntry;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::AddUserToProjectRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).add_user_to_project(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = AddUserToProjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ProjectAPI/GetProjectDatasets" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetProjectDatasetsSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Id>
+                        for GetProjectDatasetsSvc<T>
+                    {
+                        type Response = super::DatasetList;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_project_datasets(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = GetProjectDatasetsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ProjectAPI/GetUserProjects" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetUserProjectsSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Empty>
+                        for GetUserProjectsSvc<T>
+                    {
+                        type Response = super::ProjectEntryList;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Empty>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_user_projects(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = GetUserProjectsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ProjectAPI/DeleteProject" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteProjectSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Id> for DeleteProjectSvc<T> {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).delete_project(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DeleteProjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(tonic::body::BoxBody::empty())
+                        .unwrap())
+                }),
+            }
+        }
+    }
+    impl<T: ProjectApi> Clone for ProjectApiServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self { inner }
+        }
+    }
+    impl<T: ProjectApi> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(self.0.clone(), self.1.clone())
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: ProjectApi> tonic::transport::NamedService for ProjectApiServer<T> {
+        const NAME: &'static str = "services.ProjectAPI";
+    }
+}
 #[doc = r" Generated client implementations."]
 pub mod object_load_client {
     #![allow(unused_variables, dead_code, missing_docs)]
@@ -635,5 +1501,150 @@ pub mod object_load_client {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             write!(f, "ObjectLoadClient {{ ... }}")
         }
+    }
+}
+#[doc = r" Generated server implementations."]
+pub mod object_load_server {
+    #![allow(unused_variables, dead_code, missing_docs)]
+    use tonic::codegen::*;
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with ObjectLoadServer."]
+    #[async_trait]
+    pub trait ObjectLoad: Send + Sync + 'static {
+        async fn create_upload_link(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status>;
+        async fn create_download_link(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status>;
+    }
+    #[derive(Debug)]
+    pub struct ObjectLoadServer<T: ObjectLoad> {
+        inner: _Inner<T>,
+    }
+    struct _Inner<T>(Arc<T>, Option<tonic::Interceptor>);
+    impl<T: ObjectLoad> ObjectLoadServer<T> {
+        pub fn new(inner: T) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, None);
+            Self { inner }
+        }
+        pub fn with_interceptor(inner: T, interceptor: impl Into<tonic::Interceptor>) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner, Some(interceptor.into()));
+            Self { inner }
+        }
+    }
+    impl<T, B> Service<http::Request<B>> for ObjectLoadServer<T>
+    where
+        T: ObjectLoad,
+        B: HttpBody + Send + Sync + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = Never;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/services.ObjectLoad/CreateUploadLink" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateUploadLinkSvc<T: ObjectLoad>(pub Arc<T>);
+                    impl<T: ObjectLoad> tonic::server::UnaryService<super::super::models::Id>
+                        for CreateUploadLinkSvc<T>
+                    {
+                        type Response = super::CreateUploadLinkResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_upload_link(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateUploadLinkSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ObjectLoad/CreateDownloadLink" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateDownloadLinkSvc<T: ObjectLoad>(pub Arc<T>);
+                    impl<T: ObjectLoad> tonic::server::UnaryService<super::super::models::Id>
+                        for CreateDownloadLinkSvc<T>
+                    {
+                        type Response = super::CreateUploadLinkResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_download_link(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateDownloadLinkSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(tonic::body::BoxBody::empty())
+                        .unwrap())
+                }),
+            }
+        }
+    }
+    impl<T: ObjectLoad> Clone for ObjectLoadServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self { inner }
+        }
+    }
+    impl<T: ObjectLoad> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(self.0.clone(), self.1.clone())
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: ObjectLoad> tonic::transport::NamedService for ObjectLoadServer<T> {
+        const NAME: &'static str = "services.ObjectLoad";
     }
 }
