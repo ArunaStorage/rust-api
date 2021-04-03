@@ -1,14 +1,12 @@
-// These messages are used inside the DatasetAPI
-
 /// Dataset related Models
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDatasetRequest {
     /// Name of the dataset
     #[prost(string, tag = "1")]
-    pub dataset_name: ::prost::alloc::string::String,
+    pub name: ::prost::alloc::string::String,
     ///Datatype of the dataset, e.g. json, gbff, fasta
     #[prost(string, tag = "2")]
-    pub datatype: ::prost::alloc::string::String,
+    pub r#type: ::prost::alloc::string::String,
     ///ProjectID of the project the dataset is associated with
     #[prost(string, tag = "3")]
     pub project_id: ::prost::alloc::string::String,
@@ -20,7 +18,7 @@ pub struct CreateDatasetRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetVersionList {
     #[prost(message, repeated, tag = "1")]
-    pub dataset_versions: ::prost::alloc::vec::Vec<super::models::DatasetVersionEntry>,
+    pub dataset_version: ::prost::alloc::vec::Vec<super::models::DatasetVersion>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReleaseDatasetVersionRequest {
@@ -30,27 +28,17 @@ pub struct ReleaseDatasetVersionRequest {
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
     pub version: ::core::option::Option<super::models::Version>,
-    /// Additional metadata for the dataset version
-    #[prost(map = "string, message", tag = "4")]
-    pub additional_metadata:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
-    /// Message reference for the metadata
-    #[prost(map = "string, string", tag = "5")]
-    pub additional_metadata_message_ref:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
-    /// Message reference for the metadata of the objects associated with this DatasetVersion
-    #[prost(map = "string, string", tag = "6")]
-    pub additional_object_metadata_message_ref:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
-    #[prost(string, repeated, tag = "7")]
-    pub object_group_i_ds: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(message, repeated, tag = "8")]
+    #[prost(string, repeated, tag = "4")]
+    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "5")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "6")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupList {
     #[prost(message, repeated, tag = "1")]
-    pub object_groups: ::prost::alloc::vec::Vec<super::models::DatasetObjectGroup>,
+    pub object_groups: ::prost::alloc::vec::Vec<super::models::ObjectGroup>,
 }
 #[doc = r" Generated client implementations."]
 pub mod dataset_service_client {
@@ -93,7 +81,7 @@ pub mod dataset_service_client {
         pub async fn create_new_dataset(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateDatasetRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::Dataset>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -109,7 +97,7 @@ pub mod dataset_service_client {
         pub async fn dataset(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::Dataset>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -156,7 +144,7 @@ pub mod dataset_service_client {
         pub async fn update_dataset_field(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::UpdateFieldsRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::Dataset>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -188,8 +176,7 @@ pub mod dataset_service_client {
         pub async fn release_dataset_version(
             &mut self,
             request: impl tonic::IntoRequest<super::ReleaseDatasetVersionRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetVersionEntry>, tonic::Status>
-        {
+        ) -> Result<tonic::Response<super::super::models::DatasetVersion>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -243,12 +230,12 @@ pub mod dataset_service_server {
         async fn create_new_dataset(
             &self,
             request: tonic::Request<super::CreateDatasetRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::Dataset>, tonic::Status>;
         #[doc = " Dataset Returns a specific dataset"]
         async fn dataset(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::Dataset>, tonic::Status>;
         #[doc = " Lists Versions of a dataset"]
         async fn dataset_versions(
             &self,
@@ -262,7 +249,7 @@ pub mod dataset_service_server {
         async fn update_dataset_field(
             &self,
             request: tonic::Request<super::super::models::UpdateFieldsRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetEntry>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::Dataset>, tonic::Status>;
         #[doc = " DeleteDataset Delete a dataset"]
         async fn delete_dataset(
             &self,
@@ -272,7 +259,7 @@ pub mod dataset_service_server {
         async fn release_dataset_version(
             &self,
             request: tonic::Request<super::ReleaseDatasetVersionRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetVersionEntry>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::DatasetVersion>, tonic::Status>;
         async fn dataset_version_object_groups(
             &self,
             request: tonic::Request<super::super::models::Id>,
@@ -320,7 +307,7 @@ pub mod dataset_service_server {
                     impl<T: DatasetService> tonic::server::UnaryService<super::CreateDatasetRequest>
                         for CreateNewDatasetSvc<T>
                     {
-                        type Response = super::super::models::DatasetEntry;
+                        type Response = super::super::models::Dataset;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -351,7 +338,7 @@ pub mod dataset_service_server {
                     #[allow(non_camel_case_types)]
                     struct DatasetSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id> for DatasetSvc<T> {
-                        type Response = super::super::models::DatasetEntry;
+                        type Response = super::super::models::Dataset;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -451,7 +438,7 @@ pub mod dataset_service_server {
                         tonic::server::UnaryService<super::super::models::UpdateFieldsRequest>
                         for UpdateDatasetFieldSvc<T>
                     {
-                        type Response = super::super::models::DatasetEntry;
+                        type Response = super::super::models::Dataset;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -518,7 +505,7 @@ pub mod dataset_service_server {
                         tonic::server::UnaryService<super::ReleaseDatasetVersionRequest>
                         for ReleaseDatasetVersionSvc<T>
                     {
-                        type Response = super::super::models::DatasetVersionEntry;
+                        type Response = super::super::models::DatasetVersion;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -613,11 +600,11 @@ pub mod dataset_service_server {
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateUploadLinkResponse {
+pub struct CreateLinkResponse {
     #[prost(string, tag = "1")]
     pub upload_link: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
-    pub object: ::core::option::Option<super::models::DatasetObjectEntry>,
+    pub object: ::core::option::Option<super::models::Object>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectHeritageRequest {
@@ -635,17 +622,14 @@ pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
     pub object_heritage_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
+    #[prost(message, repeated, tag = "4")]
     pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    #[prost(map = "string, message", tag = "4")]
-    pub additional_metadata:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
     #[prost(message, repeated, tag = "5")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    #[prost(string, tag = "6")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "7")]
+    #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -654,20 +638,16 @@ pub struct CreateObjectRequest {
     pub filename: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub filetype: ::prost::alloc::string::String,
-    /// Origin: Source of the dataset
-    #[prost(message, optional, tag = "4")]
-    pub origin: ::core::option::Option<super::models::Origin>,
+    #[prost(message, repeated, tag = "3")]
+    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "4")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
     /// ContentLen: Lenght of the stored dataset
     #[prost(int64, tag = "5")]
     pub content_len: i64,
-    #[prost(message, repeated, tag = "6")]
-    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    /// Additional metadata of the object#
-    #[prost(map = "string, message", tag = "7")]
-    pub additional_metadata:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
-    #[prost(message, repeated, tag = "8")]
-    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
+    /// Origin: Source of the dataset
+    #[prost(message, optional, tag = "6")]
+    pub origin: ::core::option::Option<super::models::Origin>,
 }
 #[doc = r" Generated client implementations."]
 pub mod dataset_objects_service_client {
@@ -723,8 +703,7 @@ pub mod dataset_objects_service_client {
         pub async fn create_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetObjectGroup>, tonic::Status>
-        {
+        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -740,8 +719,7 @@ pub mod dataset_objects_service_client {
         pub async fn get_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::DatasetObjectGroup>, tonic::Status>
-        {
+        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -801,11 +779,11 @@ pub mod dataset_objects_service_server {
         async fn create_object_group(
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::super::models::DatasetObjectGroup>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status>;
         async fn get_object_group(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::DatasetObjectGroup>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status>;
         #[doc = "FinishObjectUpload Finishes the upload process for an object"]
         async fn finish_object_upload(
             &self,
@@ -885,7 +863,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::CreateObjectGroupRequest>
                         for CreateObjectGroupSvc<T>
                     {
-                        type Response = super::super::models::DatasetObjectGroup;
+                        type Response = super::super::models::ObjectGroup;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -919,7 +897,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::super::models::Id>
                         for GetObjectGroupSvc<T>
                     {
-                        type Response = super::super::models::DatasetObjectGroup;
+                        type Response = super::super::models::ObjectGroup;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1030,14 +1008,14 @@ pub struct AddUserToProjectRequest {
     pub project_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectEntryList {
+pub struct ProjectList {
     #[prost(message, repeated, tag = "1")]
-    pub projects: ::prost::alloc::vec::Vec<super::models::ProjectEntry>,
+    pub projects: ::prost::alloc::vec::Vec<super::models::Project>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetList {
     #[prost(message, repeated, tag = "1")]
-    pub datasets: ::prost::alloc::vec::Vec<super::models::DatasetEntry>,
+    pub dataset: ::prost::alloc::vec::Vec<super::models::Dataset>,
     #[prost(message, repeated, tag = "2")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
 }
@@ -1078,7 +1056,7 @@ pub mod project_api_client {
         pub async fn create_project(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateProjectRequest>,
-        ) -> Result<tonic::Response<super::super::models::ProjectEntry>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1093,7 +1071,7 @@ pub mod project_api_client {
         pub async fn add_user_to_project(
             &mut self,
             request: impl tonic::IntoRequest<super::AddUserToProjectRequest>,
-        ) -> Result<tonic::Response<super::super::models::ProjectEntry>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1125,7 +1103,7 @@ pub mod project_api_client {
         pub async fn get_user_projects(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Empty>,
-        ) -> Result<tonic::Response<super::ProjectEntryList>, tonic::Status> {
+        ) -> Result<tonic::Response<super::ProjectList>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1177,12 +1155,12 @@ pub mod project_api_server {
         async fn create_project(
             &self,
             request: tonic::Request<super::CreateProjectRequest>,
-        ) -> Result<tonic::Response<super::super::models::ProjectEntry>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status>;
         #[doc = "AddUserToProject Adds a new user to a given project"]
         async fn add_user_to_project(
             &self,
             request: tonic::Request<super::AddUserToProjectRequest>,
-        ) -> Result<tonic::Response<super::super::models::ProjectEntry>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status>;
         #[doc = "GetProjectDatasets Returns all datasets that belong to a certain project"]
         async fn get_project_datasets(
             &self,
@@ -1192,7 +1170,7 @@ pub mod project_api_server {
         async fn get_user_projects(
             &self,
             request: tonic::Request<super::super::models::Empty>,
-        ) -> Result<tonic::Response<super::ProjectEntryList>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ProjectList>, tonic::Status>;
         #[doc = "DeleteProject Deletes a specific project"]
         #[doc = "Will also delete all associated resources (Datasets/Objects/etc...) both from objects storage and the database"]
         async fn delete_project(
@@ -1238,7 +1216,7 @@ pub mod project_api_server {
                     impl<T: ProjectApi> tonic::server::UnaryService<super::CreateProjectRequest>
                         for CreateProjectSvc<T>
                     {
-                        type Response = super::super::models::ProjectEntry;
+                        type Response = super::super::models::Project;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1271,7 +1249,7 @@ pub mod project_api_server {
                     impl<T: ProjectApi> tonic::server::UnaryService<super::AddUserToProjectRequest>
                         for AddUserToProjectSvc<T>
                     {
-                        type Response = super::super::models::ProjectEntry;
+                        type Response = super::super::models::Project;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1337,7 +1315,7 @@ pub mod project_api_server {
                     impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Empty>
                         for GetUserProjectsSvc<T>
                     {
-                        type Response = super::ProjectEntryList;
+                        type Response = super::ProjectList;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1462,7 +1440,7 @@ pub mod object_load_client {
         pub async fn create_upload_link(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status> {
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1477,7 +1455,7 @@ pub mod object_load_client {
         pub async fn create_download_link(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status> {
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1513,11 +1491,11 @@ pub mod object_load_server {
         async fn create_upload_link(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status>;
         async fn create_download_link(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct ObjectLoadServer<T: ObjectLoad> {
@@ -1557,7 +1535,7 @@ pub mod object_load_server {
                     impl<T: ObjectLoad> tonic::server::UnaryService<super::super::models::Id>
                         for CreateUploadLinkSvc<T>
                     {
-                        type Response = super::CreateUploadLinkResponse;
+                        type Response = super::CreateLinkResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1590,7 +1568,7 @@ pub mod object_load_server {
                     impl<T: ObjectLoad> tonic::server::UnaryService<super::super::models::Id>
                         for CreateDownloadLinkSvc<T>
                     {
-                        type Response = super::CreateUploadLinkResponse;
+                        type Response = super::CreateLinkResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,

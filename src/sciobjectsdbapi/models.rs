@@ -1,6 +1,21 @@
-/// A location in S3
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Location {
+    #[prost(oneof = "location::Location", tags = "1, 2")]
+    pub location: ::core::option::Option<location::Location>,
+}
+/// Nested message and enum types in `Location`.
+pub mod location {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Location {
+        #[prost(message, tag = "1")]
+        ObjectLocation(super::ObjectLocation),
+        #[prost(message, tag = "2")]
+        ObjectIndexLocation(super::IndexedObjectLocation),
+    }
+}
+/// A location in S3
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectLocation {
     #[prost(string, tag = "1")]
     pub bucket: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -8,13 +23,22 @@ pub struct Location {
     /// Object storage endpoint
     #[prost(string, tag = "3")]
     pub url: ::prost::alloc::string::String,
-    #[prost(enumeration = "LocationType", tag = "4")]
-    pub location_type: i32,
-    #[prost(message, optional, tag = "5")]
-    pub index_location: ::core::option::Option<IndexLocation>,
+}
+/// A location in S3
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IndexedObjectLocation {
+    #[prost(string, tag = "1")]
+    pub bucket: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub key: ::prost::alloc::string::String,
+    /// Object storage endpoint
+    #[prost(string, tag = "3")]
+    pub url: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "4")]
+    pub index: ::core::option::Option<Index>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct IndexLocation {
+pub struct Index {
     #[prost(int64, tag = "1")]
     pub start_byte: i64,
     #[prost(int64, tag = "2")]
@@ -24,10 +48,10 @@ pub struct IndexLocation {
 pub struct Origin {
     #[prost(string, tag = "1")]
     pub link: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub object_storage_locatio: ::core::option::Option<Location>,
-    #[prost(enumeration = "origin::OriginTypeEnum", tag = "4")]
+    #[prost(enumeration = "origin::OriginTypeEnum", tag = "3")]
     pub origin_type: i32,
+    #[prost(oneof = "origin::Location", tags = "2")]
+    pub location: ::core::option::Option<origin::Location>,
 }
 /// Nested message and enum types in `Origin`.
 pub mod origin {
@@ -36,6 +60,11 @@ pub mod origin {
     pub enum OriginTypeEnum {
         ObjectStorage = 0,
         OriginLink = 1,
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Location {
+        #[prost(message, tag = "2")]
+        ObjectLocation(super::ObjectLocation),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -80,7 +109,7 @@ pub struct UpdateFieldsRequest {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(map = "string, string", tag = "2")]
-    pub update_string_fields:
+    pub updated_string_fields:
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -98,8 +127,8 @@ pub struct Metadata {
     pub key: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(string, tag = "3")]
-    pub metadata: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "3")]
+    pub metadata: ::prost::alloc::vec::Vec<u8>,
     #[prost(oneof = "metadata::Schema", tags = "4")]
     pub schema: ::core::option::Option<metadata::Schema>,
 }
@@ -131,32 +160,26 @@ pub enum Right {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Resource {
-    Project = 0,
-    Dataset = 1,
-    DatasetVersion = 2,
-    DatasetObject = 3,
-    DatasetObjectGroupResource = 4,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum LocationType {
-    Object = 0,
-    Index = 1,
+    ProjectResource = 0,
+    DatasetResource = 1,
+    DatasetVersionResource = 2,
+    ObjectResource = 3,
+    ObjectGroupResource = 4,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectEntry {
+pub struct Project {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub users: ::prost::alloc::vec::Vec<User>,
-    #[prost(string, tag = "4")]
-    pub project_name: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "5")]
+    #[prost(message, repeated, tag = "4")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "6")]
+    #[prost(message, repeated, tag = "5")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    #[prost(message, repeated, tag = "6")]
+    pub users: ::prost::alloc::vec::Vec<User>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectHeritage {
@@ -167,42 +190,43 @@ pub struct ObjectHeritage {
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "9")]
+    #[prost(string, tag = "4")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "5")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "11")]
+    #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DatasetObjectGroup {
+pub struct ObjectGroup {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
-    pub version: ::core::option::Option<Version>,
-    #[prost(int64, tag = "4")]
-    pub initialized_objects: i64,
-    #[prost(int64, tag = "5")]
-    pub uploaded_objects: i64,
-    #[prost(message, repeated, tag = "6")]
-    pub objects: ::prost::alloc::vec::Vec<DatasetObjectEntry>,
-    /// Additional metadata of the object
-    #[prost(map = "string, message", tag = "7")]
-    pub additional_metadata:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
-    #[prost(message, repeated, tag = "8")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(string, tag = "9")]
-    pub object_heritage_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "10")]
+    #[prost(string, tag = "4")]
     pub dataset_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "Status", tag = "11")]
+    #[prost(message, optional, tag = "5")]
+    pub version: ::core::option::Option<Version>,
+    #[prost(enumeration = "Status", tag = "6")]
     pub status: i32,
-    #[prost(message, repeated, tag = "12")]
+    /// When the data object was created
+    #[prost(message, optional, tag = "8")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, repeated, tag = "9")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "10")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    #[prost(message, repeated, tag = "11")]
+    pub objects: ::prost::alloc::vec::Vec<Object>,
+    #[prost(int64, tag = "12")]
+    pub initialized_objects: i64,
+    #[prost(int64, tag = "13")]
+    pub uploaded_objects: i64,
+    #[prost(string, tag = "14")]
+    pub object_heritage_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DatasetObjectEntry {
+pub struct Object {
     ///ID of the entity
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
@@ -212,91 +236,77 @@ pub struct DatasetObjectEntry {
     /// Filetype: Type of the stored file, e.g.: json, gbff,...
     #[prost(string, tag = "3")]
     pub filetype: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "5")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    /// When the data object was created
+    #[prost(message, optional, tag = "6")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
+    /// Location: Location of the data
+    #[prost(message, optional, tag = "7")]
+    pub location: ::core::option::Option<Location>,
     /// Origin: Source of the dataset
-    #[prost(message, optional, tag = "4")]
+    #[prost(message, optional, tag = "8")]
     pub origin: ::core::option::Option<Origin>,
     /// ContentLen: Lenght of the stored dataset
-    #[prost(int64, tag = "5")]
+    #[prost(int64, tag = "9")]
     pub content_len: i64,
-    /// Location: Location of the data
-    #[prost(message, optional, tag = "6")]
-    pub location: ::core::option::Option<Location>,
-    /// When the data object was created
-    #[prost(message, optional, tag = "7")]
-    pub created: ::core::option::Option<::prost_types::Timestamp>,
-    /// Additional metadata of the object
-    #[prost(map = "string, message", tag = "8")]
-    pub additional_metadata:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
-    #[prost(string, tag = "9")]
+    #[prost(string, tag = "10")]
     pub upload_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "11")]
-    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DatasetEntry {
+pub struct Dataset {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     /// Name of the dataset
     #[prost(string, tag = "2")]
-    pub datasetname: ::prost::alloc::string::String,
+    pub name: ::prost::alloc::string::String,
     /// Type of the stored data in the dataset
     #[prost(string, tag = "3")]
-    pub datasettype: ::prost::alloc::string::String,
-    ///Indicates if the dataset if publicly available
-    #[prost(bool, tag = "4")]
-    pub is_public: bool,
+    pub r#type: ::prost::alloc::string::String,
+    #[prost(string, tag = "8")]
+    pub description: ::prost::alloc::string::String,
     /// When the datasets was created
     #[prost(message, optional, tag = "5")]
     pub created: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(enumeration = "Status", tag = "6")]
-    pub status: i32,
-    #[prost(string, tag = "7")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
-    pub description: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "9")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
     #[prost(message, repeated, tag = "10")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    #[prost(string, tag = "7")]
+    pub project_id: ::prost::alloc::string::String,
+    ///Indicates if the dataset if publicly available
+    #[prost(bool, tag = "4")]
+    pub is_public: bool,
+    #[prost(enumeration = "Status", tag = "6")]
+    pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DatasetVersionEntry {
+pub struct DatasetVersion {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "4")]
-    pub version: ::core::option::Option<Version>,
+    #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "5")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     /// When the datasets version was created
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "6")]
     pub created: ::core::option::Option<::prost_types::Timestamp>,
-    /// Additional metadata for the dataset version
-    #[prost(map = "string, message", tag = "6")]
-    pub additional_metadata:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Struct>,
-    /// Message reference for the metadata
-    #[prost(map = "string, string", tag = "7")]
-    pub additional_metadata_message_ref:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
-    /// Message reference for the metadata of the objects associated with this DatasetVersion
-    #[prost(map = "string, string", tag = "8")]
-    pub additional_object_metadata_message_ref:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "7")]
+    pub version: ::core::option::Option<Version>,
+    #[prost(string, repeated, tag = "8")]
+    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Number of objects registered with this dataset version
     #[prost(int64, tag = "9")]
     pub object_count: i64,
     /// Indicates the status of a dataset
     #[prost(enumeration = "Status", tag = "10")]
     pub status: i32,
-    #[prost(string, repeated, tag = "11")]
-    pub object_i_ds: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(message, repeated, tag = "12")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "13")]
-    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenList {
