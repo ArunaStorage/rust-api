@@ -262,24 +262,21 @@ pub struct Dataset {
     /// Name of the dataset
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
-    /// Type of the stored data in the dataset
     #[prost(string, tag = "3")]
-    pub r#type: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
     pub description: ::prost::alloc::string::String,
     /// When the datasets was created
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "4")]
     pub created: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, repeated, tag = "9")]
+    #[prost(message, repeated, tag = "5")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "10")]
+    #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     #[prost(string, tag = "7")]
     pub project_id: ::prost::alloc::string::String,
     ///Indicates if the dataset if publicly available
-    #[prost(bool, tag = "4")]
+    #[prost(bool, tag = "8")]
     pub is_public: bool,
-    #[prost(enumeration = "Status", tag = "6")]
+    #[prost(enumeration = "Status", tag = "9")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]

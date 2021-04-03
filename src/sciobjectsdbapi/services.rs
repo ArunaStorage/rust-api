@@ -4,9 +4,6 @@ pub struct CreateDatasetRequest {
     /// Name of the dataset
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    ///Datatype of the dataset, e.g. json, gbff, fasta
-    #[prost(string, tag = "2")]
-    pub r#type: ::prost::alloc::string::String,
     ///ProjectID of the project the dataset is associated with
     #[prost(string, tag = "3")]
     pub project_id: ::prost::alloc::string::String,
