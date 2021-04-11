@@ -994,6 +994,8 @@ pub struct CreateProjectRequest {
     pub description: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
+    #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectRequest {

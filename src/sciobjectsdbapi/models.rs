@@ -218,11 +218,7 @@ pub struct ObjectGroup {
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     #[prost(message, repeated, tag = "11")]
     pub objects: ::prost::alloc::vec::Vec<Object>,
-    #[prost(int64, tag = "12")]
-    pub initialized_objects: i64,
-    #[prost(int64, tag = "13")]
-    pub uploaded_objects: i64,
-    #[prost(string, tag = "14")]
+    #[prost(string, tag = "12")]
     pub object_heritage_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
