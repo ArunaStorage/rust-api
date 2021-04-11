@@ -604,6 +604,27 @@ pub struct CreateLinkResponse {
     pub object: ::core::option::Option<super::models::Object>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetMultipartUploadRequest {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub upload_part: i64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CompleteMultipartRequest {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub parts: ::prost::alloc::vec::Vec<CompletedParts>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CompletedParts {
+    #[prost(string, tag = "1")]
+    pub etag: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub part: i64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectHeritageRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -1466,6 +1487,52 @@ pub mod object_load_client {
                 http::uri::PathAndQuery::from_static("/services.ObjectLoad/CreateDownloadLink");
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn start_multipart_upload(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path =
+                http::uri::PathAndQuery::from_static("/services.ObjectLoad/StartMultipartUpload");
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn get_multipart_upload_link(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetMultipartUploadRequest>,
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path =
+                http::uri::PathAndQuery::from_static("/services.ObjectLoad/GetMultipartUploadLink");
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn complete_multipart_upload(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CompleteMultipartRequest>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/services.ObjectLoad/CompleteMultipartUpload",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
     impl<T: Clone> Clone for ObjectLoadClient<T> {
         fn clone(&self) -> Self {
@@ -1495,6 +1562,18 @@ pub mod object_load_server {
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status>;
+        async fn start_multipart_upload(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status>;
+        async fn get_multipart_upload_link(
+            &self,
+            request: tonic::Request<super::GetMultipartUploadRequest>,
+        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status>;
+        async fn complete_multipart_upload(
+            &self,
+            request: tonic::Request<super::CompleteMultipartRequest>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct ObjectLoadServer<T: ObjectLoad> {
@@ -1583,6 +1662,108 @@ pub mod object_load_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = CreateDownloadLinkSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ObjectLoad/StartMultipartUpload" => {
+                    #[allow(non_camel_case_types)]
+                    struct StartMultipartUploadSvc<T: ObjectLoad>(pub Arc<T>);
+                    impl<T: ObjectLoad> tonic::server::UnaryService<super::super::models::Id>
+                        for StartMultipartUploadSvc<T>
+                    {
+                        type Response = super::CreateLinkResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).start_multipart_upload(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = StartMultipartUploadSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ObjectLoad/GetMultipartUploadLink" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetMultipartUploadLinkSvc<T: ObjectLoad>(pub Arc<T>);
+                    impl<T: ObjectLoad>
+                        tonic::server::UnaryService<super::GetMultipartUploadRequest>
+                        for GetMultipartUploadLinkSvc<T>
+                    {
+                        type Response = super::CreateLinkResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetMultipartUploadRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).get_multipart_upload_link(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = GetMultipartUploadLinkSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ObjectLoad/CompleteMultipartUpload" => {
+                    #[allow(non_camel_case_types)]
+                    struct CompleteMultipartUploadSvc<T: ObjectLoad>(pub Arc<T>);
+                    impl<T: ObjectLoad> tonic::server::UnaryService<super::CompleteMultipartRequest>
+                        for CompleteMultipartUploadSvc<T>
+                    {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CompleteMultipartRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).complete_multipart_upload(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CompleteMultipartUploadSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
