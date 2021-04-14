@@ -1490,7 +1490,7 @@ pub mod object_load_client {
         pub async fn start_multipart_upload(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::Object>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1565,7 +1565,7 @@ pub mod object_load_server {
         async fn start_multipart_upload(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::CreateLinkResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::Object>, tonic::Status>;
         async fn get_multipart_upload_link(
             &self,
             request: tonic::Request<super::GetMultipartUploadRequest>,
@@ -1679,7 +1679,7 @@ pub mod object_load_server {
                     impl<T: ObjectLoad> tonic::server::UnaryService<super::super::models::Id>
                         for StartMultipartUploadSvc<T>
                     {
-                        type Response = super::CreateLinkResponse;
+                        type Response = super::super::models::Object;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
