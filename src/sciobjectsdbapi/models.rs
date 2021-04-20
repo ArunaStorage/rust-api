@@ -141,6 +141,13 @@ pub mod metadata {
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VersionTag {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub version_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Empty {}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -196,6 +203,8 @@ pub struct ObjectHeritage {
     pub labels: ::prost::alloc::vec::Vec<Label>,
     #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    #[prost(message, repeated, tag = "7")]
+    pub version_tags: ::prost::alloc::vec::Vec<VersionTag>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroup {
@@ -274,6 +283,8 @@ pub struct Dataset {
     pub is_public: bool,
     #[prost(enumeration = "Status", tag = "9")]
     pub status: i32,
+    #[prost(message, repeated, tag = "10")]
+    pub version_tags: ::prost::alloc::vec::Vec<VersionTag>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetVersion {
