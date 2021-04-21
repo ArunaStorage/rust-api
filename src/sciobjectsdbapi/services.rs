@@ -625,24 +625,11 @@ pub struct CompletedParts {
     pub part: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectHeritageRequest {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    #[prost(message, repeated, tag = "4")]
-    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub dataset_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub object_heritage_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "4")]
     pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
     #[prost(message, repeated, tag = "5")]
@@ -699,23 +686,6 @@ pub mod dataset_objects_service_client {
         pub fn with_interceptor(inner: T, interceptor: impl Into<tonic::Interceptor>) -> Self {
             let inner = tonic::client::Grpc::with_interceptor(inner, interceptor);
             Self { inner }
-        }
-        #[doc = "CreateObjectHeritage Creates a new object heritage"]
-        pub async fn create_object_heritage(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateObjectHeritageRequest>,
-        ) -> Result<tonic::Response<super::super::models::ObjectHeritage>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/services.DatasetObjectsService/CreateObjectHeritage",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = "CreateObjectGroup Creates a new object group"]
         pub async fn create_object_group(
@@ -788,11 +758,6 @@ pub mod dataset_objects_service_server {
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetObjectsServiceServer."]
     #[async_trait]
     pub trait DatasetObjectsService: Send + Sync + 'static {
-        #[doc = "CreateObjectHeritage Creates a new object heritage"]
-        async fn create_object_heritage(
-            &self,
-            request: tonic::Request<super::CreateObjectHeritageRequest>,
-        ) -> Result<tonic::Response<super::super::models::ObjectHeritage>, tonic::Status>;
         #[doc = "CreateObjectGroup Creates a new object group"]
         async fn create_object_group(
             &self,
@@ -840,40 +805,6 @@ pub mod dataset_objects_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/services.DatasetObjectsService/CreateObjectHeritage" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateObjectHeritageSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::CreateObjectHeritageRequest>
-                        for CreateObjectHeritageSvc<T>
-                    {
-                        type Response = super::super::models::ObjectHeritage;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateObjectHeritageRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).create_object_heritage(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let interceptor = inner.1.clone();
-                        let inner = inner.0;
-                        let method = CreateObjectHeritageSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = if let Some(interceptor) = interceptor {
-                            tonic::server::Grpc::with_interceptor(codec, interceptor)
-                        } else {
-                            tonic::server::Grpc::new(codec)
-                        };
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
                 "/services.DatasetObjectsService/CreateObjectGroup" => {
                     #[allow(non_camel_case_types)]
                     struct CreateObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);

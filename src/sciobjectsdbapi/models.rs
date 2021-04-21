@@ -189,46 +189,41 @@ pub struct Project {
     pub users: ::prost::alloc::vec::Vec<User>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectHeritage {
+pub struct ObjectGroupVersions {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    /// Name: Name of the dataset object heritage entity e.g.: mydata
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub dataset_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "5")]
+    #[prost(message, repeated, tag = "4")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "6")]
+    #[prost(message, repeated, tag = "5")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    #[prost(message, repeated, tag = "7")]
-    pub version_tags: ::prost::alloc::vec::Vec<VersionTag>,
+    #[prost(enumeration = "Status", tag = "6")]
+    pub status: i32,
+    #[prost(string, tag = "7")]
+    pub head_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroup {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "5")]
     pub version: ::core::option::Option<Version>,
-    #[prost(enumeration = "Status", tag = "6")]
-    pub status: i32,
     /// When the data object was created
-    #[prost(message, optional, tag = "8")]
+    #[prost(message, optional, tag = "6")]
     pub created: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, repeated, tag = "9")]
+    #[prost(message, repeated, tag = "7")]
     pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "10")]
+    #[prost(message, repeated, tag = "8")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    #[prost(message, repeated, tag = "11")]
+    #[prost(message, repeated, tag = "9")]
     pub objects: ::prost::alloc::vec::Vec<Object>,
-    #[prost(string, tag = "12")]
-    pub object_heritage_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "10")]
+    pub version_ref_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
