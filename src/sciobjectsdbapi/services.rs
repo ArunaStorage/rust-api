@@ -718,6 +718,13 @@ pub struct GetObjectGroupVersionRequest {
     #[prost(message, optional, tag = "3")]
     pub version: ::core::option::Option<super::models::Version>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectGroupVersionRequestResponse {
+    #[prost(message, optional, tag = "1")]
+    pub object_group: ::core::option::Option<super::models::ObjectGroup>,
+    #[prost(message, optional, tag = "2")]
+    pub object_group_version: ::core::option::Option<super::models::ObjectGroupVersion>,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ObjectGroupVersionReferenceType {
@@ -761,7 +768,8 @@ pub mod dataset_objects_service_client {
         pub async fn create_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status> {
+        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
+        {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -778,7 +786,8 @@ pub mod dataset_objects_service_client {
         pub async fn get_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status> {
+        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
+        {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -795,7 +804,7 @@ pub mod dataset_objects_service_client {
         pub async fn get_current_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroupVersion>, tonic::Status>
+        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -868,17 +877,17 @@ pub mod dataset_objects_service_server {
         async fn create_object_group(
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         async fn get_object_group(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
         #[doc = "GetObjectGroupCurrentVersion Returns the head version in the history of a given object group"]
         async fn get_current_object_group(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroupVersion>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
         async fn get_object_group_version(
             &self,
             request: tonic::Request<super::GetObjectGroupVersionRequest>,
@@ -928,7 +937,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::CreateObjectGroupRequest>
                         for CreateObjectGroupSvc<T>
                     {
-                        type Response = super::super::models::ObjectGroup;
+                        type Response = super::ObjectGroupVersionRequestResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -962,7 +971,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::super::models::Id>
                         for GetObjectGroupSvc<T>
                     {
-                        type Response = super::super::models::ObjectGroup;
+                        type Response = super::ObjectGroupVersionRequestResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -996,7 +1005,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::super::models::Id>
                         for GetCurrentObjectGroupSvc<T>
                     {
-                        type Response = super::super::models::ObjectGroupVersion;
+                        type Response = super::ObjectGroupVersionRequestResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
