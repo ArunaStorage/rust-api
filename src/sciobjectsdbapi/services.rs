@@ -738,11 +738,11 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = "GetCurrentObjectGroupFromVersion Returns the most current version "]
-        pub async fn get_current_object_group_from_version(
+        pub async fn get_object_group_history(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status> {
+        ) -> Result<tonic::Response<super::super::models::ObjectGroupHistory>, tonic::Status>
+        {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -751,7 +751,7 @@ pub mod dataset_objects_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/services.DatasetObjectsService/GetCurrentObjectGroupFromVersion",
+                "/services.DatasetObjectsService/GetObjectGroupHistory",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -808,11 +808,10 @@ pub mod dataset_objects_service_server {
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status>;
-        #[doc = "GetCurrentObjectGroupFromVersion Returns the most current version "]
-        async fn get_current_object_group_from_version(
+        async fn get_object_group_history(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::super::models::ObjectGroup>, tonic::Status>;
+        ) -> Result<tonic::Response<super::super::models::ObjectGroupHistory>, tonic::Status>;
         #[doc = "FinishObjectUpload Finishes the upload process for an object"]
         async fn finish_object_upload(
             &self,
@@ -954,27 +953,22 @@ pub mod dataset_objects_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/services.DatasetObjectsService/GetCurrentObjectGroupFromVersion" => {
+                "/services.DatasetObjectsService/GetObjectGroupHistory" => {
                     #[allow(non_camel_case_types)]
-                    struct GetCurrentObjectGroupFromVersionSvc<T: DatasetObjectsService>(
-                        pub Arc<T>,
-                    );
+                    struct GetObjectGroupHistorySvc<T: DatasetObjectsService>(pub Arc<T>);
                     impl<T: DatasetObjectsService>
                         tonic::server::UnaryService<super::super::models::Id>
-                        for GetCurrentObjectGroupFromVersionSvc<T>
+                        for GetObjectGroupHistorySvc<T>
                     {
-                        type Response = super::super::models::ObjectGroup;
+                        type Response = super::super::models::ObjectGroupHistory;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::super::models::Id>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner)
-                                    .get_current_object_group_from_version(request)
-                                    .await
-                            };
+                            let fut =
+                                async move { (*inner).get_object_group_history(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -982,7 +976,7 @@ pub mod dataset_objects_service_server {
                     let fut = async move {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
-                        let method = GetCurrentObjectGroupFromVersionSvc(inner);
+                        let method = GetObjectGroupHistorySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
