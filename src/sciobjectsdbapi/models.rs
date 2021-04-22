@@ -189,7 +189,7 @@ pub struct Project {
     pub users: ::prost::alloc::vec::Vec<User>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroupHistory {
+pub struct ObjectGroup {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -206,7 +206,7 @@ pub struct ObjectGroupHistory {
     pub head_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroup {
+pub struct ObjectGroupVersion {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
