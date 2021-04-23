@@ -681,6 +681,13 @@ pub struct CompletedParts {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupWithVersionRequest {
+    #[prost(message, optional, tag = "1")]
+    pub object_group: ::core::option::Option<CreateObjectGroupRequest>,
+    #[prost(message, optional, tag = "2")]
+    pub object_group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -689,8 +696,6 @@ pub struct CreateObjectGroupWithVersionRequest {
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
     #[prost(message, repeated, tag = "4")]
     pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
-    #[prost(message, optional, tag = "5")]
-    pub object_group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddVersionToObjectGroupRequest {
