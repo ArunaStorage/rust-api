@@ -7,5 +7,4 @@ pub mod sciobjectsdbapi {
     pub mod models;
     #[path = "services.rs"]
     pub mod services;
-
 }

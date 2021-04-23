@@ -693,6 +693,17 @@ pub struct CreateObjectGroupRequest {
     pub object_group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupVersionRequest {
+    #[prost(string, tag = "2")]
+    pub object_group_version_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "4")]
+    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
+    #[prost(message, repeated, tag = "5")]
+    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "6")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
     #[prost(string, tag = "1")]
     pub filename: ::prost::alloc::string::String,
@@ -719,22 +730,11 @@ pub struct GetObjectGroupVersionRequest {
     pub version: ::core::option::Option<super::models::Version>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroupVersionRequestResponse {
+pub struct GetObjectGroupVersionResponse {
     #[prost(message, optional, tag = "1")]
     pub object_group: ::core::option::Option<super::models::ObjectGroup>,
     #[prost(message, optional, tag = "2")]
     pub object_group_version: ::core::option::Option<super::models::ObjectGroupVersion>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectGroupVersionRequest {
-    #[prost(string, tag = "2")]
-    pub object_group_version_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "4")]
-    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    #[prost(message, repeated, tag = "5")]
-    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    #[prost(message, repeated, tag = "6")]
-    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -779,8 +779,7 @@ pub mod dataset_objects_service_client {
         pub async fn create_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
-        {
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -793,12 +792,28 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = "CreateObjectGroupVersion Creates a new object group version"]
+        pub async fn create_object_group_version(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateObjectGroupVersionRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/services.DatasetObjectsService/CreateObjectGroupVersion",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         pub async fn get_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
-        {
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -815,8 +830,7 @@ pub mod dataset_objects_service_client {
         pub async fn get_current_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
-        {
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -843,23 +857,6 @@ pub mod dataset_objects_service_client {
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/services.DatasetObjectsService/GetObjectGroupVersion",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn create_object_group_version(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateObjectGroupVersionRequest>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/services.DatasetObjectsService/CreateObjectGroupVersion",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -905,25 +902,26 @@ pub mod dataset_objects_service_server {
         async fn create_object_group(
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status>;
+        #[doc = "CreateObjectGroupVersion Creates a new object group version"]
+        async fn create_object_group_version(
+            &self,
+            request: tonic::Request<super::CreateObjectGroupVersionRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status>;
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         async fn get_object_group(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status>;
         #[doc = "GetObjectGroupCurrentVersion Returns the head version in the history of a given object group"]
         async fn get_current_object_group(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionResponse>, tonic::Status>;
         async fn get_object_group_version(
             &self,
             request: tonic::Request<super::GetObjectGroupVersionRequest>,
         ) -> Result<tonic::Response<super::super::models::ObjectGroupVersion>, tonic::Status>;
-        async fn create_object_group_version(
-            &self,
-            request: tonic::Request<super::CreateObjectGroupVersionRequest>,
-        ) -> Result<tonic::Response<super::ObjectGroupVersionRequestResponse>, tonic::Status>;
         #[doc = "FinishObjectUpload Finishes the upload process for an object"]
         async fn finish_object_upload(
             &self,
@@ -969,7 +967,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::CreateObjectGroupRequest>
                         for CreateObjectGroupSvc<T>
                     {
-                        type Response = super::ObjectGroupVersionRequestResponse;
+                        type Response = super::GetObjectGroupVersionResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -996,6 +994,41 @@ pub mod dataset_objects_service_server {
                     };
                     Box::pin(fut)
                 }
+                "/services.DatasetObjectsService/CreateObjectGroupVersion" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateObjectGroupVersionSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::CreateObjectGroupVersionRequest>
+                        for CreateObjectGroupVersionSvc<T>
+                    {
+                        type Response = super::GetObjectGroupVersionResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateObjectGroupVersionRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).create_object_group_version(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateObjectGroupVersionSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/services.DatasetObjectsService/GetObjectGroup" => {
                     #[allow(non_camel_case_types)]
                     struct GetObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
@@ -1003,7 +1036,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::super::models::Id>
                         for GetObjectGroupSvc<T>
                     {
-                        type Response = super::ObjectGroupVersionRequestResponse;
+                        type Response = super::GetObjectGroupVersionResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1037,7 +1070,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::super::models::Id>
                         for GetCurrentObjectGroupSvc<T>
                     {
-                        type Response = super::ObjectGroupVersionRequestResponse;
+                        type Response = super::GetObjectGroupVersionResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -1089,41 +1122,6 @@ pub mod dataset_objects_service_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = GetObjectGroupVersionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = if let Some(interceptor) = interceptor {
-                            tonic::server::Grpc::with_interceptor(codec, interceptor)
-                        } else {
-                            tonic::server::Grpc::new(codec)
-                        };
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/services.DatasetObjectsService/CreateObjectGroupVersion" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateObjectGroupVersionSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::CreateObjectGroupVersionRequest>
-                        for CreateObjectGroupVersionSvc<T>
-                    {
-                        type Response = super::ObjectGroupVersionRequestResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateObjectGroupVersionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).create_object_group_version(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let interceptor = inner.1.clone();
-                        let inner = inner.0;
-                        let method = CreateObjectGroupVersionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
