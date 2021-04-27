@@ -37,6 +37,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             &["API/".to_string()], // specify the root location to search proto dependencies
         )
         .unwrap();
-
     Ok(())
 }
