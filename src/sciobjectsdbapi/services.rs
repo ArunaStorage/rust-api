@@ -137,22 +137,6 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn dataset_object_group_histories(
-            &mut self,
-            request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/services.DatasetService/DatasetObjectGroupHistories",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
         #[doc = " Updates a field of a dataset"]
         pub async fn update_dataset_field(
             &mut self,
@@ -255,10 +239,6 @@ pub mod dataset_service_server {
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::DatasetVersionList>, tonic::Status>;
         async fn dataset_object_groups(
-            &self,
-            request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status>;
-        async fn dataset_object_group_histories(
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status>;
@@ -437,41 +417,6 @@ pub mod dataset_service_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = DatasetObjectGroupsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = if let Some(interceptor) = interceptor {
-                            tonic::server::Grpc::with_interceptor(codec, interceptor)
-                        } else {
-                            tonic::server::Grpc::new(codec)
-                        };
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/services.DatasetService/DatasetObjectGroupHistories" => {
-                    #[allow(non_camel_case_types)]
-                    struct DatasetObjectGroupHistoriesSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
-                        for DatasetObjectGroupHistoriesSvc<T>
-                    {
-                        type Response = super::ObjectGroupList;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::super::models::Id>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).dataset_object_group_histories(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let interceptor = inner.1.clone();
-                        let inner = inner.0;
-                        let method = DatasetObjectGroupHistoriesSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
