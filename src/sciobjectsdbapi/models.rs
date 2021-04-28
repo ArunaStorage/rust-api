@@ -223,7 +223,7 @@ pub struct ObjectGroupVersion {
     #[prost(message, repeated, tag = "9")]
     pub objects: ::prost::alloc::vec::Vec<Object>,
     #[prost(string, tag = "10")]
-    pub version_ref_id: ::prost::alloc::string::String,
+    pub object_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
