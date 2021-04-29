@@ -172,6 +172,7 @@ pub enum Resource {
     DatasetVersionResource = 2,
     ObjectResource = 3,
     ObjectGroupResource = 4,
+    ObjectGroupVersionResource = 5,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Project {
