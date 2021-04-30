@@ -37,6 +37,86 @@ pub struct ObjectGroupList {
     #[prost(message, repeated, tag = "1")]
     pub object_groups: ::prost::alloc::vec::Vec<super::models::ObjectGroup>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupWithVersionRequest {
+    #[prost(message, optional, tag = "1")]
+    pub object_group: ::core::option::Option<CreateObjectGroupRequest>,
+    #[prost(message, optional, tag = "2")]
+    pub object_group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupRequest {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "4")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddVersionToObjectGroupRequest {
+    #[prost(string, tag = "1")]
+    pub object_group_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupVersionRequest {
+    #[prost(message, repeated, tag = "4")]
+    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
+    #[prost(message, repeated, tag = "5")]
+    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "6")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectRequest {
+    #[prost(string, tag = "1")]
+    pub filename: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub filetype: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
+    #[prost(message, repeated, tag = "4")]
+    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
+    /// ContentLen: Lenght of the stored dataset
+    #[prost(int64, tag = "5")]
+    pub content_len: i64,
+    /// Origin: Source of the dataset
+    #[prost(message, optional, tag = "6")]
+    pub origin: ::core::option::Option<super::models::Origin>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupVersionRequest {
+    #[prost(enumeration = "ObjectGroupVersionReferenceType", tag = "1")]
+    pub reference_type: i32,
+    #[prost(string, tag = "2")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub version: ::core::option::Option<super::models::Version>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupVersionResponse {
+    #[prost(message, optional, tag = "1")]
+    pub object_group: ::core::option::Option<super::models::ObjectGroup>,
+    #[prost(message, optional, tag = "2")]
+    pub object_group_version: ::core::option::Option<super::models::ObjectGroupVersion>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupVersionsResponse {
+    #[prost(message, optional, tag = "1")]
+    pub object_group: ::core::option::Option<super::models::ObjectGroup>,
+    #[prost(message, repeated, tag = "2")]
+    pub object_group_version: ::prost::alloc::vec::Vec<super::models::ObjectGroupVersion>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ObjectGroupVersionReferenceType {
+    Version = 0,
+    Id = 1,
+}
 #[doc = r" Generated client implementations."]
 pub mod dataset_service_client {
     #![allow(unused_variables, dead_code, missing_docs)]
@@ -134,6 +214,22 @@ pub mod dataset_service_client {
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/services.DatasetService/DatasetObjectGroups",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn current_object_group_versions(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionsResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/services.DatasetService/CurrentObjectGroupVersions",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -242,6 +338,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status>;
+        async fn current_object_group_versions(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::GetObjectGroupVersionsResponse>, tonic::Status>;
         #[doc = " Updates a field of a dataset"]
         async fn update_dataset_field(
             &self,
@@ -417,6 +517,41 @@ pub mod dataset_service_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = DatasetObjectGroupsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/CurrentObjectGroupVersions" => {
+                    #[allow(non_camel_case_types)]
+                    struct CurrentObjectGroupVersionsSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for CurrentObjectGroupVersionsSvc<T>
+                    {
+                        type Response = super::GetObjectGroupVersionsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).current_object_group_versions(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CurrentObjectGroupVersionsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
@@ -623,86 +758,6 @@ pub struct CompletedParts {
     pub etag: ::prost::alloc::string::String,
     #[prost(int64, tag = "2")]
     pub part: i64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectGroupWithVersionRequest {
-    #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<CreateObjectGroupRequest>,
-    #[prost(message, optional, tag = "2")]
-    pub object_group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectGroupRequest {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    #[prost(message, repeated, tag = "4")]
-    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddVersionToObjectGroupRequest {
-    #[prost(string, tag = "1")]
-    pub object_group_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub group_version: ::core::option::Option<CreateObjectGroupVersionRequest>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectGroupVersionRequest {
-    #[prost(message, repeated, tag = "4")]
-    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    #[prost(message, repeated, tag = "5")]
-    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    #[prost(message, repeated, tag = "6")]
-    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectRequest {
-    #[prost(string, tag = "1")]
-    pub filename: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub filetype: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
-    #[prost(message, repeated, tag = "4")]
-    pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
-    /// ContentLen: Lenght of the stored dataset
-    #[prost(int64, tag = "5")]
-    pub content_len: i64,
-    /// Origin: Source of the dataset
-    #[prost(message, optional, tag = "6")]
-    pub origin: ::core::option::Option<super::models::Origin>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupVersionRequest {
-    #[prost(enumeration = "ObjectGroupVersionReferenceType", tag = "1")]
-    pub reference_type: i32,
-    #[prost(string, tag = "2")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
-    pub version: ::core::option::Option<super::models::Version>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupVersionResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<super::models::ObjectGroup>,
-    #[prost(message, optional, tag = "2")]
-    pub object_group_version: ::core::option::Option<super::models::ObjectGroupVersion>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupVersionsResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<super::models::ObjectGroup>,
-    #[prost(message, repeated, tag = "2")]
-    pub object_group_version: ::prost::alloc::vec::Vec<super::models::ObjectGroupVersion>,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum ObjectGroupVersionReferenceType {
-    Version = 0,
-    Id = 1,
 }
 #[doc = r" Generated client implementations."]
 pub mod dataset_objects_service_client {
