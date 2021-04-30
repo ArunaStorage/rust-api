@@ -105,9 +105,7 @@ pub struct GetObjectGroupVersionResponse {
     pub object_group_version: ::core::option::Option<super::models::ObjectGroupVersion>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupVersionsResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<super::models::ObjectGroup>,
+pub struct ObjectGroupVersions {
     #[prost(message, repeated, tag = "2")]
     pub object_group_version: ::prost::alloc::vec::Vec<super::models::ObjectGroupVersion>,
 }
@@ -220,7 +218,7 @@ pub mod dataset_service_client {
         pub async fn current_object_group_versions(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::GetObjectGroupVersionsResponse>, tonic::Status> {
+        ) -> Result<tonic::Response<super::ObjectGroupVersions>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -282,10 +280,10 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn dataset_version_object_groups(
+        pub async fn dataset_version_object_group_versions(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status> {
+        ) -> Result<tonic::Response<super::ObjectGroupVersions>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -294,7 +292,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/services.DatasetService/DatasetVersionObjectGroups",
+                "/services.DatasetService/DatasetVersionObjectGroupVersions",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -341,7 +339,7 @@ pub mod dataset_service_server {
         async fn current_object_group_versions(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::GetObjectGroupVersionsResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ObjectGroupVersions>, tonic::Status>;
         #[doc = " Updates a field of a dataset"]
         async fn update_dataset_field(
             &self,
@@ -357,10 +355,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::ReleaseDatasetVersionRequest>,
         ) -> Result<tonic::Response<super::super::models::DatasetVersion>, tonic::Status>;
-        async fn dataset_version_object_groups(
+        async fn dataset_version_object_group_versions(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::ObjectGroupList>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ObjectGroupVersions>, tonic::Status>;
     }
     #[doc = " Dataset management service"]
     #[doc = " Manages all dataset related services"]
@@ -534,7 +532,7 @@ pub mod dataset_service_server {
                     impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
                         for CurrentObjectGroupVersionsSvc<T>
                     {
-                        type Response = super::GetObjectGroupVersionsResponse;
+                        type Response = super::ObjectGroupVersions;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -665,13 +663,13 @@ pub mod dataset_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/services.DatasetService/DatasetVersionObjectGroups" => {
+                "/services.DatasetService/DatasetVersionObjectGroupVersions" => {
                     #[allow(non_camel_case_types)]
-                    struct DatasetVersionObjectGroupsSvc<T: DatasetService>(pub Arc<T>);
+                    struct DatasetVersionObjectGroupVersionsSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
-                        for DatasetVersionObjectGroupsSvc<T>
+                        for DatasetVersionObjectGroupVersionsSvc<T>
                     {
-                        type Response = super::ObjectGroupList;
+                        type Response = super::ObjectGroupVersions;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
@@ -679,7 +677,9 @@ pub mod dataset_service_server {
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move {
-                                (*inner).dataset_version_object_groups(request).await
+                                (*inner)
+                                    .dataset_version_object_group_versions(request)
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -688,7 +688,7 @@ pub mod dataset_service_server {
                     let fut = async move {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
-                        let method = DatasetVersionObjectGroupsSvc(inner);
+                        let method = DatasetVersionObjectGroupVersionsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
@@ -880,7 +880,7 @@ pub mod dataset_objects_service_client {
         pub async fn get_object_group_versions(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::GetObjectGroupVersionsResponse>, tonic::Status> {
+        ) -> Result<tonic::Response<super::ObjectGroupVersions>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -958,7 +958,7 @@ pub mod dataset_objects_service_server {
         async fn get_object_group_versions(
             &self,
             request: tonic::Request<super::super::models::Id>,
-        ) -> Result<tonic::Response<super::GetObjectGroupVersionsResponse>, tonic::Status>;
+        ) -> Result<tonic::Response<super::ObjectGroupVersions>, tonic::Status>;
         #[doc = "FinishObjectUpload Finishes the upload process for an object"]
         async fn finish_object_upload(
             &self,
@@ -1179,7 +1179,7 @@ pub mod dataset_objects_service_server {
                         tonic::server::UnaryService<super::super::models::Id>
                         for GetObjectGroupVersionsSvc<T>
                     {
-                        type Response = super::GetObjectGroupVersionsResponse;
+                        type Response = super::ObjectGroupVersions;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
