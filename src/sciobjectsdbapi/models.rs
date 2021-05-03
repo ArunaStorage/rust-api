@@ -205,9 +205,11 @@ pub struct ObjectGroup {
     pub status: i32,
     #[prost(string, tag = "7")]
     pub head_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "8")]
+    pub current_revision: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroupVersion {
+pub struct ObjectGroupRevision {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
@@ -225,6 +227,8 @@ pub struct ObjectGroupVersion {
     pub objects: ::prost::alloc::vec::Vec<Object>,
     #[prost(string, tag = "10")]
     pub object_group_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "11")]
+    pub revision: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
