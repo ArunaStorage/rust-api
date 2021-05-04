@@ -32,7 +32,7 @@ pub struct ReleaseDatasetVersionRequest {
     #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<super::models::Metadata>,
     #[prost(string, repeated, tag = "7")]
-    pub revision_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub revision_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupList {
