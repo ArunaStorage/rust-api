@@ -282,6 +282,21 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn get_dataset_version(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::DatasetVersion>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path =
+                http::uri::PathAndQuery::from_static("/services.DatasetService/GetDatasetVersion");
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         pub async fn get_datset_version_revisions(
             &mut self,
             request: impl tonic::IntoRequest<super::super::models::Id>,
@@ -356,6 +371,10 @@ pub mod dataset_service_server {
         async fn release_dataset_version(
             &self,
             request: tonic::Request<super::ReleaseDatasetVersionRequest>,
+        ) -> Result<tonic::Response<super::super::models::DatasetVersion>, tonic::Status>;
+        async fn get_dataset_version(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::DatasetVersion>, tonic::Status>;
         async fn get_datset_version_revisions(
             &self,
@@ -655,6 +674,39 @@ pub mod dataset_service_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = ReleaseDatasetVersionSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetService/GetDatasetVersion" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDatasetVersionSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for GetDatasetVersionSvc<T>
+                    {
+                        type Response = super::super::models::DatasetVersion;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_dataset_version(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = GetDatasetVersionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
