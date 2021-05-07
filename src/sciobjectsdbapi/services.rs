@@ -1355,6 +1355,11 @@ pub struct DatasetList {
     #[prost(message, repeated, tag = "2")]
     pub labels: ::prost::alloc::vec::Vec<super::models::Label>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ApiTokenList {
+    #[prost(message, repeated, tag = "1")]
+    pub token: ::prost::alloc::vec::Vec<super::models::ApiToken>,
+}
 #[doc = r" Generated client implementations."]
 pub mod project_api_client {
     #![allow(unused_variables, dead_code, missing_docs)]
@@ -1419,6 +1424,20 @@ pub mod project_api_client {
                 http::uri::PathAndQuery::from_static("/services.ProjectAPI/AddUserToProject");
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn create_api_token(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Empty>,
+        ) -> Result<tonic::Response<super::super::models::ApiToken>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/services.ProjectAPI/CreateAPIToken");
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         #[doc = "GetProjectDatasets Returns all datasets that belong to a certain project"]
         pub async fn get_project_datasets(
             &mut self,
@@ -1464,6 +1483,20 @@ pub mod project_api_client {
             let path = http::uri::PathAndQuery::from_static("/services.ProjectAPI/GetProject");
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn get_api_token(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Empty>,
+        ) -> Result<tonic::Response<super::ApiTokenList>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/services.ProjectAPI/GetAPIToken");
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         #[doc = "DeleteProject Deletes a specific project"]
         #[doc = "Will also delete all associated resources (Datasets/Objects/etc...) both from objects storage and the database"]
         pub async fn delete_project(
@@ -1478,6 +1511,20 @@ pub mod project_api_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/services.ProjectAPI/DeleteProject");
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn delete_api_token(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/services.ProjectAPI/DeleteAPIToken");
             self.inner.unary(request.into_request(), path, codec).await
         }
     }
@@ -1511,6 +1558,10 @@ pub mod project_api_server {
             &self,
             request: tonic::Request<super::AddUserToProjectRequest>,
         ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status>;
+        async fn create_api_token(
+            &self,
+            request: tonic::Request<super::super::models::Empty>,
+        ) -> Result<tonic::Response<super::super::models::ApiToken>, tonic::Status>;
         #[doc = "GetProjectDatasets Returns all datasets that belong to a certain project"]
         async fn get_project_datasets(
             &self,
@@ -1525,9 +1576,17 @@ pub mod project_api_server {
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status>;
+        async fn get_api_token(
+            &self,
+            request: tonic::Request<super::super::models::Empty>,
+        ) -> Result<tonic::Response<super::ApiTokenList>, tonic::Status>;
         #[doc = "DeleteProject Deletes a specific project"]
         #[doc = "Will also delete all associated resources (Datasets/Objects/etc...) both from objects storage and the database"]
         async fn delete_project(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
+        async fn delete_api_token(
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
@@ -1619,6 +1678,39 @@ pub mod project_api_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = AddUserToProjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ProjectAPI/CreateAPIToken" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateAPITokenSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Empty>
+                        for CreateAPITokenSvc<T>
+                    {
+                        type Response = super::super::models::ApiToken;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Empty>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).create_api_token(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = CreateAPITokenSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
@@ -1727,6 +1819,37 @@ pub mod project_api_server {
                     };
                     Box::pin(fut)
                 }
+                "/services.ProjectAPI/GetAPIToken" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetAPITokenSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Empty> for GetAPITokenSvc<T> {
+                        type Response = super::ApiTokenList;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Empty>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_api_token(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = GetAPITokenSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/services.ProjectAPI/DeleteProject" => {
                     #[allow(non_camel_case_types)]
                     struct DeleteProjectSvc<T: ProjectApi>(pub Arc<T>);
@@ -1747,6 +1870,37 @@ pub mod project_api_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = DeleteProjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.ProjectAPI/DeleteAPIToken" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteAPITokenSvc<T: ProjectApi>(pub Arc<T>);
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Id> for DeleteAPITokenSvc<T> {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).delete_api_token(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DeleteAPITokenSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
