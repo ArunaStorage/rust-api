@@ -1426,7 +1426,7 @@ pub mod project_api_client {
         }
         pub async fn create_api_token(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::models::Empty>,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::ApiToken>, tonic::Status> {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -1560,7 +1560,7 @@ pub mod project_api_server {
         ) -> Result<tonic::Response<super::super::models::Project>, tonic::Status>;
         async fn create_api_token(
             &self,
-            request: tonic::Request<super::super::models::Empty>,
+            request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::ApiToken>, tonic::Status>;
         #[doc = "GetProjectDatasets Returns all datasets that belong to a certain project"]
         async fn get_project_datasets(
@@ -1692,14 +1692,12 @@ pub mod project_api_server {
                 "/services.ProjectAPI/CreateAPIToken" => {
                     #[allow(non_camel_case_types)]
                     struct CreateAPITokenSvc<T: ProjectApi>(pub Arc<T>);
-                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Empty>
-                        for CreateAPITokenSvc<T>
-                    {
+                    impl<T: ProjectApi> tonic::server::UnaryService<super::super::models::Id> for CreateAPITokenSvc<T> {
                         type Response = super::super::models::ApiToken;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::super::models::Empty>,
+                            request: tonic::Request<super::super::models::Id>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move { (*inner).create_api_token(request).await };
