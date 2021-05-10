@@ -313,6 +313,22 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn delete_dataset_version(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/services.DatasetService/DeleteDatasetVersion",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
     impl<T: Clone> Clone for DatasetServiceClient<T> {
         fn clone(&self) -> Self {
@@ -380,6 +396,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::ObjectGroupRevisions>, tonic::Status>;
+        async fn delete_dataset_version(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
     }
     #[doc = " Dataset management service"]
     #[doc = " Manages all dataset related services"]
@@ -752,6 +772,39 @@ pub mod dataset_service_server {
                     };
                     Box::pin(fut)
                 }
+                "/services.DatasetService/DeleteDatasetVersion" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteDatasetVersionSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService> tonic::server::UnaryService<super::super::models::Id>
+                        for DeleteDatasetVersionSvc<T>
+                    {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).delete_dataset_version(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DeleteDatasetVersionSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => Box::pin(async move {
                     Ok(http::Response::builder()
                         .status(200)
@@ -962,6 +1015,38 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn delete_object_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/services.DatasetObjectsService/DeleteObjectGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn delete_object_group_revision(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/services.DatasetObjectsService/DeleteObjectGroupRevision",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
     impl<T: Clone> Clone for DatasetObjectsServiceClient<T> {
         fn clone(&self) -> Self {
@@ -1013,6 +1098,14 @@ pub mod dataset_objects_service_server {
         ) -> Result<tonic::Response<super::ObjectGroupRevisions>, tonic::Status>;
         #[doc = "FinishObjectUpload Finishes the upload process for an object"]
         async fn finish_object_upload(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
+        async fn delete_object_group(
+            &self,
+            request: tonic::Request<super::super::models::Id>,
+        ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
+        async fn delete_object_group_revision(
             &self,
             request: tonic::Request<super::super::models::Id>,
         ) -> Result<tonic::Response<super::super::models::Empty>, tonic::Status>;
@@ -1281,6 +1374,75 @@ pub mod dataset_objects_service_server {
                         let interceptor = inner.1.clone();
                         let inner = inner.0;
                         let method = FinishObjectUploadSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetObjectsService/DeleteObjectGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::super::models::Id>
+                        for DeleteObjectGroupSvc<T>
+                    {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).delete_object_group(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DeleteObjectGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = if let Some(interceptor) = interceptor {
+                            tonic::server::Grpc::with_interceptor(codec, interceptor)
+                        } else {
+                            tonic::server::Grpc::new(codec)
+                        };
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/services.DatasetObjectsService/DeleteObjectGroupRevision" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteObjectGroupRevisionSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::super::models::Id>
+                        for DeleteObjectGroupRevisionSvc<T>
+                    {
+                        type Response = super::super::models::Empty;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::super::models::Id>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).delete_object_group_revision(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let interceptor = inner.1.clone();
+                        let inner = inner.0;
+                        let method = DeleteObjectGroupRevisionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = if let Some(interceptor) = interceptor {
                             tonic::server::Grpc::with_interceptor(codec, interceptor)
