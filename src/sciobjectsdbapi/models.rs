@@ -155,6 +155,8 @@ pub struct ApiToken {
     pub token: ::prost::alloc::string::String,
     #[prost(enumeration = "Right", repeated, tag = "3")]
     pub rights: ::prost::alloc::vec::Vec<i32>,
+    #[prost(string, tag = "4")]
+    pub project_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Empty {}
