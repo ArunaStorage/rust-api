@@ -740,8 +740,8 @@ pub struct CreateObjectRequest {
 pub struct GetObjectGroupRevisionRequest {
     #[prost(enumeration = "ObjectGroupRevisionReferenceType", tag = "1")]
     pub reference_type: i32,
-    #[prost(string, tag = "2")]
-    pub revision: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub revision: i64,
     #[prost(message, optional, tag = "3")]
     pub version: ::core::option::Option<super::models::Version>,
     #[prost(string, tag = "4")]
