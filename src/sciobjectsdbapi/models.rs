@@ -186,6 +186,58 @@ pub enum Resource {
     ObjectGroupVersionResource = 5,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Dataset {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Name of the dataset
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
+    /// When the datasets was created
+    #[prost(message, optional, tag = "4")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, repeated, tag = "5")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "6")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    #[prost(string, tag = "7")]
+    pub project_id: ::prost::alloc::string::String,
+    ///Indicates if the dataset if publicly available
+    #[prost(bool, tag = "8")]
+    pub is_public: bool,
+    #[prost(enumeration = "Status", tag = "9")]
+    pub status: i32,
+    #[prost(message, repeated, tag = "10")]
+    pub version_tags: ::prost::alloc::vec::Vec<VersionTag>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DatasetVersion {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "5")]
+    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
+    /// When the datasets version was created
+    #[prost(message, optional, tag = "6")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "7")]
+    pub version: ::core::option::Option<Version>,
+    #[prost(string, repeated, tag = "8")]
+    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Number of objects registered with this dataset version
+    #[prost(int64, tag = "9")]
+    pub object_count: i64,
+    /// Indicates the status of a dataset
+    #[prost(enumeration = "Status", tag = "10")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Project {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
@@ -199,6 +251,42 @@ pub struct Project {
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     #[prost(message, repeated, tag = "6")]
     pub users: ::prost::alloc::vec::Vec<User>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TokenList {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub token: ::prost::alloc::vec::Vec<TokenEntry>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TokenEntry {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub user_id: ::core::option::Option<User>,
+    #[prost(string, tag = "3")]
+    pub token: ::prost::alloc::string::String,
+    #[prost(enumeration = "Resource", tag = "4")]
+    pub resource: i32,
+    /// When the token was created
+    #[prost(message, optional, tag = "5")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
+    /// When the token expires
+    #[prost(message, optional, tag = "6")]
+    pub expires: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateTokenRequest {
+    #[prost(string, tag = "1")]
+    pub resource_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "Right", repeated, tag = "2")]
+    pub rights: ::prost::alloc::vec::Vec<i32>,
+    #[prost(enumeration = "Resource", tag = "3")]
+    pub resource: i32,
+    /// When the token expires
+    #[prost(message, optional, tag = "4")]
+    pub expires: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroup {
@@ -270,92 +358,4 @@ pub struct Object {
     pub content_len: i64,
     #[prost(string, tag = "10")]
     pub upload_id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Dataset {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    /// Name of the dataset
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub description: ::prost::alloc::string::String,
-    /// When the datasets was created
-    #[prost(message, optional, tag = "4")]
-    pub created: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, repeated, tag = "5")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "6")]
-    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    #[prost(string, tag = "7")]
-    pub project_id: ::prost::alloc::string::String,
-    ///Indicates if the dataset if publicly available
-    #[prost(bool, tag = "8")]
-    pub is_public: bool,
-    #[prost(enumeration = "Status", tag = "9")]
-    pub status: i32,
-    #[prost(message, repeated, tag = "10")]
-    pub version_tags: ::prost::alloc::vec::Vec<VersionTag>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DatasetVersion {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "4")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
-    #[prost(message, repeated, tag = "5")]
-    pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    /// When the datasets version was created
-    #[prost(message, optional, tag = "6")]
-    pub created: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "7")]
-    pub version: ::core::option::Option<Version>,
-    #[prost(string, repeated, tag = "8")]
-    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// Number of objects registered with this dataset version
-    #[prost(int64, tag = "9")]
-    pub object_count: i64,
-    /// Indicates the status of a dataset
-    #[prost(enumeration = "Status", tag = "10")]
-    pub status: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TokenList {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "2")]
-    pub token: ::prost::alloc::vec::Vec<TokenEntry>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TokenEntry {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub user_id: ::core::option::Option<User>,
-    #[prost(string, tag = "3")]
-    pub token: ::prost::alloc::string::String,
-    #[prost(enumeration = "Resource", tag = "4")]
-    pub resource: i32,
-    /// When the token was created
-    #[prost(message, optional, tag = "5")]
-    pub created: ::core::option::Option<::prost_types::Timestamp>,
-    /// When the token expires
-    #[prost(message, optional, tag = "6")]
-    pub expires: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateTokenRequest {
-    #[prost(string, tag = "1")]
-    pub resource_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "Right", repeated, tag = "2")]
-    pub rights: ::prost::alloc::vec::Vec<i32>,
-    #[prost(enumeration = "Resource", tag = "3")]
-    pub resource: i32,
-    /// When the token expires
-    #[prost(message, optional, tag = "4")]
-    pub expires: ::core::option::Option<::prost_types::Timestamp>,
 }
