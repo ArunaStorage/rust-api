@@ -5,25 +5,25 @@ use std::fs;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut protos: Vec<String> = Vec::new();
 
-    let entries = fs::read_dir("API/api/models")?;
+    let entries = fs::read_dir("API/api/models/v1")?;
 
     for entry in entries {
         let dir = entry?;
         let rel_path = format!(
             "{}{}",
-            "API/api/models/",
+            "API/api/models/v1/",
             dir.file_name().to_str().unwrap().to_string()
         );
         protos.push(rel_path)
     }
 
-    let entries = fs::read_dir("API/api/services")?;
+    let entries = fs::read_dir("API/api/services/v1")?;
 
     for entry in entries {
         let dir = entry?;
         let rel_path = format!(
             "{}{}",
-            "API/api/services/",
+            "API/api/services/v1/",
             dir.file_name().to_str().unwrap().to_string()
         );
         protos.push(rel_path)
