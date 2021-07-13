@@ -14,14 +14,9 @@ pub struct CreateObjectGroupRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
     #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddRevisionToObjectGroupRequest {
-    #[prost(string, tag = "1")]
     pub object_group_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub group_version: ::core::option::Option<CreateObjectGroupRevisionRequest>,
+    #[prost(string, tag = "2")]
+    pub revision_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRevisionRequest {
@@ -33,12 +28,18 @@ pub struct CreateObjectGroupRevisionRequest {
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddRevisionToObjectGroupResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroup>,
+pub struct AddRevisionToObjectGroupRequest {
+    #[prost(string, tag = "1")]
+    pub object_group_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
-    pub object_group_revision:
-        ::core::option::Option<super::super::models::v1::ObjectGroupRevision>,
+    pub group_version: ::core::option::Option<CreateObjectGroupRevisionRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddRevisionToObjectGroupResponse {
+    #[prost(string, tag = "1")]
+    pub revision_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub revision_number: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
@@ -814,8 +815,8 @@ pub struct GetDatasetRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub dataset: ::prost::alloc::vec::Vec<super::super::models::v1::Dataset>,
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v1::Dataset>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionsRequest {
@@ -882,7 +883,10 @@ pub struct ReleaseDatasetVersionRequest {
     pub revision_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReleaseDatasetVersionResponse {}
+pub struct ReleaseDatasetVersionResponse {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionRequest {
     #[prost(string, tag = "1")]
@@ -925,8 +929,6 @@ pub struct CreateUploadLinkRequest {
 pub struct CreateUploadLinkResponse {
     #[prost(string, tag = "1")]
     pub upload_link: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub object: ::core::option::Option<super::super::models::v1::Object>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDownloadLinkRequest {
@@ -1410,8 +1412,8 @@ pub struct CreateProjectRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectResponse {
-    #[prost(message, optional, tag = "1")]
-    pub project: ::core::option::Option<super::super::models::v1::Project>,
+    #[prost(string, tag = "1")]
+    pub project: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectRequest {
@@ -1455,8 +1457,8 @@ pub struct GetUserProjectsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "1")]
+    pub project: ::core::option::Option<super::super::models::v1::Project>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectResponse {
