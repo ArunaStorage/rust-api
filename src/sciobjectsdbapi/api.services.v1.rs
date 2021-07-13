@@ -1457,8 +1457,8 @@ pub struct GetUserProjectsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectRequest {
-    #[prost(message, optional, tag = "1")]
-    pub project: ::core::option::Option<super::super::models::v1::Project>,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectResponse {
