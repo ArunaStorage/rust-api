@@ -182,8 +182,8 @@ pub enum Resource {
     DatasetResource = 1,
     DatasetVersionResource = 2,
     ObjectResource = 3,
-    ObjeftGroupResource = 4,
-    ObjectGroupVersionResource = 5,
+    ObjectGroupResource = 4,
+    ObjectGroupRevisionResource = 5,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroup {

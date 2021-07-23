@@ -9,7 +9,7 @@ pub struct CreateObjectGroupRequest {
     #[prost(message, repeated, tag = "4")]
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
     #[prost(message, optional, tag = "5")]
-    pub object_group_version: ::core::option::Option<CreateObjectGroupRevisionRequest>,
+    pub object_group_revision: ::core::option::Option<CreateObjectGroupRevisionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
@@ -32,7 +32,7 @@ pub struct AddRevisionToObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub object_group_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
-    pub group_version: ::core::option::Option<CreateObjectGroupRevisionRequest>,
+    pub group_revison: ::core::option::Option<CreateObjectGroupRevisionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddRevisionToObjectGroupResponse {
