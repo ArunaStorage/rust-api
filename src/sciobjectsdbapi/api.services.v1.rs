@@ -141,7 +141,7 @@ pub enum ObjectGroupRevisionReferenceType {
 }
 #[doc = r" Generated client implementations."]
 pub mod dataset_objects_service_client {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct DatasetObjectsServiceClient<T> {
@@ -175,13 +175,13 @@ pub mod dataset_objects_service_client {
         ) -> DatasetObjectsServiceClient<InterceptedService<T, F>>
         where
             F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
-            T: Service<
+            T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as Service<http::Request<tonic::body::BoxBody>>>::Error:
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
                 Into<StdError> + Send + Sync,
         {
             DatasetObjectsServiceClient::new(InterceptedService::new(inner, interceptor))
@@ -356,7 +356,7 @@ pub mod dataset_objects_service_client {
 }
 #[doc = r" Generated server implementations."]
 pub mod dataset_objects_service_server {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetObjectsServiceServer."]
     #[async_trait]
@@ -427,7 +427,7 @@ pub mod dataset_objects_service_server {
             InterceptedService::new(Self::new(inner), interceptor)
         }
     }
-    impl<T, B> Service<http::Request<B>> for DatasetObjectsServiceServer<T>
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetObjectsServiceServer<T>
     where
         T: DatasetObjectsService,
         B: Body + Send + Sync + 'static,
@@ -984,7 +984,7 @@ pub struct CompletedParts {
 }
 #[doc = r" Generated client implementations."]
 pub mod object_load_service_client {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct ObjectLoadServiceClient<T> {
@@ -1018,13 +1018,13 @@ pub mod object_load_service_client {
         ) -> ObjectLoadServiceClient<InterceptedService<T, F>>
         where
             F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
-            T: Service<
+            T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as Service<http::Request<tonic::body::BoxBody>>>::Error:
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
                 Into<StdError> + Send + Sync,
         {
             ObjectLoadServiceClient::new(InterceptedService::new(inner, interceptor))
@@ -1127,7 +1127,7 @@ pub mod object_load_service_client {
 }
 #[doc = r" Generated server implementations."]
 pub mod object_load_service_server {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with ObjectLoadServiceServer."]
     #[async_trait]
@@ -1177,7 +1177,7 @@ pub mod object_load_service_server {
             InterceptedService::new(Self::new(inner), interceptor)
         }
     }
-    impl<T, B> Service<http::Request<B>> for ObjectLoadServiceServer<T>
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for ObjectLoadServiceServer<T>
     where
         T: ObjectLoadService,
         B: Body + Send + Sync + 'static,
@@ -1488,7 +1488,7 @@ pub struct DeleteProjectRequest {
 pub struct DeleteProjectResponse {}
 #[doc = r" Generated client implementations."]
 pub mod project_service_client {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct ProjectServiceClient<T> {
@@ -1522,13 +1522,13 @@ pub mod project_service_client {
         ) -> ProjectServiceClient<InterceptedService<T, F>>
         where
             F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
-            T: Service<
+            T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as Service<http::Request<tonic::body::BoxBody>>>::Error:
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
                 Into<StdError> + Send + Sync,
         {
             ProjectServiceClient::new(InterceptedService::new(inner, interceptor))
@@ -1698,7 +1698,7 @@ pub mod project_service_client {
 }
 #[doc = r" Generated server implementations."]
 pub mod project_service_server {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with ProjectServiceServer."]
     #[async_trait]
@@ -1770,7 +1770,7 @@ pub mod project_service_server {
             InterceptedService::new(Self::new(inner), interceptor)
         }
     }
-    impl<T, B> Service<http::Request<B>> for ProjectServiceServer<T>
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for ProjectServiceServer<T>
     where
         T: ProjectService,
         B: Body + Send + Sync + 'static,
@@ -2122,7 +2122,7 @@ pub mod project_service_server {
 }
 #[doc = r" Generated client implementations."]
 pub mod dataset_service_client {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[doc = " Dataset management service"]
     #[doc = " Manages all dataset related services"]
@@ -2160,13 +2160,13 @@ pub mod dataset_service_client {
         ) -> DatasetServiceClient<InterceptedService<T, F>>
         where
             F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
-            T: Service<
+            T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as Service<http::Request<tonic::body::BoxBody>>>::Error:
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
                 Into<StdError> + Send + Sync,
         {
             DatasetServiceClient::new(InterceptedService::new(inner, interceptor))
@@ -2371,7 +2371,7 @@ pub mod dataset_service_client {
 }
 #[doc = r" Generated server implementations."]
 pub mod dataset_service_server {
-    #![allow(unused_variables, dead_code, missing_docs)]
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetServiceServer."]
     #[async_trait]
@@ -2455,7 +2455,7 @@ pub mod dataset_service_server {
             InterceptedService::new(Self::new(inner), interceptor)
         }
     }
-    impl<T, B> Service<http::Request<B>> for DatasetServiceServer<T>
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetServiceServer<T>
     where
         T: DatasetService,
         B: Body + Send + Sync + 'static,
