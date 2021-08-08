@@ -2,8 +2,8 @@
 pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub dataset_id: u64,
     #[prost(message, repeated, tag = "3")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
     #[prost(message, repeated, tag = "4")]
@@ -13,10 +13,10 @@ pub struct CreateObjectGroupRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
-    #[prost(string, tag = "1")]
-    pub object_group_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub revision_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub object_group_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub revision_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRevisionRequest {
@@ -29,15 +29,15 @@ pub struct CreateObjectGroupRevisionRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddRevisionToObjectGroupRequest {
-    #[prost(string, tag = "1")]
-    pub object_group_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub object_group_id: u64,
     #[prost(message, optional, tag = "2")]
     pub group_revison: ::core::option::Option<CreateObjectGroupRevisionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddRevisionToObjectGroupResponse {
-    #[prost(string, tag = "1")]
-    pub revision_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub revision_id: u64,
     #[prost(uint64, tag = "2")]
     pub revision_number: u64,
 }
@@ -60,8 +60,8 @@ pub struct CreateObjectRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupResponse {
@@ -76,8 +76,8 @@ pub struct GetObjectGroupRevisionRequest {
     pub revision: i64,
     #[prost(message, optional, tag = "3")]
     pub version: ::core::option::Option<super::super::models::v1::Version>,
-    #[prost(string, tag = "4")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "4")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRevisionResponse {
@@ -89,8 +89,8 @@ pub struct GetObjectGroupRevisionResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCurrentObjectGroupRevisionRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCurrentObjectGroupRevisionResponse {
@@ -102,8 +102,8 @@ pub struct GetCurrentObjectGroupRevisionResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRevisionsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRevisionsResponse {
@@ -113,22 +113,22 @@ pub struct GetObjectGroupRevisionsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectUploadRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectUploadResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupRevisionRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupRevisionResponse {}
@@ -796,8 +796,8 @@ pub struct CreateDatasetRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
     ///ProjectID of the project the dataset is associated with
-    #[prost(string, tag = "3")]
-    pub project_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub project_id: u64,
     #[prost(message, repeated, tag = "4")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
     #[prost(message, repeated, tag = "5")]
@@ -805,13 +805,13 @@ pub struct CreateDatasetRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDatasetResponse {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetResponse {
@@ -820,8 +820,8 @@ pub struct GetDatasetResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionsResponse {
@@ -830,8 +830,8 @@ pub struct GetDatasetVersionsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetObjectGroupsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetObjectGroupsResponse {
@@ -840,8 +840,8 @@ pub struct GetDatasetObjectGroupsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCurrentObjectGroupRevisionsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCurrentObjectGroupRevisionsResponse {
@@ -858,8 +858,8 @@ pub struct UpdateDatasetFieldRequest {
 pub struct UpdateDatasetFieldResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetResponse {}
@@ -869,28 +869,28 @@ pub struct DeleteDatasetResponse {}
 pub struct ReleaseDatasetVersionRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub dataset_id: u64,
     #[prost(message, optional, tag = "3")]
     pub version: ::core::option::Option<super::super::models::v1::Version>,
-    #[prost(string, repeated, tag = "4")]
-    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "5")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
     #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-    #[prost(string, repeated, tag = "7")]
-    pub revision_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint64, repeated, tag = "7")]
+    pub revision_ids: ::prost::alloc::vec::Vec<u64>,
+    #[prost(string, tag = "8")]
+    pub description: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReleaseDatasetVersionResponse {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionResponse {
@@ -898,32 +898,32 @@ pub struct GetDatasetVersionResponse {
     pub dataset_version: ::core::option::Option<super::super::models::v1::DatasetVersion>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatsetVersionRevisionsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+pub struct GetDatasetVersionRevisionsRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatsetVersionRevisionsResponse {
+pub struct GetDatasetVersionRevisionsResponse {
     #[prost(message, repeated, tag = "1")]
     pub object_group_revision:
         ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroupRevision>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetVersionRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetVersionResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLink {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLinkRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLinkResponse {
@@ -932,8 +932,8 @@ pub struct CreateUploadLinkResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDownloadLinkRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDownloadLinkResponse {
@@ -944,8 +944,8 @@ pub struct CreateDownloadLinkResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StartMultipartUploadRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StartMultipartUploadResponse {
@@ -961,15 +961,15 @@ pub struct GetMultipartUploadLinkResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetMultipartUploadLinkRequest {
-    #[prost(string, tag = "1")]
-    pub object_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub object_id: u64,
     #[prost(int64, tag = "2")]
     pub upload_part: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CompleteMultipartUploadRequest {
-    #[prost(string, tag = "1")]
-    pub object_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub object_id: u64,
     #[prost(message, repeated, tag = "2")]
     pub parts: ::prost::alloc::vec::Vec<CompletedParts>,
 }
@@ -1412,8 +1412,8 @@ pub struct CreateProjectRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectResponse {
-    #[prost(string, tag = "1")]
-    pub project: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectRequest {
@@ -1421,15 +1421,15 @@ pub struct AddUserToProjectRequest {
     pub user_id: ::prost::alloc::string::String,
     #[prost(enumeration = "super::super::models::v1::Right", repeated, tag = "2")]
     pub scope: ::prost::alloc::vec::Vec<i32>,
-    #[prost(string, tag = "3")]
-    pub project_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub project_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenResponse {
@@ -1438,8 +1438,8 @@ pub struct CreateApiTokenResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectDatasetsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectDatasetsResponse {
@@ -1457,8 +1457,8 @@ pub struct GetUserProjectsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectResponse {
@@ -1474,15 +1474,15 @@ pub struct GetApiTokenResponse {
 pub struct GetApiTokenRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokenRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokenResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteProjectRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteProjectResponse {}
@@ -2336,8 +2336,8 @@ pub mod dataset_service_client {
         }
         pub async fn get_datset_version_revisions(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetDatsetVersionRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetDatsetVersionRevisionsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::GetDatasetVersionRevisionsRequest>,
+        ) -> Result<tonic::Response<super::GetDatasetVersionRevisionsResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -2420,8 +2420,8 @@ pub mod dataset_service_server {
         ) -> Result<tonic::Response<super::GetDatasetVersionResponse>, tonic::Status>;
         async fn get_datset_version_revisions(
             &self,
-            request: tonic::Request<super::GetDatsetVersionRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetDatsetVersionRevisionsResponse>, tonic::Status>;
+            request: tonic::Request<super::GetDatasetVersionRevisionsRequest>,
+        ) -> Result<tonic::Response<super::GetDatasetVersionRevisionsResponse>, tonic::Status>;
         async fn delete_dataset_version(
             &self,
             request: tonic::Request<super::DeleteDatasetVersionRequest>,
@@ -2779,14 +2779,14 @@ pub mod dataset_service_server {
                     #[allow(non_camel_case_types)]
                     struct GetDatsetVersionRevisionsSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetDatsetVersionRevisionsRequest>
+                        tonic::server::UnaryService<super::GetDatasetVersionRevisionsRequest>
                         for GetDatsetVersionRevisionsSvc<T>
                     {
-                        type Response = super::GetDatsetVersionRevisionsResponse;
+                        type Response = super::GetDatasetVersionRevisionsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetDatsetVersionRevisionsRequest>,
+                            request: tonic::Request<super::GetDatasetVersionRevisionsRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut =
