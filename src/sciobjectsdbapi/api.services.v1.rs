@@ -82,8 +82,6 @@ pub struct GetObjectGroupRevisionRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRevisionResponse {
     #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroup>,
-    #[prost(message, optional, tag = "2")]
     pub object_group_revision:
         ::core::option::Option<super::super::models::v1::ObjectGroupRevision>,
 }
@@ -95,8 +93,6 @@ pub struct GetCurrentObjectGroupRevisionRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCurrentObjectGroupRevisionResponse {
     #[prost(message, optional, tag = "1")]
-    pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroup>,
-    #[prost(message, optional, tag = "2")]
     pub object_group_revision:
         ::core::option::Option<super::super::models::v1::ObjectGroupRevision>,
 }
@@ -938,9 +934,7 @@ pub struct CreateDownloadLinkRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDownloadLinkResponse {
     #[prost(string, tag = "1")]
-    pub upload_link: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub object: ::core::option::Option<super::super::models::v1::Object>,
+    pub download_link: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StartMultipartUploadRequest {
