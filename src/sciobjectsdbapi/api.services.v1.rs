@@ -2,13 +2,15 @@
 pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
     pub dataset_id: u64,
-    #[prost(message, repeated, tag = "3")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
     #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
+    #[prost(message, repeated, tag = "5")]
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "6")]
     pub object_group_revision: ::core::option::Option<CreateObjectGroupRevisionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -791,6 +793,8 @@ pub struct CreateDatasetRequest {
     /// Name of the dataset
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
     ///ProjectID of the project the dataset is associated with
     #[prost(uint64, tag = "3")]
     pub project_id: u64,
@@ -1439,8 +1443,6 @@ pub struct GetProjectDatasetsRequest {
 pub struct GetProjectDatasetsResponse {
     #[prost(message, repeated, tag = "1")]
     pub dataset: ::prost::alloc::vec::Vec<super::super::models::v1::Dataset>,
-    #[prost(message, repeated, tag = "2")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserProjectsRequest {}

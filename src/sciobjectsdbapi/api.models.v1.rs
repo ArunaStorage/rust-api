@@ -191,17 +191,19 @@ pub struct ObjectGroup {
     pub id: u64,
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "4")]
     pub dataset_id: u64,
-    #[prost(message, repeated, tag = "4")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
     #[prost(message, repeated, tag = "5")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    #[prost(enumeration = "Status", tag = "6")]
+    #[prost(enumeration = "Status", tag = "7")]
     pub status: i32,
-    #[prost(uint64, tag = "7")]
+    #[prost(uint64, tag = "8")]
     pub head_id: u64,
-    #[prost(int64, tag = "8")]
+    #[prost(int64, tag = "9")]
     pub current_revision: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -286,26 +288,28 @@ pub struct Dataset {
 pub struct DatasetVersion {
     #[prost(uint64, tag = "1")]
     pub id: u64,
-    #[prost(uint64, tag = "2")]
-    pub dataset_id: u64,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "4")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(uint64, tag = "4")]
+    pub dataset_id: u64,
     #[prost(message, repeated, tag = "5")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     /// When the datasets version was created
-    #[prost(message, optional, tag = "6")]
-    pub created: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "7")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "8")]
     pub version: ::core::option::Option<Version>,
-    #[prost(uint64, repeated, tag = "8")]
+    #[prost(uint64, repeated, tag = "9")]
     pub object_group_ids: ::prost::alloc::vec::Vec<u64>,
     /// Number of objects registered with this dataset version
-    #[prost(int64, tag = "9")]
+    #[prost(int64, tag = "10")]
     pub object_count: i64,
     /// Indicates the status of a dataset
-    #[prost(enumeration = "Status", tag = "10")]
+    #[prost(enumeration = "Status", tag = "11")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
