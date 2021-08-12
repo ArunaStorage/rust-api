@@ -2330,7 +2330,7 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn get_datset_version_revisions(
+        pub async fn get_dataset_version_revisions(
             &mut self,
             request: impl tonic::IntoRequest<super::GetDatasetVersionRevisionsRequest>,
         ) -> Result<tonic::Response<super::GetDatasetVersionRevisionsResponse>, tonic::Status>
@@ -2343,7 +2343,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetDatsetVersionRevisions",
+                "/api.services.v1.DatasetService/GetDatasetVersionRevisions",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2414,7 +2414,7 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::GetDatasetVersionRequest>,
         ) -> Result<tonic::Response<super::GetDatasetVersionResponse>, tonic::Status>;
-        async fn get_datset_version_revisions(
+        async fn get_dataset_version_revisions(
             &self,
             request: tonic::Request<super::GetDatasetVersionRevisionsRequest>,
         ) -> Result<tonic::Response<super::GetDatasetVersionRevisionsResponse>, tonic::Status>;
@@ -2771,12 +2771,12 @@ pub mod dataset_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.DatasetService/GetDatsetVersionRevisions" => {
+                "/api.services.v1.DatasetService/GetDatasetVersionRevisions" => {
                     #[allow(non_camel_case_types)]
-                    struct GetDatsetVersionRevisionsSvc<T: DatasetService>(pub Arc<T>);
+                    struct GetDatasetVersionRevisionsSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService>
                         tonic::server::UnaryService<super::GetDatasetVersionRevisionsRequest>
-                        for GetDatsetVersionRevisionsSvc<T>
+                        for GetDatasetVersionRevisionsSvc<T>
                     {
                         type Response = super::GetDatasetVersionRevisionsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
@@ -2785,8 +2785,9 @@ pub mod dataset_service_server {
                             request: tonic::Request<super::GetDatasetVersionRevisionsRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).get_datset_version_revisions(request).await };
+                            let fut = async move {
+                                (*inner).get_dataset_version_revisions(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -2795,7 +2796,7 @@ pub mod dataset_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetDatsetVersionRevisionsSvc(inner);
+                        let method = GetDatasetVersionRevisionsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
