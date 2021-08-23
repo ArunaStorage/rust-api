@@ -10,38 +10,15 @@ pub struct CreateObjectGroupRequest {
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
     #[prost(message, repeated, tag = "5")]
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-    #[prost(message, optional, tag = "6")]
-    pub object_group_revision: ::core::option::Option<CreateObjectGroupRevisionRequest>,
+    #[prost(message, repeated, tag = "6")]
+    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
+    #[prost(message, optional, tag = "7")]
+    pub generated: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
     #[prost(uint64, tag = "1")]
     pub object_group_id: u64,
-    #[prost(uint64, tag = "2")]
-    pub revision_id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateObjectGroupRevisionRequest {
-    #[prost(message, repeated, tag = "4")]
-    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    #[prost(message, repeated, tag = "5")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
-    #[prost(message, repeated, tag = "6")]
-    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddRevisionToObjectGroupRequest {
-    #[prost(uint64, tag = "1")]
-    pub object_group_id: u64,
-    #[prost(message, optional, tag = "2")]
-    pub group_revison: ::core::option::Option<CreateObjectGroupRevisionRequest>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddRevisionToObjectGroupResponse {
-    #[prost(uint64, tag = "1")]
-    pub revision_id: u64,
-    #[prost(uint64, tag = "2")]
-    pub revision_number: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
@@ -59,6 +36,8 @@ pub struct CreateObjectRequest {
     /// Origin: Source of the dataset
     #[prost(message, optional, tag = "6")]
     pub origin: ::core::option::Option<super::super::models::v1::Origin>,
+    #[prost(message, optional, tag = "7")]
+    pub generated: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRequest {
@@ -69,45 +48,6 @@ pub struct GetObjectGroupRequest {
 pub struct GetObjectGroupResponse {
     #[prost(message, optional, tag = "1")]
     pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroup>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupRevisionRequest {
-    #[prost(enumeration = "ObjectGroupRevisionReferenceType", tag = "1")]
-    pub reference_type: i32,
-    #[prost(int64, tag = "2")]
-    pub revision: i64,
-    #[prost(message, optional, tag = "3")]
-    pub version: ::core::option::Option<super::super::models::v1::Version>,
-    #[prost(uint64, tag = "4")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupRevisionResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object_group_revision:
-        ::core::option::Option<super::super::models::v1::ObjectGroupRevision>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetCurrentObjectGroupRevisionRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetCurrentObjectGroupRevisionResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object_group_revision:
-        ::core::option::Option<super::super::models::v1::ObjectGroupRevision>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupRevisionsRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupRevisionsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub object_group_revision:
-        ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroupRevision>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectUploadRequest {
@@ -123,20 +63,6 @@ pub struct DeleteObjectGroupRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteObjectGroupRevisionRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteObjectGroupRevisionResponse {}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum ObjectGroupRevisionReferenceType {
-    Version = 0,
-    Revision = 1,
-    Id = 2,
-}
 #[doc = r" Generated client implementations."]
 pub mod dataset_objects_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -214,24 +140,6 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = "CreateObjectGroupVersion Creates a new object group version"]
-        pub async fn add_revision_to_object_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::AddRevisionToObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::AddRevisionToObjectGroupResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/AddRevisionToObjectGroup",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         pub async fn get_object_group(
             &mut self,
@@ -246,57 +154,6 @@ pub mod dataset_objects_service_client {
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/api.services.v1.DatasetObjectsService/GetObjectGroup",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        #[doc = "GetObjectGroupCurrentVersion Returns the head version in the history of a given object group"]
-        pub async fn get_current_object_group_revision(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetCurrentObjectGroupRevisionRequest>,
-        ) -> Result<tonic::Response<super::GetCurrentObjectGroupRevisionResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/GetCurrentObjectGroupRevision",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn get_object_group_revision(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetObjectGroupRevisionRequest>,
-        ) -> Result<tonic::Response<super::GetObjectGroupRevisionResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/GetObjectGroupRevision",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn get_object_group_revisions(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetObjectGroupRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetObjectGroupRevisionsResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/GetObjectGroupRevisions",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -333,23 +190,6 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn delete_object_group_revision(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteObjectGroupRevisionRequest>,
-        ) -> Result<tonic::Response<super::DeleteObjectGroupRevisionResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/DeleteObjectGroupRevision",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
     }
 }
 #[doc = r" Generated server implementations."]
@@ -364,29 +204,11 @@ pub mod dataset_objects_service_server {
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
         ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
-        #[doc = "CreateObjectGroupVersion Creates a new object group version"]
-        async fn add_revision_to_object_group(
-            &self,
-            request: tonic::Request<super::AddRevisionToObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::AddRevisionToObjectGroupResponse>, tonic::Status>;
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         async fn get_object_group(
             &self,
             request: tonic::Request<super::GetObjectGroupRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status>;
-        #[doc = "GetObjectGroupCurrentVersion Returns the head version in the history of a given object group"]
-        async fn get_current_object_group_revision(
-            &self,
-            request: tonic::Request<super::GetCurrentObjectGroupRevisionRequest>,
-        ) -> Result<tonic::Response<super::GetCurrentObjectGroupRevisionResponse>, tonic::Status>;
-        async fn get_object_group_revision(
-            &self,
-            request: tonic::Request<super::GetObjectGroupRevisionRequest>,
-        ) -> Result<tonic::Response<super::GetObjectGroupRevisionResponse>, tonic::Status>;
-        async fn get_object_group_revisions(
-            &self,
-            request: tonic::Request<super::GetObjectGroupRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetObjectGroupRevisionsResponse>, tonic::Status>;
         #[doc = "FinishObjectUpload Finishes the upload process for an object"]
         async fn finish_object_upload(
             &self,
@@ -396,10 +218,6 @@ pub mod dataset_objects_service_server {
             &self,
             request: tonic::Request<super::DeleteObjectGroupRequest>,
         ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status>;
-        async fn delete_object_group_revision(
-            &self,
-            request: tonic::Request<super::DeleteObjectGroupRevisionRequest>,
-        ) -> Result<tonic::Response<super::DeleteObjectGroupRevisionResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct DatasetObjectsServiceServer<T: DatasetObjectsService> {
@@ -474,41 +292,6 @@ pub mod dataset_objects_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.DatasetObjectsService/AddRevisionToObjectGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct AddRevisionToObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::AddRevisionToObjectGroupRequest>
-                        for AddRevisionToObjectGroupSvc<T>
-                    {
-                        type Response = super::AddRevisionToObjectGroupResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::AddRevisionToObjectGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).add_revision_to_object_group(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AddRevisionToObjectGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
                 "/api.services.v1.DatasetObjectsService/GetObjectGroup" => {
                     #[allow(non_camel_case_types)]
                     struct GetObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
@@ -533,112 +316,6 @@ pub mod dataset_objects_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetObjectGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/GetCurrentObjectGroupRevision" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetCurrentObjectGroupRevisionSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::GetCurrentObjectGroupRevisionRequest>
-                        for GetCurrentObjectGroupRevisionSvc<T>
-                    {
-                        type Response = super::GetCurrentObjectGroupRevisionResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetCurrentObjectGroupRevisionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).get_current_object_group_revision(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetCurrentObjectGroupRevisionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/GetObjectGroupRevision" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetObjectGroupRevisionSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::GetObjectGroupRevisionRequest>
-                        for GetObjectGroupRevisionSvc<T>
-                    {
-                        type Response = super::GetObjectGroupRevisionResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetObjectGroupRevisionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).get_object_group_revision(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetObjectGroupRevisionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/GetObjectGroupRevisions" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetObjectGroupRevisionsSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::GetObjectGroupRevisionsRequest>
-                        for GetObjectGroupRevisionsSvc<T>
-                    {
-                        type Response = super::GetObjectGroupRevisionsResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetObjectGroupRevisionsRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).get_object_group_revisions(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetObjectGroupRevisionsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
@@ -707,41 +384,6 @@ pub mod dataset_objects_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = DeleteObjectGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/DeleteObjectGroupRevision" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteObjectGroupRevisionSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::DeleteObjectGroupRevisionRequest>
-                        for DeleteObjectGroupRevisionSvc<T>
-                    {
-                        type Response = super::DeleteObjectGroupRevisionResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteObjectGroupRevisionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).delete_object_group_revision(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteObjectGroupRevisionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
@@ -839,15 +481,96 @@ pub struct GetDatasetObjectGroupsResponse {
     pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetCurrentObjectGroupRevisionsRequest {
+pub struct GetObjectGroupsInDateRangeRequest {
     #[prost(uint64, tag = "1")]
     pub id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetCurrentObjectGroupRevisionsResponse {
+pub struct GetObjectGroupsInDateRangeResponse {
     #[prost(message, repeated, tag = "1")]
-    pub object_group_revisions:
-        ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroupRevision>,
+    pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupsStreamLinkRequest {
+    #[prost(
+        enumeration = "get_object_groups_stream_link_request::QueryType",
+        tag = "2"
+    )]
+    pub query_type: i32,
+    #[prost(
+        enumeration = "get_object_groups_stream_link_request::StreamType",
+        tag = "3"
+    )]
+    pub stream_type: i32,
+    #[prost(
+        oneof = "get_object_groups_stream_link_request::Query",
+        tags = "4, 5, 6, 7"
+    )]
+    pub query: ::core::option::Option<get_object_groups_stream_link_request::Query>,
+}
+/// Nested message and enum types in `GetObjectGroupsStreamLinkRequest`.
+pub mod get_object_groups_stream_link_request {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DateRangeQuery {
+        #[prost(uint64, tag = "3")]
+        pub dataset_id: u64,
+        #[prost(message, optional, tag = "1")]
+        pub start: ::core::option::Option<::prost_types::Timestamp>,
+        #[prost(message, optional, tag = "2")]
+        pub end: ::core::option::Option<::prost_types::Timestamp>,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct GroupIDsQuery {
+        #[prost(uint64, tag = "2")]
+        pub dataset_id: u64,
+        #[prost(uint64, repeated, tag = "1")]
+        pub object_groups: ::prost::alloc::vec::Vec<u64>,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DatasetQuery {
+        #[prost(uint64, tag = "1")]
+        pub dataset_id: u64,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DatasetVersionQuery {
+        #[prost(uint64, tag = "1")]
+        pub dataset_version: u64,
+    }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    pub enum QueryType {
+        Groupids = 0,
+        Datasetall = 1,
+        Datasetversionall = 2,
+        Daterange = 3,
+    }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    pub enum StreamType {
+        Base64newline = 0,
+        Zip = 1,
+        Targz = 2,
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Query {
+        #[prost(message, tag = "4")]
+        GroupIds(GroupIDsQuery),
+        #[prost(message, tag = "5")]
+        DateRange(DateRangeQuery),
+        #[prost(message, tag = "6")]
+        Dataset(DatasetQuery),
+        #[prost(message, tag = "7")]
+        DatasetVersion(DatasetVersionQuery),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupsStreamLinkResponse {
+    #[prost(string, tag = "1")]
+    pub url: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetFieldRequest {
@@ -878,7 +601,7 @@ pub struct ReleaseDatasetVersionRequest {
     #[prost(message, repeated, tag = "6")]
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
     #[prost(uint64, repeated, tag = "7")]
-    pub revision_ids: ::prost::alloc::vec::Vec<u64>,
+    pub object_group_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "8")]
     pub description: ::prost::alloc::string::String,
 }
@@ -898,15 +621,14 @@ pub struct GetDatasetVersionResponse {
     pub dataset_version: ::core::option::Option<super::super::models::v1::DatasetVersion>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionRevisionsRequest {
+pub struct GetDatasetVersionObjectGroupsRequest {
     #[prost(uint64, tag = "1")]
     pub id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionRevisionsResponse {
+pub struct GetDatasetVersionObjectGroupsResponse {
     #[prost(message, repeated, tag = "1")]
-    pub object_group_revision:
-        ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroupRevision>,
+    pub object_group: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetVersionRequest {
@@ -2246,10 +1968,10 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn get_current_object_group_revisions(
+        pub async fn get_object_groups_stream(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetCurrentObjectGroupRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetCurrentObjectGroupRevisionsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::GetObjectGroupsStreamLinkRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupsStreamLinkResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -2259,7 +1981,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetCurrentObjectGroupRevisions",
+                "/api.services.v1.DatasetService/GetObjectGroupsStream",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2297,6 +2019,23 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn get_object_groups_in_date_range(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetObjectGroupsInDateRangeRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupsInDateRangeResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.DatasetService/GetObjectGroupsInDateRange",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         #[doc = "ReleaseDatasetVersion Release a new dataset version"]
         pub async fn release_dataset_version(
             &mut self,
@@ -2330,10 +2069,10 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn get_dataset_version_revisions(
+        pub async fn get_dataset_version_object_groups(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetDatasetVersionRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetDatasetVersionRevisionsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::GetDatasetVersionObjectGroupsRequest>,
+        ) -> Result<tonic::Response<super::GetDatasetVersionObjectGroupsResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -2343,7 +2082,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetDatasetVersionRevisions",
+                "/api.services.v1.DatasetService/GetDatasetVersionObjectGroups",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2391,10 +2130,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::GetDatasetObjectGroupsRequest>,
         ) -> Result<tonic::Response<super::GetDatasetObjectGroupsResponse>, tonic::Status>;
-        async fn get_current_object_group_revisions(
+        async fn get_object_groups_stream(
             &self,
-            request: tonic::Request<super::GetCurrentObjectGroupRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetCurrentObjectGroupRevisionsResponse>, tonic::Status>;
+            request: tonic::Request<super::GetObjectGroupsStreamLinkRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupsStreamLinkResponse>, tonic::Status>;
         #[doc = " Updates a field of a dataset"]
         async fn update_dataset_field(
             &self,
@@ -2405,6 +2144,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::DeleteDatasetRequest>,
         ) -> Result<tonic::Response<super::DeleteDatasetResponse>, tonic::Status>;
+        async fn get_object_groups_in_date_range(
+            &self,
+            request: tonic::Request<super::GetObjectGroupsInDateRangeRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupsInDateRangeResponse>, tonic::Status>;
         #[doc = "ReleaseDatasetVersion Release a new dataset version"]
         async fn release_dataset_version(
             &self,
@@ -2414,10 +2157,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::GetDatasetVersionRequest>,
         ) -> Result<tonic::Response<super::GetDatasetVersionResponse>, tonic::Status>;
-        async fn get_dataset_version_revisions(
+        async fn get_dataset_version_object_groups(
             &self,
-            request: tonic::Request<super::GetDatasetVersionRevisionsRequest>,
-        ) -> Result<tonic::Response<super::GetDatasetVersionRevisionsResponse>, tonic::Status>;
+            request: tonic::Request<super::GetDatasetVersionObjectGroupsRequest>,
+        ) -> Result<tonic::Response<super::GetDatasetVersionObjectGroupsResponse>, tonic::Status>;
         async fn delete_dataset_version(
             &self,
             request: tonic::Request<super::DeleteDatasetVersionRequest>,
@@ -2599,23 +2342,22 @@ pub mod dataset_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.DatasetService/GetCurrentObjectGroupRevisions" => {
+                "/api.services.v1.DatasetService/GetObjectGroupsStream" => {
                     #[allow(non_camel_case_types)]
-                    struct GetCurrentObjectGroupRevisionsSvc<T: DatasetService>(pub Arc<T>);
+                    struct GetObjectGroupsStreamSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetCurrentObjectGroupRevisionsRequest>
-                        for GetCurrentObjectGroupRevisionsSvc<T>
+                        tonic::server::UnaryService<super::GetObjectGroupsStreamLinkRequest>
+                        for GetObjectGroupsStreamSvc<T>
                     {
-                        type Response = super::GetCurrentObjectGroupRevisionsResponse;
+                        type Response = super::GetObjectGroupsStreamLinkResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetCurrentObjectGroupRevisionsRequest>,
+                            request: tonic::Request<super::GetObjectGroupsStreamLinkRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).get_current_object_group_revisions(request).await
-                            };
+                            let fut =
+                                async move { (*inner).get_object_groups_stream(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -2624,7 +2366,7 @@ pub mod dataset_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetCurrentObjectGroupRevisionsSvc(inner);
+                        let method = GetObjectGroupsStreamSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
@@ -2692,6 +2434,42 @@ pub mod dataset_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = DeleteDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/api.services.v1.DatasetService/GetObjectGroupsInDateRange" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetObjectGroupsInDateRangeSvc<T: DatasetService>(pub Arc<T>);
+                    impl<T: DatasetService>
+                        tonic::server::UnaryService<super::GetObjectGroupsInDateRangeRequest>
+                        for GetObjectGroupsInDateRangeSvc<T>
+                    {
+                        type Response = super::GetObjectGroupsInDateRangeResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetObjectGroupsInDateRangeRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_object_groups_in_date_range(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetObjectGroupsInDateRangeSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
@@ -2771,22 +2549,22 @@ pub mod dataset_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.DatasetService/GetDatasetVersionRevisions" => {
+                "/api.services.v1.DatasetService/GetDatasetVersionObjectGroups" => {
                     #[allow(non_camel_case_types)]
-                    struct GetDatasetVersionRevisionsSvc<T: DatasetService>(pub Arc<T>);
+                    struct GetDatasetVersionObjectGroupsSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetDatasetVersionRevisionsRequest>
-                        for GetDatasetVersionRevisionsSvc<T>
+                        tonic::server::UnaryService<super::GetDatasetVersionObjectGroupsRequest>
+                        for GetDatasetVersionObjectGroupsSvc<T>
                     {
-                        type Response = super::GetDatasetVersionRevisionsResponse;
+                        type Response = super::GetDatasetVersionObjectGroupsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetDatasetVersionRevisionsRequest>,
+                            request: tonic::Request<super::GetDatasetVersionObjectGroupsRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move {
-                                (*inner).get_dataset_version_revisions(request).await
+                                (*inner).get_dataset_version_object_groups(request).await
                             };
                             Box::pin(fut)
                         }
@@ -2796,7 +2574,7 @@ pub mod dataset_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetDatasetVersionRevisionsSvc(inner);
+                        let method = GetDatasetVersionObjectGroupsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,

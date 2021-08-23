@@ -201,10 +201,12 @@ pub struct ObjectGroup {
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     #[prost(enumeration = "Status", tag = "7")]
     pub status: i32,
-    #[prost(uint64, tag = "8")]
-    pub head_id: u64,
-    #[prost(int64, tag = "9")]
-    pub current_revision: i64,
+    #[prost(message, repeated, tag = "8")]
+    pub objects: ::prost::alloc::vec::Vec<Object>,
+    #[prost(message, optional, tag = "9")]
+    pub generated: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "10")]
+    pub created: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupRevision {
@@ -221,12 +223,10 @@ pub struct ObjectGroupRevision {
     pub labels: ::prost::alloc::vec::Vec<Label>,
     #[prost(message, repeated, tag = "8")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    #[prost(message, repeated, tag = "9")]
-    pub objects: ::prost::alloc::vec::Vec<Object>,
-    #[prost(uint64, tag = "10")]
-    pub object_group_id: u64,
     #[prost(int64, tag = "11")]
     pub revision: i64,
+    #[prost(message, repeated, tag = "12")]
+    pub object_groups: ::prost::alloc::vec::Vec<ObjectGroup>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
@@ -257,6 +257,8 @@ pub struct Object {
     pub content_len: i64,
     #[prost(string, tag = "10")]
     pub upload_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "11")]
+    pub generated: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Dataset {
