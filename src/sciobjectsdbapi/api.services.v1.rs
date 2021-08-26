@@ -14,11 +14,39 @@ pub struct CreateObjectGroupRequest {
     pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
     #[prost(message, optional, tag = "7")]
     pub generated: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(bool, tag = "8")]
+    pub include_object_link: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupBatchRequest {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::prost::alloc::vec::Vec<CreateObjectGroupRequest>,
+    #[prost(bool, tag = "2")]
+    pub include_object_link: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupBatchResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub responses: ::prost::alloc::vec::Vec<CreateObjectGroupResponse>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
     #[prost(uint64, tag = "1")]
     pub object_group_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub object_links: ::prost::alloc::vec::Vec<create_object_group_response::ObjectLinks>,
+    #[prost(string, tag = "3")]
+    pub object_group_name: ::prost::alloc::string::String,
+}
+/// Nested message and enum types in `CreateObjectGroupResponse`.
+pub mod create_object_group_response {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct ObjectLinks {
+        #[prost(string, tag = "1")]
+        pub filename: ::prost::alloc::string::String,
+        #[prost(string, tag = "2")]
+        pub link: ::prost::alloc::string::String,
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
@@ -140,6 +168,22 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn create_object_group_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateObjectGroupBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.DatasetObjectsService/CreateObjectGroupBatch",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         pub async fn get_object_group(
             &mut self,
@@ -204,6 +248,10 @@ pub mod dataset_objects_service_server {
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
         ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
+        async fn create_object_group_batch(
+            &self,
+            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status>;
         #[doc = "GetObjectGroup Returns the object group with the given ID"]
         async fn get_object_group(
             &self,
@@ -282,6 +330,41 @@ pub mod dataset_objects_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = CreateObjectGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/api.services.v1.DatasetObjectsService/CreateObjectGroupBatch" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateObjectGroupBatchSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::CreateObjectGroupBatchRequest>
+                        for CreateObjectGroupBatchSvc<T>
+                    {
+                        type Response = super::CreateObjectGroupBatchResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).create_object_group_batch(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateObjectGroupBatchSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
