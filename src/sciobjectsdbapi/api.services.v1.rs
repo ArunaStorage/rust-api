@@ -4,21 +4,55 @@ pub struct CreateObjectGroupRequest {
     pub name: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
-    pub dataset_id: u64,
+    #[prost(string, tag = "3")]
+    pub dataset_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "4")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
     #[prost(message, repeated, tag = "5")]
     pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
     #[prost(message, repeated, tag = "6")]
     pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    #[prost(message, optional, tag = "7")]
+    #[prost(bool, tag = "8")]
+    pub include_object_link: bool,
+    #[prost(message, optional, tag = "10")]
     pub generated: ::core::option::Option<::prost_types::Timestamp>,
+    /// A user defined uuid that is used to identify requests in chunked workloads
+    #[prost(string, tag = "11")]
+    pub uuid: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupBatchRequest {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::prost::alloc::vec::Vec<CreateObjectGroupRequest>,
+    #[prost(bool, tag = "2")]
+    pub include_object_link: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupBatchResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub responses: ::prost::alloc::vec::Vec<CreateObjectGroupResponse>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
-    #[prost(uint64, tag = "1")]
-    pub object_group_id: u64,
+    #[prost(string, tag = "1")]
+    pub object_group_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub object_links: ::prost::alloc::vec::Vec<create_object_group_response::ObjectLinks>,
+    #[prost(string, tag = "3")]
+    pub object_group_name: ::prost::alloc::string::String,
+    /// A user defined uuid that is used to identify requests in chunked/streamed workloads
+    #[prost(string, tag = "4")]
+    pub uuid: ::prost::alloc::string::String,
+}
+/// Nested message and enum types in `CreateObjectGroupResponse`.
+pub mod create_object_group_response {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct ObjectLinks {
+        #[prost(string, tag = "1")]
+        pub filename: ::prost::alloc::string::String,
+        #[prost(string, tag = "2")]
+        pub link: ::prost::alloc::string::String,
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
@@ -36,13 +70,11 @@ pub struct CreateObjectRequest {
     /// Origin: Source of the dataset
     #[prost(message, optional, tag = "6")]
     pub origin: ::core::option::Option<super::super::models::v1::Origin>,
-    #[prost(message, optional, tag = "7")]
-    pub generated: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupResponse {
@@ -51,15 +83,15 @@ pub struct GetObjectGroupResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectUploadRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectUploadResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupResponse {}
@@ -85,7 +117,7 @@ pub mod dataset_objects_service_client {
     impl<T> DatasetObjectsServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::ResponseBody: Body + Send + Sync + 'static,
+        T::ResponseBody: Body + Send + 'static,
         T::Error: Into<StdError>,
         <T::ResponseBody as Body>::Error: Into<StdError> + Send,
     {
@@ -98,7 +130,7 @@ pub mod dataset_objects_service_client {
             interceptor: F,
         ) -> DatasetObjectsServiceClient<InterceptedService<T, F>>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
             T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
@@ -123,7 +155,7 @@ pub mod dataset_objects_service_client {
             self.inner = self.inner.accept_gzip();
             self
         }
-        #[doc = "CreateObjectGroup Creates a new object group"]
+        #[doc = " Creates a new object group"]
         pub async fn create_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
@@ -140,7 +172,25 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = "GetObjectGroup Returns the object group with the given ID"]
+        #[doc = " Batch request of CreateObjectGroup"]
+        #[doc = " The call will preserve the ordering of the request in the response"]
+        pub async fn create_object_group_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateObjectGroupBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.DatasetObjectsService/CreateObjectGroupBatch",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        #[doc = "Returns the object group with the given ID"]
         pub async fn get_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupRequest>,
@@ -157,7 +207,9 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = "FinishObjectUpload Finishes the upload process for an object"]
+        #[doc = " Finishes the upload process for an object"]
+        #[doc = " This will change the status of the objects to \"available\""]
+        #[doc = " Experimental, might change this to FinishObjectGroupUpload"]
         pub async fn finish_object_upload(
             &mut self,
             request: impl tonic::IntoRequest<super::FinishObjectUploadRequest>,
@@ -174,6 +226,8 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = " Deletes the given object group"]
+        #[doc = " This will also delete all associated objects both as metadata objects and the actual objects in the object storage"]
         pub async fn delete_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::DeleteObjectGroupRequest>,
@@ -199,21 +253,31 @@ pub mod dataset_objects_service_server {
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetObjectsServiceServer."]
     #[async_trait]
     pub trait DatasetObjectsService: Send + Sync + 'static {
-        #[doc = "CreateObjectGroup Creates a new object group"]
+        #[doc = " Creates a new object group"]
         async fn create_object_group(
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
         ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
-        #[doc = "GetObjectGroup Returns the object group with the given ID"]
+        #[doc = " Batch request of CreateObjectGroup"]
+        #[doc = " The call will preserve the ordering of the request in the response"]
+        async fn create_object_group_batch(
+            &self,
+            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status>;
+        #[doc = "Returns the object group with the given ID"]
         async fn get_object_group(
             &self,
             request: tonic::Request<super::GetObjectGroupRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status>;
-        #[doc = "FinishObjectUpload Finishes the upload process for an object"]
+        #[doc = " Finishes the upload process for an object"]
+        #[doc = " This will change the status of the objects to \"available\""]
+        #[doc = " Experimental, might change this to FinishObjectGroupUpload"]
         async fn finish_object_upload(
             &self,
             request: tonic::Request<super::FinishObjectUploadRequest>,
         ) -> Result<tonic::Response<super::FinishObjectUploadResponse>, tonic::Status>;
+        #[doc = " Deletes the given object group"]
+        #[doc = " This will also delete all associated objects both as metadata objects and the actual objects in the object storage"]
         async fn delete_object_group(
             &self,
             request: tonic::Request<super::DeleteObjectGroupRequest>,
@@ -238,7 +302,7 @@ pub mod dataset_objects_service_server {
         }
         pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
         {
             InterceptedService::new(Self::new(inner), interceptor)
         }
@@ -246,7 +310,7 @@ pub mod dataset_objects_service_server {
     impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetObjectsServiceServer<T>
     where
         T: DatasetObjectsService,
-        B: Body + Send + Sync + 'static,
+        B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
         type Response = http::Response<tonic::body::BoxBody>;
@@ -282,6 +346,41 @@ pub mod dataset_objects_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = CreateObjectGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/api.services.v1.DatasetObjectsService/CreateObjectGroupBatch" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateObjectGroupBatchSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<T: DatasetObjectsService>
+                        tonic::server::UnaryService<super::CreateObjectGroupBatchRequest>
+                        for CreateObjectGroupBatchSvc<T>
+                    {
+                        type Response = super::CreateObjectGroupBatchResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).create_object_group_batch(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateObjectGroupBatchSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
@@ -429,223 +528,15 @@ pub mod dataset_objects_service_server {
         const NAME: &'static str = "api.services.v1.DatasetObjectsService";
     }
 }
-/// Dataset related Models
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateDatasetRequest {
-    /// Name of the dataset
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    ///ProjectID of the project the dataset is associated with
-    #[prost(uint64, tag = "3")]
-    pub project_id: u64,
-    #[prost(message, repeated, tag = "4")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
-    #[prost(message, repeated, tag = "5")]
-    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateDatasetResponse {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v1::Dataset>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionsRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub dataset_versions: ::prost::alloc::vec::Vec<super::super::models::v1::DatasetVersion>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetObjectGroupsRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetObjectGroupsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupsInDateRangeRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-    #[prost(message, optional, tag = "2")]
-    pub start: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "3")]
-    pub end: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupsInDateRangeResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupsStreamLinkRequest {
-    #[prost(
-        enumeration = "get_object_groups_stream_link_request::QueryType",
-        tag = "2"
-    )]
-    pub query_type: i32,
-    #[prost(
-        enumeration = "get_object_groups_stream_link_request::StreamType",
-        tag = "3"
-    )]
-    pub stream_type: i32,
-    #[prost(
-        oneof = "get_object_groups_stream_link_request::Query",
-        tags = "4, 5, 6, 7"
-    )]
-    pub query: ::core::option::Option<get_object_groups_stream_link_request::Query>,
-}
-/// Nested message and enum types in `GetObjectGroupsStreamLinkRequest`.
-pub mod get_object_groups_stream_link_request {
-    #[derive(Clone, PartialEq, ::prost::Message)]
-    pub struct DateRangeQuery {
-        #[prost(uint64, tag = "3")]
-        pub dataset_id: u64,
-        #[prost(message, optional, tag = "1")]
-        pub start: ::core::option::Option<::prost_types::Timestamp>,
-        #[prost(message, optional, tag = "2")]
-        pub end: ::core::option::Option<::prost_types::Timestamp>,
-    }
-    #[derive(Clone, PartialEq, ::prost::Message)]
-    pub struct GroupIDsQuery {
-        #[prost(uint64, tag = "2")]
-        pub dataset_id: u64,
-        #[prost(uint64, repeated, tag = "1")]
-        pub object_groups: ::prost::alloc::vec::Vec<u64>,
-    }
-    #[derive(Clone, PartialEq, ::prost::Message)]
-    pub struct DatasetQuery {
-        #[prost(uint64, tag = "1")]
-        pub dataset_id: u64,
-    }
-    #[derive(Clone, PartialEq, ::prost::Message)]
-    pub struct DatasetVersionQuery {
-        #[prost(uint64, tag = "1")]
-        pub dataset_version: u64,
-    }
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum QueryType {
-        Groupids = 0,
-        Datasetall = 1,
-        Datasetversionall = 2,
-        Daterange = 3,
-    }
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum StreamType {
-        Base64newline = 0,
-        Zip = 1,
-        Targz = 2,
-    }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Query {
-        #[prost(message, tag = "4")]
-        GroupIds(GroupIDsQuery),
-        #[prost(message, tag = "5")]
-        DateRange(DateRangeQuery),
-        #[prost(message, tag = "6")]
-        Dataset(DatasetQuery),
-        #[prost(message, tag = "7")]
-        DatasetVersion(DatasetVersionQuery),
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectGroupsStreamLinkResponse {
-    #[prost(string, tag = "1")]
-    pub url: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetFieldRequest {
-    #[prost(message, optional, tag = "1")]
-    pub update_request: ::core::option::Option<super::super::models::v1::UpdateFieldsRequest>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetFieldResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteDatasetRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteDatasetResponse {}
-// DatasetVersion related models
-
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReleaseDatasetVersionRequest {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    pub dataset_id: u64,
-    #[prost(message, optional, tag = "3")]
-    pub version: ::core::option::Option<super::super::models::v1::Version>,
-    #[prost(message, repeated, tag = "5")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
-    #[prost(message, repeated, tag = "6")]
-    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-    #[prost(uint64, repeated, tag = "7")]
-    pub object_group_ids: ::prost::alloc::vec::Vec<u64>,
-    #[prost(string, tag = "8")]
-    pub description: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReleaseDatasetVersionResponse {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset_version: ::core::option::Option<super::super::models::v1::DatasetVersion>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionObjectGroupsRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetVersionObjectGroupsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub object_group: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteDatasetVersionRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteDatasetVersionResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLink {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLinkRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLinkResponse {
@@ -654,18 +545,44 @@ pub struct CreateUploadLinkResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDownloadLinkRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    ///Object id the download is requested for
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    ///Optional; Byte range of the data object
+    #[prost(message, optional, tag = "2")]
+    pub range: ::core::option::Option<create_download_link_request::Range>,
+}
+/// Nested message and enum types in `CreateDownloadLinkRequest`.
+pub mod create_download_link_request {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Range {
+        #[prost(int64, tag = "1")]
+        pub start_byte: i64,
+        #[prost(int64, tag = "2")]
+        pub end_byte: i64,
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDownloadLinkResponse {
     #[prost(string, tag = "1")]
     pub download_link: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub object: ::core::option::Option<super::super::models::v1::Object>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDownloadLinkBatchRequest {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::prost::alloc::vec::Vec<CreateDownloadLinkRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDownloadLinkBatchResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub links: ::prost::alloc::vec::Vec<CreateDownloadLinkResponse>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StartMultipartUploadRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StartMultipartUploadResponse {
@@ -681,15 +598,15 @@ pub struct GetMultipartUploadLinkResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetMultipartUploadLinkRequest {
-    #[prost(uint64, tag = "1")]
-    pub object_id: u64,
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
     #[prost(int64, tag = "2")]
     pub upload_part: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CompleteMultipartUploadRequest {
-    #[prost(uint64, tag = "1")]
-    pub object_id: u64,
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
     pub parts: ::prost::alloc::vec::Vec<CompletedParts>,
 }
@@ -702,10 +619,66 @@ pub struct CompletedParts {
     #[prost(int64, tag = "2")]
     pub part: i64,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDownloadLinkStreamRequest {
+    #[prost(oneof = "create_download_link_stream_request::Query", tags = "1, 3, 4")]
+    pub query: ::core::option::Option<create_download_link_stream_request::Query>,
+}
+/// Nested message and enum types in `CreateDownloadLinkStreamRequest`.
+pub mod create_download_link_stream_request {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DateRangeQuery {
+        #[prost(string, tag = "3")]
+        pub dataset_id: ::prost::alloc::string::String,
+        #[prost(message, optional, tag = "1")]
+        pub start: ::core::option::Option<::prost_types::Timestamp>,
+        #[prost(message, optional, tag = "2")]
+        pub end: ::core::option::Option<::prost_types::Timestamp>,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DatasetQuery {
+        #[prost(string, tag = "1")]
+        pub dataset_id: ::prost::alloc::string::String,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DatasetVersionQuery {
+        #[prost(string, tag = "1")]
+        pub dataset_id: ::prost::alloc::string::String,
+        #[prost(string, tag = "2")]
+        pub dataset_version_id: ::prost::alloc::string::String,
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Query {
+        #[prost(message, tag = "1")]
+        Dataset(DatasetQuery),
+        #[prost(message, tag = "3")]
+        DatasetVersion(DatasetVersionQuery),
+        #[prost(message, tag = "4")]
+        DateRange(DateRangeQuery),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDownloadLinkStreamResponse {
+    #[prost(message, optional, tag = "1")]
+    pub links: ::core::option::Option<LinksResponse>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LinksResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
+    #[prost(message, repeated, tag = "2")]
+    pub object_group_links: ::prost::alloc::vec::Vec<InnerLinksResponse>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InnerLinksResponse {
+    #[prost(string, repeated, tag = "1")]
+    pub object_links: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
 #[doc = r" Generated client implementations."]
 pub mod object_load_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
+    #[doc = " Handles object up and downloads"]
     #[derive(Debug, Clone)]
     pub struct ObjectLoadServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -724,7 +697,7 @@ pub mod object_load_service_client {
     impl<T> ObjectLoadServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::ResponseBody: Body + Send + Sync + 'static,
+        T::ResponseBody: Body + Send + 'static,
         T::Error: Into<StdError>,
         <T::ResponseBody as Body>::Error: Into<StdError> + Send,
     {
@@ -737,7 +710,7 @@ pub mod object_load_service_client {
             interceptor: F,
         ) -> ObjectLoadServiceClient<InterceptedService<T, F>>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
             T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
@@ -762,6 +735,9 @@ pub mod object_load_service_client {
             self.inner = self.inner.accept_gzip();
             self
         }
+        #[doc = " Creates an upload link for an object to upload the actual data object"]
+        #[doc = " Returns a presigned https PUT request"]
+        #[doc = " Can only be used to upload objects < 4GB"]
         pub async fn create_upload_link(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateUploadLinkRequest>,
@@ -778,6 +754,8 @@ pub mod object_load_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = " Creates a download link for an object"]
+        #[doc = " Returns a presigned https GET request"]
         pub async fn create_download_link(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateDownloadLinkRequest>,
@@ -794,6 +772,52 @@ pub mod object_load_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = " Creates links for multiple objects at once"]
+        #[doc = " The order of the requested objects is preserved in the response"]
+        pub async fn create_download_link_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateDownloadLinkBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateDownloadLinkBatchResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.ObjectLoadService/CreateDownloadLinkBatch",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        #[doc = " Creates a stream of objects and presigned links based on the provided query"]
+        #[doc = " This can be used retrieve a large number of ObjectGroups as a stream that would otherwise cause issues with the connection"]
+        pub async fn create_download_link_stream(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateDownloadLinkStreamRequest>,
+        ) -> Result<
+            tonic::Response<tonic::codec::Streaming<super::CreateDownloadLinkStreamResponse>>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.ObjectLoadService/CreateDownloadLinkStream",
+            );
+            self.inner
+                .server_streaming(request.into_request(), path, codec)
+                .await
+        }
+        #[doc = " Initiates a multipart upload for an object"]
+        #[doc = " This is intended to be used for larger objects"]
+        #[doc = " For further information please read the Amazon S3 documentation on multipart uploads"]
+        #[doc = " Has to be used together with GetMultipartUploadLink and CompleteMultipartUpload"]
         pub async fn start_multipart_upload(
             &mut self,
             request: impl tonic::IntoRequest<super::StartMultipartUploadRequest>,
@@ -852,14 +876,40 @@ pub mod object_load_service_server {
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with ObjectLoadServiceServer."]
     #[async_trait]
     pub trait ObjectLoadService: Send + Sync + 'static {
+        #[doc = " Creates an upload link for an object to upload the actual data object"]
+        #[doc = " Returns a presigned https PUT request"]
+        #[doc = " Can only be used to upload objects < 4GB"]
         async fn create_upload_link(
             &self,
             request: tonic::Request<super::CreateUploadLinkRequest>,
         ) -> Result<tonic::Response<super::CreateUploadLinkResponse>, tonic::Status>;
+        #[doc = " Creates a download link for an object"]
+        #[doc = " Returns a presigned https GET request"]
         async fn create_download_link(
             &self,
             request: tonic::Request<super::CreateDownloadLinkRequest>,
         ) -> Result<tonic::Response<super::CreateDownloadLinkResponse>, tonic::Status>;
+        #[doc = " Creates links for multiple objects at once"]
+        #[doc = " The order of the requested objects is preserved in the response"]
+        async fn create_download_link_batch(
+            &self,
+            request: tonic::Request<super::CreateDownloadLinkBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateDownloadLinkBatchResponse>, tonic::Status>;
+        #[doc = "Server streaming response type for the CreateDownloadLinkStream method."]
+        type CreateDownloadLinkStreamStream: futures_core::Stream<
+                Item = Result<super::CreateDownloadLinkStreamResponse, tonic::Status>,
+            > + Send
+            + 'static;
+        #[doc = " Creates a stream of objects and presigned links based on the provided query"]
+        #[doc = " This can be used retrieve a large number of ObjectGroups as a stream that would otherwise cause issues with the connection"]
+        async fn create_download_link_stream(
+            &self,
+            request: tonic::Request<super::CreateDownloadLinkStreamRequest>,
+        ) -> Result<tonic::Response<Self::CreateDownloadLinkStreamStream>, tonic::Status>;
+        #[doc = " Initiates a multipart upload for an object"]
+        #[doc = " This is intended to be used for larger objects"]
+        #[doc = " For further information please read the Amazon S3 documentation on multipart uploads"]
+        #[doc = " Has to be used together with GetMultipartUploadLink and CompleteMultipartUpload"]
         async fn start_multipart_upload(
             &self,
             request: tonic::Request<super::StartMultipartUploadRequest>,
@@ -873,6 +923,7 @@ pub mod object_load_service_server {
             request: tonic::Request<super::CompleteMultipartUploadRequest>,
         ) -> Result<tonic::Response<super::CompleteMultipartUploadResponse>, tonic::Status>;
     }
+    #[doc = " Handles object up and downloads"]
     #[derive(Debug)]
     pub struct ObjectLoadServiceServer<T: ObjectLoadService> {
         inner: _Inner<T>,
@@ -892,7 +943,7 @@ pub mod object_load_service_server {
         }
         pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
         {
             InterceptedService::new(Self::new(inner), interceptor)
         }
@@ -900,7 +951,7 @@ pub mod object_load_service_server {
     impl<T, B> tonic::codegen::Service<http::Request<B>> for ObjectLoadServiceServer<T>
     where
         T: ObjectLoadService,
-        B: Body + Send + Sync + 'static,
+        B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
         type Response = http::Response<tonic::body::BoxBody>;
@@ -976,6 +1027,79 @@ pub mod object_load_service_server {
                             send_compression_encodings,
                         );
                         let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/api.services.v1.ObjectLoadService/CreateDownloadLinkBatch" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateDownloadLinkBatchSvc<T: ObjectLoadService>(pub Arc<T>);
+                    impl<T: ObjectLoadService>
+                        tonic::server::UnaryService<super::CreateDownloadLinkBatchRequest>
+                        for CreateDownloadLinkBatchSvc<T>
+                    {
+                        type Response = super::CreateDownloadLinkBatchResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateDownloadLinkBatchRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).create_download_link_batch(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateDownloadLinkBatchSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/api.services.v1.ObjectLoadService/CreateDownloadLinkStream" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateDownloadLinkStreamSvc<T: ObjectLoadService>(pub Arc<T>);
+                    impl<T: ObjectLoadService>
+                        tonic::server::ServerStreamingService<
+                            super::CreateDownloadLinkStreamRequest,
+                        > for CreateDownloadLinkStreamSvc<T>
+                    {
+                        type Response = super::CreateDownloadLinkStreamResponse;
+                        type ResponseStream = T::CreateDownloadLinkStreamStream;
+                        type Future =
+                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateDownloadLinkStreamRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).create_download_link_stream(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateDownloadLinkStreamSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.server_streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
@@ -1119,6 +1243,212 @@ pub mod object_load_service_server {
         const NAME: &'static str = "api.services.v1.ObjectLoadService";
     }
 }
+/// Dataset related Models
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDatasetRequest {
+    /// Name of the dataset
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    ///ProjectID of the project the dataset is associated with
+    #[prost(string, tag = "3")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
+    #[prost(message, repeated, tag = "5")]
+    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDatasetResponse {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v1::Dataset>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetVersionsRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetVersionsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub dataset_versions: ::prost::alloc::vec::Vec<super::super::models::v1::DatasetVersion>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetObjectGroupsRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetObjectGroupsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupsInDateRangeRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupsInDateRangeResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub object_groups: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
+}
+/// GetObjectGroupsStreamLinkRequest a request for a get link to stream a set of object groups
+/// The query defines what object groups should be part of the stream
+/// The steam type defines how the individual objects are packed
+/// ZIP and TARGZ will bundle objectgroups into subfolders
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupsStreamLinkRequest {
+    #[prost(
+        enumeration = "get_object_groups_stream_link_request::StreamType",
+        tag = "3"
+    )]
+    pub stream_type: i32,
+    /// Expiry time of the link
+    /// This is the maximum expiry time, implementations can set maximum durations that can be shorter than this
+    #[prost(message, optional, tag = "8")]
+    pub expiry: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(
+        oneof = "get_object_groups_stream_link_request::Query",
+        tags = "4, 5, 6, 7"
+    )]
+    pub query: ::core::option::Option<get_object_groups_stream_link_request::Query>,
+}
+/// Nested message and enum types in `GetObjectGroupsStreamLinkRequest`.
+pub mod get_object_groups_stream_link_request {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DateRangeQuery {
+        #[prost(string, tag = "3")]
+        pub dataset_id: ::prost::alloc::string::String,
+        #[prost(message, optional, tag = "1")]
+        pub start: ::core::option::Option<::prost_types::Timestamp>,
+        #[prost(message, optional, tag = "2")]
+        pub end: ::core::option::Option<::prost_types::Timestamp>,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct GroupIDsQuery {
+        #[prost(string, tag = "2")]
+        pub dataset_id: ::prost::alloc::string::String,
+        #[prost(string, repeated, tag = "1")]
+        pub object_groups: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DatasetQuery {
+        #[prost(string, tag = "1")]
+        pub dataset_id: ::prost::alloc::string::String,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DatasetVersionQuery {
+        #[prost(string, tag = "1")]
+        pub dataset_id: ::prost::alloc::string::String,
+        #[prost(string, tag = "2")]
+        pub dataset_version_id: ::prost::alloc::string::String,
+    }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    pub enum StreamType {
+        Base64newline = 0,
+        Zip = 1,
+        Targz = 2,
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Query {
+        #[prost(message, tag = "4")]
+        GroupIds(GroupIDsQuery),
+        #[prost(message, tag = "5")]
+        DateRange(DateRangeQuery),
+        #[prost(message, tag = "6")]
+        Dataset(DatasetQuery),
+        #[prost(message, tag = "7")]
+        DatasetVersion(DatasetVersionQuery),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectGroupsStreamLinkResponse {
+    #[prost(string, tag = "1")]
+    pub url: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetFieldRequest {
+    #[prost(message, optional, tag = "1")]
+    pub update_request: ::core::option::Option<super::super::models::v1::UpdateFieldsRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetFieldResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteDatasetRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteDatasetResponse {}
+// DatasetVersion related models
+
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReleaseDatasetVersionRequest {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub version: ::core::option::Option<super::super::models::v1::Version>,
+    #[prost(message, repeated, tag = "5")]
+    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
+    #[prost(message, repeated, tag = "6")]
+    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
+    #[prost(string, repeated, tag = "7")]
+    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag = "8")]
+    pub description: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReleaseDatasetVersionResponse {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetVersionRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetVersionResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset_version: ::core::option::Option<super::super::models::v1::DatasetVersion>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetVersionObjectGroupsRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetVersionObjectGroupsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub object_group: ::prost::alloc::vec::Vec<super::super::models::v1::ObjectGroup>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteDatasetVersionRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteDatasetVersionResponse {}
+/// Request to create a project
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectRequest {
     #[prost(string, tag = "1")]
@@ -1132,8 +1462,8 @@ pub struct CreateProjectRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectResponse {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectRequest {
@@ -1141,15 +1471,15 @@ pub struct AddUserToProjectRequest {
     pub user_id: ::prost::alloc::string::String,
     #[prost(enumeration = "super::super::models::v1::Right", repeated, tag = "2")]
     pub scope: ::prost::alloc::vec::Vec<i32>,
-    #[prost(uint64, tag = "3")]
-    pub project_id: u64,
+    #[prost(string, tag = "3")]
+    pub project_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenResponse {
@@ -1158,8 +1488,8 @@ pub struct CreateApiTokenResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectDatasetsRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectDatasetsResponse {
@@ -1175,8 +1505,8 @@ pub struct GetUserProjectsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectResponse {
@@ -1192,15 +1522,15 @@ pub struct GetApiTokenResponse {
 pub struct GetApiTokenRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokenRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokenResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteProjectRequest {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteProjectResponse {}
@@ -1226,7 +1556,7 @@ pub mod project_service_client {
     impl<T> ProjectServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::ResponseBody: Body + Send + Sync + 'static,
+        T::ResponseBody: Body + Send + 'static,
         T::Error: Into<StdError>,
         <T::ResponseBody as Body>::Error: Into<StdError> + Send,
     {
@@ -1239,7 +1569,7 @@ pub mod project_service_client {
             interceptor: F,
         ) -> ProjectServiceClient<InterceptedService<T, F>>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
             T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
@@ -1363,6 +1693,7 @@ pub mod project_service_client {
                 http::uri::PathAndQuery::from_static("/api.services.v1.ProjectService/GetProject");
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = " Returns all API token for a specific user, based on the provided oauth2 token"]
         pub async fn get_api_token(
             &mut self,
             request: impl tonic::IntoRequest<super::GetApiTokenRequest>,
@@ -1449,6 +1780,7 @@ pub mod project_service_server {
             &self,
             request: tonic::Request<super::GetProjectRequest>,
         ) -> Result<tonic::Response<super::GetProjectResponse>, tonic::Status>;
+        #[doc = " Returns all API token for a specific user, based on the provided oauth2 token"]
         async fn get_api_token(
             &self,
             request: tonic::Request<super::GetApiTokenRequest>,
@@ -1483,7 +1815,7 @@ pub mod project_service_server {
         }
         pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
         {
             InterceptedService::new(Self::new(inner), interceptor)
         }
@@ -1491,7 +1823,7 @@ pub mod project_service_server {
     impl<T, B> tonic::codegen::Service<http::Request<B>> for ProjectServiceServer<T>
     where
         T: ProjectService,
-        B: Body + Send + Sync + 'static,
+        B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
         type Response = http::Response<tonic::body::BoxBody>;
@@ -1864,7 +2196,7 @@ pub mod dataset_service_client {
     impl<T> DatasetServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::ResponseBody: Body + Send + Sync + 'static,
+        T::ResponseBody: Body + Send + 'static,
         T::Error: Into<StdError>,
         <T::ResponseBody as Body>::Error: Into<StdError> + Send,
     {
@@ -1877,7 +2209,7 @@ pub mod dataset_service_client {
             interceptor: F,
         ) -> DatasetServiceClient<InterceptedService<T, F>>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
             T: tonic::codegen::Service<
                 http::Request<tonic::body::BoxBody>,
                 Response = http::Response<
@@ -1952,6 +2284,7 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = " Lists all object groups of a dataset"]
         pub async fn get_dataset_object_groups(
             &mut self,
             request: impl tonic::IntoRequest<super::GetDatasetObjectGroupsRequest>,
@@ -1968,7 +2301,9 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn get_object_groups_stream(
+        #[doc = " Returns a signed link that can be used to download all objects from the specified request"]
+        #[doc = " The link is signed using hmac and the resulting data can be shared without exposing any secrets"]
+        pub async fn get_object_groups_stream_link(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupsStreamLinkRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupsStreamLinkResponse>, tonic::Status>
@@ -1981,7 +2316,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetObjectGroupsStream",
+                "/api.services.v1.DatasetService/GetObjectGroupsStreamLink",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2019,6 +2354,9 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = " Returns all object groups that were created within a specific date range"]
+        #[doc = " The date range is not the date when the data was created in the system but byte the externally date that indicates the actual creation of the data rather"]
+        #[doc = " than the date the data was ingested into the system"]
         pub async fn get_object_groups_in_date_range(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupsInDateRangeRequest>,
@@ -2126,11 +2464,14 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::GetDatasetVersionsRequest>,
         ) -> Result<tonic::Response<super::GetDatasetVersionsResponse>, tonic::Status>;
+        #[doc = " Lists all object groups of a dataset"]
         async fn get_dataset_object_groups(
             &self,
             request: tonic::Request<super::GetDatasetObjectGroupsRequest>,
         ) -> Result<tonic::Response<super::GetDatasetObjectGroupsResponse>, tonic::Status>;
-        async fn get_object_groups_stream(
+        #[doc = " Returns a signed link that can be used to download all objects from the specified request"]
+        #[doc = " The link is signed using hmac and the resulting data can be shared without exposing any secrets"]
+        async fn get_object_groups_stream_link(
             &self,
             request: tonic::Request<super::GetObjectGroupsStreamLinkRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupsStreamLinkResponse>, tonic::Status>;
@@ -2144,6 +2485,9 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::DeleteDatasetRequest>,
         ) -> Result<tonic::Response<super::DeleteDatasetResponse>, tonic::Status>;
+        #[doc = " Returns all object groups that were created within a specific date range"]
+        #[doc = " The date range is not the date when the data was created in the system but byte the externally date that indicates the actual creation of the data rather"]
+        #[doc = " than the date the data was ingested into the system"]
         async fn get_object_groups_in_date_range(
             &self,
             request: tonic::Request<super::GetObjectGroupsInDateRangeRequest>,
@@ -2189,7 +2533,7 @@ pub mod dataset_service_server {
         }
         pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
-            F: FnMut(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+            F: tonic::service::Interceptor,
         {
             InterceptedService::new(Self::new(inner), interceptor)
         }
@@ -2197,7 +2541,7 @@ pub mod dataset_service_server {
     impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetServiceServer<T>
     where
         T: DatasetService,
-        B: Body + Send + Sync + 'static,
+        B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
         type Response = http::Response<tonic::body::BoxBody>;
@@ -2342,12 +2686,12 @@ pub mod dataset_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.DatasetService/GetObjectGroupsStream" => {
+                "/api.services.v1.DatasetService/GetObjectGroupsStreamLink" => {
                     #[allow(non_camel_case_types)]
-                    struct GetObjectGroupsStreamSvc<T: DatasetService>(pub Arc<T>);
+                    struct GetObjectGroupsStreamLinkSvc<T: DatasetService>(pub Arc<T>);
                     impl<T: DatasetService>
                         tonic::server::UnaryService<super::GetObjectGroupsStreamLinkRequest>
-                        for GetObjectGroupsStreamSvc<T>
+                        for GetObjectGroupsStreamLinkSvc<T>
                     {
                         type Response = super::GetObjectGroupsStreamLinkResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
@@ -2356,8 +2700,9 @@ pub mod dataset_service_server {
                             request: tonic::Request<super::GetObjectGroupsStreamLinkRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).get_object_groups_stream(request).await };
+                            let fut = async move {
+                                (*inner).get_object_groups_stream_link(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -2366,7 +2711,7 @@ pub mod dataset_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetObjectGroupsStreamSvc(inner);
+                        let method = GetObjectGroupsStreamLinkSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
