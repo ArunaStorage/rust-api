@@ -160,6 +160,18 @@ pub struct ApiToken {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Empty {}
+/// Request for paginated result retrival
+/// If the page size is zero, the backends default page size will be used
+/// If the page size exceeds the backends maximum, an error will be returned
+/// Consistency of results will only be guaranteed for DatasetVersions
+/// For the initial request leave last_uuid empty
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PageRequest {
+    #[prost(string, tag = "1")]
+    pub last_uuid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub page_size: u64,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Status {
@@ -244,6 +256,8 @@ pub struct Dataset {
     pub is_public: bool,
     #[prost(enumeration = "Status", tag = "9")]
     pub status: i32,
+    #[prost(string, tag = "10")]
+    pub bucket: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetVersion {
@@ -350,4 +364,6 @@ pub struct Project {
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
     #[prost(message, repeated, tag = "6")]
     pub users: ::prost::alloc::vec::Vec<User>,
+    #[prost(string, tag = "7")]
+    pub bucket: ::prost::alloc::string::String,
 }

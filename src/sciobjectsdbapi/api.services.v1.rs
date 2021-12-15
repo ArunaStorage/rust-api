@@ -1,4 +1,290 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NotificationStreamRequest {
+    #[prost(enumeration = "notification_stream_request::EventResources", tag = "1")]
+    pub resource: i32,
+    #[prost(string, tag = "2")]
+    pub resource_id: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub include_subresource: bool,
+    #[prost(oneof = "notification_stream_request::StreamType", tags = "4, 5, 6")]
+    pub stream_type: ::core::option::Option<notification_stream_request::StreamType>,
+}
+/// Nested message and enum types in `NotificationStreamRequest`.
+pub mod notification_stream_request {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    pub enum EventResources {
+        Unspecified = 0,
+        ProjectResource = 1,
+        DatasetResource = 2,
+        DatasetVersionResource = 3,
+        ObjectGroupResource = 4,
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum StreamType {
+        #[prost(message, tag = "4")]
+        StreamAll(super::StreamAll),
+        #[prost(message, tag = "5")]
+        StreamFromDate(super::StreamFromDate),
+        #[prost(message, tag = "6")]
+        StreamFromSequence(super::StreamFromSequence),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StreamFromSequence {
+    #[prost(uint64, tag = "1")]
+    pub sequence: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StreamFromDate {
+    #[prost(message, optional, tag = "1")]
+    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StreamAll {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NotificationStreamResponse {
+    #[prost(message, optional, tag = "1")]
+    pub message: ::core::option::Option<EventNotificationMessage>,
+    #[prost(uint64, tag = "2")]
+    pub sequence: u64,
+    #[prost(message, optional, tag = "3")]
+    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EventNotificationMessage {
+    #[prost(enumeration = "super::super::models::v1::Resource", tag = "1")]
+    pub resource: i32,
+    #[prost(string, tag = "2")]
+    pub resource_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "event_notification_message::UpdateType", tag = "3")]
+    pub updated_type: i32,
+}
+/// Nested message and enum types in `EventNotificationMessage`.
+pub mod event_notification_message {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    pub enum UpdateType {
+        Unspecified = 0,
+        Created = 1,
+        Available = 2,
+        Updated = 3,
+        MetadataUpdated = 4,
+        Deleted = 5,
+    }
+}
+#[doc = r" Generated client implementations."]
+pub mod update_notification_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    #[derive(Debug, Clone)]
+    pub struct UpdateNotificationServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl UpdateNotificationServiceClient<tonic::transport::Channel> {
+        #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: std::convert::TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> UpdateNotificationServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::ResponseBody: Body + Send + 'static,
+        T::Error: Into<StdError>,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> UpdateNotificationServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
+        {
+            UpdateNotificationServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        #[doc = r" Compress requests with `gzip`."]
+        #[doc = r""]
+        #[doc = r" This requires the server to support it otherwise it might respond with an"]
+        #[doc = r" error."]
+        pub fn send_gzip(mut self) -> Self {
+            self.inner = self.inner.send_gzip();
+            self
+        }
+        #[doc = r" Enable decompressing responses with `gzip`."]
+        pub fn accept_gzip(mut self) -> Self {
+            self.inner = self.inner.accept_gzip();
+            self
+        }
+        pub async fn notification_stream(
+            &mut self,
+            request: impl tonic::IntoRequest<super::NotificationStreamRequest>,
+        ) -> Result<
+            tonic::Response<tonic::codec::Streaming<super::NotificationStreamResponse>>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.UpdateNotificationService/NotificationStream",
+            );
+            self.inner
+                .server_streaming(request.into_request(), path, codec)
+                .await
+        }
+    }
+}
+#[doc = r" Generated server implementations."]
+pub mod update_notification_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer."]
+    #[async_trait]
+    pub trait UpdateNotificationService: Send + Sync + 'static {
+        #[doc = "Server streaming response type for the NotificationStream method."]
+        type NotificationStreamStream: futures_core::Stream<Item = Result<super::NotificationStreamResponse, tonic::Status>>
+            + Send
+            + 'static;
+        async fn notification_stream(
+            &self,
+            request: tonic::Request<super::NotificationStreamRequest>,
+        ) -> Result<tonic::Response<Self::NotificationStreamStream>, tonic::Status>;
+    }
+    #[derive(Debug)]
+    pub struct UpdateNotificationServiceServer<T: UpdateNotificationService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: (),
+        send_compression_encodings: (),
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: UpdateNotificationService> UpdateNotificationServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+            }
+        }
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for UpdateNotificationServiceServer<T>
+    where
+        T: UpdateNotificationService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = Never;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/api.services.v1.UpdateNotificationService/NotificationStream" => {
+                    #[allow(non_camel_case_types)]
+                    struct NotificationStreamSvc<T: UpdateNotificationService>(pub Arc<T>);
+                    impl<T: UpdateNotificationService>
+                        tonic::server::ServerStreamingService<super::NotificationStreamRequest>
+                        for NotificationStreamSvc<T>
+                    {
+                        type Response = super::NotificationStreamResponse;
+                        type ResponseStream = T::NotificationStreamStream;
+                        type Future =
+                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::NotificationStreamRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).notification_stream(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = NotificationStreamSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.server_streaming(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(empty_body())
+                        .unwrap())
+                }),
+            }
+        }
+    }
+    impl<T: UpdateNotificationService> Clone for UpdateNotificationServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+            }
+        }
+    }
+    impl<T: UpdateNotificationService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(self.0.clone())
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: UpdateNotificationService> tonic::transport::NamedService
+        for UpdateNotificationServiceServer<T>
+    {
+        const NAME: &'static str = "api.services.v1.UpdateNotificationService";
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -52,6 +338,8 @@ pub mod create_object_group_response {
         pub filename: ::prost::alloc::string::String,
         #[prost(string, tag = "2")]
         pub link: ::prost::alloc::string::String,
+        #[prost(string, tag = "3")]
+        pub object_id: ::prost::alloc::string::String,
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1288,6 +1576,8 @@ pub struct GetDatasetVersionsResponse {
 pub struct GetDatasetObjectGroupsRequest {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetObjectGroupsResponse {
@@ -1435,6 +1725,8 @@ pub struct GetDatasetVersionResponse {
 pub struct GetDatasetVersionObjectGroupsRequest {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionObjectGroupsResponse {
