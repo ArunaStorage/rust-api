@@ -340,6 +340,8 @@ pub mod create_object_group_response {
         pub link: ::prost::alloc::string::String,
         #[prost(string, tag = "3")]
         pub object_id: ::prost::alloc::string::String,
+        #[prost(int64, tag = "4")]
+        pub index: i64,
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
