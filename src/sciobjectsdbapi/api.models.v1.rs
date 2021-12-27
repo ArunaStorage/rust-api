@@ -299,17 +299,19 @@ pub struct ObjectGroup {
     pub description: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "5")]
-    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(string, tag = "5")]
+    pub project_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "6")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+    #[prost(message, repeated, tag = "7")]
     pub metadata: ::prost::alloc::vec::Vec<Metadata>,
-    #[prost(enumeration = "Status", tag = "7")]
+    #[prost(enumeration = "Status", tag = "8")]
     pub status: i32,
-    #[prost(message, repeated, tag = "8")]
+    #[prost(message, repeated, tag = "9")]
     pub objects: ::prost::alloc::vec::Vec<Object>,
-    #[prost(message, optional, tag = "9")]
-    pub generated: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "10")]
+    pub generated: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "11")]
     pub created: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
