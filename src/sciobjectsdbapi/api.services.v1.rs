@@ -1,16 +1,24 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamRequest {
-    #[prost(enumeration = "notification_stream_request::EventResources", tag = "1")]
+pub struct CreateEventStreamingGroupRequest {
+    #[prost(
+        enumeration = "create_event_streaming_group_request::EventResources",
+        tag = "1"
+    )]
     pub resource: i32,
     #[prost(string, tag = "2")]
     pub resource_id: ::prost::alloc::string::String,
     #[prost(bool, tag = "3")]
     pub include_subresource: bool,
-    #[prost(oneof = "notification_stream_request::StreamType", tags = "4, 5, 6")]
-    pub stream_type: ::core::option::Option<notification_stream_request::StreamType>,
+    #[prost(string, tag = "7")]
+    pub stream_group_id: ::prost::alloc::string::String,
+    #[prost(
+        oneof = "create_event_streaming_group_request::StreamType",
+        tags = "4, 5, 6"
+    )]
+    pub stream_type: ::core::option::Option<create_event_streaming_group_request::StreamType>,
 }
-/// Nested message and enum types in `NotificationStreamRequest`.
-pub mod notification_stream_request {
+/// Nested message and enum types in `CreateEventStreamingGroupRequest`.
+pub mod create_event_streaming_group_request {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
     pub enum EventResources {
@@ -19,6 +27,7 @@ pub mod notification_stream_request {
         DatasetResource = 2,
         DatasetVersionResource = 3,
         ObjectGroupResource = 4,
+        AllResource = 5,
     }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamType {
@@ -29,6 +38,48 @@ pub mod notification_stream_request {
         #[prost(message, tag = "6")]
         StreamFromSequence(super::StreamFromSequence),
     }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateEventStreamingGroupResponse {
+    #[prost(string, tag = "1")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NotificationStreamGroupRequest {
+    #[prost(bool, tag = "3")]
+    pub close: bool,
+    #[prost(
+        oneof = "notification_stream_group_request::StreamAction",
+        tags = "1, 2"
+    )]
+    pub stream_action: ::core::option::Option<notification_stream_group_request::StreamAction>,
+}
+/// Nested message and enum types in `NotificationStreamGroupRequest`.
+pub mod notification_stream_group_request {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum StreamAction {
+        #[prost(message, tag = "1")]
+        Init(super::NotificationStreamInit),
+        #[prost(message, tag = "2")]
+        Ack(super::NotficationStreamAck),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NotificationStreamInit {
+    #[prost(string, tag = "1")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NotficationStreamAck {
+    #[prost(string, repeated, tag = "1")]
+    pub ack_chunk_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NotificationStreamGroupResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub notification: ::prost::alloc::vec::Vec<NotificationStreamResponse>,
+    #[prost(string, tag = "2")]
+    pub ack_chunk_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromSequence {
@@ -133,11 +184,28 @@ pub mod update_notification_service_client {
             self.inner = self.inner.accept_gzip();
             self
         }
-        pub async fn notification_stream(
+        pub async fn create_event_streaming_group(
             &mut self,
-            request: impl tonic::IntoRequest<super::NotificationStreamRequest>,
+            request: impl tonic::IntoRequest<super::CreateEventStreamingGroupRequest>,
+        ) -> Result<tonic::Response<super::CreateEventStreamingGroupResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.services.v1.UpdateNotificationService/CreateEventStreamingGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn notification_stream_group(
+            &mut self,
+            request: impl tonic::IntoStreamingRequest<Message = super::NotificationStreamGroupRequest>,
         ) -> Result<
-            tonic::Response<tonic::codec::Streaming<super::NotificationStreamResponse>>,
+            tonic::Response<tonic::codec::Streaming<super::NotificationStreamGroupResponse>>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -148,10 +216,10 @@ pub mod update_notification_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.UpdateNotificationService/NotificationStream",
+                "/api.services.v1.UpdateNotificationService/NotificationStreamGroup",
             );
             self.inner
-                .server_streaming(request.into_request(), path, codec)
+                .streaming(request.into_streaming_request(), path, codec)
                 .await
         }
     }
@@ -163,14 +231,19 @@ pub mod update_notification_service_server {
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer."]
     #[async_trait]
     pub trait UpdateNotificationService: Send + Sync + 'static {
-        #[doc = "Server streaming response type for the NotificationStream method."]
-        type NotificationStreamStream: futures_core::Stream<Item = Result<super::NotificationStreamResponse, tonic::Status>>
-            + Send
-            + 'static;
-        async fn notification_stream(
+        async fn create_event_streaming_group(
             &self,
-            request: tonic::Request<super::NotificationStreamRequest>,
-        ) -> Result<tonic::Response<Self::NotificationStreamStream>, tonic::Status>;
+            request: tonic::Request<super::CreateEventStreamingGroupRequest>,
+        ) -> Result<tonic::Response<super::CreateEventStreamingGroupResponse>, tonic::Status>;
+        #[doc = "Server streaming response type for the NotificationStreamGroup method."]
+        type NotificationStreamGroupStream: futures_core::Stream<
+                Item = Result<super::NotificationStreamGroupResponse, tonic::Status>,
+            > + Send
+            + 'static;
+        async fn notification_stream_group(
+            &self,
+            request: tonic::Request<tonic::Streaming<super::NotificationStreamGroupRequest>>,
+        ) -> Result<tonic::Response<Self::NotificationStreamGroupStream>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct UpdateNotificationServiceServer<T: UpdateNotificationService> {
@@ -211,23 +284,22 @@ pub mod update_notification_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/api.services.v1.UpdateNotificationService/NotificationStream" => {
+                "/api.services.v1.UpdateNotificationService/CreateEventStreamingGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct NotificationStreamSvc<T: UpdateNotificationService>(pub Arc<T>);
+                    struct CreateEventStreamingGroupSvc<T: UpdateNotificationService>(pub Arc<T>);
                     impl<T: UpdateNotificationService>
-                        tonic::server::ServerStreamingService<super::NotificationStreamRequest>
-                        for NotificationStreamSvc<T>
+                        tonic::server::UnaryService<super::CreateEventStreamingGroupRequest>
+                        for CreateEventStreamingGroupSvc<T>
                     {
-                        type Response = super::NotificationStreamResponse;
-                        type ResponseStream = T::NotificationStreamStream;
-                        type Future =
-                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
+                        type Response = super::CreateEventStreamingGroupResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::NotificationStreamRequest>,
+                            request: tonic::Request<super::CreateEventStreamingGroupRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).notification_stream(request).await };
+                            let fut =
+                                async move { (*inner).create_event_streaming_group(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -236,13 +308,52 @@ pub mod update_notification_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = NotificationStreamSvc(inner);
+                        let method = CreateEventStreamingGroupSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
                             accept_compression_encodings,
                             send_compression_encodings,
                         );
-                        let res = grpc.server_streaming(method, req).await;
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/api.services.v1.UpdateNotificationService/NotificationStreamGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct NotificationStreamGroupSvc<T: UpdateNotificationService>(pub Arc<T>);
+                    impl<T: UpdateNotificationService>
+                        tonic::server::StreamingService<super::NotificationStreamGroupRequest>
+                        for NotificationStreamGroupSvc<T>
+                    {
+                        type Response = super::NotificationStreamGroupResponse;
+                        type ResponseStream = T::NotificationStreamGroupStream;
+                        type Future =
+                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                tonic::Streaming<super::NotificationStreamGroupRequest>,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut =
+                                async move { (*inner).notification_stream_group(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = NotificationStreamGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
+                            accept_compression_encodings,
+                            send_compression_encodings,
+                        );
+                        let res = grpc.streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
@@ -2595,8 +2706,9 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = " Returns a signed link that can be used to download all objects from the specified request"]
-        #[doc = " The link is signed using hmac and the resulting data can be shared without exposing any secrets"]
+        #[doc = " Returns a signed link that can be used to download all objects from the"]
+        #[doc = " specified request The link is signed using hmac and the resulting data can"]
+        #[doc = " be shared without exposing any secrets"]
         pub async fn get_object_groups_stream_link(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupsStreamLinkRequest>,
@@ -2649,8 +2761,9 @@ pub mod dataset_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = " Returns all object groups that were created within a specific date range"]
-        #[doc = " The date range is not the date when the data was created in the system but byte the externally date that indicates the actual creation of the data rather"]
-        #[doc = " than the date the data was ingested into the system"]
+        #[doc = " The date range is not the date when the data was created in the system but"]
+        #[doc = " byte the externally date that indicates the actual creation of the data"]
+        #[doc = " rather than the date the data was ingested into the system"]
         pub async fn get_object_groups_in_date_range(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupsInDateRangeRequest>,
@@ -2668,7 +2781,7 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = "ReleaseDatasetVersion Release a new dataset version"]
+        #[doc = " ReleaseDatasetVersion Release a new dataset version"]
         pub async fn release_dataset_version(
             &mut self,
             request: impl tonic::IntoRequest<super::ReleaseDatasetVersionRequest>,
@@ -2763,8 +2876,9 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::GetDatasetObjectGroupsRequest>,
         ) -> Result<tonic::Response<super::GetDatasetObjectGroupsResponse>, tonic::Status>;
-        #[doc = " Returns a signed link that can be used to download all objects from the specified request"]
-        #[doc = " The link is signed using hmac and the resulting data can be shared without exposing any secrets"]
+        #[doc = " Returns a signed link that can be used to download all objects from the"]
+        #[doc = " specified request The link is signed using hmac and the resulting data can"]
+        #[doc = " be shared without exposing any secrets"]
         async fn get_object_groups_stream_link(
             &self,
             request: tonic::Request<super::GetObjectGroupsStreamLinkRequest>,
@@ -2780,13 +2894,14 @@ pub mod dataset_service_server {
             request: tonic::Request<super::DeleteDatasetRequest>,
         ) -> Result<tonic::Response<super::DeleteDatasetResponse>, tonic::Status>;
         #[doc = " Returns all object groups that were created within a specific date range"]
-        #[doc = " The date range is not the date when the data was created in the system but byte the externally date that indicates the actual creation of the data rather"]
-        #[doc = " than the date the data was ingested into the system"]
+        #[doc = " The date range is not the date when the data was created in the system but"]
+        #[doc = " byte the externally date that indicates the actual creation of the data"]
+        #[doc = " rather than the date the data was ingested into the system"]
         async fn get_object_groups_in_date_range(
             &self,
             request: tonic::Request<super::GetObjectGroupsInDateRangeRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupsInDateRangeResponse>, tonic::Status>;
-        #[doc = "ReleaseDatasetVersion Release a new dataset version"]
+        #[doc = " ReleaseDatasetVersion Release a new dataset version"]
         async fn release_dataset_version(
             &self,
             request: tonic::Request<super::ReleaseDatasetVersionRequest>,
