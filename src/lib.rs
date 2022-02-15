@@ -1,1 +1,1 @@
-pub mod sciobjectsdbapi;
+pub mod sciobjectsdb;

@@ -1,401 +1,4 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateEventStreamingGroupRequest {
-    #[prost(
-        enumeration = "create_event_streaming_group_request::EventResources",
-        tag = "1"
-    )]
-    pub resource: i32,
-    #[prost(string, tag = "2")]
-    pub resource_id: ::prost::alloc::string::String,
-    #[prost(bool, tag = "3")]
-    pub include_subresource: bool,
-    #[prost(string, tag = "7")]
-    pub stream_group_id: ::prost::alloc::string::String,
-    #[prost(
-        oneof = "create_event_streaming_group_request::StreamType",
-        tags = "4, 5, 6"
-    )]
-    pub stream_type: ::core::option::Option<create_event_streaming_group_request::StreamType>,
-}
-/// Nested message and enum types in `CreateEventStreamingGroupRequest`.
-pub mod create_event_streaming_group_request {
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum EventResources {
-        Unspecified = 0,
-        ProjectResource = 1,
-        DatasetResource = 2,
-        DatasetVersionResource = 3,
-        ObjectGroupResource = 4,
-        AllResource = 5,
-    }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum StreamType {
-        #[prost(message, tag = "4")]
-        StreamAll(super::StreamAll),
-        #[prost(message, tag = "5")]
-        StreamFromDate(super::StreamFromDate),
-        #[prost(message, tag = "6")]
-        StreamFromSequence(super::StreamFromSequence),
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateEventStreamingGroupResponse {
-    #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamGroupRequest {
-    #[prost(bool, tag = "3")]
-    pub close: bool,
-    #[prost(
-        oneof = "notification_stream_group_request::StreamAction",
-        tags = "1, 2"
-    )]
-    pub stream_action: ::core::option::Option<notification_stream_group_request::StreamAction>,
-}
-/// Nested message and enum types in `NotificationStreamGroupRequest`.
-pub mod notification_stream_group_request {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum StreamAction {
-        #[prost(message, tag = "1")]
-        Init(super::NotificationStreamInit),
-        #[prost(message, tag = "2")]
-        Ack(super::NotficationStreamAck),
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamInit {
-    #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotficationStreamAck {
-    #[prost(string, repeated, tag = "1")]
-    pub ack_chunk_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamGroupResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub notification: ::prost::alloc::vec::Vec<NotificationStreamResponse>,
-    #[prost(string, tag = "2")]
-    pub ack_chunk_id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamFromSequence {
-    #[prost(uint64, tag = "1")]
-    pub sequence: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamFromDate {
-    #[prost(message, optional, tag = "1")]
-    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamAll {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamResponse {
-    #[prost(message, optional, tag = "1")]
-    pub message: ::core::option::Option<EventNotificationMessage>,
-    #[prost(uint64, tag = "2")]
-    pub sequence: u64,
-    #[prost(message, optional, tag = "3")]
-    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EventNotificationMessage {
-    #[prost(enumeration = "super::super::models::v1::Resource", tag = "1")]
-    pub resource: i32,
-    #[prost(string, tag = "2")]
-    pub resource_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "event_notification_message::UpdateType", tag = "3")]
-    pub updated_type: i32,
-}
-/// Nested message and enum types in `EventNotificationMessage`.
-pub mod event_notification_message {
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum UpdateType {
-        Unspecified = 0,
-        Created = 1,
-        Available = 2,
-        Updated = 3,
-        MetadataUpdated = 4,
-        Deleted = 5,
-    }
-}
-#[doc = r" Generated client implementations."]
-pub mod update_notification_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    #[derive(Debug, Clone)]
-    pub struct UpdateNotificationServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl UpdateNotificationServiceClient<tonic::transport::Channel> {
-        #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: std::convert::TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
-    }
-    impl<T> UpdateNotificationServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::ResponseBody: Body + Send + 'static,
-        T::Error: Into<StdError>,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> UpdateNotificationServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
-                Into<StdError> + Send + Sync,
-        {
-            UpdateNotificationServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        #[doc = r" Compress requests with `gzip`."]
-        #[doc = r""]
-        #[doc = r" This requires the server to support it otherwise it might respond with an"]
-        #[doc = r" error."]
-        pub fn send_gzip(mut self) -> Self {
-            self.inner = self.inner.send_gzip();
-            self
-        }
-        #[doc = r" Enable decompressing responses with `gzip`."]
-        pub fn accept_gzip(mut self) -> Self {
-            self.inner = self.inner.accept_gzip();
-            self
-        }
-        pub async fn create_event_streaming_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateEventStreamingGroupRequest>,
-        ) -> Result<tonic::Response<super::CreateEventStreamingGroupResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.UpdateNotificationService/CreateEventStreamingGroup",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn notification_stream_group(
-            &mut self,
-            request: impl tonic::IntoStreamingRequest<Message = super::NotificationStreamGroupRequest>,
-        ) -> Result<
-            tonic::Response<tonic::codec::Streaming<super::NotificationStreamGroupResponse>>,
-            tonic::Status,
-        > {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.UpdateNotificationService/NotificationStreamGroup",
-            );
-            self.inner
-                .streaming(request.into_streaming_request(), path, codec)
-                .await
-        }
-    }
-}
-#[doc = r" Generated server implementations."]
-pub mod update_notification_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    #[doc = "Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer."]
-    #[async_trait]
-    pub trait UpdateNotificationService: Send + Sync + 'static {
-        async fn create_event_streaming_group(
-            &self,
-            request: tonic::Request<super::CreateEventStreamingGroupRequest>,
-        ) -> Result<tonic::Response<super::CreateEventStreamingGroupResponse>, tonic::Status>;
-        #[doc = "Server streaming response type for the NotificationStreamGroup method."]
-        type NotificationStreamGroupStream: futures_core::Stream<
-                Item = Result<super::NotificationStreamGroupResponse, tonic::Status>,
-            > + Send
-            + 'static;
-        async fn notification_stream_group(
-            &self,
-            request: tonic::Request<tonic::Streaming<super::NotificationStreamGroupRequest>>,
-        ) -> Result<tonic::Response<Self::NotificationStreamGroupStream>, tonic::Status>;
-    }
-    #[derive(Debug)]
-    pub struct UpdateNotificationServiceServer<T: UpdateNotificationService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: (),
-        send_compression_encodings: (),
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: UpdateNotificationService> UpdateNotificationServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            let inner = Arc::new(inner);
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-            }
-        }
-        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>> for UpdateNotificationServiceServer<T>
-    where
-        T: UpdateNotificationService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = Never;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/api.services.v1.UpdateNotificationService/CreateEventStreamingGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateEventStreamingGroupSvc<T: UpdateNotificationService>(pub Arc<T>);
-                    impl<T: UpdateNotificationService>
-                        tonic::server::UnaryService<super::CreateEventStreamingGroupRequest>
-                        for CreateEventStreamingGroupSvc<T>
-                    {
-                        type Response = super::CreateEventStreamingGroupResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateEventStreamingGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).create_event_streaming_group(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateEventStreamingGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.UpdateNotificationService/NotificationStreamGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct NotificationStreamGroupSvc<T: UpdateNotificationService>(pub Arc<T>);
-                    impl<T: UpdateNotificationService>
-                        tonic::server::StreamingService<super::NotificationStreamGroupRequest>
-                        for NotificationStreamGroupSvc<T>
-                    {
-                        type Response = super::NotificationStreamGroupResponse;
-                        type ResponseStream = T::NotificationStreamGroupStream;
-                        type Future =
-                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                tonic::Streaming<super::NotificationStreamGroupRequest>,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).notification_stream_group(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = NotificationStreamGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.streaming(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => Box::pin(async move {
-                    Ok(http::Response::builder()
-                        .status(200)
-                        .header("grpc-status", "12")
-                        .header("content-type", "application/grpc")
-                        .body(empty_body())
-                        .unwrap())
-                }),
-            }
-        }
-    }
-    impl<T: UpdateNotificationService> Clone for UpdateNotificationServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-            }
-        }
-    }
-    impl<T: UpdateNotificationService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(self.0.clone())
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: UpdateNotificationService> tonic::transport::NamedService
-        for UpdateNotificationServiceServer<T>
-    {
-        const NAME: &'static str = "api.services.v1.UpdateNotificationService";
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -496,439 +99,92 @@ pub struct DeleteObjectGroupRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupResponse {}
-#[doc = r" Generated client implementations."]
-pub mod dataset_objects_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    #[derive(Debug, Clone)]
-    pub struct DatasetObjectsServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl DatasetObjectsServiceClient<tonic::transport::Channel> {
-        #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: std::convert::TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
-    }
-    impl<T> DatasetObjectsServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::ResponseBody: Body + Send + 'static,
-        T::Error: Into<StdError>,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> DatasetObjectsServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
-                Into<StdError> + Send + Sync,
-        {
-            DatasetObjectsServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        #[doc = r" Compress requests with `gzip`."]
-        #[doc = r""]
-        #[doc = r" This requires the server to support it otherwise it might respond with an"]
-        #[doc = r" error."]
-        pub fn send_gzip(mut self) -> Self {
-            self.inner = self.inner.send_gzip();
-            self
-        }
-        #[doc = r" Enable decompressing responses with `gzip`."]
-        pub fn accept_gzip(mut self) -> Self {
-            self.inner = self.inner.accept_gzip();
-            self
-        }
-        #[doc = " Creates a new object group"]
-        pub async fn create_object_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/CreateObjectGroup",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        #[doc = " Batch request of CreateObjectGroup"]
-        #[doc = " The call will preserve the ordering of the request in the response"]
-        pub async fn create_object_group_batch(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateObjectGroupBatchRequest>,
-        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/CreateObjectGroupBatch",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        #[doc = "Returns the object group with the given ID"]
-        pub async fn get_object_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/GetObjectGroup",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        #[doc = " Finishes the upload process for an object"]
-        #[doc = " This will change the status of the objects to \"available\""]
-        #[doc = " Experimental, might change this to FinishObjectGroupUpload"]
-        pub async fn finish_object_upload(
-            &mut self,
-            request: impl tonic::IntoRequest<super::FinishObjectUploadRequest>,
-        ) -> Result<tonic::Response<super::FinishObjectUploadResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/FinishObjectUpload",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        #[doc = " Deletes the given object group"]
-        #[doc = " This will also delete all associated objects both as metadata objects and the actual objects in the object storage"]
-        pub async fn delete_object_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetObjectsService/DeleteObjectGroup",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-    }
+/// Request to create a project
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateProjectRequest {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
+    #[prost(message, repeated, tag = "4")]
+    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
 }
-#[doc = r" Generated server implementations."]
-pub mod dataset_objects_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetObjectsServiceServer."]
-    #[async_trait]
-    pub trait DatasetObjectsService: Send + Sync + 'static {
-        #[doc = " Creates a new object group"]
-        async fn create_object_group(
-            &self,
-            request: tonic::Request<super::CreateObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
-        #[doc = " Batch request of CreateObjectGroup"]
-        #[doc = " The call will preserve the ordering of the request in the response"]
-        async fn create_object_group_batch(
-            &self,
-            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
-        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status>;
-        #[doc = "Returns the object group with the given ID"]
-        async fn get_object_group(
-            &self,
-            request: tonic::Request<super::GetObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status>;
-        #[doc = " Finishes the upload process for an object"]
-        #[doc = " This will change the status of the objects to \"available\""]
-        #[doc = " Experimental, might change this to FinishObjectGroupUpload"]
-        async fn finish_object_upload(
-            &self,
-            request: tonic::Request<super::FinishObjectUploadRequest>,
-        ) -> Result<tonic::Response<super::FinishObjectUploadResponse>, tonic::Status>;
-        #[doc = " Deletes the given object group"]
-        #[doc = " This will also delete all associated objects both as metadata objects and the actual objects in the object storage"]
-        async fn delete_object_group(
-            &self,
-            request: tonic::Request<super::DeleteObjectGroupRequest>,
-        ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status>;
-    }
-    #[derive(Debug)]
-    pub struct DatasetObjectsServiceServer<T: DatasetObjectsService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: (),
-        send_compression_encodings: (),
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: DatasetObjectsService> DatasetObjectsServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            let inner = Arc::new(inner);
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-            }
-        }
-        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetObjectsServiceServer<T>
-    where
-        T: DatasetObjectsService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = Never;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/api.services.v1.DatasetObjectsService/CreateObjectGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::CreateObjectGroupRequest>
-                        for CreateObjectGroupSvc<T>
-                    {
-                        type Response = super::CreateObjectGroupResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateObjectGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).create_object_group(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateObjectGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/CreateObjectGroupBatch" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateObjectGroupBatchSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::CreateObjectGroupBatchRequest>
-                        for CreateObjectGroupBatchSvc<T>
-                    {
-                        type Response = super::CreateObjectGroupBatchResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).create_object_group_batch(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateObjectGroupBatchSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/GetObjectGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::GetObjectGroupRequest>
-                        for GetObjectGroupSvc<T>
-                    {
-                        type Response = super::GetObjectGroupResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetObjectGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).get_object_group(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetObjectGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/FinishObjectUpload" => {
-                    #[allow(non_camel_case_types)]
-                    struct FinishObjectUploadSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::FinishObjectUploadRequest>
-                        for FinishObjectUploadSvc<T>
-                    {
-                        type Response = super::FinishObjectUploadResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::FinishObjectUploadRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).finish_object_upload(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = FinishObjectUploadSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetObjectsService/DeleteObjectGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
-                    impl<T: DatasetObjectsService>
-                        tonic::server::UnaryService<super::DeleteObjectGroupRequest>
-                        for DeleteObjectGroupSvc<T>
-                    {
-                        type Response = super::DeleteObjectGroupResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteObjectGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).delete_object_group(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteObjectGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => Box::pin(async move {
-                    Ok(http::Response::builder()
-                        .status(200)
-                        .header("grpc-status", "12")
-                        .header("content-type", "application/grpc")
-                        .body(empty_body())
-                        .unwrap())
-                }),
-            }
-        }
-    }
-    impl<T: DatasetObjectsService> Clone for DatasetObjectsServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-            }
-        }
-    }
-    impl<T: DatasetObjectsService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(self.0.clone())
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: DatasetObjectsService> tonic::transport::NamedService for DatasetObjectsServiceServer<T> {
-        const NAME: &'static str = "api.services.v1.DatasetObjectsService";
-    }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateProjectResponse {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserToProjectRequest {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::super::models::v1::Right", repeated, tag = "2")]
+    pub scope: ::prost::alloc::vec::Vec<i32>,
+    #[prost(string, tag = "3")]
+    pub project_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserToProjectResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateApiTokenRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateApiTokenResponse {
+    #[prost(message, optional, tag = "1")]
+    pub token: ::core::option::Option<super::super::models::v1::ApiToken>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProjectDatasetsRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProjectDatasetsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub datasets: ::prost::alloc::vec::Vec<super::super::models::v1::Dataset>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUserProjectsRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUserProjectsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub projects: ::prost::alloc::vec::Vec<super::super::models::v1::Project>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProjectRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProjectResponse {
+    #[prost(message, optional, tag = "1")]
+    pub project: ::core::option::Option<super::super::models::v1::Project>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetApiTokenResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub token: ::prost::alloc::vec::Vec<super::super::models::v1::ApiToken>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetApiTokenRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteApiTokenRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteApiTokenResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteProjectRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteProjectResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateUploadLink {
     #[prost(string, tag = "1")]
@@ -1076,6 +332,259 @@ pub struct InnerLinksResponse {
     pub object_links: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[doc = r" Generated client implementations."]
+pub mod dataset_objects_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    #[derive(Debug, Clone)]
+    pub struct DatasetObjectsServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl DatasetObjectsServiceClient<tonic::transport::Channel> {
+        #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: std::convert::TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> DatasetObjectsServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::ResponseBody: Body + Send + 'static,
+        T::Error: Into<StdError>,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> DatasetObjectsServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
+        {
+            DatasetObjectsServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        #[doc = r" Compress requests with `gzip`."]
+        #[doc = r""]
+        #[doc = r" This requires the server to support it otherwise it might respond with an"]
+        #[doc = r" error."]
+        pub fn send_gzip(mut self) -> Self {
+            self.inner = self.inner.send_gzip();
+            self
+        }
+        #[doc = r" Enable decompressing responses with `gzip`."]
+        pub fn accept_gzip(mut self) -> Self {
+            self.inner = self.inner.accept_gzip();
+            self
+        }
+        #[doc = " Creates a new object group"]
+        pub async fn create_object_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/CreateObjectGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        #[doc = " Batch request of CreateObjectGroup"]
+        #[doc = " The call will preserve the ordering of the request in the response"]
+        pub async fn create_object_group_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateObjectGroupBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/CreateObjectGroupBatch",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        #[doc = "Returns the object group with the given ID"]
+        pub async fn get_object_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/GetObjectGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        #[doc = " Finishes the upload process for an object"]
+        #[doc = " This will change the status of the objects to \"available\""]
+        #[doc = " Experimental, might change this to FinishObjectGroupUpload"]
+        pub async fn finish_object_upload(
+            &mut self,
+            request: impl tonic::IntoRequest<super::FinishObjectUploadRequest>,
+        ) -> Result<tonic::Response<super::FinishObjectUploadResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/FinishObjectUpload",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        #[doc = " Deletes the given object group"]
+        #[doc = " This will also delete all associated objects both as metadata objects and the actual objects in the object storage"]
+        pub async fn delete_object_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/DeleteObjectGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+    }
+}
+#[doc = r" Generated server implementations."]
+pub mod dataset_objects_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with DatasetObjectsServiceServer."]
+    #[async_trait]
+    pub trait DatasetObjectsService: Send + Sync + 'static {
+        #[doc = " Creates a new object group"]
+        async fn create_object_group(
+            &self,
+            request: tonic::Request<super::CreateObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
+        #[doc = " Batch request of CreateObjectGroup"]
+        #[doc = " The call will preserve the ordering of the request in the response"]
+        async fn create_object_group_batch(
+            &self,
+            request: tonic::Request<super::CreateObjectGroupBatchRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectGroupBatchResponse>, tonic::Status>;
+        #[doc = "Returns the object group with the given ID"]
+        async fn get_object_group(
+            &self,
+            request: tonic::Request<super::GetObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status>;
+        #[doc = " Finishes the upload process for an object"]
+        #[doc = " This will change the status of the objects to \"available\""]
+        #[doc = " Experimental, might change this to FinishObjectGroupUpload"]
+        async fn finish_object_upload(
+            &self,
+            request: tonic::Request<super::FinishObjectUploadRequest>,
+        ) -> Result<tonic::Response<super::FinishObjectUploadResponse>, tonic::Status>;
+        #[doc = " Deletes the given object group"]
+        #[doc = " This will also delete all associated objects both as metadata objects and the actual objects in the object storage"]
+        async fn delete_object_group(
+            &self,
+            request: tonic::Request<super::DeleteObjectGroupRequest>,
+        ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status>;
+    }
+    #[derive(Debug)]
+    pub struct DatasetObjectsServiceServer<T: DatasetObjectsService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: (),
+        send_compression_encodings: (),
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: DatasetObjectsService> DatasetObjectsServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            let inner = Arc::new(inner);
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+            }
+        }
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetObjectsServiceServer<T>
+    where
+        T: DatasetObjectsService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = Never;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req . uri () . path () { "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/CreateObjectGroup" => { # [allow (non_camel_case_types)] struct CreateObjectGroupSvc < T : DatasetObjectsService > (pub Arc < T >) ; impl < T : DatasetObjectsService > tonic :: server :: UnaryService < super :: CreateObjectGroupRequest > for CreateObjectGroupSvc < T > { type Response = super :: CreateObjectGroupResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: CreateObjectGroupRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . create_object_group (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = CreateObjectGroupSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/CreateObjectGroupBatch" => { # [allow (non_camel_case_types)] struct CreateObjectGroupBatchSvc < T : DatasetObjectsService > (pub Arc < T >) ; impl < T : DatasetObjectsService > tonic :: server :: UnaryService < super :: CreateObjectGroupBatchRequest > for CreateObjectGroupBatchSvc < T > { type Response = super :: CreateObjectGroupBatchResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: CreateObjectGroupBatchRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . create_object_group_batch (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = CreateObjectGroupBatchSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/GetObjectGroup" => { # [allow (non_camel_case_types)] struct GetObjectGroupSvc < T : DatasetObjectsService > (pub Arc < T >) ; impl < T : DatasetObjectsService > tonic :: server :: UnaryService < super :: GetObjectGroupRequest > for GetObjectGroupSvc < T > { type Response = super :: GetObjectGroupResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetObjectGroupRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_object_group (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetObjectGroupSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/FinishObjectUpload" => { # [allow (non_camel_case_types)] struct FinishObjectUploadSvc < T : DatasetObjectsService > (pub Arc < T >) ; impl < T : DatasetObjectsService > tonic :: server :: UnaryService < super :: FinishObjectUploadRequest > for FinishObjectUploadSvc < T > { type Response = super :: FinishObjectUploadResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: FinishObjectUploadRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . finish_object_upload (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = FinishObjectUploadSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/DeleteObjectGroup" => { # [allow (non_camel_case_types)] struct DeleteObjectGroupSvc < T : DatasetObjectsService > (pub Arc < T >) ; impl < T : DatasetObjectsService > tonic :: server :: UnaryService < super :: DeleteObjectGroupRequest > for DeleteObjectGroupSvc < T > { type Response = super :: DeleteObjectGroupResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: DeleteObjectGroupRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . delete_object_group (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = DeleteObjectGroupSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } _ => Box :: pin (async move { Ok (http :: Response :: builder () . status (200) . header ("grpc-status" , "12") . header ("content-type" , "application/grpc") . body (empty_body ()) . unwrap ()) }) , }
+        }
+    }
+    impl<T: DatasetObjectsService> Clone for DatasetObjectsServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+            }
+        }
+    }
+    impl<T: DatasetObjectsService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(self.0.clone())
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: DatasetObjectsService> tonic::transport::NamedService for DatasetObjectsServiceServer<T> {
+        const NAME: &'static str = "sciobjsdb.api.storage.services.v1.DatasetObjectsService";
+    }
+}
+#[doc = r" Generated client implementations."]
 pub mod object_load_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
@@ -1151,7 +660,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/CreateUploadLink",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateUploadLink",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1169,7 +678,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/CreateDownloadLink",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateDownloadLink",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1188,7 +697,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/CreateDownloadLinkBatch",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateDownloadLinkBatch",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1209,7 +718,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/CreateDownloadLinkStream",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateDownloadLinkStream",
             );
             self.inner
                 .server_streaming(request.into_request(), path, codec)
@@ -1231,7 +740,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/StartMultipartUpload",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/StartMultipartUpload",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1247,7 +756,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/GetMultipartUploadLink",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/GetMultipartUploadLink",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1264,7 +773,7 @@ pub mod object_load_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ObjectLoadService/CompleteMultipartUpload",
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CompleteMultipartUpload",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1364,7 +873,7 @@ pub mod object_load_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/api.services.v1.ObjectLoadService/CreateUploadLink" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateUploadLink" => {
                     #[allow(non_camel_case_types)]
                     struct CreateUploadLinkSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1398,7 +907,7 @@ pub mod object_load_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ObjectLoadService/CreateDownloadLink" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateDownloadLink" => {
                     #[allow(non_camel_case_types)]
                     struct CreateDownloadLinkSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1432,7 +941,7 @@ pub mod object_load_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ObjectLoadService/CreateDownloadLinkBatch" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateDownloadLinkBatch" => {
                     #[allow(non_camel_case_types)]
                     struct CreateDownloadLinkBatchSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1467,7 +976,7 @@ pub mod object_load_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ObjectLoadService/CreateDownloadLinkStream" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CreateDownloadLinkStream" => {
                     #[allow(non_camel_case_types)]
                     struct CreateDownloadLinkStreamSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1505,7 +1014,7 @@ pub mod object_load_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ObjectLoadService/StartMultipartUpload" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/StartMultipartUpload" => {
                     #[allow(non_camel_case_types)]
                     struct StartMultipartUploadSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1539,7 +1048,7 @@ pub mod object_load_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ObjectLoadService/GetMultipartUploadLink" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/GetMultipartUploadLink" => {
                     #[allow(non_camel_case_types)]
                     struct GetMultipartUploadLinkSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1574,7 +1083,7 @@ pub mod object_load_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ObjectLoadService/CompleteMultipartUpload" => {
+                "/sciobjsdb.api.storage.services.v1.ObjectLoadService/CompleteMultipartUpload" => {
                     #[allow(non_camel_case_types)]
                     struct CompleteMultipartUploadSvc<T: ObjectLoadService>(pub Arc<T>);
                     impl<T: ObjectLoadService>
@@ -1641,7 +1150,7 @@ pub mod object_load_service_server {
         }
     }
     impl<T: ObjectLoadService> tonic::transport::NamedService for ObjectLoadServiceServer<T> {
-        const NAME: &'static str = "api.services.v1.ObjectLoadService";
+        const NAME: &'static str = "sciobjsdb.api.storage.services.v1.ObjectLoadService";
     }
 }
 /// Dataset related Models
@@ -1765,9 +1274,10 @@ pub mod get_object_groups_stream_link_request {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
     pub enum StreamType {
-        Base64newline = 0,
-        Zip = 1,
-        Targz = 2,
+        Unspecified = 0,
+        Base64newline = 1,
+        Zip = 2,
+        Targz = 3,
     }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Query {
@@ -1853,92 +1363,6 @@ pub struct DeleteDatasetVersionRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetVersionResponse {}
-/// Request to create a project
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateProjectRequest {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub metadata: ::prost::alloc::vec::Vec<super::super::models::v1::Metadata>,
-    #[prost(message, repeated, tag = "4")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateProjectResponse {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddUserToProjectRequest {
-    #[prost(string, tag = "1")]
-    pub user_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "super::super::models::v1::Right", repeated, tag = "2")]
-    pub scope: ::prost::alloc::vec::Vec<i32>,
-    #[prost(string, tag = "3")]
-    pub project_id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddUserToProjectResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateApiTokenRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateApiTokenResponse {
-    #[prost(message, optional, tag = "1")]
-    pub token: ::core::option::Option<super::super::models::v1::ApiToken>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectDatasetsRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectDatasetsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub dataset: ::prost::alloc::vec::Vec<super::super::models::v1::Dataset>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetUserProjectsRequest {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetUserProjectsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub projects: ::prost::alloc::vec::Vec<super::super::models::v1::Project>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectResponse {
-    #[prost(message, optional, tag = "1")]
-    pub project: ::core::option::Option<super::super::models::v1::Project>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetApiTokenResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub token: ::prost::alloc::vec::Vec<super::super::models::v1::ApiToken>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetApiTokenRequest {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteApiTokenRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteApiTokenResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteProjectRequest {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteProjectResponse {}
 #[doc = r" Generated client implementations."]
 pub mod project_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -2012,7 +1436,7 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/CreateProject",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/CreateProject",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2029,10 +1453,11 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/AddUserToProject",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/AddUserToProject",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        #[doc = "Creates an API token to authenticate "]
         pub async fn create_api_token(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateApiTokenRequest>,
@@ -2045,7 +1470,7 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/CreateAPIToken",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/CreateAPIToken",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2062,7 +1487,7 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/GetProjectDatasets",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetProjectDatasets",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2079,7 +1504,7 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/GetUserProjects",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetUserProjects",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2094,8 +1519,9 @@ pub mod project_service_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path =
-                http::uri::PathAndQuery::from_static("/api.services.v1.ProjectService/GetProject");
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetProject",
+            );
             self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = " Returns all API token for a specific user, based on the provided oauth2 token"]
@@ -2110,8 +1536,9 @@ pub mod project_service_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path =
-                http::uri::PathAndQuery::from_static("/api.services.v1.ProjectService/GetAPIToken");
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetAPIToken",
+            );
             self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = "DeleteProject Deletes a specific project"]
@@ -2128,7 +1555,7 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/DeleteProject",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/DeleteProject",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2144,7 +1571,7 @@ pub mod project_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.ProjectService/DeleteAPIToken",
+                "/sciobjsdb.api.storage.services.v1.ProjectService/DeleteAPIToken",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2167,6 +1594,7 @@ pub mod project_service_server {
             &self,
             request: tonic::Request<super::AddUserToProjectRequest>,
         ) -> Result<tonic::Response<super::AddUserToProjectResponse>, tonic::Status>;
+        #[doc = "Creates an API token to authenticate "]
         async fn create_api_token(
             &self,
             request: tonic::Request<super::CreateApiTokenRequest>,
@@ -2240,7 +1668,7 @@ pub mod project_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/api.services.v1.ProjectService/CreateProject" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/CreateProject" => {
                     #[allow(non_camel_case_types)]
                     struct CreateProjectSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService> tonic::server::UnaryService<super::CreateProjectRequest>
@@ -2273,7 +1701,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/AddUserToProject" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/AddUserToProject" => {
                     #[allow(non_camel_case_types)]
                     struct AddUserToProjectSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService>
@@ -2307,7 +1735,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/CreateAPIToken" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/CreateAPIToken" => {
                     #[allow(non_camel_case_types)]
                     struct CreateAPITokenSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService>
@@ -2341,7 +1769,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/GetProjectDatasets" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetProjectDatasets" => {
                     #[allow(non_camel_case_types)]
                     struct GetProjectDatasetsSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService>
@@ -2375,7 +1803,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/GetUserProjects" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetUserProjects" => {
                     #[allow(non_camel_case_types)]
                     struct GetUserProjectsSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService>
@@ -2409,7 +1837,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/GetProject" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetProject" => {
                     #[allow(non_camel_case_types)]
                     struct GetProjectSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService> tonic::server::UnaryService<super::GetProjectRequest> for GetProjectSvc<T> {
@@ -2440,7 +1868,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/GetAPIToken" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/GetAPIToken" => {
                     #[allow(non_camel_case_types)]
                     struct GetAPITokenSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService> tonic::server::UnaryService<super::GetApiTokenRequest>
@@ -2473,7 +1901,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/DeleteProject" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/DeleteProject" => {
                     #[allow(non_camel_case_types)]
                     struct DeleteProjectSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService> tonic::server::UnaryService<super::DeleteProjectRequest>
@@ -2506,7 +1934,7 @@ pub mod project_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/api.services.v1.ProjectService/DeleteAPIToken" => {
+                "/sciobjsdb.api.storage.services.v1.ProjectService/DeleteAPIToken" => {
                     #[allow(non_camel_case_types)]
                     struct DeleteAPITokenSvc<T: ProjectService>(pub Arc<T>);
                     impl<T: ProjectService>
@@ -2572,7 +2000,7 @@ pub mod project_service_server {
         }
     }
     impl<T: ProjectService> tonic::transport::NamedService for ProjectServiceServer<T> {
-        const NAME: &'static str = "api.services.v1.ProjectService";
+        const NAME: &'static str = "sciobjsdb.api.storage.services.v1.ProjectService";
     }
 }
 #[doc = r" Generated client implementations."]
@@ -2652,7 +2080,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/CreateDataset",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/CreateDataset",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2668,8 +2096,9 @@ pub mod dataset_service_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path =
-                http::uri::PathAndQuery::from_static("/api.services.v1.DatasetService/GetDataset");
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDataset",
+            );
             self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = " Lists Versions of a dataset"]
@@ -2685,7 +2114,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetDatasetVersions",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetVersions",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2702,7 +2131,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetDatasetObjectGroups",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetObjectGroups",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2722,7 +2151,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetObjectGroupsStreamLink",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetObjectGroupsStreamLink",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2739,7 +2168,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/UpdateDatasetField",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/UpdateDatasetField",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2756,7 +2185,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/DeleteDataset",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/DeleteDataset",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2777,7 +2206,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetObjectGroupsInDateRange",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetObjectGroupsInDateRange",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2794,7 +2223,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/ReleaseDatasetVersion",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/ReleaseDatasetVersion",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2810,7 +2239,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetDatasetVersion",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetVersion",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2827,7 +2256,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/GetDatasetVersionObjectGroups",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetVersionObjectGroups",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2843,7 +2272,7 @@ pub mod dataset_service_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/api.services.v1.DatasetService/DeleteDatasetVersion",
+                "/sciobjsdb.api.storage.services.v1.DatasetService/DeleteDatasetVersion",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -2961,427 +2390,7 @@ pub mod dataset_service_server {
         }
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
-            match req.uri().path() {
-                "/api.services.v1.DatasetService/CreateDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService> tonic::server::UnaryService<super::CreateDatasetRequest>
-                        for CreateDatasetSvc<T>
-                    {
-                        type Response = super::CreateDatasetResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).create_dataset(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService> tonic::server::UnaryService<super::GetDatasetRequest> for GetDatasetSvc<T> {
-                        type Response = super::GetDatasetResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).get_dataset(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetDatasetVersions" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetVersionsSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetDatasetVersionsRequest>
-                        for GetDatasetVersionsSvc<T>
-                    {
-                        type Response = super::GetDatasetVersionsResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetVersionsRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).get_dataset_versions(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetVersionsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetDatasetObjectGroups" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetObjectGroupsSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetDatasetObjectGroupsRequest>
-                        for GetDatasetObjectGroupsSvc<T>
-                    {
-                        type Response = super::GetDatasetObjectGroupsResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetObjectGroupsRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).get_dataset_object_groups(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetObjectGroupsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetObjectGroupsStreamLink" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetObjectGroupsStreamLinkSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetObjectGroupsStreamLinkRequest>
-                        for GetObjectGroupsStreamLinkSvc<T>
-                    {
-                        type Response = super::GetObjectGroupsStreamLinkResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetObjectGroupsStreamLinkRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).get_object_groups_stream_link(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetObjectGroupsStreamLinkSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/UpdateDatasetField" => {
-                    #[allow(non_camel_case_types)]
-                    struct UpdateDatasetFieldSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::UpdateDatasetFieldRequest>
-                        for UpdateDatasetFieldSvc<T>
-                    {
-                        type Response = super::UpdateDatasetFieldResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::UpdateDatasetFieldRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).update_dataset_field(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = UpdateDatasetFieldSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/DeleteDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService> tonic::server::UnaryService<super::DeleteDatasetRequest>
-                        for DeleteDatasetSvc<T>
-                    {
-                        type Response = super::DeleteDatasetResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).delete_dataset(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetObjectGroupsInDateRange" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetObjectGroupsInDateRangeSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetObjectGroupsInDateRangeRequest>
-                        for GetObjectGroupsInDateRangeSvc<T>
-                    {
-                        type Response = super::GetObjectGroupsInDateRangeResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetObjectGroupsInDateRangeRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).get_object_groups_in_date_range(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetObjectGroupsInDateRangeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/ReleaseDatasetVersion" => {
-                    #[allow(non_camel_case_types)]
-                    struct ReleaseDatasetVersionSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::ReleaseDatasetVersionRequest>
-                        for ReleaseDatasetVersionSvc<T>
-                    {
-                        type Response = super::ReleaseDatasetVersionResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::ReleaseDatasetVersionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut =
-                                async move { (*inner).release_dataset_version(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = ReleaseDatasetVersionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetDatasetVersion" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetVersionSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetDatasetVersionRequest>
-                        for GetDatasetVersionSvc<T>
-                    {
-                        type Response = super::GetDatasetVersionResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetVersionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).get_dataset_version(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetVersionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/GetDatasetVersionObjectGroups" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetVersionObjectGroupsSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::GetDatasetVersionObjectGroupsRequest>
-                        for GetDatasetVersionObjectGroupsSvc<T>
-                    {
-                        type Response = super::GetDatasetVersionObjectGroupsResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetVersionObjectGroupsRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).get_dataset_version_object_groups(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetVersionObjectGroupsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.services.v1.DatasetService/DeleteDatasetVersion" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteDatasetVersionSvc<T: DatasetService>(pub Arc<T>);
-                    impl<T: DatasetService>
-                        tonic::server::UnaryService<super::DeleteDatasetVersionRequest>
-                        for DeleteDatasetVersionSvc<T>
-                    {
-                        type Response = super::DeleteDatasetVersionResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteDatasetVersionRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).delete_dataset_version(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteDatasetVersionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec).apply_compression_config(
-                            accept_compression_encodings,
-                            send_compression_encodings,
-                        );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => Box::pin(async move {
-                    Ok(http::Response::builder()
-                        .status(200)
-                        .header("grpc-status", "12")
-                        .header("content-type", "application/grpc")
-                        .body(empty_body())
-                        .unwrap())
-                }),
-            }
+            match req . uri () . path () { "/sciobjsdb.api.storage.services.v1.DatasetService/CreateDataset" => { # [allow (non_camel_case_types)] struct CreateDatasetSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: CreateDatasetRequest > for CreateDatasetSvc < T > { type Response = super :: CreateDatasetResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: CreateDatasetRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . create_dataset (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = CreateDatasetSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetDataset" => { # [allow (non_camel_case_types)] struct GetDatasetSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetDatasetRequest > for GetDatasetSvc < T > { type Response = super :: GetDatasetResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetDatasetRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_dataset (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetDatasetSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetVersions" => { # [allow (non_camel_case_types)] struct GetDatasetVersionsSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetDatasetVersionsRequest > for GetDatasetVersionsSvc < T > { type Response = super :: GetDatasetVersionsResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetDatasetVersionsRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_dataset_versions (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetDatasetVersionsSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetObjectGroups" => { # [allow (non_camel_case_types)] struct GetDatasetObjectGroupsSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetDatasetObjectGroupsRequest > for GetDatasetObjectGroupsSvc < T > { type Response = super :: GetDatasetObjectGroupsResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetDatasetObjectGroupsRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_dataset_object_groups (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetDatasetObjectGroupsSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetObjectGroupsStreamLink" => { # [allow (non_camel_case_types)] struct GetObjectGroupsStreamLinkSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetObjectGroupsStreamLinkRequest > for GetObjectGroupsStreamLinkSvc < T > { type Response = super :: GetObjectGroupsStreamLinkResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetObjectGroupsStreamLinkRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_object_groups_stream_link (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetObjectGroupsStreamLinkSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/UpdateDatasetField" => { # [allow (non_camel_case_types)] struct UpdateDatasetFieldSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: UpdateDatasetFieldRequest > for UpdateDatasetFieldSvc < T > { type Response = super :: UpdateDatasetFieldResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: UpdateDatasetFieldRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . update_dataset_field (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = UpdateDatasetFieldSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/DeleteDataset" => { # [allow (non_camel_case_types)] struct DeleteDatasetSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: DeleteDatasetRequest > for DeleteDatasetSvc < T > { type Response = super :: DeleteDatasetResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: DeleteDatasetRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . delete_dataset (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = DeleteDatasetSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetObjectGroupsInDateRange" => { # [allow (non_camel_case_types)] struct GetObjectGroupsInDateRangeSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetObjectGroupsInDateRangeRequest > for GetObjectGroupsInDateRangeSvc < T > { type Response = super :: GetObjectGroupsInDateRangeResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetObjectGroupsInDateRangeRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_object_groups_in_date_range (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetObjectGroupsInDateRangeSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/ReleaseDatasetVersion" => { # [allow (non_camel_case_types)] struct ReleaseDatasetVersionSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: ReleaseDatasetVersionRequest > for ReleaseDatasetVersionSvc < T > { type Response = super :: ReleaseDatasetVersionResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: ReleaseDatasetVersionRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . release_dataset_version (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = ReleaseDatasetVersionSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetVersion" => { # [allow (non_camel_case_types)] struct GetDatasetVersionSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetDatasetVersionRequest > for GetDatasetVersionSvc < T > { type Response = super :: GetDatasetVersionResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetDatasetVersionRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_dataset_version (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetDatasetVersionSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetVersionObjectGroups" => { # [allow (non_camel_case_types)] struct GetDatasetVersionObjectGroupsSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: GetDatasetVersionObjectGroupsRequest > for GetDatasetVersionObjectGroupsSvc < T > { type Response = super :: GetDatasetVersionObjectGroupsResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: GetDatasetVersionObjectGroupsRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . get_dataset_version_object_groups (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = GetDatasetVersionObjectGroupsSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } "/sciobjsdb.api.storage.services.v1.DatasetService/DeleteDatasetVersion" => { # [allow (non_camel_case_types)] struct DeleteDatasetVersionSvc < T : DatasetService > (pub Arc < T >) ; impl < T : DatasetService > tonic :: server :: UnaryService < super :: DeleteDatasetVersionRequest > for DeleteDatasetVersionSvc < T > { type Response = super :: DeleteDatasetVersionResponse ; type Future = BoxFuture < tonic :: Response < Self :: Response > , tonic :: Status > ; fn call (& mut self , request : tonic :: Request < super :: DeleteDatasetVersionRequest >) -> Self :: Future { let inner = self . 0 . clone () ; let fut = async move { (* inner) . delete_dataset_version (request) . await } ; Box :: pin (fut) } } let accept_compression_encodings = self . accept_compression_encodings ; let send_compression_encodings = self . send_compression_encodings ; let inner = self . inner . clone () ; let fut = async move { let inner = inner . 0 ; let method = DeleteDatasetVersionSvc (inner) ; let codec = tonic :: codec :: ProstCodec :: default () ; let mut grpc = tonic :: server :: Grpc :: new (codec) . apply_compression_config (accept_compression_encodings , send_compression_encodings) ; let res = grpc . unary (method , req) . await ; Ok (res) } ; Box :: pin (fut) } _ => Box :: pin (async move { Ok (http :: Response :: builder () . status (200) . header ("grpc-status" , "12") . header ("content-type" , "application/grpc") . body (empty_body ()) . unwrap ()) }) , }
         }
     }
     impl<T: DatasetService> Clone for DatasetServiceServer<T> {
@@ -3405,6 +2414,6 @@ pub mod dataset_service_server {
         }
     }
     impl<T: DatasetService> tonic::transport::NamedService for DatasetServiceServer<T> {
-        const NAME: &'static str = "api.services.v1.DatasetService";
+        const NAME: &'static str = "sciobjsdb.api.storage.services.v1.DatasetService";
     }
 }
