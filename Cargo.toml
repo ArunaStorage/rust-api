@@ -1,18 +1,20 @@
 [package]
-name = "scienceobjectsdb_rust_api"
-version = "0.1.0"
 authors = ["Marius <mariusdieckmann90@gmail.com>"]
+description = "The Rust API build for the ScienceObjectsDB"
 edition = "2018"
+license-file = "LICENSE"
+name = "scienceobjectsdb_rust_api"
+version = "0.2.0-rc1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tonic = "0.6"
 prost = "0.9"
-prost-types = "0.9"
 prost-derive = "0.9"
+prost-types = "0.9"
 serde = "1"
 serde_json = "1"
+tonic = "0.6"
 
 [build-dependencies]
 tonic-build = "0.6"
