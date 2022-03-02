@@ -264,6 +264,8 @@ pub struct Object {
     pub dataset_id: ::prost::alloc::string::String,
     #[prost(string, tag = "14")]
     pub project_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "Status", tag = "15")]
+    pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Dataset {
@@ -337,4 +339,6 @@ pub struct Project {
     pub users: ::prost::alloc::vec::Vec<User>,
     #[prost(string, tag = "7")]
     pub bucket: ::prost::alloc::string::String,
+    #[prost(enumeration = "Status", tag = "8")]
+    pub status: i32,
 }
