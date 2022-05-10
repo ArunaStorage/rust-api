@@ -9,12 +9,12 @@ version = "0.2.0-rc1"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-prost = "0.9"
-prost-derive = "0.9"
-prost-types = "0.9"
+prost = "0"
+prost-derive = "0"
+prost-types = "0"
 serde = "1"
 serde_json = "1"
-tonic = "0.6"
+tonic = "0"
 
 [build-dependencies]
-tonic-build = "0.6"
+tonic-build = "0"
