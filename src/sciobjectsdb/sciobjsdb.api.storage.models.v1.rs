@@ -145,6 +145,11 @@ pub struct PageRequest {
     #[prost(uint64, tag="2")]
     pub page_size: u64,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LabelFilter {
+    #[prost(message, repeated, tag="1")]
+    pub labels: ::prost::alloc::vec::Vec<Label>,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Status {
@@ -220,7 +225,7 @@ pub struct ObjectGroupRevision {
     pub subpath: ::core::option::Option<Subpath>,
     #[prost(string, tag="16")]
     pub object_group_id: ::prost::alloc::string::String,
-    ///Number in the history, will be assigned after the ObjectGroupRevision has been finalized
+    ///Number in the history, will be assigned after the ObjectGroupRevision has been finalized and added to the objectgroups history
     #[prost(int64, tag="17")]
     pub revision_number: i64,
 }

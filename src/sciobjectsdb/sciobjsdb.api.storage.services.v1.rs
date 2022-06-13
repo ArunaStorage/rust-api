@@ -1,30 +1,9 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRequest {
-    #[prost(string, tag="1")]
-    pub name: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="1")]
+    pub create_revision_request: ::core::option::Option<CreateObjectGroupRevisionRequest>,
     #[prost(string, tag="2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(string, tag="3")]
     pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag="4")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
-    #[prost(message, repeated, tag="5")]
-    pub annotations: ::prost::alloc::vec::Vec<super::super::models::v1::Annotation>,
-    #[prost(message, repeated, tag="6")]
-    pub objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    #[prost(message, repeated, tag="7")]
-    pub metadata_objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
-    ///If true, an upload link for each generated object and metadata object will be created. The order of the objects will be preserved in the returned list
-    #[prost(bool, tag="8")]
-    pub include_object_link: bool,
-    #[prost(message, optional, tag="10")]
-    pub generated: ::core::option::Option<::prost_types::Timestamp>,
-    /// A user defined uuid that is used to identify requests in chunked workloads
-    #[prost(string, tag="11")]
-    pub uuid: ::prost::alloc::string::String,
-    ///External path that the objectgroup contents should be stored under.
-    #[prost(message, optional, tag="12")]
-    pub subpath: ::core::option::Option<super::super::models::v1::Subpath>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupBatchRequest {
@@ -42,31 +21,55 @@ pub struct CreateObjectGroupBatchResponse {
 pub struct CreateObjectGroupResponse {
     #[prost(string, tag="1")]
     pub object_group_id: ::prost::alloc::string::String,
-    ///upload link for the individual objects of the objectgroup. Will only be used if include_object_link in the create request is specified.
-    #[prost(message, repeated, tag="2")]
-    pub object_links: ::prost::alloc::vec::Vec<create_object_group_response::ObjectLinks>,
-    #[prost(message, repeated, tag="3")]
-    pub metadata_object_links: ::prost::alloc::vec::Vec<create_object_group_response::ObjectLinks>,
     #[prost(string, tag="4")]
     pub object_group_name: ::prost::alloc::string::String,
-    /// A user defined uuid that is used to identify requests in chunked/streamed workloads
-    #[prost(string, tag="5")]
-    pub uuid: ::prost::alloc::string::String,
-    #[prost(string, tag="6")]
-    pub object_group_revision_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="6")]
+    pub create_revision_response: ::core::option::Option<CreateObjectGroupRevisionResponse>,
 }
-/// Nested message and enum types in `CreateObjectGroupResponse`.
-pub mod create_object_group_response {
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupRevisionRequest {
+    #[prost(message, optional, tag="2")]
+    pub update_objects: ::core::option::Option<UpdateObjectsRequests>,
+    #[prost(message, optional, tag="3")]
+    pub update_meta_objects: ::core::option::Option<UpdateObjectsRequests>,
+    #[prost(string, tag="4")]
+    pub object_group_id: ::prost::alloc::string::String,
+    #[prost(string, tag="5")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag="6")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag="7")]
+    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::Label>,
+    #[prost(message, repeated, tag="8")]
+    pub annotations: ::prost::alloc::vec::Vec<super::super::models::v1::Annotation>,
+    ///If true, an upload link for each generated object and metadata object will be created. The order of the objects will be preserved in the returned list
+    #[prost(bool, tag="9")]
+    pub include_object_link: bool,
+    #[prost(message, optional, tag="10")]
+    pub generated: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectGroupRevisionResponse {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag="2")]
+    pub data_objects: ::prost::alloc::vec::Vec<super::super::models::v1::Object>,
+    #[prost(message, repeated, tag="3")]
+    pub meta_objects: ::prost::alloc::vec::Vec<super::super::models::v1::Object>,
+    ///upload link for the individual objects of the objectgroup. Will only be used if include_object_link in the create request is specified.
+    #[prost(message, repeated, tag="4")]
+    pub object_links: ::prost::alloc::vec::Vec<create_object_group_revision_response::ObjectLinks>,
+    #[prost(message, repeated, tag="5")]
+    pub metadata_object_links: ::prost::alloc::vec::Vec<create_object_group_revision_response::ObjectLinks>,
+}
+/// Nested message and enum types in `CreateObjectGroupRevisionResponse`.
+pub mod create_object_group_revision_response {
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct ObjectLinks {
-        #[prost(string, tag="1")]
-        pub filename: ::prost::alloc::string::String,
         #[prost(string, tag="2")]
         pub link: ::prost::alloc::string::String,
         #[prost(string, tag="3")]
         pub object_id: ::prost::alloc::string::String,
-        #[prost(int64, tag="4")]
-        pub index: i64,
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -88,6 +91,28 @@ pub struct CreateObjectRequest {
     ///External path that the object content should be stored under.
     #[prost(message, optional, tag="12")]
     pub subpath: ::core::option::Option<super::super::models::v1::Subpath>,
+    #[prost(string, tag="13")]
+    pub dataset_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectResponse {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub upload_link: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectRequest {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateObjectFromUpdate {
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteObject {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupRequest {
@@ -128,36 +153,30 @@ pub struct GetObjectGroupRevisionResponse {
 pub struct UpdateObjectGroupRequest {
     #[prost(string, tag="1")]
     pub id: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
-    pub parent_revision_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag="3")]
-    pub update_objects: ::core::option::Option<UpdateObjectsRequests>,
-    #[prost(message, optional, tag="4")]
-    pub update_meta_objects: ::core::option::Option<UpdateObjectsRequests>,
+    #[prost(message, optional, tag="2")]
+    pub create_revision_request: ::core::option::Option<CreateObjectGroupRevisionRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectsRequests {
     #[prost(message, repeated, tag="1")]
-    pub add_objects: ::prost::alloc::vec::Vec<CreateObjectRequest>,
+    pub add_objects: ::prost::alloc::vec::Vec<AddObjectRequest>,
     #[prost(message, repeated, tag="2")]
-    pub update_object: ::prost::alloc::vec::Vec<UpdateObjectRequest>,
-    #[prost(string, repeated, tag="3")]
-    pub delete_objects: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub update_objects: ::prost::alloc::vec::Vec<UpdateObjectRequest>,
+    #[prost(message, repeated, tag="3")]
+    pub delete_objects: ::prost::alloc::vec::Vec<DeleteObjectRequest>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddObjectRequest {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteObjectRequest {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectRequest {
-    #[prost(string, tag="1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(oneof="update_object_request::UpdateObject", tags="2")]
-    pub update_object: ::core::option::Option<update_object_request::UpdateObject>,
-}
-/// Nested message and enum types in `UpdateObjectRequest`.
-pub mod update_object_request {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum UpdateObject {
-        #[prost(message, tag="2")]
-        UpdatedObject(super::CreateObjectRequest),
-    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectGroupResponse {
@@ -561,7 +580,7 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        ///Returns the object group with the given ID
+        ///Returns the object group revision with the given id
         pub async fn get_object_group_revision(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupRevisionRequest>,
@@ -585,9 +604,7 @@ pub mod dataset_objects_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// Updates an ObjectGroup
-        /// This creates a new ObjectGroupRevisions
-        /// It needs to be finished via FinishObjectGroupRevisionUpload before it is actually available
-        /// Currently experimental
+        /// Adds an existing ObjectGroupRevision as a new revision to the objectgroup
         pub async fn update_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::UpdateObjectGroupRequest>,
@@ -628,32 +645,6 @@ pub mod dataset_objects_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// Finishes the upload process for an objectgroup
-        /// This will change the status of the objectgroup to "available"
-        pub async fn finish_object_group_revision_upload(
-            &mut self,
-            request: impl tonic::IntoRequest<
-                super::FinishObjectGroupRevisionUploadRequest,
-            >,
-        ) -> Result<
-                tonic::Response<super::FinishObjectGroupRevisionUploadResponse>,
-                tonic::Status,
-            > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/FinishObjectGroupRevisionUpload",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
         /// Deletes the given object group
         /// This will also delete all associated objects both as metadata objects and the actual objects in the object storage
         pub async fn delete_object_group(
@@ -672,6 +663,25 @@ pub mod dataset_objects_service_client {
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/DeleteObjectGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn create_object(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateObjectRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectResponse>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/CreateObject",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -702,7 +712,7 @@ pub mod dataset_objects_service_server {
             &self,
             request: tonic::Request<super::GetObjectGroupRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupResponse>, tonic::Status>;
-        ///Returns the object group with the given ID
+        ///Returns the object group revision with the given id
         async fn get_object_group_revision(
             &self,
             request: tonic::Request<super::GetObjectGroupRevisionRequest>,
@@ -711,9 +721,7 @@ pub mod dataset_objects_service_server {
                 tonic::Status,
             >;
         /// Updates an ObjectGroup
-        /// This creates a new ObjectGroupRevisions
-        /// It needs to be finished via FinishObjectGroupRevisionUpload before it is actually available
-        /// Currently experimental
+        /// Adds an existing ObjectGroupRevision as a new revision to the objectgroup
         async fn update_object_group(
             &self,
             request: tonic::Request<super::UpdateObjectGroupRequest>,
@@ -724,21 +732,16 @@ pub mod dataset_objects_service_server {
             &self,
             request: tonic::Request<super::FinishObjectUploadRequest>,
         ) -> Result<tonic::Response<super::FinishObjectUploadResponse>, tonic::Status>;
-        /// Finishes the upload process for an objectgroup
-        /// This will change the status of the objectgroup to "available"
-        async fn finish_object_group_revision_upload(
-            &self,
-            request: tonic::Request<super::FinishObjectGroupRevisionUploadRequest>,
-        ) -> Result<
-                tonic::Response<super::FinishObjectGroupRevisionUploadResponse>,
-                tonic::Status,
-            >;
         /// Deletes the given object group
         /// This will also delete all associated objects both as metadata objects and the actual objects in the object storage
         async fn delete_object_group(
             &self,
             request: tonic::Request<super::DeleteObjectGroupRequest>,
         ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status>;
+        async fn create_object(
+            &self,
+            request: tonic::Request<super::CreateObjectRequest>,
+        ) -> Result<tonic::Response<super::CreateObjectResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct DatasetObjectsServiceServer<T: DatasetObjectsService> {
@@ -1032,51 +1035,6 @@ pub mod dataset_objects_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/FinishObjectGroupRevisionUpload" => {
-                    #[allow(non_camel_case_types)]
-                    struct FinishObjectGroupRevisionUploadSvc<T: DatasetObjectsService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: DatasetObjectsService,
-                    > tonic::server::UnaryService<
-                        super::FinishObjectGroupRevisionUploadRequest,
-                    > for FinishObjectGroupRevisionUploadSvc<T> {
-                        type Response = super::FinishObjectGroupRevisionUploadResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::FinishObjectGroupRevisionUploadRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).finish_object_group_revision_upload(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = FinishObjectGroupRevisionUploadSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
                 "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/DeleteObjectGroup" => {
                     #[allow(non_camel_case_types)]
                     struct DeleteObjectGroupSvc<T: DatasetObjectsService>(pub Arc<T>);
@@ -1106,6 +1064,46 @@ pub mod dataset_objects_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = DeleteObjectGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sciobjsdb.api.storage.services.v1.DatasetObjectsService/CreateObject" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateObjectSvc<T: DatasetObjectsService>(pub Arc<T>);
+                    impl<
+                        T: DatasetObjectsService,
+                    > tonic::server::UnaryService<super::CreateObjectRequest>
+                    for CreateObjectSvc<T> {
+                        type Response = super::CreateObjectResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateObjectRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).create_object(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateObjectSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1869,6 +1867,23 @@ pub struct GetDatasetResponse {
     #[prost(message, optional, tag="1")]
     pub dataset: ::core::option::Option<super::super::models::v1::Dataset>,
 }
+/// Returns all objects of a dataset, the label filter option can be used to find only objects that at least have a specific set of labels (but can have more)
+/// For returning large numbers of objects the query can be paginated
+/// There is no guarantee that paginated queries return consistent results, since they can reflect changes that were made between two different pagianted calls.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetObjectsRequest {
+    #[prost(string, tag="1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="2")]
+    pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
+    #[prost(message, optional, tag="3")]
+    pub label_filter: ::core::option::Option<super::super::models::v1::LabelFilter>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetObjectsResponse {
+    #[prost(message, repeated, tag="1")]
+    pub objects: ::prost::alloc::vec::Vec<super::super::models::v1::Object>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetVersionsRequest {
     #[prost(string, tag="1")]
@@ -1885,6 +1900,8 @@ pub struct GetDatasetObjectGroupsRequest {
     pub id: ::prost::alloc::string::String,
     #[prost(message, optional, tag="2")]
     pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
+    #[prost(message, optional, tag="3")]
+    pub label_filter: ::core::option::Option<super::super::models::v1::Label>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetObjectGroupsResponse {
@@ -2898,6 +2915,25 @@ pub mod dataset_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn get_dataset_objects(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDatasetObjectsRequest>,
+        ) -> Result<tonic::Response<super::GetDatasetObjectsResponse>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetObjects",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         /// Lists Versions of a dataset
         pub async fn get_dataset_versions(
             &mut self,
@@ -3139,6 +3175,10 @@ pub mod dataset_service_server {
             &self,
             request: tonic::Request<super::GetDatasetRequest>,
         ) -> Result<tonic::Response<super::GetDatasetResponse>, tonic::Status>;
+        async fn get_dataset_objects(
+            &self,
+            request: tonic::Request<super::GetDatasetObjectsRequest>,
+        ) -> Result<tonic::Response<super::GetDatasetObjectsResponse>, tonic::Status>;
         /// Lists Versions of a dataset
         async fn get_dataset_versions(
             &self,
@@ -3325,6 +3365,46 @@ pub mod dataset_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sciobjsdb.api.storage.services.v1.DatasetService/GetDatasetObjects" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDatasetObjectsSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::GetDatasetObjectsRequest>
+                    for GetDatasetObjectsSvc<T> {
+                        type Response = super::GetDatasetObjectsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetDatasetObjectsRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_dataset_objects(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetDatasetObjectsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
