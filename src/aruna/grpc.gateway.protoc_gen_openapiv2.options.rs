@@ -1,6 +1,7 @@
 /// `Swagger` is a representation of OpenAPI v2 specification's Swagger object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#swaggerObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#swaggerObject>
 ///
 /// Example:
 ///
@@ -8,7 +9,7 @@
 ///     info: {
 ///       title: "Echo API";
 ///       version: "1.0";
-///       description: ";
+///       description: "";
 ///       contact: {
 ///         name: "gRPC-Gateway project";
 ///         url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
@@ -16,7 +17,8 @@
 ///       };
 ///       license: {
 ///         name: "BSD 3-Clause License";
-///         url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
+///         url:
+///         "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
 ///       };
 ///     };
 ///     schemes: HTTPS;
@@ -27,28 +29,28 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Swagger {
     /// Specifies the OpenAPI Specification version being used. It can be
-    /// used by the OpenAPI UI and other clients to interpret the API listing. The 
+    /// used by the OpenAPI UI and other clients to interpret the API listing. The
     /// value MUST be "2.0".
     #[prost(string, tag="1")]
     pub swagger: ::prost::alloc::string::String,
-    /// Provides metadata about the API. The metadata can be used by the 
+    /// Provides metadata about the API. The metadata can be used by the
     /// clients if needed.
     #[prost(message, optional, tag="2")]
     pub info: ::core::option::Option<Info>,
-    /// The host (name or ip) serving the API. This MUST be the host only and does 
+    /// The host (name or ip) serving the API. This MUST be the host only and does
     /// not include the scheme nor sub-paths. It MAY include a port. If the host is
     /// not included, the host serving the documentation is to be used (including
     /// the port). The host does not support path templating.
     #[prost(string, tag="3")]
     pub host: ::prost::alloc::string::String,
     /// The base path on which the API is served, which is relative to the host. If
-    /// it is not included, the API is served directly under the host. The value 
+    /// it is not included, the API is served directly under the host. The value
     /// MUST start with a leading slash (/). The basePath does not support path
     /// templating.
-    /// Note that using `base_path` does not change the endpoint paths that are 
+    /// Note that using `base_path` does not change the endpoint paths that are
     /// generated in the resulting OpenAPI file. If you wish to use `base_path`
-    /// with relatively generated OpenAPI paths, the `base_path` prefix must be 
-    /// manually removed from your `google.api.http` paths and your code changed to 
+    /// with relatively generated OpenAPI paths, the `base_path` prefix must be
+    /// manually removed from your `google.api.http` paths and your code changed to
     /// serve the API from the `base_path`.
     #[prost(string, tag="4")]
     pub base_path: ::prost::alloc::string::String,
@@ -57,7 +59,7 @@ pub struct Swagger {
     /// be used is the one used to access the OpenAPI definition itself.
     #[prost(enumeration="Scheme", repeated, tag="5")]
     pub schemes: ::prost::alloc::vec::Vec<i32>,
-    /// A list of MIME types the APIs can consume. This is global to all APIs but 
+    /// A list of MIME types the APIs can consume. This is global to all APIs but
     /// can be overridden on specific API calls. Value MUST be as described under
     /// Mime Types.
     #[prost(string, repeated, tag="6")]
@@ -75,8 +77,8 @@ pub struct Swagger {
     #[prost(message, optional, tag="11")]
     pub security_definitions: ::core::option::Option<SecurityDefinitions>,
     /// A declaration of which security schemes are applied for the API as a whole.
-    /// The list of values describes alternative security schemes that can be used 
-    /// (that is, there is a logical OR between the security requirements). 
+    /// The list of values describes alternative security schemes that can be used
+    /// (that is, there is a logical OR between the security requirements).
     /// Individual operations can override this definition.
     #[prost(message, repeated, tag="12")]
     pub security: ::prost::alloc::vec::Vec<SecurityRequirement>,
@@ -86,9 +88,11 @@ pub struct Swagger {
     #[prost(map="string, message", tag="15")]
     pub extensions: ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Value>,
 }
-/// `Operation` is a representation of OpenAPI v2 specification's Operation object.
+/// `Operation` is a representation of OpenAPI v2 specification's Operation
+/// object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#operationObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#operationObject>
 ///
 /// Example:
 ///
@@ -98,7 +102,8 @@ pub struct Swagger {
 ///         get: "/v1/example/echo/{id}"
 ///       };
 ///
-///       option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+///       option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) =
+///       {
 ///         summary: "Get a message.";
 ///         operation_id: "getMessage";
 ///         tags: "echo";
@@ -169,31 +174,37 @@ pub struct Operation {
 }
 /// `Header` is a representation of OpenAPI v2 specification's Header object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#headerObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#headerObject>
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Header {
     /// `Description` is a short description of the header.
     #[prost(string, tag="1")]
     pub description: ::prost::alloc::string::String,
-    /// The type of the object. The value MUST be one of "string", "number", "integer", or "boolean". The "array" type is not supported.
+    /// The type of the object. The value MUST be one of "string", "number",
+    /// "integer", or "boolean". The "array" type is not supported.
     #[prost(string, tag="2")]
     pub r#type: ::prost::alloc::string::String,
     /// `Format` The extending format for the previously mentioned type.
     #[prost(string, tag="3")]
     pub format: ::prost::alloc::string::String,
-    /// `Default` Declares the value of the header that the server will use if none is provided.
-    /// See: <https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-6.2.>
-    /// Unlike JSON Schema this value MUST conform to the defined type for the header.
+    /// `Default` Declares the value of the header that the server will use if none
+    /// is provided. See:
+    /// <https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-6.2.>
+    /// Unlike JSON Schema this value MUST conform to the defined type for the
+    /// header.
     #[prost(string, tag="6")]
     pub default: ::prost::alloc::string::String,
-    /// 'Pattern' See <https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.3.>
+    /// 'Pattern' See
+    /// <https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.3.>
     #[prost(string, tag="13")]
     pub pattern: ::prost::alloc::string::String,
 }
 /// `Response` is a representation of OpenAPI v2 specification's Response object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#responseObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#responseObject>
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {
@@ -206,12 +217,14 @@ pub struct Response {
     #[prost(message, optional, tag="2")]
     pub schema: ::core::option::Option<Schema>,
     /// `Headers` A list of headers that are sent with the response.
-    /// `Header` name is expected to be a string in the canonical format of the MIME header key
-    /// See: <https://golang.org/pkg/net/textproto/#CanonicalMIMEHeaderKey>
+    /// `Header` name is expected to be a string in the canonical format of the
+    /// MIME header key See:
+    /// <https://golang.org/pkg/net/textproto/#CanonicalMIMEHeaderKey>
     #[prost(map="string, message", tag="3")]
     pub headers: ::std::collections::HashMap<::prost::alloc::string::String, Header>,
     /// `Examples` gives per-mimetype response examples.
-    /// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#example-object>
+    /// See:
+    /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#example-object>
     #[prost(map="string, string", tag="4")]
     pub examples: ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
     #[prost(map="string, message", tag="5")]
@@ -219,7 +232,8 @@ pub struct Response {
 }
 /// `Info` is a representation of OpenAPI v2 specification's Info object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#infoObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#infoObject>
 ///
 /// Example:
 ///
@@ -227,7 +241,7 @@ pub struct Response {
 ///     info: {
 ///       title: "Echo API";
 ///       version: "1.0";
-///       description: ";
+///       description: "";
 ///       contact: {
 ///         name: "gRPC-Gateway project";
 ///         url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
@@ -235,7 +249,8 @@ pub struct Response {
 ///       };
 ///       license: {
 ///         name: "BSD 3-Clause License";
-///         url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
+///         url:
+///         "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
 ///       };
 ///     };
 ///     ...
@@ -268,7 +283,8 @@ pub struct Info {
 }
 /// `Contact` is a representation of OpenAPI v2 specification's Contact object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#contactObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#contactObject>
 ///
 /// Example:
 ///
@@ -301,7 +317,8 @@ pub struct Contact {
 }
 /// `License` is a representation of OpenAPI v2 specification's License object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#licenseObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#licenseObject>
 ///
 /// Example:
 ///
@@ -310,7 +327,8 @@ pub struct Contact {
 ///       ...
 ///       license: {
 ///         name: "BSD 3-Clause License";
-///         url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
+///         url:
+///         "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
 ///       };
 ///       ...
 ///     };
@@ -329,7 +347,8 @@ pub struct License {
 /// `ExternalDocumentation` is a representation of OpenAPI v2 specification's
 /// ExternalDocumentation object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#externalDocumentationObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#externalDocumentationObject>
 ///
 /// Example:
 ///
@@ -355,7 +374,8 @@ pub struct ExternalDocumentation {
 }
 /// `Schema` is a representation of OpenAPI v2 specification's Schema object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Schema {
@@ -378,8 +398,8 @@ pub struct Schema {
     /// Additional external documentation for this schema.
     #[prost(message, optional, tag="5")]
     pub external_docs: ::core::option::Option<ExternalDocumentation>,
-    /// A free-form property to include an example of an instance for this schema in JSON.
-    /// This is copied verbatim to the output.
+    /// A free-form property to include an example of an instance for this schema
+    /// in JSON. This is copied verbatim to the output.
     #[prost(string, tag="6")]
     pub example: ::prost::alloc::string::String,
 }
@@ -388,7 +408,8 @@ pub struct Schema {
 ///
 /// This includes changes made by OpenAPI v2.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
 ///
 /// See also: <https://cswr.github.io/JsonSchema/spec/basic_types/,>
 /// <https://github.com/json-schema-org/json-schema-spec/blob/master/schema.json>
@@ -431,21 +452,23 @@ pub struct JsonSchema {
     pub default: ::prost::alloc::string::String,
     #[prost(bool, tag="8")]
     pub read_only: bool,
-    /// A free-form property to include a JSON example of this field. This is copied
-    /// verbatim to the output swagger.json. Quotes must be escaped.
-    /// This property is the same for 2.0 and 3.0.0 <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/3.0.0.md#schemaObject>  <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
+    /// A free-form property to include a JSON example of this field. This is
+    /// copied verbatim to the output swagger.json. Quotes must be escaped. This
+    /// property is the same for 2.0 and 3.0.0
+    /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/3.0.0.md#schemaObject>
+    /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
     #[prost(string, tag="9")]
     pub example: ::prost::alloc::string::String,
     #[prost(double, tag="10")]
     pub multiple_of: f64,
-    /// Maximum represents an inclusive upper limit for a numeric instance. The 
-    /// value of MUST be a number, 
+    /// Maximum represents an inclusive upper limit for a numeric instance. The
+    /// value of MUST be a number,
     #[prost(double, tag="11")]
     pub maximum: f64,
     #[prost(bool, tag="12")]
     pub exclusive_maximum: bool,
-    /// minimum represents an inclusive lower limit for a numeric instance. The 
-    /// value of MUST be a number, 
+    /// minimum represents an inclusive lower limit for a numeric instance. The
+    /// value of MUST be a number,
     #[prost(double, tag="13")]
     pub minimum: f64,
     #[prost(bool, tag="14")]
@@ -476,12 +499,30 @@ pub struct JsonSchema {
     /// `Format`
     #[prost(string, tag="36")]
     pub format: ::prost::alloc::string::String,
-    /// Items in `enum` must be unique <https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.5.1>
+    /// Items in `enum` must be unique
+    /// <https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.5.1>
     #[prost(string, repeated, tag="46")]
     pub r#enum: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Additional field level properties used when generating the OpenAPI v2 file.
+    #[prost(message, optional, tag="1001")]
+    pub field_configuration: ::core::option::Option<json_schema::FieldConfiguration>,
+    #[prost(map="string, message", tag="48")]
+    pub extensions: ::std::collections::HashMap<::prost::alloc::string::String, ::prost_types::Value>,
 }
 /// Nested message and enum types in `JSONSchema`.
 pub mod json_schema {
+    /// 'FieldConfiguration' provides additional field level properties used when
+    /// generating the OpenAPI v2 file. These properties are not defined by
+    /// OpenAPIv2, but they are used to control the generation.
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct FieldConfiguration {
+        /// Alternative parameter name when used as path parameter. If set, this will
+        /// be used as the complete parameter name when this field is used as a path
+        /// parameter. Use this to avoid having auto generated path parameter names
+        /// for overlapping paths.
+        #[prost(string, tag="47")]
+        pub path_param_name: ::prost::alloc::string::String,
+    }
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
     pub enum JsonSchemaSimpleTypes {
@@ -515,11 +556,12 @@ pub mod json_schema {
 }
 /// `Tag` is a representation of OpenAPI v2 specification's Tag object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#tagObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#tagObject>
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Tag {
-    /// A short description for the tag. GFM syntax can be used for rich text 
+    /// A short description for the tag. GFM syntax can be used for rich text
     /// representation.
     #[prost(string, tag="2")]
     pub description: ::prost::alloc::string::String,
@@ -530,7 +572,8 @@ pub struct Tag {
 /// `SecurityDefinitions` is a representation of OpenAPI v2 specification's
 /// Security Definitions object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securityDefinitionsObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securityDefinitionsObject>
 ///
 /// A declaration of the security schemes available to be used in the
 /// specification. This does not enforce the security schemes on the operations
@@ -545,7 +588,8 @@ pub struct SecurityDefinitions {
 /// `SecurityScheme` is a representation of OpenAPI v2 specification's
 /// Security Scheme object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securitySchemeObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securitySchemeObject>
 ///
 /// Allows the definition of a security scheme that can be used by the
 /// operations. Supported schemes are basic authentication, an API key (either as
@@ -668,7 +712,8 @@ pub mod security_scheme {
 /// `SecurityRequirement` is a representation of OpenAPI v2 specification's
 /// Security Requirement object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securityRequirementObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securityRequirementObject>
 ///
 /// Lists the required security schemes to execute this operation. The object can
 /// have multiple security schemes declared in it which are all required (that
@@ -698,7 +743,8 @@ pub mod security_requirement {
 }
 /// `Scopes` is a representation of OpenAPI v2 specification's Scopes object.
 ///
-/// See: <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#scopesObject>
+/// See:
+/// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#scopesObject>
 ///
 /// Lists the available scopes for an OAuth2 security scheme.
 #[derive(Clone, PartialEq, ::prost::Message)]

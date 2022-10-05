@@ -1,10 +1,10 @@
 [package]
-authors = ["Marius <mariusdieckmann90@gmail.com>"]
-description = "The Rust API build for the ScienceObjectsDB"
+authors = ["Sebastian <sb@pus.de>", "Marius <mariusdieckmann90@gmail.com>"]
+description = "The Rust API build for the Aruna Object Storage (AOS)"
 edition = "2018"
 license-file = "LICENSE"
-name = "scienceobjectsdb_rust_api"
-version = "0.3.0-alpha.1"
+name = "aruna-rust-api"
+version = "0.4.1-alpha.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

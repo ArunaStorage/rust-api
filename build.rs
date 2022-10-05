@@ -44,7 +44,7 @@ fn main() {
     tonic_build
         ::configure()
         .build_server(true)
-        .out_dir("src")
+        .out_dir("src/aruna")
         .compile(
             &protos,
             &[

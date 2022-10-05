@@ -17,10 +17,7 @@ pub mod create_event_streaming_group_request {
     #[repr(i32)]
     pub enum EventResources {
         Unspecified = 0,
-        ProjectResource = 1,
-        DatasetResource = 2,
-        DatasetVersionResource = 3,
-        ObjectGroupResource = 4,
+        CollectionResource = 1,
         AllResource = 5,
     }
     impl EventResources {
@@ -31,10 +28,7 @@ pub mod create_event_streaming_group_request {
         pub fn as_str_name(&self) -> &'static str {
             match self {
                 EventResources::Unspecified => "EVENT_RESOURCES_UNSPECIFIED",
-                EventResources::ProjectResource => "EVENT_RESOURCES_PROJECT_RESOURCE",
-                EventResources::DatasetResource => "EVENT_RESOURCES_DATASET_RESOURCE",
-                EventResources::DatasetVersionResource => "EVENT_RESOURCES_DATASET_VERSION_RESOURCE",
-                EventResources::ObjectGroupResource => "EVENT_RESOURCES_OBJECT_GROUP_RESOURCE",
+                EventResources::CollectionResource => "EVENT_RESOURCES_COLLECTION_RESOURCE",
                 EventResources::AllResource => "EVENT_RESOURCES_ALL_RESOURCE",
             }
         }
@@ -112,7 +106,7 @@ pub struct NotificationStreamResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventNotificationMessage {
-    #[prost(enumeration="super::super::super::storage::models::v1::Resource", tag="1")]
+    #[prost(enumeration="event_notification_message::EventResources", tag="1")]
     pub resource: i32,
     #[prost(string, tag="2")]
     pub resource_id: ::prost::alloc::string::String,
@@ -144,6 +138,26 @@ pub mod event_notification_message {
                 UpdateType::Updated => "UPDATE_TYPE_UPDATED",
                 UpdateType::MetadataUpdated => "UPDATE_TYPE_METADATA_UPDATED",
                 UpdateType::Deleted => "UPDATE_TYPE_DELETED",
+            }
+        }
+    }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    pub enum EventResources {
+        Unspecified = 0,
+        CollectionResource = 1,
+        AllResource = 5,
+    }
+    impl EventResources {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                EventResources::Unspecified => "EVENT_RESOURCES_UNSPECIFIED",
+                EventResources::CollectionResource => "EVENT_RESOURCES_COLLECTION_RESOURCE",
+                EventResources::AllResource => "EVENT_RESOURCES_ALL_RESOURCE",
             }
         }
     }
@@ -237,7 +251,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/sciobjsdb.api.notification.services.v1.UpdateNotificationService/CreateEventStreamingGroup",
+                "/aruna.api.notification.services.v1.UpdateNotificationService/CreateEventStreamingGroup",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -263,7 +277,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/sciobjsdb.api.notification.services.v1.UpdateNotificationService/NotificationStreamGroup",
+                "/aruna.api.notification.services.v1.UpdateNotificationService/NotificationStreamGroup",
             );
             self.inner.streaming(request.into_streaming_request(), path, codec).await
         }
@@ -356,7 +370,7 @@ pub mod update_notification_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/sciobjsdb.api.notification.services.v1.UpdateNotificationService/CreateEventStreamingGroup" => {
+                "/aruna.api.notification.services.v1.UpdateNotificationService/CreateEventStreamingGroup" => {
                     #[allow(non_camel_case_types)]
                     struct CreateEventStreamingGroupSvc<T: UpdateNotificationService>(
                         pub Arc<T>,
@@ -401,7 +415,7 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/sciobjsdb.api.notification.services.v1.UpdateNotificationService/NotificationStreamGroup" => {
+                "/aruna.api.notification.services.v1.UpdateNotificationService/NotificationStreamGroup" => {
                     #[allow(non_camel_case_types)]
                     struct NotificationStreamGroupSvc<T: UpdateNotificationService>(
                         pub Arc<T>,
@@ -484,6 +498,6 @@ pub mod update_notification_service_server {
     }
     impl<T: UpdateNotificationService> tonic::server::NamedService
     for UpdateNotificationServiceServer<T> {
-        const NAME: &'static str = "sciobjsdb.api.notification.services.v1.UpdateNotificationService";
+        const NAME: &'static str = "aruna.api.notification.services.v1.UpdateNotificationService";
     }
 }
