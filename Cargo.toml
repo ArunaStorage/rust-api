@@ -5,6 +5,7 @@ edition = "2021"
 license-file = "LICENSE"
 name = "aruna-rust-api"
 version = "0.4.1-alpha.2"
+include = ["src"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
