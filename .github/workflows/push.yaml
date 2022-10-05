@@ -1,15 +1,6 @@
 name: test_build_push
 on: push
 jobs:
-  lint: 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout without submodules
-        uses: actions/checkout@v2
-      - name: Setup buf
-        uses: bufbuild/buf-setup-action@v1
-      - name: Lint protofiles with buf
-        uses: bufbuild/buf-lint-action@v1
   build: # This does not build the whole proto files for production, it tests if rust / tonic
     runs-on: ubuntu-latest
     steps:
@@ -24,4 +15,4 @@ jobs:
       - name: Test compiling protofiles with rust
         uses: actions-rs/cargo@v1
         with:
-          command: run
+          command: build
