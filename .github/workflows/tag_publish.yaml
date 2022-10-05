@@ -1,16 +1,23 @@
-name: test_build_pull_request
-on:
-  push:
-    tags:
-      - '*'
+name: test_build_publish
+on: 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to publish, needs to be Semver'
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
       - name: Checkout repository with submodules
         uses: actions/checkout@v2
         with:
           submodules: recursive
+      - name: Update tag
+        run: sed -i -e 's/^version = .*/version = "${{ inputs.tag }}"/' Cargo.toml 
       - name: Pull rust stable
         uses: actions-rs/toolchain@v1
         with:
@@ -19,10 +26,21 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: cargo build
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Commit files
+        run: |
+          cd protos
+          git checkout updates_mvp
+          git pull
+          cd ..
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update to version to ${{ inputs.tag }}" -a
+          git tag ${{ inputs.tag }} -a "Published new version: ${{ inputs.tag }} , see API for detailed changelog."
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Cargo publish    
         run: cargo publish --token ${CRATES_TOKEN}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
-          CARGO_PKG_VERSION: ${{ env.RELEASE_VERSION }}

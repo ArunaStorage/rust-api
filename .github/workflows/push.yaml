@@ -4,6 +4,8 @@ jobs:
   build: # This does not build the whole proto files for production, it tests if rust / tonic
     runs-on: ubuntu-latest
     steps:
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
       - name: Checkout repository with submodules
         uses: actions/checkout@v2
         with:
