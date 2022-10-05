@@ -5,37 +5,37 @@ use std::fs;
 fn main() {
     let mut protos: Vec<String> = Vec::new();
 
-    let service_entries = fs::read_dir("protos/aruna/api/storage/services/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/storage/services/v1/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "protos/aruna/api/storage/services/v1/",
+            "./src/protos/aruna/api/storage/services/v1/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    let service_entries = fs::read_dir("protos/aruna/api/notification/services/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/notification/services/v1/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "protos/aruna/api/notification/services/v1/",
+            "./src/protos/aruna/api/notification/services/v1/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    let service_entries = fs::read_dir("protos/aruna/api/internal/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/internal/v1/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "protos/aruna/api/internal/v1/",
+            "./src/protos/aruna/api/internal/v1/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
@@ -44,13 +44,13 @@ fn main() {
     tonic_build
         ::configure()
         .build_server(true)
-        .out_dir("src/aruna")
+        .out_dir("./src/aruna")
         .compile(
             &protos,
             &[
-                "./protos".to_string(),
-                "protos/aruna/api/google".to_string(),
-                "protos/aruna/api/protoc-gen-openapiv2".to_string(),
+                "./src/protos".to_string(),
+                "./src/protos/aruna/api/google".to_string(),
+                "./src/protos/aruna/api/protoc-gen-openapiv2".to_string(),
             ]
         )
         .unwrap();
