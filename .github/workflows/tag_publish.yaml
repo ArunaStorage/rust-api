@@ -1,11 +1,5 @@
-name: test_build_publish
-on: 
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Tag to publish, needs to be Semver'
-        required: true
-        type: string
+name: automatic_test_build_publish
+on: repository_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,23 +7,28 @@ jobs:
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
       - name: Checkout repository with submodules
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Update tag
-        run: sed -i -e 's/^version = .*/version = "${{ inputs.tag }}"/' Cargo.toml 
+        run: sed -i -e 's/^version = .*/version = "${{ github.event.client_payload.version }}"/' Cargo.toml 
       - name: Pull rust stable
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - name: Git Submodule Update
+        run: |
+          git pull --recurse-submodules
+          git submodule update --init --recursive
+          git submodule update --remote --recursive
       - name: Compile protofiles with rust
         run: cargo build
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Update to version to ${{ inputs.tag }}" -a
-          git tag -a v${{ inputs.tag }} -m "Published new version: ${{ inputs.tag }} , see API for detailed changelog."
+          git commit -m "Update to version to ${{ github.event.client_payload.version }}" -a
+          git tag -a v${{ github.event.client_payload.version }} -m "Published new version: ${{ github.event.client_payload.version }}, see API for detailed changelog."
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
@@ -39,3 +38,5 @@ jobs:
         run: cargo publish --token ${CRATES_TOKEN}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+      - name: Create release
+        run: gh release create v${{ github.event.client_payload.version }}
