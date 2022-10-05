@@ -4,25 +4,25 @@
 ///
 /// Example:
 ///
-///  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-///    info: {
-///      title: "Echo API";
-///      version: "1.0";
-///      description: ";
-///      contact: {
-///        name: "gRPC-Gateway project";
-///        url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
-///        email: "none@example.com";
-///      };
-///      license: {
-///        name: "BSD 3-Clause License";
-///        url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
-///      };
-///    };
-///    schemes: HTTPS;
-///    consumes: "application/json";
-///    produces: "application/json";
-///  };
+///   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+///     info: {
+///       title: "Echo API";
+///       version: "1.0";
+///       description: ";
+///       contact: {
+///         name: "gRPC-Gateway project";
+///         url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
+///         email: "none@example.com";
+///       };
+///       license: {
+///         name: "BSD 3-Clause License";
+///         url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
+///       };
+///     };
+///     schemes: HTTPS;
+///     consumes: "application/json";
+///     produces: "application/json";
+///   };
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Swagger {
@@ -92,25 +92,25 @@ pub struct Swagger {
 ///
 /// Example:
 ///
-///  service EchoService {
-///    rpc Echo(SimpleMessage) returns (SimpleMessage) {
-///      option (google.api.http) = {
-///        get: "/v1/example/echo/{id}"
-///      };
+///   service EchoService {
+///     rpc Echo(SimpleMessage) returns (SimpleMessage) {
+///       option (google.api.http) = {
+///         get: "/v1/example/echo/{id}"
+///       };
 ///
-///      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-///        summary: "Get a message.";
-///        operation_id: "getMessage";
-///        tags: "echo";
-///        responses: {
-///          key: "200"
-///            value: {
-///            description: "OK";
-///          }
-///        }
-///      };
-///    }
-///  }
+///       option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+///         summary: "Get a message.";
+///         operation_id: "getMessage";
+///         tags: "echo";
+///         responses: {
+///           key: "200"
+///             value: {
+///             description: "OK";
+///           }
+///         }
+///       };
+///     }
+///   }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Operation {
     /// A list of tags for API documentation control. Tags can be used for logical
@@ -223,23 +223,23 @@ pub struct Response {
 ///
 /// Example:
 ///
-///  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-///    info: {
-///      title: "Echo API";
-///      version: "1.0";
-///      description: ";
-///      contact: {
-///        name: "gRPC-Gateway project";
-///        url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
-///        email: "none@example.com";
-///      };
-///      license: {
-///        name: "BSD 3-Clause License";
-///        url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
-///      };
-///    };
-///    ...
-///  };
+///   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+///     info: {
+///       title: "Echo API";
+///       version: "1.0";
+///       description: ";
+///       contact: {
+///         name: "gRPC-Gateway project";
+///         url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
+///         email: "none@example.com";
+///       };
+///       license: {
+///         name: "BSD 3-Clause License";
+///         url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
+///       };
+///     };
+///     ...
+///   };
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Info {
@@ -272,18 +272,18 @@ pub struct Info {
 ///
 /// Example:
 ///
-///  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-///    info: {
-///      ...
-///      contact: {
-///        name: "gRPC-Gateway project";
-///        url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
-///        email: "none@example.com";
-///      };
-///      ...
-///    };
-///    ...
-///  };
+///   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+///     info: {
+///       ...
+///       contact: {
+///         name: "gRPC-Gateway project";
+///         url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
+///         email: "none@example.com";
+///       };
+///       ...
+///     };
+///     ...
+///   };
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contact {
@@ -305,17 +305,17 @@ pub struct Contact {
 ///
 /// Example:
 ///
-///  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-///    info: {
-///      ...
-///      license: {
-///        name: "BSD 3-Clause License";
-///        url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
-///      };
-///      ...
-///    };
-///    ...
-///  };
+///   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+///     info: {
+///       ...
+///       license: {
+///         name: "BSD 3-Clause License";
+///         url: "<https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt";>
+///       };
+///       ...
+///     };
+///     ...
+///   };
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct License {
@@ -333,14 +333,14 @@ pub struct License {
 ///
 /// Example:
 ///
-///  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-///    ...
-///    external_docs: {
-///      description: "More about gRPC-Gateway";
-///      url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
-///    }
-///    ...
-///  };
+///   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+///     ...
+///     external_docs: {
+///       description: "More about gRPC-Gateway";
+///       url: "<https://github.com/grpc-ecosystem/grpc-gateway";>
+///     }
+///     ...
+///   };
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExternalDocumentation {
@@ -395,21 +395,21 @@ pub struct Schema {
 ///
 /// Example:
 ///
-///  message SimpleMessage {
-///    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
-///      json_schema: {
-///        title: "SimpleMessage"
-///        description: "A simple message."
-///        required: \["id"\]
-///      }
-///    };
+///   message SimpleMessage {
+///     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+///       json_schema: {
+///         title: "SimpleMessage"
+///         description: "A simple message."
+///         required: \["id"\]
+///       }
+///     };
 ///
-///    // Id represents the message identifier.
-///    string id = 1; [
-///        (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-///          description: "The unique identifier of the simple message."
-///        }];
-///  }
+///     // Id represents the message identifier.
+///     string id = 1; [
+///         (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+///           description: "The unique identifier of the simple message."
+///         }];
+///   }
 ///
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct JsonSchema {
@@ -418,7 +418,7 @@ pub struct JsonSchema {
     /// be imported into the protofile. If no message is identified, the Ref will
     /// be used verbatim in the output.
     /// For example:
-    ///  `ref: ".google.protobuf.Timestamp"`.
+    ///   `ref: ".google.protobuf.Timestamp"`.
     #[prost(string, tag="3")]
     pub r#ref: ::prost::alloc::string::String,
     /// The title of the schema.
@@ -493,6 +493,24 @@ pub mod json_schema {
         Number = 5,
         Object = 6,
         String = 7,
+    }
+    impl JsonSchemaSimpleTypes {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                JsonSchemaSimpleTypes::Unknown => "UNKNOWN",
+                JsonSchemaSimpleTypes::Array => "ARRAY",
+                JsonSchemaSimpleTypes::Boolean => "BOOLEAN",
+                JsonSchemaSimpleTypes::Integer => "INTEGER",
+                JsonSchemaSimpleTypes::Null => "NULL",
+                JsonSchemaSimpleTypes::Number => "NUMBER",
+                JsonSchemaSimpleTypes::Object => "OBJECT",
+                JsonSchemaSimpleTypes::String => "STRING",
+            }
+        }
     }
 }
 /// `Tag` is a representation of OpenAPI v2 specification's Tag object.
@@ -585,6 +603,20 @@ pub mod security_scheme {
         ApiKey = 2,
         Oauth2 = 3,
     }
+    impl Type {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Type::Invalid => "TYPE_INVALID",
+                Type::Basic => "TYPE_BASIC",
+                Type::ApiKey => "TYPE_API_KEY",
+                Type::Oauth2 => "TYPE_OAUTH2",
+            }
+        }
+    }
     /// The location of the API key. Valid values are "query" or "header".
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
@@ -592,6 +624,19 @@ pub mod security_scheme {
         Invalid = 0,
         Query = 1,
         Header = 2,
+    }
+    impl In {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                In::Invalid => "IN_INVALID",
+                In::Query => "IN_QUERY",
+                In::Header => "IN_HEADER",
+            }
+        }
     }
     /// The flow used by the OAuth2 security scheme. Valid values are
     /// "implicit", "password", "application" or "accessCode".
@@ -603,6 +648,21 @@ pub mod security_scheme {
         Password = 2,
         Application = 3,
         AccessCode = 4,
+    }
+    impl Flow {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Flow::Invalid => "FLOW_INVALID",
+                Flow::Implicit => "FLOW_IMPLICIT",
+                Flow::Password => "FLOW_PASSWORD",
+                Flow::Application => "FLOW_APPLICATION",
+                Flow::AccessCode => "FLOW_ACCESS_CODE",
+            }
+        }
     }
 }
 /// `SecurityRequirement` is a representation of OpenAPI v2 specification's
@@ -658,4 +718,19 @@ pub enum Scheme {
     Https = 2,
     Ws = 3,
     Wss = 4,
+}
+impl Scheme {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Scheme::Unknown => "UNKNOWN",
+            Scheme::Http => "HTTP",
+            Scheme::Https => "HTTPS",
+            Scheme::Ws => "WS",
+            Scheme::Wss => "WSS",
+        }
+    }
 }

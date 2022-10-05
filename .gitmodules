@@ -1,3 +1,4 @@
-[submodule "API"]
-	path = API
-	url = https://github.com/ScienceObjectsDB/API
+[submodule "protos"]
+	path = protos
+	url = git@github.com:ArunaStorage/ArunaAPI.git
+	branch = updates_mvp

@@ -2,48 +2,56 @@ extern crate tonic_build;
 
 use std::fs;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    compile_services()?;
-    Ok(())
-}
-
-fn compile_services() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
     let mut protos: Vec<String> = Vec::new();
 
-    let service_entries = fs::read_dir("API/sciobjsdb/api/storage/services/v1/")?;
+    let service_entries = fs::read_dir("protos/aruna/api/storage/services/v1/").unwrap();
 
     for entry in service_entries {
-        let dir = entry?;
+        let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "API/sciobjsdb/api/storage/services/v1/",
-            dir.file_name().to_str().unwrap().to_string()
+            "protos/aruna/api/storage/services/v1/",
+            dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    let service_entries = fs::read_dir("API/sciobjsdb/api/notification/services/v1/")?;
+    let service_entries = fs::read_dir("protos/aruna/api/notification/services/v1/").unwrap();
 
     for entry in service_entries {
-        let dir = entry?;
+        let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "API/sciobjsdb/api/notification/services/v1/",
-            dir.file_name().to_str().unwrap().to_string()
+            "protos/aruna/api/notification/services/v1/",
+            dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    protos.push("proto/google/api/annotations.proto".to_string());
-    protos.push("proto/google/api/http.proto".to_string());
+    let service_entries = fs::read_dir("protos/aruna/api/internal/v1/").unwrap();
 
-    tonic_build::configure()
+    for entry in service_entries {
+        let dir = entry.unwrap();
+        let rel_path = format!(
+            "{}{}",
+            "protos/aruna/api/internal/v1/",
+            dir.file_name().to_str().unwrap()
+        );
+        protos.push(rel_path);
+    }
+
+    tonic_build
+        ::configure()
         .build_server(true)
-        .out_dir("src/sciobjectsdb/") // you can change the generated code's location
+        .out_dir("src/api")
         .compile(
             &protos,
-            &["proto/".to_string(), "API/".to_string()], // specify the root location to search proto dependencies
+            &[
+                "./protos".to_string(),
+                "protos/aruna/api/google".to_string(),
+                "protos/aruna/api/protoc-gen-openapiv2".to_string(),
+            ]
         )
         .unwrap();
-    Ok(())
 }

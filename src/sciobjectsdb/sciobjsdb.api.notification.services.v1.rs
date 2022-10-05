@@ -23,6 +23,22 @@ pub mod create_event_streaming_group_request {
         ObjectGroupResource = 4,
         AllResource = 5,
     }
+    impl EventResources {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                EventResources::Unspecified => "EVENT_RESOURCES_UNSPECIFIED",
+                EventResources::ProjectResource => "EVENT_RESOURCES_PROJECT_RESOURCE",
+                EventResources::DatasetResource => "EVENT_RESOURCES_DATASET_RESOURCE",
+                EventResources::DatasetVersionResource => "EVENT_RESOURCES_DATASET_VERSION_RESOURCE",
+                EventResources::ObjectGroupResource => "EVENT_RESOURCES_OBJECT_GROUP_RESOURCE",
+                EventResources::AllResource => "EVENT_RESOURCES_ALL_RESOURCE",
+            }
+        }
+    }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamType {
         #[prost(message, tag="4")]
@@ -115,11 +131,28 @@ pub mod event_notification_message {
         MetadataUpdated = 4,
         Deleted = 5,
     }
+    impl UpdateType {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                UpdateType::Unspecified => "UPDATE_TYPE_UNSPECIFIED",
+                UpdateType::Created => "UPDATE_TYPE_CREATED",
+                UpdateType::Available => "UPDATE_TYPE_AVAILABLE",
+                UpdateType::Updated => "UPDATE_TYPE_UPDATED",
+                UpdateType::MetadataUpdated => "UPDATE_TYPE_METADATA_UPDATED",
+                UpdateType::Deleted => "UPDATE_TYPE_DELETED",
+            }
+        }
+    }
 }
 /// Generated client implementations.
 pub mod update_notification_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
     #[derive(Debug, Clone)]
     pub struct UpdateNotificationServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -146,6 +179,10 @@ pub mod update_notification_service_client {
             let inner = tonic::client::Grpc::new(inner);
             Self { inner }
         }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
         pub fn with_interceptor<F>(
             inner: T,
             interceptor: F,
@@ -167,28 +204,28 @@ pub mod update_notification_service_client {
                 InterceptedService::new(inner, interceptor),
             )
         }
-        /// Compress requests with `gzip`.
+        /// Compress requests with the given encoding.
         ///
         /// This requires the server to support it otherwise it might respond with an
         /// error.
         #[must_use]
-        pub fn send_gzip(mut self) -> Self {
-            self.inner = self.inner.send_gzip();
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
             self
         }
-        /// Enable decompressing responses with `gzip`.
+        /// Enable decompressing responses.
         #[must_use]
-        pub fn accept_gzip(mut self) -> Self {
-            self.inner = self.inner.accept_gzip();
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
             self
         }
         pub async fn create_event_streaming_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateEventStreamingGroupRequest>,
         ) -> Result<
-                tonic::Response<super::CreateEventStreamingGroupResponse>,
-                tonic::Status,
-            > {
+            tonic::Response<super::CreateEventStreamingGroupResponse>,
+            tonic::Status,
+        > {
             self.inner
                 .ready()
                 .await
@@ -210,11 +247,11 @@ pub mod update_notification_service_client {
                 Message = super::NotificationStreamGroupRequest,
             >,
         ) -> Result<
-                tonic::Response<
-                    tonic::codec::Streaming<super::NotificationStreamGroupResponse>,
-                >,
-                tonic::Status,
-            > {
+            tonic::Response<
+                tonic::codec::Streaming<super::NotificationStreamGroupResponse>,
+            >,
+            tonic::Status,
+        > {
             self.inner
                 .ready()
                 .await
@@ -243,9 +280,9 @@ pub mod update_notification_service_server {
             &self,
             request: tonic::Request<super::CreateEventStreamingGroupRequest>,
         ) -> Result<
-                tonic::Response<super::CreateEventStreamingGroupResponse>,
-                tonic::Status,
-            >;
+            tonic::Response<super::CreateEventStreamingGroupResponse>,
+            tonic::Status,
+        >;
         ///Server streaming response type for the NotificationStreamGroup method.
         type NotificationStreamGroupStream: futures_core::Stream<
                 Item = Result<super::NotificationStreamGroupResponse, tonic::Status>,
@@ -262,8 +299,8 @@ pub mod update_notification_service_server {
     #[derive(Debug)]
     pub struct UpdateNotificationServiceServer<T: UpdateNotificationService> {
         inner: _Inner<T>,
-        accept_compression_encodings: (),
-        send_compression_encodings: (),
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
     }
     struct _Inner<T>(Arc<T>);
     impl<T: UpdateNotificationService> UpdateNotificationServiceServer<T> {
@@ -286,6 +323,18 @@ pub mod update_notification_service_server {
             F: tonic::service::Interceptor,
         {
             InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
         }
     }
     impl<T, B> tonic::codegen::Service<http::Request<B>>
@@ -433,7 +482,7 @@ pub mod update_notification_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: UpdateNotificationService> tonic::transport::NamedService
+    impl<T: UpdateNotificationService> tonic::server::NamedService
     for UpdateNotificationServiceServer<T> {
         const NAME: &'static str = "sciobjsdb.api.notification.services.v1.UpdateNotificationService";
     }

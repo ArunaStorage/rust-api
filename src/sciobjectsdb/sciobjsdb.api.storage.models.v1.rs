@@ -45,6 +45,19 @@ pub mod origin {
         ObjectStorage = 1,
         OriginLink = 2,
     }
+    impl OriginType {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                OriginType::Unspecified => "ORIGIN_TYPE_UNSPECIFIED",
+                OriginType::ObjectStorage => "ORIGIN_TYPE_OBJECT_STORAGE",
+                OriginType::OriginLink => "ORIGIN_TYPE_ORIGIN_LINK",
+            }
+        }
+    }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Location {
         #[prost(message, tag="2")]
@@ -74,6 +87,21 @@ pub mod version {
         Rc = 2,
         Beta = 3,
         Alpha = 4,
+    }
+    impl VersionStage {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                VersionStage::Unspecified => "VERSION_STAGE_UNSPECIFIED",
+                VersionStage::Stable => "VERSION_STAGE_STABLE",
+                VersionStage::Rc => "VERSION_STAGE_RC",
+                VersionStage::Beta => "VERSION_STAGE_BETA",
+                VersionStage::Alpha => "VERSION_STAGE_ALPHA",
+            }
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -156,12 +184,42 @@ pub enum Status {
     Deleting = 5,
     Staging = 6,
 }
+impl Status {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Status::Unspecified => "STATUS_UNSPECIFIED",
+            Status::Initiating => "STATUS_INITIATING",
+            Status::Available => "STATUS_AVAILABLE",
+            Status::Updating => "STATUS_UPDATING",
+            Status::Archived => "STATUS_ARCHIVED",
+            Status::Deleting => "STATUS_DELETING",
+            Status::Staging => "STATUS_STAGING",
+        }
+    }
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Right {
     Unspecified = 0,
     Read = 1,
     Write = 2,
+}
+impl Right {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Right::Unspecified => "RIGHT_UNSPECIFIED",
+            Right::Read => "RIGHT_READ",
+            Right::Write => "RIGHT_WRITE",
+        }
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -173,6 +231,23 @@ pub enum Resource {
     Object = 4,
     ObjectGroup = 5,
     ObjectGroupRevision = 6,
+}
+impl Resource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Resource::Unspecified => "RESOURCE_UNSPECIFIED",
+            Resource::Project => "RESOURCE_PROJECT",
+            Resource::Dataset => "RESOURCE_DATASET",
+            Resource::DatasetVersion => "RESOURCE_DATASET_VERSION",
+            Resource::Object => "RESOURCE_OBJECT",
+            Resource::ObjectGroup => "RESOURCE_OBJECT_GROUP",
+            Resource::ObjectGroupRevision => "RESOURCE_OBJECT_GROUP_REVISION",
+        }
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroup {
@@ -220,7 +295,7 @@ pub struct ObjectGroupRevision {
     pub subpath: ::core::option::Option<Subpath>,
     #[prost(string, tag="16")]
     pub object_group_id: ::prost::alloc::string::String,
-    ///Number in the history, will be assigned after the ObjectGroupRevision has been finalized
+    /// Number in the history, will be assigned after the ObjectGroupRevision has been finalized
     #[prost(int64, tag="17")]
     pub revision_number: i64,
 }
@@ -237,7 +312,7 @@ pub struct ObjectGroupStats {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
-    ///ID of the entity
+    /// ID of the entity
     #[prost(string, tag="1")]
     pub id: ::prost::alloc::string::String,
     /// Filename: Name of the original file e.g.: mydata.json
@@ -306,7 +381,7 @@ pub struct Dataset {
     pub annotations: ::prost::alloc::vec::Vec<Annotation>,
     #[prost(string, tag="7")]
     pub project_id: ::prost::alloc::string::String,
-    ///Indicates if the dataset if publicly available
+    /// Indicates if the dataset if publicly available
     #[prost(bool, tag="8")]
     pub is_public: bool,
     #[prost(enumeration="Status", tag="9")]
