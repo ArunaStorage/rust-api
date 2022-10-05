@@ -22,24 +22,19 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - name: Test compiling protofiles with rust
-        uses: actions-rs/cargo@v1
-        with:
-          command: cargo build
+      - name: Compile protofiles with rust
+        run: cargo build
       - name: Commit files
         run: |
-          cd protos
-          git checkout updates_mvp
-          git pull
-          cd ..
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -m "Update to version to ${{ inputs.tag }}" -a
-          git tag ${{ inputs.tag }} -a "Published new version: ${{ inputs.tag }} , see API for detailed changelog."
+          git tag -a v${{ inputs.tag }} -m "Published new version: ${{ inputs.tag }} , see API for detailed changelog."
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          tags: true
       - name: Cargo publish    
         run: cargo publish --token ${CRATES_TOKEN}
         env:
