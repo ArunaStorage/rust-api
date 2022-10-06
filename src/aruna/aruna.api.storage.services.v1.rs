@@ -1,12 +1,15 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectRequest {
+    /// Project name
     #[prost(string, tag="1")]
     pub name: ::prost::alloc::string::String,
+    /// Description for the project
     #[prost(string, tag="2")]
     pub description: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectResponse {
+    /// The freshly created project_id 
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
 }
@@ -15,24 +18,12 @@ pub struct AddUserToProjectRequest {
     /// The id of the project to add the user to
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
+    /// Permissions for the user
     #[prost(message, optional, tag="3")]
     pub user_permission: ::core::option::Option<super::super::models::v1::ProjectPermission>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToProjectResponse {
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectCollectionsRequest {
-    /// The id of the project to get the collections for
-    #[prost(string, tag="1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag="2")]
-    pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectCollectionsResponse {
-    #[prost(message, repeated, tag="1")]
-    pub collection: ::prost::alloc::vec::Vec<super::super::models::v1::CollectionOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectRequest {
@@ -42,6 +33,7 @@ pub struct GetProjectRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectResponse {
+    /// Overview of the projectroject
     #[prost(message, optional, tag="1")]
     pub project: ::core::option::Option<super::super::models::v1::ProjectOverview>,
 }
@@ -56,6 +48,7 @@ pub struct DestroyProjectResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectRequest {
+    /// Project id to update
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
     /// Updated name
@@ -67,13 +60,16 @@ pub struct UpdateProjectRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectResponse {
+    /// Updated project overview 
     #[prost(message, optional, tag="1")]
     pub project: ::core::option::Option<super::super::models::v1::ProjectOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveUserFromProjectRequest {
+    /// Project id
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
+    /// User that should be removed
     #[prost(string, tag="2")]
     pub user_id: ::prost::alloc::string::String,
 }
@@ -82,18 +78,22 @@ pub struct RemoveUserFromProjectResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserPermissionsForProjectRequest {
+    /// Project id
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
+    /// User id
     #[prost(string, tag="2")]
     pub user_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserPermissionsForProjectResponse {
+    /// Userpermission for a specific user
     #[prost(message, optional, tag="1")]
     pub user_permission: ::core::option::Option<super::super::models::v1::ProjectPermission>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EditUserPermissionsForProjectRequest {
+    /// Project id
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
     /// This contains the user_id and the "new permission"
@@ -108,6 +108,9 @@ pub mod project_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// ProjectService
+    ///
+    /// Contains all methods that get/create or update Projects and associated resources
     #[derive(Debug, Clone)]
     pub struct ProjectServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -172,8 +175,9 @@ pub mod project_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
-        /// This creates a new authorization group.option
-        /// All users and collections are bundled in a authorization group.
+        /// CreateProject
+        ///
+        /// Creates a new project all users and collections are bundled in a project.
         pub async fn create_project(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateProjectRequest>,
@@ -193,7 +197,9 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// AddUserToProject Adds a new user to a given project by its id
+        /// AddUserToProject
+        ///
+        /// Adds a new user to a given project by its id
         pub async fn add_user_to_project(
             &mut self,
             request: impl tonic::IntoRequest<super::AddUserToProjectRequest>,
@@ -213,31 +219,9 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetProjectCollections Returns all collections that belong to a certain
-        /// project
-        pub async fn get_project_collections(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetProjectCollectionsRequest>,
-        ) -> Result<
-            tonic::Response<super::GetProjectCollectionsResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v1.ProjectService/GetProjectCollections",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        /// GetProject Returns the specified project
+        /// GetProject
+        ///
+        /// Requests a project by id
         pub async fn get_project(
             &mut self,
             request: impl tonic::IntoRequest<super::GetProjectRequest>,
@@ -257,6 +241,8 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// DestroyProject
+        ///
         /// Destroys the project and all its associated data. Must be empty
         /// (cannot contain any collections).
         pub async fn destroy_project(
@@ -278,6 +264,8 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// UpdateProject
+        ///
         /// Updates the project. All (meta) data will be overwritten.
         pub async fn update_project(
             &mut self,
@@ -298,6 +286,8 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// RemoveUserFromProject
+        ///
         /// Removes a specified user from the project.
         pub async fn remove_user_from_project(
             &mut self,
@@ -321,6 +311,8 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetUserPermissionsForProject
+        ///
         /// Get the user_permission of a specific user for the project.
         pub async fn get_user_permissions_for_project(
             &mut self,
@@ -344,7 +336,9 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// Edit the user_permission of a specific user for the project.
+        /// EditUserPermissionsForProject
+        ///
+        /// Modifies the user_permission of a specific user for the project.
         pub async fn edit_user_permissions_for_project(
             &mut self,
             request: impl tonic::IntoRequest<super::EditUserPermissionsForProjectRequest>,
@@ -376,42 +370,44 @@ pub mod project_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with ProjectServiceServer.
     #[async_trait]
     pub trait ProjectService: Send + Sync + 'static {
-        /// This creates a new authorization group.option
-        /// All users and collections are bundled in a authorization group.
+        /// CreateProject
+        ///
+        /// Creates a new project all users and collections are bundled in a project.
         async fn create_project(
             &self,
             request: tonic::Request<super::CreateProjectRequest>,
         ) -> Result<tonic::Response<super::CreateProjectResponse>, tonic::Status>;
-        /// AddUserToProject Adds a new user to a given project by its id
+        /// AddUserToProject
+        ///
+        /// Adds a new user to a given project by its id
         async fn add_user_to_project(
             &self,
             request: tonic::Request<super::AddUserToProjectRequest>,
         ) -> Result<tonic::Response<super::AddUserToProjectResponse>, tonic::Status>;
-        /// GetProjectCollections Returns all collections that belong to a certain
-        /// project
-        async fn get_project_collections(
-            &self,
-            request: tonic::Request<super::GetProjectCollectionsRequest>,
-        ) -> Result<
-            tonic::Response<super::GetProjectCollectionsResponse>,
-            tonic::Status,
-        >;
-        /// GetProject Returns the specified project
+        /// GetProject
+        ///
+        /// Requests a project by id
         async fn get_project(
             &self,
             request: tonic::Request<super::GetProjectRequest>,
         ) -> Result<tonic::Response<super::GetProjectResponse>, tonic::Status>;
+        /// DestroyProject
+        ///
         /// Destroys the project and all its associated data. Must be empty
         /// (cannot contain any collections).
         async fn destroy_project(
             &self,
             request: tonic::Request<super::DestroyProjectRequest>,
         ) -> Result<tonic::Response<super::DestroyProjectResponse>, tonic::Status>;
+        /// UpdateProject
+        ///
         /// Updates the project. All (meta) data will be overwritten.
         async fn update_project(
             &self,
             request: tonic::Request<super::UpdateProjectRequest>,
         ) -> Result<tonic::Response<super::UpdateProjectResponse>, tonic::Status>;
+        /// RemoveUserFromProject
+        ///
         /// Removes a specified user from the project.
         async fn remove_user_from_project(
             &self,
@@ -420,6 +416,8 @@ pub mod project_service_server {
             tonic::Response<super::RemoveUserFromProjectResponse>,
             tonic::Status,
         >;
+        /// GetUserPermissionsForProject
+        ///
         /// Get the user_permission of a specific user for the project.
         async fn get_user_permissions_for_project(
             &self,
@@ -428,7 +426,9 @@ pub mod project_service_server {
             tonic::Response<super::GetUserPermissionsForProjectResponse>,
             tonic::Status,
         >;
-        /// Edit the user_permission of a specific user for the project.
+        /// EditUserPermissionsForProject
+        ///
+        /// Modifies the user_permission of a specific user for the project.
         async fn edit_user_permissions_for_project(
             &self,
             request: tonic::Request<super::EditUserPermissionsForProjectRequest>,
@@ -437,6 +437,9 @@ pub mod project_service_server {
             tonic::Status,
         >;
     }
+    /// ProjectService
+    ///
+    /// Contains all methods that get/create or update Projects and associated resources
     #[derive(Debug)]
     pub struct ProjectServiceServer<T: ProjectService> {
         inner: _Inner<T>,
@@ -565,46 +568,6 @@ pub mod project_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = AddUserToProjectSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v1.ProjectService/GetProjectCollections" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetProjectCollectionsSvc<T: ProjectService>(pub Arc<T>);
-                    impl<
-                        T: ProjectService,
-                    > tonic::server::UnaryService<super::GetProjectCollectionsRequest>
-                    for GetProjectCollectionsSvc<T> {
-                        type Response = super::GetProjectCollectionsResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetProjectCollectionsRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).get_project_collections(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetProjectCollectionsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -905,31 +868,39 @@ pub mod project_service_server {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExpiresAt {
+    /// Expiry time
     #[prost(message, optional, tag="1")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RegisterUserRequest {
+    /// Optional user_displayname
     #[prost(string, tag="1")]
     pub display_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RegisterUserResponse {
+    /// Created user id
     #[prost(string, tag="1")]
     pub user_id: ::prost::alloc::string::String,
 }
+/// Empty if token_type is personal, otherwise the id of the collection or
+/// project to create the token for
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenRequest {
-    /// Empty if token_type is personal, otherwise the id of the collection or
-    /// project to create the token for
+    /// Project id
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
+    /// Collection id
     #[prost(string, tag="2")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Token name
     #[prost(string, tag="3")]
     pub name: ::prost::alloc::string::String,
+    /// Token expiry
     #[prost(message, optional, tag="4")]
     pub expires_at: ::core::option::Option<ExpiresAt>,
+    /// Token permissions
     #[prost(enumeration="super::super::models::v1::Permission", tag="5")]
     pub permission: i32,
 }
@@ -949,9 +920,6 @@ pub struct GetApiTokenRequest {
     /// The token id
     #[prost(string, tag="1")]
     pub token_id: ::prost::alloc::string::String,
-    /// or the user_defined name
-    #[prost(string, tag="2")]
-    pub name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetApiTokenResponse {
@@ -991,47 +959,58 @@ pub struct DeleteApiTokensResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserRequest {
+    /// Optional user_id
     #[prost(string, tag="1")]
     pub user_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserResponse {
+    /// User info
     #[prost(message, optional, tag="1")]
     pub user: ::core::option::Option<super::super::models::v1::User>,
+    /// User permissions per project
     #[prost(message, repeated, tag="2")]
     pub project_permissions: ::prost::alloc::vec::Vec<super::super::models::v1::ProjectPermission>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserDisplayNameRequest {
+    /// New display name
     #[prost(string, tag="1")]
     pub new_display_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserDisplayNameResponse {
+    /// Updated user info
     #[prost(message, optional, tag="1")]
     pub user: ::core::option::Option<super::super::models::v1::User>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserProjectsRequest {
+    /// User id
     #[prost(string, tag="1")]
     pub user_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserProject {
+    /// Project id
     #[prost(string, tag="1")]
     pub id: ::prost::alloc::string::String,
+    /// Project name
     #[prost(string, tag="2")]
     pub name: ::prost::alloc::string::String,
+    /// Project description
     #[prost(string, tag="3")]
     pub description: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserProjectsResponse {
+    /// List of associated projects
     #[prost(message, repeated, tag="1")]
     pub projects: ::prost::alloc::vec::Vec<UserProject>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ActivateUserRequest {
+    /// User to activate
     #[prost(string, tag="1")]
     pub user_id: ::prost::alloc::string::String,
 }
@@ -1039,10 +1018,11 @@ pub struct ActivateUserRequest {
 pub struct ActivateUserResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetUsersUnregisteredRequest {
+pub struct GetNotActivatedUsersRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetUsersUnregisteredResponse {
+pub struct GetNotActivatedUsersResponse {
+    /// List of users that are not yet activated
     #[prost(message, repeated, tag="1")]
     pub users: ::prost::alloc::vec::Vec<super::super::models::v1::User>,
 }
@@ -1051,6 +1031,10 @@ pub mod user_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// UserService
+    ///
+    /// Contains all methods that get/create or update Users and associated resource
+    /// including all autorization methods
     #[derive(Debug, Clone)]
     pub struct UserServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -1115,6 +1099,8 @@ pub mod user_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
+        /// RegisterUser
+        ///
         /// This request should be called when a new user logs in for the first time
         pub async fn register_user(
             &mut self,
@@ -1135,7 +1121,9 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// ActivateUser enables a specific user (Admin request)
+        /// ActivateUser
+        ///
+        /// This activates a specific user (Admin request)
         pub async fn activate_user(
             &mut self,
             request: impl tonic::IntoRequest<super::ActivateUserRequest>,
@@ -1155,7 +1143,9 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// CreateAPIToken Creates an API token to authenticate
+        /// CreateAPIToken
+        ///
+        /// Creates an API token to authenticate
         pub async fn create_api_token(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateApiTokenRequest>,
@@ -1175,6 +1165,8 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetAPIToken
+        ///
         /// Returns one API token by id
         pub async fn get_api_token(
             &mut self,
@@ -1195,7 +1187,9 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// Returns all API token for a specific user
+        /// GetAPITokens
+        ///
+        /// Returns a list of API tokens for a specific user
         pub async fn get_api_tokens(
             &mut self,
             request: impl tonic::IntoRequest<super::GetApiTokensRequest>,
@@ -1215,7 +1209,9 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// DeleteAPITokenRequest Deletes the specified API Token
+        /// DeleteAPIToken
+        ///
+        /// Deletes the specified API Token
         pub async fn delete_api_token(
             &mut self,
             request: impl tonic::IntoRequest<super::DeleteApiTokenRequest>,
@@ -1235,7 +1231,9 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// DeleteAPITokenRequest Deletes the specified API Token
+        /// DeleteAPITokens
+        ///
+        /// Deletes the specified API Token
         pub async fn delete_api_tokens(
             &mut self,
             request: impl tonic::IntoRequest<super::DeleteApiTokensRequest>,
@@ -1255,7 +1253,9 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetUserRequest is a request that returns the user information of the
+        /// GetUserRequest
+        ///
+        /// This is a request that returns the user information of the
         /// current user or if invoked by an admin from another user
         pub async fn get_user(
             &mut self,
@@ -1276,6 +1276,8 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// UpdateUserDisplayName
+        ///
         /// Updates the Displayname for the user (Personal only)
         pub async fn update_user_display_name(
             &mut self,
@@ -1299,6 +1301,8 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetUserProjects
+        ///
         /// Gets all project_ids a user is member of
         pub async fn get_user_projects(
             &mut self,
@@ -1319,12 +1323,14 @@ pub mod user_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// Get all "unregistered" users (Admin only)
-        pub async fn get_users_unregistered(
+        /// GetNotActivatedUsers
+        ///
+        /// Get all not activated users (Admin only)
+        pub async fn get_not_activated_users(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetUsersUnregisteredRequest>,
+            request: impl tonic::IntoRequest<super::GetNotActivatedUsersRequest>,
         ) -> Result<
-            tonic::Response<super::GetUsersUnregisteredResponse>,
+            tonic::Response<super::GetNotActivatedUsersResponse>,
             tonic::Status,
         > {
             self.inner
@@ -1338,7 +1344,7 @@ pub mod user_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v1.UserService/GetUsersUnregistered",
+                "/aruna.api.storage.services.v1.UserService/GetNotActivatedUsers",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1351,47 +1357,65 @@ pub mod user_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with UserServiceServer.
     #[async_trait]
     pub trait UserService: Send + Sync + 'static {
+        /// RegisterUser
+        ///
         /// This request should be called when a new user logs in for the first time
         async fn register_user(
             &self,
             request: tonic::Request<super::RegisterUserRequest>,
         ) -> Result<tonic::Response<super::RegisterUserResponse>, tonic::Status>;
-        /// ActivateUser enables a specific user (Admin request)
+        /// ActivateUser
+        ///
+        /// This activates a specific user (Admin request)
         async fn activate_user(
             &self,
             request: tonic::Request<super::ActivateUserRequest>,
         ) -> Result<tonic::Response<super::ActivateUserResponse>, tonic::Status>;
-        /// CreateAPIToken Creates an API token to authenticate
+        /// CreateAPIToken
+        ///
+        /// Creates an API token to authenticate
         async fn create_api_token(
             &self,
             request: tonic::Request<super::CreateApiTokenRequest>,
         ) -> Result<tonic::Response<super::CreateApiTokenResponse>, tonic::Status>;
+        /// GetAPIToken
+        ///
         /// Returns one API token by id
         async fn get_api_token(
             &self,
             request: tonic::Request<super::GetApiTokenRequest>,
         ) -> Result<tonic::Response<super::GetApiTokenResponse>, tonic::Status>;
-        /// Returns all API token for a specific user
+        /// GetAPITokens
+        ///
+        /// Returns a list of API tokens for a specific user
         async fn get_api_tokens(
             &self,
             request: tonic::Request<super::GetApiTokensRequest>,
         ) -> Result<tonic::Response<super::GetApiTokensResponse>, tonic::Status>;
-        /// DeleteAPITokenRequest Deletes the specified API Token
+        /// DeleteAPIToken
+        ///
+        /// Deletes the specified API Token
         async fn delete_api_token(
             &self,
             request: tonic::Request<super::DeleteApiTokenRequest>,
         ) -> Result<tonic::Response<super::DeleteApiTokenResponse>, tonic::Status>;
-        /// DeleteAPITokenRequest Deletes the specified API Token
+        /// DeleteAPITokens
+        ///
+        /// Deletes the specified API Token
         async fn delete_api_tokens(
             &self,
             request: tonic::Request<super::DeleteApiTokensRequest>,
         ) -> Result<tonic::Response<super::DeleteApiTokensResponse>, tonic::Status>;
-        /// GetUserRequest is a request that returns the user information of the
+        /// GetUserRequest
+        ///
+        /// This is a request that returns the user information of the
         /// current user or if invoked by an admin from another user
         async fn get_user(
             &self,
             request: tonic::Request<super::GetUserRequest>,
         ) -> Result<tonic::Response<super::GetUserResponse>, tonic::Status>;
+        /// UpdateUserDisplayName
+        ///
         /// Updates the Displayname for the user (Personal only)
         async fn update_user_display_name(
             &self,
@@ -1400,17 +1424,25 @@ pub mod user_service_server {
             tonic::Response<super::UpdateUserDisplayNameResponse>,
             tonic::Status,
         >;
+        /// GetUserProjects
+        ///
         /// Gets all project_ids a user is member of
         async fn get_user_projects(
             &self,
             request: tonic::Request<super::GetUserProjectsRequest>,
         ) -> Result<tonic::Response<super::GetUserProjectsResponse>, tonic::Status>;
-        /// Get all "unregistered" users (Admin only)
-        async fn get_users_unregistered(
+        /// GetNotActivatedUsers
+        ///
+        /// Get all not activated users (Admin only)
+        async fn get_not_activated_users(
             &self,
-            request: tonic::Request<super::GetUsersUnregisteredRequest>,
-        ) -> Result<tonic::Response<super::GetUsersUnregisteredResponse>, tonic::Status>;
+            request: tonic::Request<super::GetNotActivatedUsersRequest>,
+        ) -> Result<tonic::Response<super::GetNotActivatedUsersResponse>, tonic::Status>;
     }
+    /// UserService
+    ///
+    /// Contains all methods that get/create or update Users and associated resource
+    /// including all autorization methods
     #[derive(Debug)]
     pub struct UserServiceServer<T: UserService> {
         inner: _Inner<T>,
@@ -1868,25 +1900,25 @@ pub mod user_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v1.UserService/GetUsersUnregistered" => {
+                "/aruna.api.storage.services.v1.UserService/GetNotActivatedUsers" => {
                     #[allow(non_camel_case_types)]
-                    struct GetUsersUnregisteredSvc<T: UserService>(pub Arc<T>);
+                    struct GetNotActivatedUsersSvc<T: UserService>(pub Arc<T>);
                     impl<
                         T: UserService,
-                    > tonic::server::UnaryService<super::GetUsersUnregisteredRequest>
-                    for GetUsersUnregisteredSvc<T> {
-                        type Response = super::GetUsersUnregisteredResponse;
+                    > tonic::server::UnaryService<super::GetNotActivatedUsersRequest>
+                    for GetNotActivatedUsersSvc<T> {
+                        type Response = super::GetNotActivatedUsersResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetUsersUnregisteredRequest>,
+                            request: tonic::Request<super::GetNotActivatedUsersRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move {
-                                (*inner).get_users_unregistered(request).await
+                                (*inner).get_not_activated_users(request).await
                             };
                             Box::pin(fut)
                         }
@@ -1896,7 +1928,7 @@ pub mod user_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetUsersUnregisteredSvc(inner);
+                        let method = GetNotActivatedUsersSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1947,16 +1979,15 @@ pub mod user_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v1.UserService";
     }
 }
-// Models
-// This section contains the models for each individual Request and
-// corresponding Response
-
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupRequest {
+    /// ObjectGroup name
     #[prost(string, tag="1")]
     pub name: ::prost::alloc::string::String,
+    /// Description for group
     #[prost(string, tag="2")]
     pub description: ::prost::alloc::string::String,
+    /// Collection Id
     #[prost(string, tag="3")]
     pub collection_id: ::prost::alloc::string::String,
     /// This is the reference to the Objects that should be added to the group
@@ -1966,24 +1997,31 @@ pub struct CreateObjectGroupRequest {
     /// about corresponding objects in the group
     #[prost(string, repeated, tag="5")]
     pub meta_object_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// List of label key-value pairs
     #[prost(message, repeated, tag="6")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    /// List of hooks key-value pairs
     #[prost(message, repeated, tag="7")]
     pub hooks: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectGroupResponse {
+    /// Overview of the new objectgroup
     #[prost(message, optional, tag="1")]
     pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroupOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectGroupRequest {
+    /// Old group id
     #[prost(string, tag="1")]
     pub group_id: ::prost::alloc::string::String,
+    /// New name
     #[prost(string, tag="2")]
     pub name: ::prost::alloc::string::String,
+    /// New description
     #[prost(string, tag="3")]
     pub description: ::prost::alloc::string::String,
+    /// Collection id
     #[prost(string, tag="4")]
     pub collection_id: ::prost::alloc::string::String,
     /// This is the reference to the Objects that should be added to the group
@@ -1993,46 +2031,58 @@ pub struct UpdateObjectGroupRequest {
     /// about corresponding objects in the group
     #[prost(string, repeated, tag="6")]
     pub meta_object_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// List of label key-value pairs
     #[prost(message, repeated, tag="7")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    /// List of hooks key-value pairs
     #[prost(message, repeated, tag="8")]
     pub hooks: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectGroupResponse {
+    /// Overview of the updated objectgroup
     #[prost(message, optional, tag="1")]
     pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroupOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupByIdRequest {
+    /// Object group id
     #[prost(string, tag="1")]
     pub group_id: ::prost::alloc::string::String,
+    /// Collection id
     #[prost(string, tag="2")]
     pub collection_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupByIdResponse {
+    /// Overview of the objectgroup
     #[prost(message, optional, tag="1")]
     pub object_group: ::core::option::Option<super::super::models::v1::ObjectGroupOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupsFromObjectRequest {
+    /// Object id
     #[prost(string, tag="1")]
     pub object_id: ::prost::alloc::string::String,
+    /// Collection id
     #[prost(string, tag="2")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Page request
     #[prost(message, optional, tag="3")]
     pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupsFromObjectResponse {
+    /// Overviews of multiple objectgroups
     #[prost(message, optional, tag="1")]
     pub object_groups: ::core::option::Option<super::super::models::v1::ObjectGroupOverviews>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectGroupRequest {
+    /// Objectgroup id
     #[prost(string, tag="1")]
     pub group_id: ::prost::alloc::string::String,
+    /// Collection id
     #[prost(string, tag="2")]
     pub collection_id: ::prost::alloc::string::String,
 }
@@ -2041,6 +2091,7 @@ pub struct DeleteObjectGroupResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupsRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
     /// Paginate the results: Default is 20
@@ -2052,31 +2103,41 @@ pub struct GetObjectGroupsRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupsResponse {
+    /// Overviews of multiple objectgroups
     #[prost(message, optional, tag="1")]
     pub object_groups: ::core::option::Option<super::super::models::v1::ObjectGroupOverviews>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupHistoryRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Objectgroup id
     #[prost(string, tag="2")]
     pub group_id: ::prost::alloc::string::String,
+    /// Pagerequest
     #[prost(message, optional, tag="3")]
     pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupHistoryResponse {
+    /// Overviews of multiple objectgroups
     #[prost(message, optional, tag="1")]
     pub object_groups: ::core::option::Option<super::super::models::v1::ObjectGroupOverviews>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupObjectsRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Objectgroup id
     #[prost(string, tag="2")]
     pub group_id: ::prost::alloc::string::String,
+    /// Pagerequest
     #[prost(message, optional, tag="3")]
     pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
+    /// Include meta objects only
+    ///
     /// Should only the "meta" objects be returned
     #[prost(bool, tag="4")]
     pub meta_only: bool,
@@ -2085,13 +2146,16 @@ pub struct GetObjectGroupObjectsRequest {
 /// flag Returned as single list to allow for more precise queries
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupObject {
+    /// Object
     #[prost(message, optional, tag="1")]
     pub object: ::core::option::Option<super::super::models::v1::Object>,
+    /// Is this objet a meta object
     #[prost(bool, tag="2")]
     pub is_metadata: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectGroupObjectsResponse {
+    /// List of associated object group objects
     #[prost(message, repeated, tag="1")]
     pub object_group_objects: ::prost::alloc::vec::Vec<ObjectGroupObject>,
 }
@@ -2100,6 +2164,9 @@ pub mod object_group_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// ObjectService
+    ///
+    /// Contains all methods that get/create or update Objects and associated resource
     #[derive(Debug, Clone)]
     pub struct ObjectGroupServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -2164,7 +2231,9 @@ pub mod object_group_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
-        /// CreateObjectGroup creates a new ObjectGroup in the collection
+        /// CreateObjectGroup
+        ///
+        /// This creates a new ObjectGroup in the collection
         pub async fn create_object_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateObjectGroupRequest>,
@@ -2184,7 +2253,9 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// UpdateObjectGroup creates an updated ObjectGroup
+        /// UpdateObjectGroup
+        ///
+        /// This creates an updated ObjectGroup
         /// ObjectGroups are immutable
         /// Updating an ObjectGroup will create a new Revision of the ObjectGroup
         pub async fn update_object_group(
@@ -2206,7 +2277,9 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetObjectGroupById gets a specific ObjectGroup by ID
+        /// GetObjectGroupById
+        ///
+        /// This gets a specific ObjectGroup by ID
         /// By default the latest revision is always returned, older revisions need to
         /// be specified separately
         pub async fn get_object_group_by_id(
@@ -2228,7 +2301,9 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetObjectGroupsFromObject gets all ObjectGroups associated to a specific
+        /// GetObjectGroupsFromObject
+        ///
+        /// This gets all ObjectGroups associated to a specific
         /// Object Objects can be part of multiple ObjectGroups at once
         pub async fn get_object_groups_from_object(
             &mut self,
@@ -2252,7 +2327,9 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetObjectGroups is a request that returns a (paginated) list of
+        /// GetObjectGroups
+        ///
+        /// This is a request that returns a (paginated) list of
         /// ObjectGroups that contain a specific set of labels.
         pub async fn get_object_groups(
             &mut self,
@@ -2273,6 +2350,10 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetObjectGroupHistory
+        ///
+        /// This requests a full history with all objectgroups
+        /// that are part of this objectgroups history
         pub async fn get_object_group_history(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupHistoryRequest>,
@@ -2295,6 +2376,10 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetObjectGroupObjects
+        ///
+        /// Requests a list of paginated objects associated with this
+        /// specific objectgroup
         pub async fn get_object_group_objects(
             &mut self,
             request: impl tonic::IntoRequest<super::GetObjectGroupObjectsRequest>,
@@ -2317,7 +2402,9 @@ pub mod object_group_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// DeleteObjectGroup is a request that deletes a specified ObjectGroup
+        /// DeleteObjectGroup
+        ///
+        /// This is a request that deletes a specified ObjectGroup
         /// This does not delete the associated Objects
         pub async fn delete_object_group(
             &mut self,
@@ -2347,26 +2434,34 @@ pub mod object_group_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with ObjectGroupServiceServer.
     #[async_trait]
     pub trait ObjectGroupService: Send + Sync + 'static {
-        /// CreateObjectGroup creates a new ObjectGroup in the collection
+        /// CreateObjectGroup
+        ///
+        /// This creates a new ObjectGroup in the collection
         async fn create_object_group(
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
         ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
-        /// UpdateObjectGroup creates an updated ObjectGroup
+        /// UpdateObjectGroup
+        ///
+        /// This creates an updated ObjectGroup
         /// ObjectGroups are immutable
         /// Updating an ObjectGroup will create a new Revision of the ObjectGroup
         async fn update_object_group(
             &self,
             request: tonic::Request<super::UpdateObjectGroupRequest>,
         ) -> Result<tonic::Response<super::UpdateObjectGroupResponse>, tonic::Status>;
-        /// GetObjectGroupById gets a specific ObjectGroup by ID
+        /// GetObjectGroupById
+        ///
+        /// This gets a specific ObjectGroup by ID
         /// By default the latest revision is always returned, older revisions need to
         /// be specified separately
         async fn get_object_group_by_id(
             &self,
             request: tonic::Request<super::GetObjectGroupByIdRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupByIdResponse>, tonic::Status>;
-        /// GetObjectGroupsFromObject gets all ObjectGroups associated to a specific
+        /// GetObjectGroupsFromObject
+        ///
+        /// This gets all ObjectGroups associated to a specific
         /// Object Objects can be part of multiple ObjectGroups at once
         async fn get_object_groups_from_object(
             &self,
@@ -2375,12 +2470,18 @@ pub mod object_group_service_server {
             tonic::Response<super::GetObjectGroupsFromObjectResponse>,
             tonic::Status,
         >;
-        /// GetObjectGroups is a request that returns a (paginated) list of
+        /// GetObjectGroups
+        ///
+        /// This is a request that returns a (paginated) list of
         /// ObjectGroups that contain a specific set of labels.
         async fn get_object_groups(
             &self,
             request: tonic::Request<super::GetObjectGroupsRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupsResponse>, tonic::Status>;
+        /// GetObjectGroupHistory
+        ///
+        /// This requests a full history with all objectgroups
+        /// that are part of this objectgroups history
         async fn get_object_group_history(
             &self,
             request: tonic::Request<super::GetObjectGroupHistoryRequest>,
@@ -2388,6 +2489,10 @@ pub mod object_group_service_server {
             tonic::Response<super::GetObjectGroupHistoryResponse>,
             tonic::Status,
         >;
+        /// GetObjectGroupObjects
+        ///
+        /// Requests a list of paginated objects associated with this
+        /// specific objectgroup
         async fn get_object_group_objects(
             &self,
             request: tonic::Request<super::GetObjectGroupObjectsRequest>,
@@ -2395,13 +2500,18 @@ pub mod object_group_service_server {
             tonic::Response<super::GetObjectGroupObjectsResponse>,
             tonic::Status,
         >;
-        /// DeleteObjectGroup is a request that deletes a specified ObjectGroup
+        /// DeleteObjectGroup
+        ///
+        /// This is a request that deletes a specified ObjectGroup
         /// This does not delete the associated Objects
         async fn delete_object_group(
             &self,
             request: tonic::Request<super::DeleteObjectGroupRequest>,
         ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status>;
     }
+    /// ObjectService
+    ///
+    /// Contains all methods that get/create or update Objects and associated resource
     #[derive(Debug)]
     pub struct ObjectGroupServiceServer<T: ObjectGroupService> {
         inner: _Inner<T>,
@@ -2828,54 +2938,69 @@ pub mod object_group_service_server {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddEndpointRequest {
+    /// Endpoint name
     #[prost(string, tag="1")]
     pub name: ::prost::alloc::string::String,
+    /// Endpoint type
     #[prost(enumeration="super::super::models::v1::EndpointType", tag="2")]
     pub ep_type: i32,
+    /// Public hostname of the proxy
     #[prost(string, tag="3")]
     pub proxy_hostname: ::prost::alloc::string::String,
+    /// Internal hostname for the proxy
     #[prost(string, tag="4")]
     pub internal_hostname: ::prost::alloc::string::String,
+    /// (optional) URL to a offsite documentation 
     #[prost(string, tag="5")]
     pub documentation_path: ::prost::alloc::string::String,
+    /// Is this endpoint public
     #[prost(bool, tag="6")]
     pub is_public: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddEndpointResponse {
+    /// Overview of the requested endpoint
     #[prost(message, optional, tag="1")]
     pub endpoint: ::core::option::Option<super::super::models::v1::Endpoint>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointRequest {
+    /// Either endpoint_name or id
     #[prost(oneof="get_endpoint_request::Endpoint", tags="1, 2")]
     pub endpoint: ::core::option::Option<get_endpoint_request::Endpoint>,
 }
 /// Nested message and enum types in `GetEndpointRequest`.
 pub mod get_endpoint_request {
+    /// Either endpoint_name or id
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Endpoint {
+        /// The name of the endpoint
         #[prost(string, tag="1")]
         EndpointName(::prost::alloc::string::String),
+        /// Id of the endpoint
         #[prost(string, tag="2")]
         EndpointId(::prost::alloc::string::String),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointResponse {
+    /// Overview of the requested endpoint
     #[prost(message, optional, tag="1")]
     pub endpoint: ::core::option::Option<super::super::models::v1::Endpoint>,
 }
+/// Requests all endpoints
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointsRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointsResponse {
+    /// List of endpoints
     #[prost(message, repeated, tag="1")]
     pub endpoints: ::prost::alloc::vec::Vec<super::super::models::v1::Endpoint>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEndpointRequest {
+    /// Endpoint_id to delete
     #[prost(string, tag="1")]
     pub endpoint_id: ::prost::alloc::string::String,
 }
@@ -2887,6 +3012,7 @@ pub struct GetDefaultEndpointRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDefaultEndpointResponse {
+    /// Default endpoint of the server instance
     #[prost(message, optional, tag="1")]
     pub endpoint: ::core::option::Option<super::super::models::v1::Endpoint>,
 }
@@ -2895,6 +3021,9 @@ pub mod endpoint_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// EndpointService
+    ///
+    /// Contains all methods that get/create or update Endpoint and associated resources
     #[derive(Debug, Clone)]
     pub struct EndpointServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -2959,6 +3088,10 @@ pub mod endpoint_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
+        /// AddEndpoint
+        ///
+        /// Registers a new Endpoint (Aruna DataProxy) to the server
+        /// Needs admin permissions
         pub async fn add_endpoint(
             &mut self,
             request: impl tonic::IntoRequest<super::AddEndpointRequest>,
@@ -2978,6 +3111,8 @@ pub mod endpoint_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetEndpoint
+        ///
         /// Gets an specific endpoint by ID or Name
         pub async fn get_endpoint(
             &mut self,
@@ -2998,6 +3133,8 @@ pub mod endpoint_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetEndpoints
+        ///
         /// Gets all available endpoints
         pub async fn get_endpoints(
             &mut self,
@@ -3018,6 +3155,8 @@ pub mod endpoint_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// DeleteEndpoint
+        ///
         /// Deletes a specific endpoint by id
         /// This needs admin permissions
         pub async fn delete_endpoint(
@@ -3039,7 +3178,9 @@ pub mod endpoint_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// This request returns the default endpoint for the current server
+        /// GetDefaultEndpoint
+        ///
+        /// This request returns the default endpoint for the current aruna_server
         /// It may produce different results depending on the used server
         pub async fn get_default_endpoint(
             &mut self,
@@ -3069,33 +3210,48 @@ pub mod endpoint_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with EndpointServiceServer.
     #[async_trait]
     pub trait EndpointService: Send + Sync + 'static {
+        /// AddEndpoint
+        ///
+        /// Registers a new Endpoint (Aruna DataProxy) to the server
+        /// Needs admin permissions
         async fn add_endpoint(
             &self,
             request: tonic::Request<super::AddEndpointRequest>,
         ) -> Result<tonic::Response<super::AddEndpointResponse>, tonic::Status>;
+        /// GetEndpoint
+        ///
         /// Gets an specific endpoint by ID or Name
         async fn get_endpoint(
             &self,
             request: tonic::Request<super::GetEndpointRequest>,
         ) -> Result<tonic::Response<super::GetEndpointResponse>, tonic::Status>;
+        /// GetEndpoints
+        ///
         /// Gets all available endpoints
         async fn get_endpoints(
             &self,
             request: tonic::Request<super::GetEndpointsRequest>,
         ) -> Result<tonic::Response<super::GetEndpointsResponse>, tonic::Status>;
+        /// DeleteEndpoint
+        ///
         /// Deletes a specific endpoint by id
         /// This needs admin permissions
         async fn delete_endpoint(
             &self,
             request: tonic::Request<super::DeleteEndpointRequest>,
         ) -> Result<tonic::Response<super::DeleteEndpointResponse>, tonic::Status>;
-        /// This request returns the default endpoint for the current server
+        /// GetDefaultEndpoint
+        ///
+        /// This request returns the default endpoint for the current aruna_server
         /// It may produce different results depending on the used server
         async fn get_default_endpoint(
             &self,
             request: tonic::Request<super::GetDefaultEndpointRequest>,
         ) -> Result<tonic::Response<super::GetDefaultEndpointResponse>, tonic::Status>;
     }
+    /// EndpointService
+    ///
+    /// Contains all methods that get/create or update Endpoint and associated resources
     #[derive(Debug)]
     pub struct EndpointServiceServer<T: EndpointService> {
         inner: _Inner<T>,
@@ -3401,25 +3557,34 @@ pub mod endpoint_service_server {
 
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Url {
+    /// URL response
     #[prost(string, tag="1")]
     pub url: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StageObject {
+    /// Filename
     #[prost(string, tag="1")]
     pub filename: ::prost::alloc::string::String,
+    /// File description
     #[prost(string, tag="2")]
     pub description: ::prost::alloc::string::String,
+    /// Collection Id
     #[prost(string, tag="3")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Content length
     #[prost(int64, tag="4")]
     pub content_len: i64,
+    /// Source of the object (e.g. wikipedia)
     #[prost(message, optional, tag="5")]
     pub source: ::core::option::Option<super::super::models::v1::Source>,
+    /// Dataclass public / private
     #[prost(enumeration="super::super::models::v1::DataClass", tag="6")]
     pub dataclass: i32,
+    /// List of label key-values
     #[prost(message, repeated, tag="7")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    /// List of hook key-values
     #[prost(message, repeated, tag="8")]
     pub hooks: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
 }
@@ -3492,13 +3657,16 @@ pub struct CompletedParts {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDownloadUrlRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDownloadUrlResponse {
+    /// URL
     #[prost(message, optional, tag="1")]
     pub url: ::core::option::Option<Url>,
 }
@@ -3513,6 +3681,7 @@ pub struct GetDownloadLinksBatchRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDownloadLinksBatchResponse {
+    /// List of URLs
     #[prost(message, repeated, tag="1")]
     pub urls: ::prost::alloc::vec::Vec<Url>,
 }
@@ -3561,6 +3730,7 @@ pub struct FinishObjectStagingRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectStagingResponse {
+    /// (new) Object overview
     #[prost(message, optional, tag="1")]
     pub object: ::core::option::Option<super::super::models::v1::Object>,
 }
@@ -3672,8 +3842,10 @@ pub struct ObjectWithUrl {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectByIdRequest {
+    /// Collection Id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object Id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
     /// With URL: Include URL in response ?
@@ -3687,6 +3859,7 @@ pub struct GetObjectByIdResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectsRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
     /// Paginate the results: Default is 20
@@ -3710,24 +3883,31 @@ pub struct GetObjectsResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectRevisionsRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
+    /// Pagination info
     #[prost(message, optional, tag="3")]
     pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
+    /// Should the response include download urls ?
     #[prost(bool, tag="4")]
     pub with_url: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectRevisionsResponse {
+    /// List of objects with (optional) URLs
     #[prost(message, repeated, tag="1")]
     pub objects: ::prost::alloc::vec::Vec<ObjectWithUrl>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLatestObjectRevisionRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
 }
@@ -3739,20 +3919,25 @@ pub struct GetLatestObjectRevisionResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectEndpointsRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectEndpointsResponse {
+    /// List of endpoints
     #[prost(message, repeated, tag="1")]
     pub endpoints: ::prost::alloc::vec::Vec<super::super::models::v1::Endpoint>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddLabelToObjectRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id 
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
     /// List of labels that should be added to the list of labels
@@ -3767,8 +3952,10 @@ pub struct AddLabelToObjectResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetHooksOfObjectRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
     /// This will overwrite all existing hooks
@@ -3784,26 +3971,34 @@ pub struct SetHooksOfObjectResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetReferencesRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Object id
     #[prost(string, tag="2")]
     pub object_id: ::prost::alloc::string::String,
+    /// Should all revisions be included?
     #[prost(bool, tag="3")]
     pub with_revisions: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectReference {
+    /// Object id
     #[prost(string, tag="1")]
     pub object_id: ::prost::alloc::string::String,
+    /// Collection id
     #[prost(string, tag="2")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Specific revision number
     #[prost(int64, tag="3")]
     pub revision_number: i64,
+    /// Is the writeable?
     #[prost(bool, tag="4")]
     pub is_writeable: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetReferencesResponse {
+    /// List of object references
     #[prost(message, repeated, tag="1")]
     pub references: ::prost::alloc::vec::Vec<ObjectReference>,
 }
@@ -3812,6 +4007,9 @@ pub mod object_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// ObjectService
+    ///
+    /// Contains all methods that get/create or update Objects and associated resources
     #[derive(Debug, Clone)]
     pub struct ObjectServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -3876,6 +4074,8 @@ pub mod object_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
+        /// InitializeNewObject
+        ///
         /// This initializes a new object
         /// Initializing an object will put it in a staging area.
         /// Staged objects will get a separate staging id and need to be finished
@@ -3899,6 +4099,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetUploadURL
+        ///
         /// This method will return a (multi-part) url that can be used to upload a
         /// file to S3. Part is a optional query parameter that can be used to upload a
         /// part of the file / multipart upload.
@@ -3921,6 +4123,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetDownloadUrl
+        ///
         /// This method will return a url that can be used to download a file from S3.
         pub async fn get_download_url(
             &mut self,
@@ -3941,6 +4145,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetDownloadLinksBatch
+        ///
         /// This method can be used to get download urls for multiple objects.
         /// The order of the returned urls will be the same as the order of the object
         /// ids in the request.
@@ -3966,6 +4172,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// CreateDownloadLinksStream
+        ///
         /// Creates a stream of objects and presigned links based on the provided query
         /// This can be used retrieve a large number of Objects as a stream that would
         /// otherwise cause issues with the connection
@@ -3993,6 +4201,8 @@ pub mod object_service_client {
             );
             self.inner.server_streaming(request.into_request(), path, codec).await
         }
+        /// FinishObjectStaging
+        ///
         /// This method completes the staging of an object.
         pub async fn finish_object_staging(
             &mut self,
@@ -4013,6 +4223,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// UpdateObject
+        ///
         /// Objects are immutable!
         /// Updating an object will create a new revision for the object
         /// This method will put the new revision in a staging area.
@@ -4037,6 +4249,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// CreateObjectReference
+        ///
+        /// Creates a new reference of this object in another collection
         pub async fn create_object_reference(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateObjectReferenceRequest>,
@@ -4059,6 +4274,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// CloneObject
+        ///
         /// This method clones an object and creates a copy in the same collection.
         /// This copy has a new id and revision and will not receive any updates from
         /// the original object.
@@ -4081,6 +4298,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// DeleteObject
+        ///
         /// Deletes the object with the complete revision history.
         /// This should be avoided if possible.
         /// This method allows the owner to cascade the deletion of all objects that
@@ -4105,7 +4324,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetObjectByID gets a specific Object by ID that is associated to the
+        /// GetObjectByID
+        ///
+        /// gets a specific Object by ID that is associated to the
         /// current collection By default only the latest revision of an object will be
         /// returned Specify a revision_number to select an older revision With the
         /// optional with_url boolean a download link can automatically be requested
@@ -4128,6 +4349,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetObjects
+        ///
         /// GetObjects returns a (paginated) list of objects in a specific collection
         /// By default only the latest revisions of all objects will be shown
         /// This behaviour can be changed with the include_history flag
@@ -4153,7 +4376,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetObjectRevisions returns the full list of revisions of a specified object
+        /// GetObjectRevisions
+        ///
+        /// This returns the full list of revisions of a specified object
         /// With the optional with_url boolean a download link can automatically be
         /// requested for each Object This is by default a paginated request
         pub async fn get_object_revisions(
@@ -4175,7 +4400,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetLatestObjectRevision returns the latest revision of a specific object
+        /// GetLatestObjectRevision
+        ///
+        /// This returns the latest revision of a specific object
         /// The returned `latest` object will have a different id if the current
         /// object is not the latest revision
         pub async fn get_latest_object_revision(
@@ -4200,7 +4427,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetObjectEndpoints returns a list of endpoints
+        /// GetObjectEndpoints
+        ///
+        /// This returns a list of endpoints
         /// One endpoint will be the "default" endpoint
         pub async fn get_object_endpoints(
             &mut self,
@@ -4221,7 +4450,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// AddLabelToObject is a specific request to add a new label
+        /// AddLabelToObject
+        ///
+        /// This is a specific request to add a new label
         /// to an existing object, in contrast to UpdateObject
         /// this will not create a new object in the staging area
         /// Instead it will directly add the specified label(s) to the object
@@ -4244,7 +4475,9 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// SetHooksOfObject is a specific request to update the complete list
+        /// SetHooksOfObject
+        ///
+        /// This is a specific request to update the complete list
         /// of hooks for a specific object. This will not update the object
         /// and create a new id, instead it will overwrite all hooks of the existing
         /// object.
@@ -4267,6 +4500,8 @@ pub mod object_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetReferences
+        ///
         /// Get a list of references for this object (optional) including all revisions
         pub async fn get_references(
             &mut self,
@@ -4296,6 +4531,8 @@ pub mod object_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with ObjectServiceServer.
     #[async_trait]
     pub trait ObjectService: Send + Sync + 'static {
+        /// InitializeNewObject
+        ///
         /// This initializes a new object
         /// Initializing an object will put it in a staging area.
         /// Staged objects will get a separate staging id and need to be finished
@@ -4304,6 +4541,8 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::InitializeNewObjectRequest>,
         ) -> Result<tonic::Response<super::InitializeNewObjectResponse>, tonic::Status>;
+        /// GetUploadURL
+        ///
         /// This method will return a (multi-part) url that can be used to upload a
         /// file to S3. Part is a optional query parameter that can be used to upload a
         /// part of the file / multipart upload.
@@ -4311,11 +4550,15 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::GetUploadUrlRequest>,
         ) -> Result<tonic::Response<super::GetUploadUrlResponse>, tonic::Status>;
+        /// GetDownloadUrl
+        ///
         /// This method will return a url that can be used to download a file from S3.
         async fn get_download_url(
             &self,
             request: tonic::Request<super::GetDownloadUrlRequest>,
         ) -> Result<tonic::Response<super::GetDownloadUrlResponse>, tonic::Status>;
+        /// GetDownloadLinksBatch
+        ///
         /// This method can be used to get download urls for multiple objects.
         /// The order of the returned urls will be the same as the order of the object
         /// ids in the request.
@@ -4332,6 +4575,8 @@ pub mod object_service_server {
             >
             + Send
             + 'static;
+        /// CreateDownloadLinksStream
+        ///
         /// Creates a stream of objects and presigned links based on the provided query
         /// This can be used retrieve a large number of Objects as a stream that would
         /// otherwise cause issues with the connection
@@ -4342,11 +4587,15 @@ pub mod object_service_server {
             tonic::Response<Self::CreateDownloadLinksStreamStream>,
             tonic::Status,
         >;
+        /// FinishObjectStaging
+        ///
         /// This method completes the staging of an object.
         async fn finish_object_staging(
             &self,
             request: tonic::Request<super::FinishObjectStagingRequest>,
         ) -> Result<tonic::Response<super::FinishObjectStagingResponse>, tonic::Status>;
+        /// UpdateObject
+        ///
         /// Objects are immutable!
         /// Updating an object will create a new revision for the object
         /// This method will put the new revision in a staging area.
@@ -4356,6 +4605,9 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::UpdateObjectRequest>,
         ) -> Result<tonic::Response<super::UpdateObjectResponse>, tonic::Status>;
+        /// CreateObjectReference
+        ///
+        /// Creates a new reference of this object in another collection
         async fn create_object_reference(
             &self,
             request: tonic::Request<super::CreateObjectReferenceRequest>,
@@ -4363,6 +4615,8 @@ pub mod object_service_server {
             tonic::Response<super::CreateObjectReferenceResponse>,
             tonic::Status,
         >;
+        /// CloneObject
+        ///
         /// This method clones an object and creates a copy in the same collection.
         /// This copy has a new id and revision and will not receive any updates from
         /// the original object.
@@ -4370,6 +4624,8 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::CloneObjectRequest>,
         ) -> Result<tonic::Response<super::CloneObjectResponse>, tonic::Status>;
+        /// DeleteObject
+        ///
         /// Deletes the object with the complete revision history.
         /// This should be avoided if possible.
         /// This method allows the owner to cascade the deletion of all objects that
@@ -4379,7 +4635,9 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::DeleteObjectRequest>,
         ) -> Result<tonic::Response<super::DeleteObjectResponse>, tonic::Status>;
-        /// GetObjectByID gets a specific Object by ID that is associated to the
+        /// GetObjectByID
+        ///
+        /// gets a specific Object by ID that is associated to the
         /// current collection By default only the latest revision of an object will be
         /// returned Specify a revision_number to select an older revision With the
         /// optional with_url boolean a download link can automatically be requested
@@ -4387,6 +4645,8 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::GetObjectByIdRequest>,
         ) -> Result<tonic::Response<super::GetObjectByIdResponse>, tonic::Status>;
+        /// GetObjects
+        ///
         /// GetObjects returns a (paginated) list of objects in a specific collection
         /// By default only the latest revisions of all objects will be shown
         /// This behaviour can be changed with the include_history flag
@@ -4397,14 +4657,18 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::GetObjectsRequest>,
         ) -> Result<tonic::Response<super::GetObjectsResponse>, tonic::Status>;
-        /// GetObjectRevisions returns the full list of revisions of a specified object
+        /// GetObjectRevisions
+        ///
+        /// This returns the full list of revisions of a specified object
         /// With the optional with_url boolean a download link can automatically be
         /// requested for each Object This is by default a paginated request
         async fn get_object_revisions(
             &self,
             request: tonic::Request<super::GetObjectRevisionsRequest>,
         ) -> Result<tonic::Response<super::GetObjectRevisionsResponse>, tonic::Status>;
-        /// GetLatestObjectRevision returns the latest revision of a specific object
+        /// GetLatestObjectRevision
+        ///
+        /// This returns the latest revision of a specific object
         /// The returned `latest` object will have a different id if the current
         /// object is not the latest revision
         async fn get_latest_object_revision(
@@ -4414,13 +4678,17 @@ pub mod object_service_server {
             tonic::Response<super::GetLatestObjectRevisionResponse>,
             tonic::Status,
         >;
-        /// GetObjectEndpoints returns a list of endpoints
+        /// GetObjectEndpoints
+        ///
+        /// This returns a list of endpoints
         /// One endpoint will be the "default" endpoint
         async fn get_object_endpoints(
             &self,
             request: tonic::Request<super::GetObjectEndpointsRequest>,
         ) -> Result<tonic::Response<super::GetObjectEndpointsResponse>, tonic::Status>;
-        /// AddLabelToObject is a specific request to add a new label
+        /// AddLabelToObject
+        ///
+        /// This is a specific request to add a new label
         /// to an existing object, in contrast to UpdateObject
         /// this will not create a new object in the staging area
         /// Instead it will directly add the specified label(s) to the object
@@ -4428,7 +4696,9 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::AddLabelToObjectRequest>,
         ) -> Result<tonic::Response<super::AddLabelToObjectResponse>, tonic::Status>;
-        /// SetHooksOfObject is a specific request to update the complete list
+        /// SetHooksOfObject
+        ///
+        /// This is a specific request to update the complete list
         /// of hooks for a specific object. This will not update the object
         /// and create a new id, instead it will overwrite all hooks of the existing
         /// object.
@@ -4436,12 +4706,17 @@ pub mod object_service_server {
             &self,
             request: tonic::Request<super::SetHooksOfObjectRequest>,
         ) -> Result<tonic::Response<super::SetHooksOfObjectResponse>, tonic::Status>;
+        /// GetReferences
+        ///
         /// Get a list of references for this object (optional) including all revisions
         async fn get_references(
             &self,
             request: tonic::Request<super::GetReferencesRequest>,
         ) -> Result<tonic::Response<super::GetReferencesResponse>, tonic::Status>;
     }
+    /// ObjectService
+    ///
+    /// Contains all methods that get/create or update Objects and associated resources
     #[derive(Debug)]
     pub struct ObjectServiceServer<T: ObjectService> {
         inner: _Inner<T>,
@@ -5268,48 +5543,61 @@ pub mod object_service_server {
 
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateNewCollectionRequest {
+    /// Collection name
     #[prost(string, tag="1")]
     pub name: ::prost::alloc::string::String,
+    /// Description
     #[prost(string, tag="2")]
     pub description: ::prost::alloc::string::String,
+    /// Project id
     #[prost(string, tag="3")]
     pub project_id: ::prost::alloc::string::String,
+    /// List of associated labels
     #[prost(message, repeated, tag="4")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    /// List of associated hooks
     #[prost(message, repeated, tag="5")]
     pub hooks: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
-    /// Optional dataclass
-    #[prost(enumeration="super::super::models::v1::DataClass", tag="6")]
+    /// Optional LabelOntology with required labels
+    #[prost(message, optional, tag="6")]
+    pub label_ontology: ::core::option::Option<super::super::models::v1::LabelOntology>,
+    /// Optional Dataclass
+    #[prost(enumeration="super::super::models::v1::DataClass", tag="7")]
     pub dataclass: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateNewCollectionResponse {
+    /// The new collection_id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionByIdRequest {
+    /// Requested id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionByIdResponse {
+    /// Overview of the requested collection
     #[prost(message, optional, tag="1")]
     pub collection: ::core::option::Option<super::super::models::v1::CollectionOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionsRequest {
-    /// Filter by Labels (optional) OR request a specific list of Collections by id
+    /// Project id
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
+    /// (optional) Filter, label or ids
     #[prost(message, optional, tag="2")]
     pub label_or_id_filter: ::core::option::Option<super::super::models::v1::LabelOrIdQuery>,
+    /// (optional) Pagerequest
     #[prost(message, optional, tag="3")]
     pub page_request: ::core::option::Option<super::super::models::v1::PageRequest>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionsResponse {
-    /// These are plural representations of their specific single counterparts
+    /// List of collection overviews
     #[prost(message, optional, tag="1")]
     pub collections: ::core::option::Option<super::super::models::v1::CollectionOverviews>,
 }
@@ -5317,20 +5605,27 @@ pub struct GetCollectionsResponse {
 /// Updating a pinned collection will require a new version to be created
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionRequest {
+    /// Project id
     #[prost(string, tag="1")]
     pub project_id: ::prost::alloc::string::String,
+    /// Old collection_id
     #[prost(string, tag="2")]
     pub collection_id: ::prost::alloc::string::String,
+    /// New name
     #[prost(string, tag="3")]
     pub name: ::prost::alloc::string::String,
+    /// New description
     #[prost(string, tag="4")]
     pub description: ::prost::alloc::string::String,
+    /// New list of labels
     #[prost(message, repeated, tag="5")]
     pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    /// New list of hooks
     #[prost(message, repeated, tag="6")]
     pub hooks: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
-    #[prost(message, repeated, tag="7")]
-    pub label_ontology: ::prost::alloc::vec::Vec<super::super::models::v1::LabelOntology>,
+    /// (optional) LabelOntology
+    #[prost(message, optional, tag="7")]
+    pub label_ontology: ::core::option::Option<super::super::models::v1::LabelOntology>,
     /// Optional update Dataclass, this will not overwrite
     /// the dataclass of all existing associated objects
     /// New objects can only have this dataclass
@@ -5345,27 +5640,34 @@ pub struct UpdateCollectionRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionResponse {
+    /// New collection overview
     #[prost(message, optional, tag="1")]
     pub collection: ::core::option::Option<super::super::models::v1::CollectionOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PinCollectionVersionRequest {
+    /// Old collection_id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// New version
     #[prost(message, optional, tag="2")]
     pub version: ::core::option::Option<super::super::models::v1::Version>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PinCollectionVersionResponse {
+    /// New collection overview
     #[prost(message, optional, tag="1")]
     pub collection: ::core::option::Option<super::super::models::v1::CollectionOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteCollectionRequest {
+    /// Collection id
     #[prost(string, tag="1")]
     pub collection_id: ::prost::alloc::string::String,
+    /// Project id
     #[prost(string, tag="2")]
     pub project_id: ::prost::alloc::string::String,
+    /// Force delete
     #[prost(bool, tag="3")]
     pub force: bool,
 }
@@ -5377,6 +5679,9 @@ pub mod collection_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// CollectionService
+    ///
+    /// Contains all methods that get/create or update Collection and associated resources
     #[derive(Debug, Clone)]
     pub struct CollectionServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -5441,7 +5746,9 @@ pub mod collection_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
-        /// CreateNewCollection creates a new Collection
+        /// CreateNewCollection
+        ///
+        /// creates a new Collection
         pub async fn create_new_collection(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateNewCollectionRequest>,
@@ -5461,7 +5768,9 @@ pub mod collection_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetCollection queries a specific Collection by ID
+        /// GetCollectionByID
+        ///
+        /// Queries a specific Collection by ID
         /// The result can be one_of:
         /// CollectionOverview -> default
         /// CollectionWithID
@@ -5486,8 +5795,11 @@ pub mod collection_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetCollections queries multiple collections by ID or by LabelFilter
+        /// GetCollections
+        ///
+        /// queries multiple collections by ID or by LabelFilter
         /// This returns by default a paginated result with 20 entries.
+        /// Must specify a project_id as context
         pub async fn get_collections(
             &mut self,
             request: impl tonic::IntoRequest<super::GetCollectionsRequest>,
@@ -5507,7 +5819,9 @@ pub mod collection_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// UpdateCollection updates the current collection
+        /// UpdateCollection
+        ///
+        /// Updates the current collection
         /// This will update the collection in place if it is unversioned / latest
         /// A versioned (pinned) collection requires a new semantic version after the
         /// update This can be used to pin a collection to a specific version similar
@@ -5531,8 +5845,10 @@ pub mod collection_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// PinCollectionVersion this pins the current status of the version to a
-        /// specific version This effectively creates a copy of the collection with a
+        /// PinCollectionVersion
+        ///
+        /// This pins the current status of the version to a
+        /// specific version. Effectively creating a copy of the collection with a
         /// stable version All objects will be pinned to an explicit revision number
         /// Pinned collections can not be updated in place
         pub async fn pin_collection_version(
@@ -5557,6 +5873,8 @@ pub mod collection_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// DeleteCollection
+        ///
         /// This request deletes the collection.
         /// If with_version is true, it deletes the collection and all its versions.
         /// If cascade is true, all objects that are owned by the collection will also
@@ -5589,12 +5907,16 @@ pub mod collection_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with CollectionServiceServer.
     #[async_trait]
     pub trait CollectionService: Send + Sync + 'static {
-        /// CreateNewCollection creates a new Collection
+        /// CreateNewCollection
+        ///
+        /// creates a new Collection
         async fn create_new_collection(
             &self,
             request: tonic::Request<super::CreateNewCollectionRequest>,
         ) -> Result<tonic::Response<super::CreateNewCollectionResponse>, tonic::Status>;
-        /// GetCollection queries a specific Collection by ID
+        /// GetCollectionByID
+        ///
+        /// Queries a specific Collection by ID
         /// The result can be one_of:
         /// CollectionOverview -> default
         /// CollectionWithID
@@ -5604,13 +5926,18 @@ pub mod collection_service_server {
             &self,
             request: tonic::Request<super::GetCollectionByIdRequest>,
         ) -> Result<tonic::Response<super::GetCollectionByIdResponse>, tonic::Status>;
-        /// GetCollections queries multiple collections by ID or by LabelFilter
+        /// GetCollections
+        ///
+        /// queries multiple collections by ID or by LabelFilter
         /// This returns by default a paginated result with 20 entries.
+        /// Must specify a project_id as context
         async fn get_collections(
             &self,
             request: tonic::Request<super::GetCollectionsRequest>,
         ) -> Result<tonic::Response<super::GetCollectionsResponse>, tonic::Status>;
-        /// UpdateCollection updates the current collection
+        /// UpdateCollection
+        ///
+        /// Updates the current collection
         /// This will update the collection in place if it is unversioned / latest
         /// A versioned (pinned) collection requires a new semantic version after the
         /// update This can be used to pin a collection to a specific version similar
@@ -5619,14 +5946,18 @@ pub mod collection_service_server {
             &self,
             request: tonic::Request<super::UpdateCollectionRequest>,
         ) -> Result<tonic::Response<super::UpdateCollectionResponse>, tonic::Status>;
-        /// PinCollectionVersion this pins the current status of the version to a
-        /// specific version This effectively creates a copy of the collection with a
+        /// PinCollectionVersion
+        ///
+        /// This pins the current status of the version to a
+        /// specific version. Effectively creating a copy of the collection with a
         /// stable version All objects will be pinned to an explicit revision number
         /// Pinned collections can not be updated in place
         async fn pin_collection_version(
             &self,
             request: tonic::Request<super::PinCollectionVersionRequest>,
         ) -> Result<tonic::Response<super::PinCollectionVersionResponse>, tonic::Status>;
+        /// DeleteCollection
+        ///
         /// This request deletes the collection.
         /// If with_version is true, it deletes the collection and all its versions.
         /// If cascade is true, all objects that are owned by the collection will also
@@ -5636,6 +5967,9 @@ pub mod collection_service_server {
             request: tonic::Request<super::DeleteCollectionRequest>,
         ) -> Result<tonic::Response<super::DeleteCollectionResponse>, tonic::Status>;
     }
+    /// CollectionService
+    ///
+    /// Contains all methods that get/create or update Collection and associated resources
     #[derive(Debug)]
     pub struct CollectionServiceServer<T: CollectionService> {
         inner: _Inner<T>,

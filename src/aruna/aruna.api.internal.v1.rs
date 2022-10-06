@@ -85,6 +85,9 @@ pub struct CreatePresignedDownloadRequest {
     /// optional Range
     #[prost(message, optional, tag="3")]
     pub range: ::core::option::Option<Range>,
+    /// filename
+    #[prost(string, tag="4")]
+    pub filename: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatePresignedDownloadResponse {
