@@ -38,6 +38,11 @@ jobs:
         run: cargo publish --token ${CRATES_TOKEN}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+      - name: Try delete (old) release if exists
+        run: gh release delete v${{ github.event.client_payload.version }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create release
         run: gh release create v${{ github.event.client_payload.version }} --title "v${{ github.event.client_payload.version }}" --notes "${{ github.event.client_payload.message }}"
         env:
