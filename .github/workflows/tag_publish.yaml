@@ -28,7 +28,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A
-          git diff-index --quiet HEAD || git commit -m "Update to version to ${{ github.event.client_payload.version }}" -a
+          git diff-index --quiet HEAD || git commit -m "Update to version ${{ github.event.client_payload.version }}" -a
           git tag -a v${{ github.event.client_payload.version }} -m "Published new version: ${{ github.event.client_payload.version }}, see API for detailed changelog. ${{ github.event.client_payload.message }}."
       - name: Push changes
         uses: ad-m/github-push-action@master
