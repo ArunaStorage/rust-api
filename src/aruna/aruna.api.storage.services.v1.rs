@@ -38,6 +38,15 @@ pub struct GetProjectResponse {
     pub project: ::core::option::Option<super::super::models::v1::ProjectOverview>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProjectsRequest {
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProjectsResponse {
+    /// Overview of the projects
+    #[prost(message, repeated, tag="1")]
+    pub projects: ::prost::alloc::vec::Vec<super::super::models::v1::ProjectOverview>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DestroyProjectRequest {
     /// The id of the project to destroy
     #[prost(string, tag="1")]
@@ -241,6 +250,28 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetProject
+        ///
+        /// Admin request to get all projects
+        pub async fn get_projects(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetProjectsRequest>,
+        ) -> Result<tonic::Response<super::GetProjectsResponse>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v1.ProjectService/GetProjects",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         /// DestroyProject
         ///
         /// Destroys the project and all its associated data. Must be empty
@@ -391,6 +422,13 @@ pub mod project_service_server {
             &self,
             request: tonic::Request<super::GetProjectRequest>,
         ) -> Result<tonic::Response<super::GetProjectResponse>, tonic::Status>;
+        /// GetProject
+        ///
+        /// Admin request to get all projects
+        async fn get_projects(
+            &self,
+            request: tonic::Request<super::GetProjectsRequest>,
+        ) -> Result<tonic::Response<super::GetProjectsResponse>, tonic::Status>;
         /// DestroyProject
         ///
         /// Destroys the project and all its associated data. Must be empty
@@ -606,6 +644,46 @@ pub mod project_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetProjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v1.ProjectService/GetProjects" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetProjectsSvc<T: ProjectService>(pub Arc<T>);
+                    impl<
+                        T: ProjectService,
+                    > tonic::server::UnaryService<super::GetProjectsRequest>
+                    for GetProjectsSvc<T> {
+                        type Response = super::GetProjectsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetProjectsRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_projects(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetProjectsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
