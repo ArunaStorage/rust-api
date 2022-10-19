@@ -72,6 +72,8 @@ pub struct ProjectPermission {
     pub project_id: ::prost::alloc::string::String,
     #[prost(enumeration="Permission", tag="3")]
     pub permission: i32,
+    #[prost(string, tag="4")]
+    pub display_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
