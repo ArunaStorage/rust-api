@@ -1,6 +1,6 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEventStreamingGroupRequest {
-    #[prost(enumeration="create_event_streaming_group_request::EventResources", tag="1")]
+    #[prost(enumeration="super::super::super::storage::models::v1::ResourceType", tag="1")]
     pub resource: i32,
     #[prost(string, tag="2")]
     pub resource_id: ::prost::alloc::string::String,
@@ -13,26 +13,6 @@ pub struct CreateEventStreamingGroupRequest {
 }
 /// Nested message and enum types in `CreateEventStreamingGroupRequest`.
 pub mod create_event_streaming_group_request {
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum EventResources {
-        Unspecified = 0,
-        CollectionResource = 1,
-        AllResource = 5,
-    }
-    impl EventResources {
-        /// String value of the enum field names used in the ProtoBuf definition.
-        ///
-        /// The values are not transformed in any way and thus are considered stable
-        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-        pub fn as_str_name(&self) -> &'static str {
-            match self {
-                EventResources::Unspecified => "EVENT_RESOURCES_UNSPECIFIED",
-                EventResources::CollectionResource => "EVENT_RESOURCES_COLLECTION_RESOURCE",
-                EventResources::AllResource => "EVENT_RESOURCES_ALL_RESOURCE",
-            }
-        }
-    }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamType {
         #[prost(message, tag="4")]
@@ -49,14 +29,14 @@ pub struct CreateEventStreamingGroupResponse {
     pub stream_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamGroupRequest {
+pub struct ReadStreamGroupMessagesRequest {
     #[prost(bool, tag="3")]
     pub close: bool,
-    #[prost(oneof="notification_stream_group_request::StreamAction", tags="1, 2")]
-    pub stream_action: ::core::option::Option<notification_stream_group_request::StreamAction>,
+    #[prost(oneof="read_stream_group_messages_request::StreamAction", tags="1, 2")]
+    pub stream_action: ::core::option::Option<read_stream_group_messages_request::StreamAction>,
 }
-/// Nested message and enum types in `NotificationStreamGroupRequest`.
-pub mod notification_stream_group_request {
+/// Nested message and enum types in `ReadStreamGroupMessagesRequest`.
+pub mod read_stream_group_messages_request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamAction {
         #[prost(message, tag="1")]
@@ -64,6 +44,14 @@ pub mod notification_stream_group_request {
         #[prost(message, tag="2")]
         Ack(super::NotficationStreamAck),
     }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteEventStreamingGroupRequest {
+    #[prost(string, tag="1")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteEventStreamingGroupResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotificationStreamInit {
@@ -76,7 +64,7 @@ pub struct NotficationStreamAck {
     pub ack_chunk_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamGroupResponse {
+pub struct ReadStreamGroupMessagesResponse {
     #[prost(message, repeated, tag="1")]
     pub notification: ::prost::alloc::vec::Vec<NotificationStreamResponse>,
     #[prost(string, tag="2")]
@@ -106,59 +94,36 @@ pub struct NotificationStreamResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventNotificationMessage {
-    #[prost(enumeration="event_notification_message::EventResources", tag="1")]
+    #[prost(enumeration="super::super::super::storage::models::v1::ResourceType", tag="1")]
     pub resource: i32,
     #[prost(string, tag="2")]
     pub resource_id: ::prost::alloc::string::String,
-    #[prost(enumeration="event_notification_message::UpdateType", tag="3")]
+    #[prost(enumeration="EventType", tag="3")]
     pub updated_type: i32,
 }
-/// Nested message and enum types in `EventNotificationMessage`.
-pub mod event_notification_message {
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum UpdateType {
-        Unspecified = 0,
-        Created = 1,
-        Available = 2,
-        Updated = 3,
-        MetadataUpdated = 4,
-        Deleted = 5,
-    }
-    impl UpdateType {
-        /// String value of the enum field names used in the ProtoBuf definition.
-        ///
-        /// The values are not transformed in any way and thus are considered stable
-        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-        pub fn as_str_name(&self) -> &'static str {
-            match self {
-                UpdateType::Unspecified => "UPDATE_TYPE_UNSPECIFIED",
-                UpdateType::Created => "UPDATE_TYPE_CREATED",
-                UpdateType::Available => "UPDATE_TYPE_AVAILABLE",
-                UpdateType::Updated => "UPDATE_TYPE_UPDATED",
-                UpdateType::MetadataUpdated => "UPDATE_TYPE_METADATA_UPDATED",
-                UpdateType::Deleted => "UPDATE_TYPE_DELETED",
-            }
-        }
-    }
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-    #[repr(i32)]
-    pub enum EventResources {
-        Unspecified = 0,
-        CollectionResource = 1,
-        AllResource = 5,
-    }
-    impl EventResources {
-        /// String value of the enum field names used in the ProtoBuf definition.
-        ///
-        /// The values are not transformed in any way and thus are considered stable
-        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-        pub fn as_str_name(&self) -> &'static str {
-            match self {
-                EventResources::Unspecified => "EVENT_RESOURCES_UNSPECIFIED",
-                EventResources::CollectionResource => "EVENT_RESOURCES_COLLECTION_RESOURCE",
-                EventResources::AllResource => "EVENT_RESOURCES_ALL_RESOURCE",
-            }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EventType {
+    Unspecified = 0,
+    Created = 1,
+    Available = 2,
+    Updated = 3,
+    MetadataUpdated = 4,
+    Deleted = 5,
+}
+impl EventType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            EventType::Unspecified => "EVENT_TYPE_UNSPECIFIED",
+            EventType::Created => "EVENT_TYPE_CREATED",
+            EventType::Available => "EVENT_TYPE_AVAILABLE",
+            EventType::Updated => "EVENT_TYPE_UPDATED",
+            EventType::MetadataUpdated => "EVENT_TYPE_METADATA_UPDATED",
+            EventType::Deleted => "EVENT_TYPE_DELETED",
         }
     }
 }
@@ -167,6 +132,9 @@ pub mod update_notification_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// UpdateNotificationService
+    ///
+    /// A service to update streaminggroups in nats.io
     #[derive(Debug, Clone)]
     pub struct UpdateNotificationServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -233,6 +201,9 @@ pub mod update_notification_service_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
+        /// CreateEventStreamingGroup
+        ///
+        /// Creates a new EventStreamingGroup
         pub async fn create_event_streaming_group(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateEventStreamingGroupRequest>,
@@ -255,14 +226,42 @@ pub mod update_notification_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn notification_stream_group(
+        /// DeleteEventStreamingGroup
+        ///
+        /// Deletes a existing EventStreamingGroup by ID
+        pub async fn delete_event_streaming_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteEventStreamingGroupRequest>,
+        ) -> Result<
+            tonic::Response<super::DeleteEventStreamingGroupResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.notification.services.v1.UpdateNotificationService/DeleteEventStreamingGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        /// ReadStreamGroupMessages
+        ///
+        /// Reads a stream of messages for a specific StreamGroup
+        pub async fn read_stream_group_messages(
             &mut self,
             request: impl tonic::IntoStreamingRequest<
-                Message = super::NotificationStreamGroupRequest,
+                Message = super::ReadStreamGroupMessagesRequest,
             >,
         ) -> Result<
             tonic::Response<
-                tonic::codec::Streaming<super::NotificationStreamGroupResponse>,
+                tonic::codec::Streaming<super::ReadStreamGroupMessagesResponse>,
             >,
             tonic::Status,
         > {
@@ -277,7 +276,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/NotificationStreamGroup",
+                "/aruna.api.notification.services.v1.UpdateNotificationService/ReadStreamGroupMessages",
             );
             self.inner.streaming(request.into_streaming_request(), path, codec).await
         }
@@ -290,6 +289,9 @@ pub mod update_notification_service_server {
     ///Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer.
     #[async_trait]
     pub trait UpdateNotificationService: Send + Sync + 'static {
+        /// CreateEventStreamingGroup
+        ///
+        /// Creates a new EventStreamingGroup
         async fn create_event_streaming_group(
             &self,
             request: tonic::Request<super::CreateEventStreamingGroupRequest>,
@@ -297,19 +299,35 @@ pub mod update_notification_service_server {
             tonic::Response<super::CreateEventStreamingGroupResponse>,
             tonic::Status,
         >;
-        ///Server streaming response type for the NotificationStreamGroup method.
-        type NotificationStreamGroupStream: futures_core::Stream<
-                Item = Result<super::NotificationStreamGroupResponse, tonic::Status>,
+        /// DeleteEventStreamingGroup
+        ///
+        /// Deletes a existing EventStreamingGroup by ID
+        async fn delete_event_streaming_group(
+            &self,
+            request: tonic::Request<super::DeleteEventStreamingGroupRequest>,
+        ) -> Result<
+            tonic::Response<super::DeleteEventStreamingGroupResponse>,
+            tonic::Status,
+        >;
+        ///Server streaming response type for the ReadStreamGroupMessages method.
+        type ReadStreamGroupMessagesStream: futures_core::Stream<
+                Item = Result<super::ReadStreamGroupMessagesResponse, tonic::Status>,
             >
             + Send
             + 'static;
-        async fn notification_stream_group(
+        /// ReadStreamGroupMessages
+        ///
+        /// Reads a stream of messages for a specific StreamGroup
+        async fn read_stream_group_messages(
             &self,
             request: tonic::Request<
-                tonic::Streaming<super::NotificationStreamGroupRequest>,
+                tonic::Streaming<super::ReadStreamGroupMessagesRequest>,
             >,
-        ) -> Result<tonic::Response<Self::NotificationStreamGroupStream>, tonic::Status>;
+        ) -> Result<tonic::Response<Self::ReadStreamGroupMessagesStream>, tonic::Status>;
     }
+    /// UpdateNotificationService
+    ///
+    /// A service to update streaminggroups in nats.io
     #[derive(Debug)]
     pub struct UpdateNotificationServiceServer<T: UpdateNotificationService> {
         inner: _Inner<T>,
@@ -415,31 +433,30 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v1.UpdateNotificationService/NotificationStreamGroup" => {
+                "/aruna.api.notification.services.v1.UpdateNotificationService/DeleteEventStreamingGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct NotificationStreamGroupSvc<T: UpdateNotificationService>(
+                    struct DeleteEventStreamingGroupSvc<T: UpdateNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
                         T: UpdateNotificationService,
-                    > tonic::server::StreamingService<
-                        super::NotificationStreamGroupRequest,
-                    > for NotificationStreamGroupSvc<T> {
-                        type Response = super::NotificationStreamGroupResponse;
-                        type ResponseStream = T::NotificationStreamGroupStream;
+                    > tonic::server::UnaryService<
+                        super::DeleteEventStreamingGroupRequest,
+                    > for DeleteEventStreamingGroupSvc<T> {
+                        type Response = super::DeleteEventStreamingGroupResponse;
                         type Future = BoxFuture<
-                            tonic::Response<Self::ResponseStream>,
+                            tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                tonic::Streaming<super::NotificationStreamGroupRequest>,
+                                super::DeleteEventStreamingGroupRequest,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move {
-                                (*inner).notification_stream_group(request).await
+                                (*inner).delete_event_streaming_group(request).await
                             };
                             Box::pin(fut)
                         }
@@ -449,7 +466,53 @@ pub mod update_notification_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = NotificationStreamGroupSvc(inner);
+                        let method = DeleteEventStreamingGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.notification.services.v1.UpdateNotificationService/ReadStreamGroupMessages" => {
+                    #[allow(non_camel_case_types)]
+                    struct ReadStreamGroupMessagesSvc<T: UpdateNotificationService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: UpdateNotificationService,
+                    > tonic::server::StreamingService<
+                        super::ReadStreamGroupMessagesRequest,
+                    > for ReadStreamGroupMessagesSvc<T> {
+                        type Response = super::ReadStreamGroupMessagesResponse;
+                        type ResponseStream = T::ReadStreamGroupMessagesStream;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::ResponseStream>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                tonic::Streaming<super::ReadStreamGroupMessagesRequest>,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).read_stream_group_messages(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ReadStreamGroupMessagesSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

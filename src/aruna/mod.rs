@@ -15,9 +15,17 @@ pub mod aruna {
                 #[path = "aruna.api.storage.services.v1.rs"]
                 pub mod v1;
             }
+        }
+        #[path = ""]
+        pub mod internal {
+            #[path = "aruna.api.internal.v1.rs"]
+            pub mod v1;
+        }
+        #[path = ""]
+        pub mod notification {
             #[path = ""]
-            pub mod internal {
-                #[path = "aruna.api.internal.v1.rs"]
+            pub mod services {
+                #[path = "aruna.api.notification.services.v1.rs"]
                 pub mod v1;
             }
         }
