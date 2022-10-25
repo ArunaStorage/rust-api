@@ -110,6 +110,7 @@ pub enum EventType {
     Updated = 3,
     MetadataUpdated = 4,
     Deleted = 5,
+    All = 6,
 }
 impl EventType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -124,6 +125,7 @@ impl EventType {
             EventType::Updated => "EVENT_TYPE_UPDATED",
             EventType::MetadataUpdated => "EVENT_TYPE_METADATA_UPDATED",
             EventType::Deleted => "EVENT_TYPE_DELETED",
+            EventType::All => "EVENT_TYPE_ALL",
         }
     }
 }
