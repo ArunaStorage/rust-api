@@ -2,7 +2,7 @@
 authors = ["Sebastian <sb@pus.de>", "Marius <mariusdieckmann90@gmail.com>"]
 description = "The Rust API build for the Aruna Object Storage (AOS)"
 edition = "2021"
-license-file = "LICENSE"
+license = "Apache-2.0"
 name = "aruna-rust-api"
 version = "0.5.0-beta.4"
 include = ["src"]
