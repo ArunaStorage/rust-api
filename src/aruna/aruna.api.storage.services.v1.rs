@@ -4123,9 +4123,6 @@ pub struct GetObjectsRequest {
     /// With URL: Include URL in response ?
     #[prost(bool, tag="4")]
     pub with_url: bool,
-    /// Should this request consider older revisions of Objects ?
-    #[prost(bool, tag="5")]
-    pub include_history: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectsResponse {
