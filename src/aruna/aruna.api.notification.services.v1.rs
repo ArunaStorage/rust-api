@@ -1,104 +1,115 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEventStreamingGroupRequest {
-    #[prost(enumeration="super::super::super::storage::models::v1::ResourceType", tag="1")]
+    #[prost(
+        enumeration = "super::super::super::storage::models::v1::ResourceType",
+        tag = "1"
+    )]
     pub resource: i32,
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub resource_id: ::prost::alloc::string::String,
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub include_subresource: bool,
-    #[prost(string, tag="7")]
+    #[prost(string, tag = "7")]
     pub stream_group_id: ::prost::alloc::string::String,
-    #[prost(oneof="create_event_streaming_group_request::StreamType", tags="4, 5, 6")]
-    pub stream_type: ::core::option::Option<create_event_streaming_group_request::StreamType>,
+    #[prost(
+        oneof = "create_event_streaming_group_request::StreamType",
+        tags = "4, 5, 6"
+    )]
+    pub stream_type: ::core::option::Option<
+        create_event_streaming_group_request::StreamType,
+    >,
 }
 /// Nested message and enum types in `CreateEventStreamingGroupRequest`.
 pub mod create_event_streaming_group_request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamType {
-        #[prost(message, tag="4")]
+        #[prost(message, tag = "4")]
         StreamAll(super::StreamAll),
-        #[prost(message, tag="5")]
+        #[prost(message, tag = "5")]
         StreamFromDate(super::StreamFromDate),
-        #[prost(message, tag="6")]
+        #[prost(message, tag = "6")]
         StreamFromSequence(super::StreamFromSequence),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEventStreamingGroupResponse {
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadStreamGroupMessagesRequest {
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub close: bool,
-    #[prost(oneof="read_stream_group_messages_request::StreamAction", tags="1, 2")]
-    pub stream_action: ::core::option::Option<read_stream_group_messages_request::StreamAction>,
+    #[prost(oneof = "read_stream_group_messages_request::StreamAction", tags = "1, 2")]
+    pub stream_action: ::core::option::Option<
+        read_stream_group_messages_request::StreamAction,
+    >,
 }
 /// Nested message and enum types in `ReadStreamGroupMessagesRequest`.
 pub mod read_stream_group_messages_request {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamAction {
-        #[prost(message, tag="1")]
+        #[prost(message, tag = "1")]
         Init(super::NotificationStreamInit),
-        #[prost(message, tag="2")]
+        #[prost(message, tag = "2")]
         Ack(super::NotficationStreamAck),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupRequest {
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteEventStreamingGroupResponse {
-}
+pub struct DeleteEventStreamingGroupResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotificationStreamInit {
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotficationStreamAck {
-    #[prost(string, repeated, tag="1")]
+    #[prost(string, repeated, tag = "1")]
     pub ack_chunk_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadStreamGroupMessagesResponse {
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub notification: ::prost::alloc::vec::Vec<NotificationStreamResponse>,
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub ack_chunk_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromSequence {
-    #[prost(uint64, tag="1")]
+    #[prost(uint64, tag = "1")]
     pub sequence: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromDate {
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamAll {
-}
+pub struct StreamAll {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotificationStreamResponse {
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub message: ::core::option::Option<EventNotificationMessage>,
-    #[prost(uint64, tag="2")]
+    #[prost(uint64, tag = "2")]
     pub sequence: u64,
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventNotificationMessage {
-    #[prost(enumeration="super::super::super::storage::models::v1::ResourceType", tag="1")]
+    #[prost(
+        enumeration = "super::super::super::storage::models::v1::ResourceType",
+        tag = "1"
+    )]
     pub resource: i32,
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub resource_id: ::prost::alloc::string::String,
-    #[prost(enumeration="EventType", tag="3")]
+    #[prost(enumeration = "EventType", tag = "3")]
     pub updated_type: i32,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

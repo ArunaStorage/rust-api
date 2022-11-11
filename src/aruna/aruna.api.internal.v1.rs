@@ -1,31 +1,34 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Authorization {
     /// Should include the APItoken
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub secretkey: ::prost::alloc::string::String,
     /// Can be empty for now
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub accesskey: ::prost::alloc::string::String,
     /// If the secret is an APIToken (or S3-style access / secretkey)
-    #[prost(bool, tag="3")]
+    #[prost(bool, tag = "3")]
     pub is_token: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AuthorizeRequest {
     /// The resource type
-    #[prost(enumeration="super::super::storage::models::v1::ResourceType", tag="1")]
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
     pub resource: i32,
     /// Id of the resource
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub resource_id: ::prost::alloc::string::String,
     /// Which action should be performed (CRUD)
-    #[prost(enumeration="super::super::storage::models::v1::ResourceAction", tag="3")]
+    #[prost(
+        enumeration = "super::super::storage::models::v1::ResourceAction",
+        tag = "3"
+    )]
     pub resource_action: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AuthorizeResponse {
     /// Ok -> Authorization granted, empty or not ok -> dismiss
-    #[prost(bool, tag="1")]
+    #[prost(bool, tag = "1")]
     pub ok: bool,
 }
 /// Generated client implementations.
@@ -273,108 +276,107 @@ pub mod internal_authorize_service_server {
 /// Locations is the path to the requested data.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Location {
-    #[prost(enumeration="LocationType", tag="1")]
+    #[prost(enumeration = "LocationType", tag = "1")]
     pub r#type: i32,
     /// This is the bucket name for S3. This is the folder name
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub bucket: ::prost::alloc::string::String,
     /// for local file.
     ///
     /// This is the key name for S3. This is the file name for local file.
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub path: ::prost::alloc::string::String,
 }
 /// Etag / Part combination to finish a presigned multipart upload.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PartETag {
-    #[prost(int64, tag="1")]
+    #[prost(int64, tag = "1")]
     pub part_number: i64,
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub etag: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InitPresignedUploadRequest {
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub location: ::core::option::Option<Location>,
     /// True if multipart upload is requested.
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub multipart: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InitPresignedUploadResponse {
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub upload_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatePresignedUploadUrlRequest {
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub location: ::core::option::Option<Location>,
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub upload_id: ::prost::alloc::string::String,
-    #[prost(int64, tag="3")]
+    #[prost(int64, tag = "3")]
     pub part_number: i64,
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     pub multipart: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatePresignedUploadUrlResponse {
     /// The presigned URL to upload the file to.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub url: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishPresignedUploadRequest {
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub upload_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag="2")]
+    #[prost(message, repeated, tag = "2")]
     pub part_etags: ::prost::alloc::vec::Vec<PartETag>,
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub bucket: ::prost::alloc::string::String,
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub key: ::prost::alloc::string::String,
-    #[prost(bool, tag="5")]
+    #[prost(bool, tag = "5")]
     pub multipart: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishPresignedUploadResponse {
     /// If the upload finished successfully.
-    #[prost(bool, tag="1")]
+    #[prost(bool, tag = "1")]
     pub ok: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Range {
-    #[prost(int64, tag="1")]
+    #[prost(int64, tag = "1")]
     pub start: i64,
-    #[prost(int64, tag="2")]
+    #[prost(int64, tag = "2")]
     pub end: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatePresignedDownloadRequest {
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub location: ::core::option::Option<Location>,
-    #[prost(bool, tag="2")]
+    #[prost(bool, tag = "2")]
     pub is_public: bool,
     /// optional Range
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub range: ::core::option::Option<Range>,
     /// filename
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub filename: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatePresignedDownloadResponse {
     /// The presigned URL to download the file to.
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub url: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateBucketRequest {
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub bucket_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateBucketResponse {
-}
+pub struct CreateBucketResponse {}
 /// Enum to support multiple target Locations.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -916,128 +918,135 @@ pub mod internal_proxy_service_server {
         const NAME: &'static str = "aruna.api.internal.v1.InternalProxyService";
     }
 }
-// ------------ InternalEventEmitterService -------------------------
-
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Relations {
+pub struct ObjectGroupRelation {
+    #[prost(string, tag = "1")]
+    pub shared_object_group_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Relation {
     /// The shared revision id of an object
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub shared_object: ::prost::alloc::string::String,
-    /// The associated objectgroup
-    #[prost(string, tag="2")]
-    pub object_group: ::prost::alloc::string::String,
-    /// The shared revision id of the object_group
-    #[prost(string, tag="3")]
-    pub shared_object_group: ::prost::alloc::string::String,
+    /// The associated objectgroup(s)
+    #[prost(message, repeated, tag = "2")]
+    pub object_groups: ::prost::alloc::vec::Vec<ObjectGroupRelation>,
     /// Collection ID
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "3")]
     pub collection: ::prost::alloc::string::String,
     /// Project ID
-    #[prost(string, tag="5")]
+    #[prost(string, tag = "4")]
     pub project: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EmitEventRequest {
     /// The resource Type e.g. Collection / Object etc.
-    #[prost(enumeration="super::super::storage::models::v1::ResourceType", tag="1")]
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
     pub event_resource: i32,
     /// The resource ID
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub resource_id: ::prost::alloc::string::String,
     /// Event type (CRUD)
-    #[prost(enumeration="super::super::notification::services::v1::EventType", tag="3")]
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "3"
+    )]
     pub event_type: i32,
     /// All relations of the resource, only parents are shown
-    #[prost(message, optional, tag="4")]
-    pub relations: ::core::option::Option<Relations>,
+    #[prost(message, repeated, tag = "4")]
+    pub relations: ::prost::alloc::vec::Vec<Relation>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmitEventResponse {
-}
-// ------------ InternalEventService -------------------------
-
+pub struct EmitEventResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamGroup {
     /// Stream group ID
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     /// Event this streamgroup is listening for
-    #[prost(enumeration="super::super::notification::services::v1::EventType", tag="2")]
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "2"
+    )]
     pub event_type: i32,
     /// Type of the resource (Collection, Object etc.)
-    #[prost(enumeration="super::super::storage::models::v1::ResourceType", tag="3")]
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
     pub resource_type: i32,
     /// Resource ID
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub resource_id: ::prost::alloc::string::String,
     /// Should all "sub" resources be included
-    #[prost(bool, tag="5")]
+    #[prost(bool, tag = "5")]
     pub notify_on_sub_resource: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateStreamGroupRequest {
     /// Authorization for the user who wants to create this stream group
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub token: ::prost::alloc::string::String,
     /// Event type
-    #[prost(enumeration="super::super::notification::services::v1::EventType", tag="2")]
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "2"
+    )]
     pub event_type: i32,
     /// Type of the resource (Collection, Object etc.)
-    #[prost(enumeration="super::super::storage::models::v1::ResourceType", tag="3")]
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
     pub resource_type: i32,
     /// Resource ID
-    #[prost(string, tag="4")]
+    #[prost(string, tag = "4")]
     pub resource_id: ::prost::alloc::string::String,
     /// Should all "sub" resources be included
-    #[prost(bool, tag="5")]
+    #[prost(bool, tag = "5")]
     pub notify_on_sub_resource: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateStreamGroupResponse {
     /// The stream_group
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub stream_group: ::core::option::Option<StreamGroup>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetStreamGroupRequest {
     /// User token
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub token: ::prost::alloc::string::String,
     /// Stream group ID
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetStreamGroupResponse {
     /// Stream group
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub stream_group: ::core::option::Option<StreamGroup>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteStreamGroupRequest {
     /// User token
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub token: ::prost::alloc::string::String,
     /// Stream group ID
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteStreamGroupResponse {
-}
+pub struct DeleteStreamGroupResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSharedRevisionRequest {
     /// Resource Type (ObjectGroup or Object)
-    #[prost(enumeration="super::super::storage::models::v1::ResourceType", tag="1")]
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
     pub resource_type: i32,
     /// Resource ID
-    #[prost(string, tag="2")]
+    #[prost(string, tag = "2")]
     pub resource_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSharedRevisionResponse {
     /// Shared revision ID
-    #[prost(string, tag="1")]
+    #[prost(string, tag = "1")]
     pub shared_revision_id: ::prost::alloc::string::String,
 }
 /// Generated client implementations.
