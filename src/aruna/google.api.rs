@@ -361,16 +361,17 @@ pub struct CustomHttpPattern {
     #[prost(string, tag = "2")]
     pub path: ::prost::alloc::string::String,
 }
-/// `Visibility` defines restrictions for the visibility of service
-/// elements.  Restrictions are specified using visibility labels
-/// (e.g., PREVIEW) that are elsewhere linked to users and projects.
+/// `Visibility` restricts service consumer's access to service elements,
+/// such as whether an application can call a visibility-restricted method.
+/// The restriction is expressed by applying visibility labels on service
+/// elements. The visibility labels are elsewhere linked to service consumers.
 ///
-/// Users and projects can have access to more than one visibility label. The
-/// effective visibility for multiple labels is the union of each label's
-/// elements, plus any unrestricted elements.
+/// A service can define multiple visibility labels, but a service consumer
+/// should be granted at most one visibility label. Multiple visibility
+/// labels for a single service consumer are not supported.
 ///
-/// If an element and its parents have no restrictions, visibility is
-/// unconditionally granted.
+/// If an element and all its parents have no visibility label, its visibility
+/// is unconditionally granted.
 ///
 /// Example:
 ///
@@ -397,7 +398,8 @@ pub struct Visibility {
 pub struct VisibilityRule {
     /// Selects methods, messages, fields, enums, etc. to which this rule applies.
     ///
-    /// Refer to \[selector][google.api.DocumentationRule.selector\] for syntax details.
+    /// Refer to \[selector][google.api.DocumentationRule.selector\] for syntax
+    /// details.
     #[prost(string, tag = "1")]
     pub selector: ::prost::alloc::string::String,
     /// A comma-separated list of visibility labels that apply to the `selector`.

@@ -679,6 +679,8 @@ pub struct ProjectPermission {
     pub project_id: ::prost::alloc::string::String,
     #[prost(enumeration = "Permission", tag = "3")]
     pub permission: i32,
+    #[prost(bool, tag = "4")]
+    pub service_account: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProjectPermissionDisplayName {
