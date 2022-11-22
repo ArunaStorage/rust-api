@@ -202,6 +202,8 @@ pub mod collection_service_client {
         }
         /// CreateNewCollection
         ///
+        /// Status: STABLE
+        ///
         /// creates a new Collection
         pub async fn create_new_collection(
             &mut self,
@@ -223,6 +225,8 @@ pub mod collection_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetCollectionByID
+        ///
+        /// Status: STABLE
         ///
         /// Queries a specific Collection by ID
         /// The result can be one_of:
@@ -251,6 +255,8 @@ pub mod collection_service_client {
         }
         /// GetCollections
         ///
+        /// Status: STABLE
+        ///
         /// queries multiple collections by ID or by LabelFilter
         /// This returns by default a paginated result with 20 entries.
         /// Must specify a project_id as context
@@ -274,6 +280,8 @@ pub mod collection_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// UpdateCollection
+        ///
+        /// Status: STABLE
         ///
         /// Updates the current collection
         /// This will update the collection in place if it is unversioned / latest
@@ -300,6 +308,8 @@ pub mod collection_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// PinCollectionVersion
+        ///
+        /// Status: STABLE
         ///
         /// This pins the current status of the version to a
         /// specific version. Effectively creating a copy of the collection with a
@@ -328,6 +338,8 @@ pub mod collection_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// DeleteCollection
+        ///
+        /// Status: STABLE
         ///
         /// This request deletes the collection.
         /// If with_version is true, it deletes the collection and all its versions.
@@ -363,12 +375,16 @@ pub mod collection_service_server {
     pub trait CollectionService: Send + Sync + 'static {
         /// CreateNewCollection
         ///
+        /// Status: STABLE
+        ///
         /// creates a new Collection
         async fn create_new_collection(
             &self,
             request: tonic::Request<super::CreateNewCollectionRequest>,
         ) -> Result<tonic::Response<super::CreateNewCollectionResponse>, tonic::Status>;
         /// GetCollectionByID
+        ///
+        /// Status: STABLE
         ///
         /// Queries a specific Collection by ID
         /// The result can be one_of:
@@ -382,6 +398,8 @@ pub mod collection_service_server {
         ) -> Result<tonic::Response<super::GetCollectionByIdResponse>, tonic::Status>;
         /// GetCollections
         ///
+        /// Status: STABLE
+        ///
         /// queries multiple collections by ID or by LabelFilter
         /// This returns by default a paginated result with 20 entries.
         /// Must specify a project_id as context
@@ -390,6 +408,8 @@ pub mod collection_service_server {
             request: tonic::Request<super::GetCollectionsRequest>,
         ) -> Result<tonic::Response<super::GetCollectionsResponse>, tonic::Status>;
         /// UpdateCollection
+        ///
+        /// Status: STABLE
         ///
         /// Updates the current collection
         /// This will update the collection in place if it is unversioned / latest
@@ -402,6 +422,8 @@ pub mod collection_service_server {
         ) -> Result<tonic::Response<super::UpdateCollectionResponse>, tonic::Status>;
         /// PinCollectionVersion
         ///
+        /// Status: STABLE
+        ///
         /// This pins the current status of the version to a
         /// specific version. Effectively creating a copy of the collection with a
         /// stable version All objects will be pinned to an explicit revision number
@@ -411,6 +433,8 @@ pub mod collection_service_server {
             request: tonic::Request<super::PinCollectionVersionRequest>,
         ) -> Result<tonic::Response<super::PinCollectionVersionResponse>, tonic::Status>;
         /// DeleteCollection
+        ///
+        /// Status: STABLE
         ///
         /// This request deletes the collection.
         /// If with_version is true, it deletes the collection and all its versions.
@@ -791,17 +815,19 @@ pub struct CreateServiceAccountResponse {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateServiceAccountTokenRequest {
     /// Empty if token should inherit account / project permissions
-    /// Collection id
     #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    /// Collection id
+    #[prost(string, tag = "2")]
     pub collection_id: ::prost::alloc::string::String,
     /// Token name
-    #[prost(string, tag = "2")]
+    #[prost(string, tag = "3")]
     pub name: ::prost::alloc::string::String,
     /// Token expiry
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "4")]
     pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
     /// Token permissions
-    #[prost(enumeration = "super::super::models::v1::Permission", tag = "4")]
+    #[prost(enumeration = "super::super::models::v1::Permission", tag = "5")]
     pub permission: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2074,6 +2100,8 @@ pub mod object_group_service_client {
         }
         /// CreateObjectGroup
         ///
+        /// Status: STABLE
+        ///
         /// This creates a new ObjectGroup in the collection
         pub async fn create_object_group(
             &mut self,
@@ -2095,6 +2123,8 @@ pub mod object_group_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// UpdateObjectGroup
+        ///
+        /// Status: STABLE
         ///
         /// This creates an updated ObjectGroup
         /// ObjectGroups are immutable
@@ -2120,6 +2150,8 @@ pub mod object_group_service_client {
         }
         /// GetObjectGroupById
         ///
+        /// Status: STABLE
+        ///
         /// This gets a specific ObjectGroup by ID
         /// By default the latest revision is always returned, older revisions need to
         /// be specified separately
@@ -2143,6 +2175,8 @@ pub mod object_group_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetObjectGroupsFromObject
+        ///
+        /// Status: STABLE
         ///
         /// This gets all ObjectGroups associated to a specific
         /// Object Objects can be part of multiple ObjectGroups at once
@@ -2170,6 +2204,8 @@ pub mod object_group_service_client {
         }
         /// GetObjectGroups
         ///
+        /// Status: STABLE
+        ///
         /// This is a request that returns a (paginated) list of
         /// ObjectGroups that contain a specific set of labels.
         pub async fn get_object_groups(
@@ -2192,6 +2228,8 @@ pub mod object_group_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetObjectGroupHistory
+        ///
+        /// Status: BETA
         ///
         /// This requests a full history with all objectgroups
         /// that are part of this objectgroups history
@@ -2219,6 +2257,8 @@ pub mod object_group_service_client {
         }
         /// GetObjectGroupObjects
         ///
+        /// Status: STABLE
+        ///
         /// Requests a list of paginated objects associated with this
         /// specific objectgroup
         pub async fn get_object_group_objects(
@@ -2245,6 +2285,8 @@ pub mod object_group_service_client {
         }
         /// DeleteObjectGroup
         ///
+        /// Status: STABLE
+        ///
         /// This is a request that deletes a specified ObjectGroup
         /// This does not delete the associated Objects
         pub async fn delete_object_group(
@@ -2267,6 +2309,8 @@ pub mod object_group_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// AddLabelsToObjectGroup
+        ///
+        /// Status: STABLE
         ///
         /// This is a specific request to add new label(s)
         /// to an existing object_group, in contrast to UpdateObjectGroup
@@ -2305,12 +2349,16 @@ pub mod object_group_service_server {
     pub trait ObjectGroupService: Send + Sync + 'static {
         /// CreateObjectGroup
         ///
+        /// Status: STABLE
+        ///
         /// This creates a new ObjectGroup in the collection
         async fn create_object_group(
             &self,
             request: tonic::Request<super::CreateObjectGroupRequest>,
         ) -> Result<tonic::Response<super::CreateObjectGroupResponse>, tonic::Status>;
         /// UpdateObjectGroup
+        ///
+        /// Status: STABLE
         ///
         /// This creates an updated ObjectGroup
         /// ObjectGroups are immutable
@@ -2321,6 +2369,8 @@ pub mod object_group_service_server {
         ) -> Result<tonic::Response<super::UpdateObjectGroupResponse>, tonic::Status>;
         /// GetObjectGroupById
         ///
+        /// Status: STABLE
+        ///
         /// This gets a specific ObjectGroup by ID
         /// By default the latest revision is always returned, older revisions need to
         /// be specified separately
@@ -2329,6 +2379,8 @@ pub mod object_group_service_server {
             request: tonic::Request<super::GetObjectGroupByIdRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupByIdResponse>, tonic::Status>;
         /// GetObjectGroupsFromObject
+        ///
+        /// Status: STABLE
         ///
         /// This gets all ObjectGroups associated to a specific
         /// Object Objects can be part of multiple ObjectGroups at once
@@ -2341,6 +2393,8 @@ pub mod object_group_service_server {
         >;
         /// GetObjectGroups
         ///
+        /// Status: STABLE
+        ///
         /// This is a request that returns a (paginated) list of
         /// ObjectGroups that contain a specific set of labels.
         async fn get_object_groups(
@@ -2348,6 +2402,8 @@ pub mod object_group_service_server {
             request: tonic::Request<super::GetObjectGroupsRequest>,
         ) -> Result<tonic::Response<super::GetObjectGroupsResponse>, tonic::Status>;
         /// GetObjectGroupHistory
+        ///
+        /// Status: BETA
         ///
         /// This requests a full history with all objectgroups
         /// that are part of this objectgroups history
@@ -2360,6 +2416,8 @@ pub mod object_group_service_server {
         >;
         /// GetObjectGroupObjects
         ///
+        /// Status: STABLE
+        ///
         /// Requests a list of paginated objects associated with this
         /// specific objectgroup
         async fn get_object_group_objects(
@@ -2371,6 +2429,8 @@ pub mod object_group_service_server {
         >;
         /// DeleteObjectGroup
         ///
+        /// Status: STABLE
+        ///
         /// This is a request that deletes a specified ObjectGroup
         /// This does not delete the associated Objects
         async fn delete_object_group(
@@ -2378,6 +2438,8 @@ pub mod object_group_service_server {
             request: tonic::Request<super::DeleteObjectGroupRequest>,
         ) -> Result<tonic::Response<super::DeleteObjectGroupResponse>, tonic::Status>;
         /// AddLabelsToObjectGroup
+        ///
+        /// Status: STABLE
         ///
         /// This is a specific request to add new label(s)
         /// to an existing object_group, in contrast to UpdateObjectGroup
@@ -3090,6 +3152,8 @@ pub mod user_service_client {
         }
         /// RegisterUser
         ///
+        /// Status: STABLE
+        ///
         /// This request should be called when a new user logs in for the first time
         pub async fn register_user(
             &mut self,
@@ -3111,6 +3175,8 @@ pub mod user_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// ActivateUser
+        ///
+        /// Status: STABLE
         ///
         /// This activates a specific user (Admin request)
         pub async fn activate_user(
@@ -3134,6 +3200,8 @@ pub mod user_service_client {
         }
         /// CreateAPIToken
         ///
+        /// Status: STABLE
+        ///
         /// Creates an API token to authenticate
         pub async fn create_api_token(
             &mut self,
@@ -3155,6 +3223,8 @@ pub mod user_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetAPIToken
+        ///
+        /// Status: STABLE
         ///
         /// Returns one API token by id
         pub async fn get_api_token(
@@ -3178,6 +3248,8 @@ pub mod user_service_client {
         }
         /// GetAPITokens
         ///
+        /// Status: STABLE
+        ///
         /// Returns a list of API tokens for a specific user
         pub async fn get_api_tokens(
             &mut self,
@@ -3199,6 +3271,8 @@ pub mod user_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// DeleteAPIToken
+        ///
+        /// Status: STABLE
         ///
         /// Deletes the specified API Token
         pub async fn delete_api_token(
@@ -3222,6 +3296,8 @@ pub mod user_service_client {
         }
         /// DeleteAPITokens
         ///
+        /// Status: STABLE
+        ///
         /// Deletes the specified API Token
         pub async fn delete_api_tokens(
             &mut self,
@@ -3243,6 +3319,8 @@ pub mod user_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetUserRequest
+        ///
+        /// Status: STABLE
         ///
         /// This is a request that returns the user information of the
         /// current user or if invoked by an admin from another user
@@ -3266,6 +3344,8 @@ pub mod user_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// UpdateUserDisplayName
+        ///
+        /// Status: STABLE
         ///
         /// Updates the Displayname for the user (Personal only)
         pub async fn update_user_display_name(
@@ -3292,6 +3372,8 @@ pub mod user_service_client {
         }
         /// GetUserProjects
         ///
+        /// Status: STABLE
+        ///
         /// Gets all project_ids a user is member of
         pub async fn get_user_projects(
             &mut self,
@@ -3313,6 +3395,8 @@ pub mod user_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetNotActivatedUsers
+        ///
+        /// Status: STABLE
         ///
         /// Get all not activated users (Admin only)
         pub async fn get_not_activated_users(
@@ -3348,12 +3432,16 @@ pub mod user_service_server {
     pub trait UserService: Send + Sync + 'static {
         /// RegisterUser
         ///
+        /// Status: STABLE
+        ///
         /// This request should be called when a new user logs in for the first time
         async fn register_user(
             &self,
             request: tonic::Request<super::RegisterUserRequest>,
         ) -> Result<tonic::Response<super::RegisterUserResponse>, tonic::Status>;
         /// ActivateUser
+        ///
+        /// Status: STABLE
         ///
         /// This activates a specific user (Admin request)
         async fn activate_user(
@@ -3362,12 +3450,16 @@ pub mod user_service_server {
         ) -> Result<tonic::Response<super::ActivateUserResponse>, tonic::Status>;
         /// CreateAPIToken
         ///
+        /// Status: STABLE
+        ///
         /// Creates an API token to authenticate
         async fn create_api_token(
             &self,
             request: tonic::Request<super::CreateApiTokenRequest>,
         ) -> Result<tonic::Response<super::CreateApiTokenResponse>, tonic::Status>;
         /// GetAPIToken
+        ///
+        /// Status: STABLE
         ///
         /// Returns one API token by id
         async fn get_api_token(
@@ -3376,12 +3468,16 @@ pub mod user_service_server {
         ) -> Result<tonic::Response<super::GetApiTokenResponse>, tonic::Status>;
         /// GetAPITokens
         ///
+        /// Status: STABLE
+        ///
         /// Returns a list of API tokens for a specific user
         async fn get_api_tokens(
             &self,
             request: tonic::Request<super::GetApiTokensRequest>,
         ) -> Result<tonic::Response<super::GetApiTokensResponse>, tonic::Status>;
         /// DeleteAPIToken
+        ///
+        /// Status: STABLE
         ///
         /// Deletes the specified API Token
         async fn delete_api_token(
@@ -3390,12 +3486,16 @@ pub mod user_service_server {
         ) -> Result<tonic::Response<super::DeleteApiTokenResponse>, tonic::Status>;
         /// DeleteAPITokens
         ///
+        /// Status: STABLE
+        ///
         /// Deletes the specified API Token
         async fn delete_api_tokens(
             &self,
             request: tonic::Request<super::DeleteApiTokensRequest>,
         ) -> Result<tonic::Response<super::DeleteApiTokensResponse>, tonic::Status>;
         /// GetUserRequest
+        ///
+        /// Status: STABLE
         ///
         /// This is a request that returns the user information of the
         /// current user or if invoked by an admin from another user
@@ -3404,6 +3504,8 @@ pub mod user_service_server {
             request: tonic::Request<super::GetUserRequest>,
         ) -> Result<tonic::Response<super::GetUserResponse>, tonic::Status>;
         /// UpdateUserDisplayName
+        ///
+        /// Status: STABLE
         ///
         /// Updates the Displayname for the user (Personal only)
         async fn update_user_display_name(
@@ -3415,12 +3517,16 @@ pub mod user_service_server {
         >;
         /// GetUserProjects
         ///
+        /// Status: STABLE
+        ///
         /// Gets all project_ids a user is member of
         async fn get_user_projects(
             &self,
             request: tonic::Request<super::GetUserProjectsRequest>,
         ) -> Result<tonic::Response<super::GetUserProjectsResponse>, tonic::Status>;
         /// GetNotActivatedUsers
+        ///
+        /// Status: STABLE
         ///
         /// Get all not activated users (Admin only)
         async fn get_not_activated_users(
@@ -4157,6 +4263,8 @@ pub mod project_service_client {
         }
         /// CreateProject
         ///
+        /// Status: STABLE
+        ///
         /// Creates a new project all users and collections are bundled in a project.
         pub async fn create_project(
             &mut self,
@@ -4178,6 +4286,8 @@ pub mod project_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// AddUserToProject
+        ///
+        /// Status: STABLE
         ///
         /// Adds a new user to a given project by its id
         pub async fn add_user_to_project(
@@ -4201,6 +4311,8 @@ pub mod project_service_client {
         }
         /// GetProject
         ///
+        /// Status: STABLE
+        ///
         /// Requests a project by id
         pub async fn get_project(
             &mut self,
@@ -4221,7 +4333,9 @@ pub mod project_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// GetProject
+        /// GetProjects
+        ///
+        /// Status: STABLE
         ///
         /// Admin request to get all projects
         pub async fn get_projects(
@@ -4244,6 +4358,8 @@ pub mod project_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// DestroyProject
+        ///
+        /// Status: STABLE
         ///
         /// Destroys the project and all its associated data. Must be empty
         /// (cannot contain any collections).
@@ -4268,6 +4384,8 @@ pub mod project_service_client {
         }
         /// UpdateProject
         ///
+        /// Status: STABLE
+        ///
         /// Updates the project. All (meta) data will be overwritten.
         pub async fn update_project(
             &mut self,
@@ -4289,6 +4407,8 @@ pub mod project_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// RemoveUserFromProject
+        ///
+        /// Status: STABLE
         ///
         /// Removes a specified user from the project.
         pub async fn remove_user_from_project(
@@ -4315,6 +4435,8 @@ pub mod project_service_client {
         }
         /// GetUserPermissionsForProject
         ///
+        /// Status: STABLE
+        ///
         /// Get the user_permission of a specific user for the project.
         pub async fn get_user_permissions_for_project(
             &mut self,
@@ -4339,6 +4461,8 @@ pub mod project_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// EditUserPermissionsForProject
+        ///
+        /// Status: STABLE
         ///
         /// Modifies the user_permission of a specific user for the project.
         pub async fn edit_user_permissions_for_project(
@@ -4374,12 +4498,16 @@ pub mod project_service_server {
     pub trait ProjectService: Send + Sync + 'static {
         /// CreateProject
         ///
+        /// Status: STABLE
+        ///
         /// Creates a new project all users and collections are bundled in a project.
         async fn create_project(
             &self,
             request: tonic::Request<super::CreateProjectRequest>,
         ) -> Result<tonic::Response<super::CreateProjectResponse>, tonic::Status>;
         /// AddUserToProject
+        ///
+        /// Status: STABLE
         ///
         /// Adds a new user to a given project by its id
         async fn add_user_to_project(
@@ -4388,12 +4516,16 @@ pub mod project_service_server {
         ) -> Result<tonic::Response<super::AddUserToProjectResponse>, tonic::Status>;
         /// GetProject
         ///
+        /// Status: STABLE
+        ///
         /// Requests a project by id
         async fn get_project(
             &self,
             request: tonic::Request<super::GetProjectRequest>,
         ) -> Result<tonic::Response<super::GetProjectResponse>, tonic::Status>;
-        /// GetProject
+        /// GetProjects
+        ///
+        /// Status: STABLE
         ///
         /// Admin request to get all projects
         async fn get_projects(
@@ -4401,6 +4533,8 @@ pub mod project_service_server {
             request: tonic::Request<super::GetProjectsRequest>,
         ) -> Result<tonic::Response<super::GetProjectsResponse>, tonic::Status>;
         /// DestroyProject
+        ///
+        /// Status: STABLE
         ///
         /// Destroys the project and all its associated data. Must be empty
         /// (cannot contain any collections).
@@ -4410,12 +4544,16 @@ pub mod project_service_server {
         ) -> Result<tonic::Response<super::DestroyProjectResponse>, tonic::Status>;
         /// UpdateProject
         ///
+        /// Status: STABLE
+        ///
         /// Updates the project. All (meta) data will be overwritten.
         async fn update_project(
             &self,
             request: tonic::Request<super::UpdateProjectRequest>,
         ) -> Result<tonic::Response<super::UpdateProjectResponse>, tonic::Status>;
         /// RemoveUserFromProject
+        ///
+        /// Status: STABLE
         ///
         /// Removes a specified user from the project.
         async fn remove_user_from_project(
@@ -4427,6 +4565,8 @@ pub mod project_service_server {
         >;
         /// GetUserPermissionsForProject
         ///
+        /// Status: STABLE
+        ///
         /// Get the user_permission of a specific user for the project.
         async fn get_user_permissions_for_project(
             &self,
@@ -4436,6 +4576,8 @@ pub mod project_service_server {
             tonic::Status,
         >;
         /// EditUserPermissionsForProject
+        ///
+        /// Status: STABLE
         ///
         /// Modifies the user_permission of a specific user for the project.
         async fn edit_user_permissions_for_project(
@@ -5458,6 +5600,8 @@ pub mod object_service_client {
         }
         /// InitializeNewObject
         ///
+        /// Status: STABLE
+        ///
         /// This initializes a new object
         /// Initializing an object will put it in a staging area.
         /// Staged objects will get a separate staging id and need to be finished
@@ -5483,6 +5627,8 @@ pub mod object_service_client {
         }
         /// GetUploadURL
         ///
+        /// Status: STABLE
+        ///
         /// This method will return a (multi-part) url that can be used to upload a
         /// file to S3. Part is a optional query parameter that can be used to upload a
         /// part of the file / multipart upload.
@@ -5507,6 +5653,8 @@ pub mod object_service_client {
         }
         /// GetDownloadUrl
         ///
+        /// Status: STABLE
+        ///
         /// This method will return a url that can be used to download a file from S3.
         pub async fn get_download_url(
             &mut self,
@@ -5528,6 +5676,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetDownloadLinksBatch
+        ///
+        /// Status: BETA
         ///
         /// This method can be used to get download urls for multiple objects.
         /// The order of the returned urls will be the same as the order of the object
@@ -5555,6 +5705,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// CreateDownloadLinksStream
+        ///
+        /// Status: BETA
         ///
         /// Creates a stream of objects and presigned links based on the provided query
         /// This can be used retrieve a large number of Objects as a stream that would
@@ -5585,6 +5737,8 @@ pub mod object_service_client {
         }
         /// FinishObjectStaging
         ///
+        /// Status: STABLE
+        ///
         /// This method completes the staging of an object.
         pub async fn finish_object_staging(
             &mut self,
@@ -5606,6 +5760,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// UpdateObject
+        ///
+        /// Status: STABLE
         ///
         /// Objects are immutable!
         /// Updating an object will create a new revision for the object
@@ -5633,6 +5789,8 @@ pub mod object_service_client {
         }
         /// CreateObjectReference
         ///
+        /// Status: STABLE
+        ///
         /// Creates a new reference of this object in another collection
         pub async fn create_object_reference(
             &mut self,
@@ -5658,6 +5816,8 @@ pub mod object_service_client {
         }
         /// CloneObject
         ///
+        /// Status: STABLE
+        ///
         /// This method clones an object and creates a copy in the same collection.
         /// This copy has a new id and revision and will not receive any updates from
         /// the original object.
@@ -5682,6 +5842,8 @@ pub mod object_service_client {
         }
         /// DeleteObject
         ///
+        /// Status: STABLE
+        ///
         /// Deletes the object with the complete revision history.
         pub async fn delete_object(
             &mut self,
@@ -5704,6 +5866,8 @@ pub mod object_service_client {
         }
         /// DeleteObjects
         ///
+        /// Status: STABLE
+        ///
         /// Deletes multiple objects at once.
         pub async fn delete_objects(
             &mut self,
@@ -5725,6 +5889,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetObjectByID
+        ///
+        /// Status: STABLE
         ///
         /// gets a specific Object by ID that is associated to the
         /// current collection By default only the latest revision of an object will be
@@ -5750,6 +5916,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetObjects
+        ///
+        /// Status: STABLE
         ///
         /// GetObjects returns a (paginated) list of objects in a specific collection
         /// By default only the latest revisions of all objects will be shown
@@ -5778,6 +5946,8 @@ pub mod object_service_client {
         }
         /// GetObjectRevisions
         ///
+        /// Status: STABLE
+        ///
         /// This returns the full list of revisions of a specified object
         /// With the optional with_url boolean a download link can automatically be
         /// requested for each Object This is by default a paginated request
@@ -5801,6 +5971,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetLatestObjectRevision
+        ///
+        /// Status: STABLE
         ///
         /// This returns the latest revision of a specific object
         /// The returned `latest` object will have a different id if the current
@@ -5829,6 +6001,8 @@ pub mod object_service_client {
         }
         /// GetObjectEndpoints
         ///
+        /// Status: BETA
+        ///
         /// This returns a list of endpoints
         /// One endpoint will be the "default" endpoint
         pub async fn get_object_endpoints(
@@ -5851,6 +6025,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// AddLabelsToObject
+        ///
+        /// Status: STABLE
         ///
         /// This is a specific request to add new label(s)
         /// to an existing object, in contrast to UpdateObject
@@ -5877,6 +6053,8 @@ pub mod object_service_client {
         }
         /// SetHooksOfObject
         ///
+        /// Status: BETA
+        ///
         /// This is a specific request to update the complete list
         /// of hooks for a specific object. This will not update the object
         /// and create a new id, instead it will overwrite all hooks of the existing
@@ -5901,6 +6079,8 @@ pub mod object_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetReferences
+        ///
+        /// Status: STABLE
         ///
         /// Get a list of references for this object (optional) including all revisions
         pub async fn get_references(
@@ -5933,6 +6113,8 @@ pub mod object_service_server {
     pub trait ObjectService: Send + Sync + 'static {
         /// InitializeNewObject
         ///
+        /// Status: STABLE
+        ///
         /// This initializes a new object
         /// Initializing an object will put it in a staging area.
         /// Staged objects will get a separate staging id and need to be finished
@@ -5943,6 +6125,8 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::InitializeNewObjectResponse>, tonic::Status>;
         /// GetUploadURL
         ///
+        /// Status: STABLE
+        ///
         /// This method will return a (multi-part) url that can be used to upload a
         /// file to S3. Part is a optional query parameter that can be used to upload a
         /// part of the file / multipart upload.
@@ -5952,12 +6136,16 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::GetUploadUrlResponse>, tonic::Status>;
         /// GetDownloadUrl
         ///
+        /// Status: STABLE
+        ///
         /// This method will return a url that can be used to download a file from S3.
         async fn get_download_url(
             &self,
             request: tonic::Request<super::GetDownloadUrlRequest>,
         ) -> Result<tonic::Response<super::GetDownloadUrlResponse>, tonic::Status>;
         /// GetDownloadLinksBatch
+        ///
+        /// Status: BETA
         ///
         /// This method can be used to get download urls for multiple objects.
         /// The order of the returned urls will be the same as the order of the object
@@ -5977,6 +6165,8 @@ pub mod object_service_server {
             + 'static;
         /// CreateDownloadLinksStream
         ///
+        /// Status: BETA
+        ///
         /// Creates a stream of objects and presigned links based on the provided query
         /// This can be used retrieve a large number of Objects as a stream that would
         /// otherwise cause issues with the connection
@@ -5989,12 +6179,16 @@ pub mod object_service_server {
         >;
         /// FinishObjectStaging
         ///
+        /// Status: STABLE
+        ///
         /// This method completes the staging of an object.
         async fn finish_object_staging(
             &self,
             request: tonic::Request<super::FinishObjectStagingRequest>,
         ) -> Result<tonic::Response<super::FinishObjectStagingResponse>, tonic::Status>;
         /// UpdateObject
+        ///
+        /// Status: STABLE
         ///
         /// Objects are immutable!
         /// Updating an object will create a new revision for the object
@@ -6007,6 +6201,8 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::UpdateObjectResponse>, tonic::Status>;
         /// CreateObjectReference
         ///
+        /// Status: STABLE
+        ///
         /// Creates a new reference of this object in another collection
         async fn create_object_reference(
             &self,
@@ -6017,6 +6213,8 @@ pub mod object_service_server {
         >;
         /// CloneObject
         ///
+        /// Status: STABLE
+        ///
         /// This method clones an object and creates a copy in the same collection.
         /// This copy has a new id and revision and will not receive any updates from
         /// the original object.
@@ -6026,6 +6224,8 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::CloneObjectResponse>, tonic::Status>;
         /// DeleteObject
         ///
+        /// Status: STABLE
+        ///
         /// Deletes the object with the complete revision history.
         async fn delete_object(
             &self,
@@ -6033,12 +6233,16 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::DeleteObjectResponse>, tonic::Status>;
         /// DeleteObjects
         ///
+        /// Status: STABLE
+        ///
         /// Deletes multiple objects at once.
         async fn delete_objects(
             &self,
             request: tonic::Request<super::DeleteObjectsRequest>,
         ) -> Result<tonic::Response<super::DeleteObjectsResponse>, tonic::Status>;
         /// GetObjectByID
+        ///
+        /// Status: STABLE
         ///
         /// gets a specific Object by ID that is associated to the
         /// current collection By default only the latest revision of an object will be
@@ -6049,6 +6253,8 @@ pub mod object_service_server {
             request: tonic::Request<super::GetObjectByIdRequest>,
         ) -> Result<tonic::Response<super::GetObjectByIdResponse>, tonic::Status>;
         /// GetObjects
+        ///
+        /// Status: STABLE
         ///
         /// GetObjects returns a (paginated) list of objects in a specific collection
         /// By default only the latest revisions of all objects will be shown
@@ -6062,6 +6268,8 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::GetObjectsResponse>, tonic::Status>;
         /// GetObjectRevisions
         ///
+        /// Status: STABLE
+        ///
         /// This returns the full list of revisions of a specified object
         /// With the optional with_url boolean a download link can automatically be
         /// requested for each Object This is by default a paginated request
@@ -6070,6 +6278,8 @@ pub mod object_service_server {
             request: tonic::Request<super::GetObjectRevisionsRequest>,
         ) -> Result<tonic::Response<super::GetObjectRevisionsResponse>, tonic::Status>;
         /// GetLatestObjectRevision
+        ///
+        /// Status: STABLE
         ///
         /// This returns the latest revision of a specific object
         /// The returned `latest` object will have a different id if the current
@@ -6083,6 +6293,8 @@ pub mod object_service_server {
         >;
         /// GetObjectEndpoints
         ///
+        /// Status: BETA
+        ///
         /// This returns a list of endpoints
         /// One endpoint will be the "default" endpoint
         async fn get_object_endpoints(
@@ -6090,6 +6302,8 @@ pub mod object_service_server {
             request: tonic::Request<super::GetObjectEndpointsRequest>,
         ) -> Result<tonic::Response<super::GetObjectEndpointsResponse>, tonic::Status>;
         /// AddLabelsToObject
+        ///
+        /// Status: STABLE
         ///
         /// This is a specific request to add new label(s)
         /// to an existing object, in contrast to UpdateObject
@@ -6101,6 +6315,8 @@ pub mod object_service_server {
         ) -> Result<tonic::Response<super::AddLabelsToObjectResponse>, tonic::Status>;
         /// SetHooksOfObject
         ///
+        /// Status: BETA
+        ///
         /// This is a specific request to update the complete list
         /// of hooks for a specific object. This will not update the object
         /// and create a new id, instead it will overwrite all hooks of the existing
@@ -6110,6 +6326,8 @@ pub mod object_service_server {
             request: tonic::Request<super::SetHooksOfObjectRequest>,
         ) -> Result<tonic::Response<super::SetHooksOfObjectResponse>, tonic::Status>;
         /// GetReferences
+        ///
+        /// Status: STABLE
         ///
         /// Get a list of references for this object (optional) including all revisions
         async fn get_references(
@@ -7133,6 +7351,8 @@ pub mod endpoint_service_client {
         }
         /// AddEndpoint
         ///
+        /// Status: BETA
+        ///
         /// Registers a new Endpoint (Aruna DataProxy) to the server
         /// Needs admin permissions
         pub async fn add_endpoint(
@@ -7156,6 +7376,8 @@ pub mod endpoint_service_client {
         }
         /// GetEndpoint
         ///
+        /// Status: BETA
+        ///
         /// Gets an specific endpoint by ID or Name
         pub async fn get_endpoint(
             &mut self,
@@ -7177,6 +7399,8 @@ pub mod endpoint_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetEndpoints
+        ///
+        /// Status: BETA
         ///
         /// Gets all available endpoints
         pub async fn get_endpoints(
@@ -7200,6 +7424,8 @@ pub mod endpoint_service_client {
         }
         /// DeleteEndpoint
         ///
+        /// Status: BETA
+        ///
         /// Deletes a specific endpoint by id
         /// This needs admin permissions
         pub async fn delete_endpoint(
@@ -7222,6 +7448,8 @@ pub mod endpoint_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetDefaultEndpoint
+        ///
+        /// Status: BETA
         ///
         /// This request returns the default endpoint for the current aruna_server
         /// It may produce different results depending on the used server
@@ -7255,6 +7483,8 @@ pub mod endpoint_service_server {
     pub trait EndpointService: Send + Sync + 'static {
         /// AddEndpoint
         ///
+        /// Status: BETA
+        ///
         /// Registers a new Endpoint (Aruna DataProxy) to the server
         /// Needs admin permissions
         async fn add_endpoint(
@@ -7263,12 +7493,16 @@ pub mod endpoint_service_server {
         ) -> Result<tonic::Response<super::AddEndpointResponse>, tonic::Status>;
         /// GetEndpoint
         ///
+        /// Status: BETA
+        ///
         /// Gets an specific endpoint by ID or Name
         async fn get_endpoint(
             &self,
             request: tonic::Request<super::GetEndpointRequest>,
         ) -> Result<tonic::Response<super::GetEndpointResponse>, tonic::Status>;
         /// GetEndpoints
+        ///
+        /// Status: BETA
         ///
         /// Gets all available endpoints
         async fn get_endpoints(
@@ -7277,6 +7511,8 @@ pub mod endpoint_service_server {
         ) -> Result<tonic::Response<super::GetEndpointsResponse>, tonic::Status>;
         /// DeleteEndpoint
         ///
+        /// Status: BETA
+        ///
         /// Deletes a specific endpoint by id
         /// This needs admin permissions
         async fn delete_endpoint(
@@ -7284,6 +7520,8 @@ pub mod endpoint_service_server {
             request: tonic::Request<super::DeleteEndpointRequest>,
         ) -> Result<tonic::Response<super::DeleteEndpointResponse>, tonic::Status>;
         /// GetDefaultEndpoint
+        ///
+        /// Status: BETA
         ///
         /// This request returns the default endpoint for the current aruna_server
         /// It may produce different results depending on the used server
@@ -7891,6 +8129,8 @@ pub mod storage_info_service_client {
         }
         /// GetStorageVersion
         ///
+        /// Status: ALPHA
+        ///
         /// A request to get the current version of the server application
         /// String representation and https://semver.org/
         pub async fn get_storage_version(
@@ -7913,6 +8153,8 @@ pub mod storage_info_service_client {
             self.inner.unary(request.into_request(), path, codec).await
         }
         /// GetStorageStatus
+        ///
+        /// Status: ALPHA
         ///
         /// A request to get the current status of the storage components by location(s)
         pub async fn get_storage_status(
@@ -8106,6 +8348,8 @@ pub mod storage_info_service_server {
     pub trait StorageInfoService: Send + Sync + 'static {
         /// GetStorageVersion
         ///
+        /// Status: ALPHA
+        ///
         /// A request to get the current version of the server application
         /// String representation and https://semver.org/
         async fn get_storage_version(
@@ -8113,6 +8357,8 @@ pub mod storage_info_service_server {
             request: tonic::Request<super::GetStorageVersionRequest>,
         ) -> Result<tonic::Response<super::GetStorageVersionResponse>, tonic::Status>;
         /// GetStorageStatus
+        ///
+        /// Status: ALPHA
         ///
         /// A request to get the current status of the storage components by location(s)
         async fn get_storage_status(
