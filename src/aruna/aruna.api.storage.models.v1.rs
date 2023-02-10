@@ -1,4 +1,5 @@
 /// A key value pair for hooks and labels
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct KeyValue {
     #[prost(string, tag = "1")]
@@ -6,6 +7,7 @@ pub struct KeyValue {
     #[prost(string, tag = "2")]
     pub value: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LabelOntology {
     /// These are the keys for labels that are required for the collection
@@ -15,6 +17,7 @@ pub struct LabelOntology {
     pub required_label_keys: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// Stats for a set of objects
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Stats {
     #[prost(int64, tag = "1")]
@@ -23,6 +26,7 @@ pub struct Stats {
     pub acc_size: i64,
 }
 /// Stats for a collection
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CollectionStats {
     #[prost(message, optional, tag = "1")]
@@ -33,6 +37,7 @@ pub struct CollectionStats {
     pub last_updated: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// Stats for an object group
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupStats {
     #[prost(message, optional, tag = "1")]
@@ -42,6 +47,7 @@ pub struct ObjectGroupStats {
 }
 /// Semver version -> Alpha Beta release are not supported -> Use "latest" for
 /// mutable collections that are in development
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Version {
     #[prost(int32, tag = "1")]
@@ -51,6 +57,7 @@ pub struct Version {
     #[prost(int32, tag = "3")]
     pub patch: i32,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Hash {
     #[prost(enumeration = "Hashalgorithm", tag = "1")]
@@ -59,6 +66,7 @@ pub struct Hash {
     pub hash: ::prost::alloc::string::String,
 }
 /// Origin of the object -> To be GDPA compliant
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Origin {
     #[prost(enumeration = "OriginType", tag = "1")]
@@ -66,6 +74,7 @@ pub struct Origin {
     #[prost(string, tag = "2")]
     pub id: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Source {
     /// This is a URL / DOI
@@ -75,6 +84,7 @@ pub struct Source {
     #[prost(enumeration = "SourceType", tag = "2")]
     pub source_type: i32,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Endpoint {
     #[prost(string, tag = "1")]
@@ -94,6 +104,7 @@ pub struct Endpoint {
     #[prost(bool, tag = "8")]
     pub is_default: bool,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
     /// ObjectID
@@ -141,6 +152,7 @@ pub struct Object {
     pub auto_update: bool,
 }
 /// Multiple Objects
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Objects {
     #[prost(message, repeated, tag = "1")]
@@ -149,6 +161,7 @@ pub struct Objects {
 /// ObjectGroups are optional and can be used to group objects in a collection
 /// together They need to refer to objects in the same collection Objectgroups
 /// can be changed if the collection is mutable
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroup {
     #[prost(string, tag = "1")]
@@ -173,6 +186,7 @@ pub struct ObjectGroup {
     pub rev_number: i64,
 }
 /// Multiple ObjectGroups
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroups {
     #[prost(message, repeated, tag = "1")]
@@ -180,6 +194,7 @@ pub struct ObjectGroups {
 }
 /// This is a representation of the ObjectGroup without the recursive nature of
 /// object references
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupOverview {
     #[prost(string, tag = "1")]
@@ -198,6 +213,7 @@ pub struct ObjectGroupOverview {
     pub rev_number: i64,
 }
 /// Multiple ObjectGroupOverviews
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupOverviews {
     #[prost(message, repeated, tag = "1")]
@@ -205,6 +221,7 @@ pub struct ObjectGroupOverviews {
 }
 /// This is a representation of the ObjectGroup with only ObjectIDs instead of
 /// full objects
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupWithId {
     #[prost(string, tag = "1")]
@@ -229,11 +246,13 @@ pub struct ObjectGroupWithId {
     pub rev_number: i64,
 }
 /// Multiple ObjectGroupWithIDs
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ObjectGroupWithIDs {
     #[prost(message, repeated, tag = "1")]
     pub object_group_with_ids: ::prost::alloc::vec::Vec<ObjectGroupWithId>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Collection {
     #[prost(string, tag = "1")]
@@ -267,6 +286,7 @@ pub struct Collection {
 }
 /// Nested message and enum types in `Collection`.
 pub mod collection {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Version {
         #[prost(message, tag = "12")]
@@ -276,6 +296,7 @@ pub mod collection {
     }
 }
 /// Multiple Collections
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Collections {
     #[prost(message, repeated, tag = "1")]
@@ -283,6 +304,7 @@ pub struct Collections {
 }
 /// This is a representation of the Collection without the recursive nature of
 /// objectreferences
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CollectionOverview {
     #[prost(string, tag = "1")]
@@ -309,6 +331,7 @@ pub struct CollectionOverview {
 }
 /// Nested message and enum types in `CollectionOverview`.
 pub mod collection_overview {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Version {
         #[prost(message, tag = "12")]
@@ -318,6 +341,7 @@ pub mod collection_overview {
     }
 }
 /// Multiple CollectionOverviews
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CollectionOverviews {
     #[prost(message, repeated, tag = "1")]
@@ -325,6 +349,7 @@ pub struct CollectionOverviews {
 }
 /// This is a representation of the Collection with only Resource RevisionIDs
 /// instead of full objects
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CollectionWithId {
     #[prost(string, tag = "1")]
@@ -357,6 +382,7 @@ pub struct CollectionWithId {
 }
 /// Nested message and enum types in `CollectionWithID`.
 pub mod collection_with_id {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Version {
         #[prost(message, tag = "12")]
@@ -366,6 +392,7 @@ pub mod collection_with_id {
     }
 }
 /// Multiple CollectionWithIDs
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CollectionWithIDs {
     #[prost(message, repeated, tag = "1")]
@@ -397,6 +424,18 @@ impl ResourceType {
             ResourceType::All => "RESOURCE_TYPE_ALL",
         }
     }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "RESOURCE_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "RESOURCE_TYPE_PROJECT" => Some(Self::Project),
+            "RESOURCE_TYPE_COLLECTION" => Some(Self::Collection),
+            "RESOURCE_TYPE_OBJECT_GROUP" => Some(Self::ObjectGroup),
+            "RESOURCE_TYPE_OBJECT" => Some(Self::Object),
+            "RESOURCE_TYPE_ALL" => Some(Self::All),
+            _ => None,
+        }
+    }
 }
 /// Used for the internal associated services to validate permissions
 /// Actions are similar to HTTP verbs
@@ -423,6 +462,18 @@ impl ResourceAction {
             ResourceAction::Update => "RESOURCE_ACTION_UPDATE",
             ResourceAction::Read => "RESOURCE_ACTION_READ",
             ResourceAction::Delete => "RESOURCE_ACTION_DELETE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "RESOURCE_ACTION_UNSPECIFIED" => Some(Self::Unspecified),
+            "RESOURCE_ACTION_CREATE" => Some(Self::Create),
+            "RESOURCE_ACTION_APPEND" => Some(Self::Append),
+            "RESOURCE_ACTION_UPDATE" => Some(Self::Update),
+            "RESOURCE_ACTION_READ" => Some(Self::Read),
+            "RESOURCE_ACTION_DELETE" => Some(Self::Delete),
+            _ => None,
         }
     }
 }
@@ -452,17 +503,31 @@ impl Status {
             Status::Trash => "STATUS_TRASH",
         }
     }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "STATUS_INITIALIZING" => Some(Self::Initializing),
+            "STATUS_AVAILABLE" => Some(Self::Available),
+            "STATUS_UNAVAILABLE" => Some(Self::Unavailable),
+            "STATUS_ERROR" => Some(Self::Error),
+            "STATUS_TRASH" => Some(Self::Trash),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Hashalgorithm {
     Unspecified = 0,
     Md5 = 1,
-    Sha1 = 2,
+    /// HASHALGORITHM_SHA1 = 2;
+    ///
+    /// HASHALGORITHM_SHA512 = 4;
+    /// HASHALGORITHM_MURMUR3A32 = 5;
+    /// HASHALGORITHM_XXHASH32 = 6;
+    /// HASHALGORITHM_SHA224 = 7;
     Sha256 = 3,
-    Sha512 = 4,
-    Murmur3a32 = 5,
-    Xxhash32 = 6,
 }
 impl Hashalgorithm {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -473,11 +538,16 @@ impl Hashalgorithm {
         match self {
             Hashalgorithm::Unspecified => "HASHALGORITHM_UNSPECIFIED",
             Hashalgorithm::Md5 => "HASHALGORITHM_MD5",
-            Hashalgorithm::Sha1 => "HASHALGORITHM_SHA1",
             Hashalgorithm::Sha256 => "HASHALGORITHM_SHA256",
-            Hashalgorithm::Sha512 => "HASHALGORITHM_SHA512",
-            Hashalgorithm::Murmur3a32 => "HASHALGORITHM_MURMUR3A32",
-            Hashalgorithm::Xxhash32 => "HASHALGORITHM_XXHASH32",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "HASHALGORITHM_UNSPECIFIED" => Some(Self::Unspecified),
+            "HASHALGORITHM_MD5" => Some(Self::Md5),
+            "HASHALGORITHM_SHA256" => Some(Self::Sha256),
+            _ => None,
         }
     }
 }
@@ -501,6 +571,15 @@ impl OriginType {
             OriginType::Unspecified => "ORIGIN_TYPE_UNSPECIFIED",
             OriginType::User => "ORIGIN_TYPE_USER",
             OriginType::Objclone => "ORIGIN_TYPE_OBJCLONE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ORIGIN_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "ORIGIN_TYPE_USER" => Some(Self::User),
+            "ORIGIN_TYPE_OBJCLONE" => Some(Self::Objclone),
+            _ => None,
         }
     }
 }
@@ -528,6 +607,17 @@ impl DataClass {
             DataClass::Protected => "DATA_CLASS_PROTECTED",
         }
     }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "DATA_CLASS_UNSPECIFIED" => Some(Self::Unspecified),
+            "DATA_CLASS_PUBLIC" => Some(Self::Public),
+            "DATA_CLASS_PRIVATE" => Some(Self::Private),
+            "DATA_CLASS_CONFIDENTIAL" => Some(Self::Confidential),
+            "DATA_CLASS_PROTECTED" => Some(Self::Protected),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -546,6 +636,15 @@ impl SourceType {
             SourceType::Unspecified => "SOURCE_TYPE_UNSPECIFIED",
             SourceType::Url => "SOURCE_TYPE_URL",
             SourceType::Doi => "SOURCE_TYPE_DOI",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SOURCE_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SOURCE_TYPE_URL" => Some(Self::Url),
+            "SOURCE_TYPE_DOI" => Some(Self::Doi),
+            _ => None,
         }
     }
 }
@@ -568,12 +667,22 @@ impl EndpointType {
             EndpointType::File => "ENDPOINT_TYPE_FILE",
         }
     }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ENDPOINT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "ENDPOINT_TYPE_S3" => Some(Self::S3),
+            "ENDPOINT_TYPE_FILE" => Some(Self::File),
+            _ => None,
+        }
+    }
 }
 /// This file contains parameters for queries that return a list of resources.
 /// The results are paginated.
 /// The page request specifies the page size and last_id.
 /// If page_size is not specified, it defaults to 20.
 /// If page_size is -1, it returns all objects.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PageRequest {
     /// This is the last ID of the previous returned request
@@ -585,6 +694,7 @@ pub struct PageRequest {
 }
 /// LabelFilter is used to filter resources by labels.
 /// The labels are specified as a map of key-value pairs.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LabelFilter {
     #[prost(message, repeated, tag = "1")]
@@ -598,6 +708,7 @@ pub struct LabelFilter {
 }
 /// This is a combined query for either a list of resource IDs or filtered by
 /// Label Can be expanded in the future to allow for more complex queries
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LabelOrIdQuery {
     #[prost(message, optional, tag = "1")]
@@ -608,6 +719,7 @@ pub struct LabelOrIdQuery {
 /// A Project is a list of collections with associated users
 /// This is used to manage access to multiple collections at the same time
 /// Each Collection can only be in one Project at a time
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Project {
     #[prost(string, tag = "1")]
@@ -621,6 +733,7 @@ pub struct Project {
     #[prost(string, tag = "5")]
     pub description: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProjectOverview {
     #[prost(string, tag = "1")]
@@ -634,6 +747,7 @@ pub struct ProjectOverview {
     #[prost(string, repeated, tag = "5")]
     pub user_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
     /// Internal Aruna UserID
@@ -652,6 +766,7 @@ pub struct User {
     #[prost(bool, tag = "5")]
     pub is_admin: bool,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Token {
     #[prost(string, tag = "1")]
@@ -671,6 +786,7 @@ pub struct Token {
     #[prost(enumeration = "Permission", tag = "9")]
     pub permission: i32,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProjectPermission {
     #[prost(string, tag = "1")]
@@ -682,6 +798,7 @@ pub struct ProjectPermission {
     #[prost(bool, tag = "4")]
     pub service_account: bool,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProjectPermissionDisplayName {
     #[prost(string, tag = "1")]
@@ -727,6 +844,18 @@ impl Permission {
             Permission::Admin => "PERMISSION_ADMIN",
         }
     }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PERMISSION_UNSPECIFIED" => Some(Self::Unspecified),
+            "PERMISSION_NONE" => Some(Self::None),
+            "PERMISSION_READ" => Some(Self::Read),
+            "PERMISSION_APPEND" => Some(Self::Append),
+            "PERMISSION_MODIFY" => Some(Self::Modify),
+            "PERMISSION_ADMIN" => Some(Self::Admin),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -752,6 +881,16 @@ impl PermType {
             PermType::Token => "PERM_TYPE_TOKEN",
         }
     }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PERM_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "PERM_TYPE_USER" => Some(Self::User),
+            "PERM_TYPE_ANONYMOUS" => Some(Self::Anonymous),
+            "PERM_TYPE_TOKEN" => Some(Self::Token),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -770,6 +909,15 @@ impl TokenType {
             TokenType::Unspecified => "TOKEN_TYPE_UNSPECIFIED",
             TokenType::Personal => "TOKEN_TYPE_PERSONAL",
             TokenType::Scoped => "TOKEN_TYPE_SCOPED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "TOKEN_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "TOKEN_TYPE_PERSONAL" => Some(Self::Personal),
+            "TOKEN_TYPE_SCOPED" => Some(Self::Scoped),
+            _ => None,
         }
     }
 }

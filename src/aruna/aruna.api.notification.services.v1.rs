@@ -1,3 +1,4 @@
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEventStreamingGroupRequest {
     #[prost(
@@ -21,6 +22,7 @@ pub struct CreateEventStreamingGroupRequest {
 }
 /// Nested message and enum types in `CreateEventStreamingGroupRequest`.
 pub mod create_event_streaming_group_request {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamType {
         #[prost(message, tag = "4")]
@@ -31,11 +33,13 @@ pub mod create_event_streaming_group_request {
         StreamFromSequence(super::StreamFromSequence),
     }
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEventStreamingGroupResponse {
     #[prost(string, tag = "1")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadStreamGroupMessagesRequest {
     #[prost(bool, tag = "3")]
@@ -47,6 +51,7 @@ pub struct ReadStreamGroupMessagesRequest {
 }
 /// Nested message and enum types in `ReadStreamGroupMessagesRequest`.
 pub mod read_stream_group_messages_request {
+    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamAction {
         #[prost(message, tag = "1")]
@@ -55,23 +60,28 @@ pub mod read_stream_group_messages_request {
         Ack(super::NotficationStreamAck),
     }
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupRequest {
     #[prost(string, tag = "1")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotificationStreamInit {
     #[prost(string, tag = "1")]
     pub stream_group_id: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotficationStreamAck {
     #[prost(string, repeated, tag = "1")]
     pub ack_chunk_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadStreamGroupMessagesResponse {
     #[prost(message, repeated, tag = "1")]
@@ -79,18 +89,22 @@ pub struct ReadStreamGroupMessagesResponse {
     #[prost(string, tag = "2")]
     pub ack_chunk_id: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromSequence {
     #[prost(uint64, tag = "1")]
     pub sequence: u64,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromDate {
     #[prost(message, optional, tag = "1")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamAll {}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NotificationStreamResponse {
     #[prost(message, optional, tag = "1")]
@@ -100,6 +114,7 @@ pub struct NotificationStreamResponse {
     #[prost(message, optional, tag = "3")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventNotificationMessage {
     #[prost(
@@ -137,6 +152,19 @@ impl EventType {
             EventType::MetadataUpdated => "EVENT_TYPE_METADATA_UPDATED",
             EventType::Deleted => "EVENT_TYPE_DELETED",
             EventType::All => "EVENT_TYPE_ALL",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EVENT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "EVENT_TYPE_CREATED" => Some(Self::Created),
+            "EVENT_TYPE_AVAILABLE" => Some(Self::Available),
+            "EVENT_TYPE_UPDATED" => Some(Self::Updated),
+            "EVENT_TYPE_METADATA_UPDATED" => Some(Self::MetadataUpdated),
+            "EVENT_TYPE_DELETED" => Some(Self::Deleted),
+            "EVENT_TYPE_ALL" => Some(Self::All),
+            _ => None,
         }
     }
 }
@@ -299,7 +327,7 @@ pub mod update_notification_service_client {
 pub mod update_notification_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    ///Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer.
     #[async_trait]
     pub trait UpdateNotificationService: Send + Sync + 'static {
         /// CreateEventStreamingGroup
@@ -322,7 +350,7 @@ pub mod update_notification_service_server {
             tonic::Response<super::DeleteEventStreamingGroupResponse>,
             tonic::Status,
         >;
-        ///Server streaming response type for the ReadStreamGroupMessages method.
+        /// Server streaming response type for the ReadStreamGroupMessages method.
         type ReadStreamGroupMessagesStream: futures_core::Stream<
                 Item = Result<super::ReadStreamGroupMessagesResponse, tonic::Status>,
             >
