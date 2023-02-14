@@ -69,8 +69,7 @@ pub struct Hash {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Origin {
-    #[prost(enumeration = "OriginType", tag = "1")]
-    pub r#type: i32,
+    /// OriginType type = 1;
     #[prost(string, tag = "2")]
     pub id: ::prost::alloc::string::String,
 }
@@ -547,38 +546,6 @@ impl Hashalgorithm {
             "HASHALGORITHM_UNSPECIFIED" => Some(Self::Unspecified),
             "HASHALGORITHM_MD5" => Some(Self::Md5),
             "HASHALGORITHM_SHA256" => Some(Self::Sha256),
-            _ => None,
-        }
-    }
-}
-/// Specifies the Origin of the object
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum OriginType {
-    Unspecified = 0,
-    /// User uploaded the object
-    User = 1,
-    /// Object was cloned from another object
-    Objclone = 2,
-}
-impl OriginType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            OriginType::Unspecified => "ORIGIN_TYPE_UNSPECIFIED",
-            OriginType::User => "ORIGIN_TYPE_USER",
-            OriginType::Objclone => "ORIGIN_TYPE_OBJCLONE",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "ORIGIN_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "ORIGIN_TYPE_USER" => Some(Self::User),
-            "ORIGIN_TYPE_OBJCLONE" => Some(Self::Objclone),
             _ => None,
         }
     }

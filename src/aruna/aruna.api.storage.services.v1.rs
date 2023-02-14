@@ -4802,6 +4802,9 @@ pub struct InitializeNewObjectRequest {
     /// Should this object contain a specification for the collection ?
     #[prost(bool, tag = "6")]
     pub is_specification: bool,
+    /// (optional) Hash
+    #[prost(message, optional, tag = "7")]
+    pub hash: ::core::option::Option<super::super::models::v1::Hash>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
