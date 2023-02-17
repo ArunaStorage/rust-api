@@ -121,6 +121,9 @@ pub struct DeleteObjectGroupRequest {
     /// Collection id
     #[prost(string, tag = "2")]
     pub collection_id: ::prost::alloc::string::String,
+    /// with revisions
+    #[prost(bool, tag = "3")]
+    pub with_revisions: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -5014,7 +5017,7 @@ pub struct CreateObjectReferenceRequest {
     pub auto_update: bool,
     /// (collection specific) sub_path for file
     /// does not include file-, collection- or projectname
-    /// final schema: /<projectname>/<collectionname>/<path>/<filename>
+    /// final schema: /<projectname>/<collectionname>/<version>/<path>/<filename>
     #[prost(string, tag = "6")]
     pub sub_path: ::prost::alloc::string::String,
 }
@@ -5335,10 +5338,8 @@ pub struct SetObjectPathVisibilityRequest {
     #[prost(string, tag = "1")]
     pub collection_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
     pub path: ::prost::alloc::string::String,
-    #[prost(bool, tag = "4")]
+    #[prost(bool, tag = "3")]
     pub visibility: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
