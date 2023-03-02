@@ -6237,6 +6237,12 @@ pub struct CreateApiTokenResponse {
     /// New tokens will always contain a new secret
     #[prost(string, tag = "2")]
     pub token_secret: ::prost::alloc::string::String,
+    /// S3 Access Key
+    #[prost(string, tag = "3")]
+    pub s3_access_key: ::prost::alloc::string::String,
+    /// S3 Secret Key
+    #[prost(string, tag = "4")]
+    pub s3_secret_key: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

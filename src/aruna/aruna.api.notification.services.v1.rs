@@ -165,18 +165,18 @@ impl EventType {
     }
 }
 /// Generated client implementations.
-pub mod update_notification_service_client {
+pub mod event_notification_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
-    /// UpdateNotificationService
+    /// EventNotificationService
     ///
-    /// A service to update streaminggroups in nats.io
+    /// A service to receive events in the AOS storage
     #[derive(Debug, Clone)]
-    pub struct UpdateNotificationServiceClient<T> {
+    pub struct EventNotificationServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl UpdateNotificationServiceClient<tonic::transport::Channel> {
+    impl EventNotificationServiceClient<tonic::transport::Channel> {
         /// Attempt to create a new client by connecting to a given endpoint.
         pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
@@ -187,7 +187,7 @@ pub mod update_notification_service_client {
             Ok(Self::new(conn))
         }
     }
-    impl<T> UpdateNotificationServiceClient<T>
+    impl<T> EventNotificationServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
         T::Error: Into<StdError>,
@@ -205,7 +205,7 @@ pub mod update_notification_service_client {
         pub fn with_interceptor<F>(
             inner: T,
             interceptor: F,
-        ) -> UpdateNotificationServiceClient<InterceptedService<T, F>>
+        ) -> EventNotificationServiceClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -219,7 +219,7 @@ pub mod update_notification_service_client {
                 http::Request<tonic::body::BoxBody>,
             >>::Error: Into<StdError> + Send + Sync,
         {
-            UpdateNotificationServiceClient::new(
+            EventNotificationServiceClient::new(
                 InterceptedService::new(inner, interceptor),
             )
         }
@@ -259,7 +259,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/CreateEventStreamingGroup",
+                "/aruna.api.notification.services.v1.EventNotificationService/CreateEventStreamingGroup",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -286,7 +286,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatch",
+                "/aruna.api.notification.services.v1.EventNotificationService/GetEventMessageBatch",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -315,7 +315,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatchStream",
+                "/aruna.api.notification.services.v1.EventNotificationService/GetEventMessageBatchStream",
             );
             self.inner.server_streaming(request.into_request(), path, codec).await
         }
@@ -341,7 +341,7 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/AcknowledgeMessageBatch",
+                "/aruna.api.notification.services.v1.EventNotificationService/AcknowledgeMessageBatch",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -366,19 +366,19 @@ pub mod update_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/DeleteEventStreamingGroup",
+                "/aruna.api.notification.services.v1.EventNotificationService/DeleteEventStreamingGroup",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
     }
 }
 /// Generated server implementations.
-pub mod update_notification_service_server {
+pub mod event_notification_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with UpdateNotificationServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with EventNotificationServiceServer.
     #[async_trait]
-    pub trait UpdateNotificationService: Send + Sync + 'static {
+    pub trait EventNotificationService: Send + Sync + 'static {
         /// CreateEventStreamingGroup
         ///
         /// Creates a new EventStreamingGroup
@@ -438,17 +438,17 @@ pub mod update_notification_service_server {
             tonic::Status,
         >;
     }
-    /// UpdateNotificationService
+    /// EventNotificationService
     ///
-    /// A service to update streaminggroups in nats.io
+    /// A service to receive events in the AOS storage
     #[derive(Debug)]
-    pub struct UpdateNotificationServiceServer<T: UpdateNotificationService> {
+    pub struct EventNotificationServiceServer<T: EventNotificationService> {
         inner: _Inner<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
     }
     struct _Inner<T>(Arc<T>);
-    impl<T: UpdateNotificationService> UpdateNotificationServiceServer<T> {
+    impl<T: EventNotificationService> EventNotificationServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -483,9 +483,9 @@ pub mod update_notification_service_server {
         }
     }
     impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for UpdateNotificationServiceServer<T>
+    for EventNotificationServiceServer<T>
     where
-        T: UpdateNotificationService,
+        T: EventNotificationService,
         B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
@@ -501,13 +501,13 @@ pub mod update_notification_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.notification.services.v1.UpdateNotificationService/CreateEventStreamingGroup" => {
+                "/aruna.api.notification.services.v1.EventNotificationService/CreateEventStreamingGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct CreateEventStreamingGroupSvc<T: UpdateNotificationService>(
+                    struct CreateEventStreamingGroupSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
-                        T: UpdateNotificationService,
+                        T: EventNotificationService,
                     > tonic::server::UnaryService<
                         super::CreateEventStreamingGroupRequest,
                     > for CreateEventStreamingGroupSvc<T> {
@@ -546,13 +546,13 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatch" => {
+                "/aruna.api.notification.services.v1.EventNotificationService/GetEventMessageBatch" => {
                     #[allow(non_camel_case_types)]
-                    struct GetEventMessageBatchSvc<T: UpdateNotificationService>(
+                    struct GetEventMessageBatchSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
-                        T: UpdateNotificationService,
+                        T: EventNotificationService,
                     > tonic::server::UnaryService<super::GetEventMessageBatchRequest>
                     for GetEventMessageBatchSvc<T> {
                         type Response = super::GetEventMessageBatchResponse;
@@ -588,13 +588,13 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatchStream" => {
+                "/aruna.api.notification.services.v1.EventNotificationService/GetEventMessageBatchStream" => {
                     #[allow(non_camel_case_types)]
-                    struct GetEventMessageBatchStreamSvc<T: UpdateNotificationService>(
+                    struct GetEventMessageBatchStreamSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
-                        T: UpdateNotificationService,
+                        T: EventNotificationService,
                     > tonic::server::ServerStreamingService<
                         super::GetEventMessageBatchStreamRequest,
                     > for GetEventMessageBatchStreamSvc<T> {
@@ -634,13 +634,13 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v1.UpdateNotificationService/AcknowledgeMessageBatch" => {
+                "/aruna.api.notification.services.v1.EventNotificationService/AcknowledgeMessageBatch" => {
                     #[allow(non_camel_case_types)]
-                    struct AcknowledgeMessageBatchSvc<T: UpdateNotificationService>(
+                    struct AcknowledgeMessageBatchSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
-                        T: UpdateNotificationService,
+                        T: EventNotificationService,
                     > tonic::server::UnaryService<super::AcknowledgeMessageBatchRequest>
                     for AcknowledgeMessageBatchSvc<T> {
                         type Response = super::AcknowledgeMessageBatchResponse;
@@ -678,13 +678,13 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v1.UpdateNotificationService/DeleteEventStreamingGroup" => {
+                "/aruna.api.notification.services.v1.EventNotificationService/DeleteEventStreamingGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct DeleteEventStreamingGroupSvc<T: UpdateNotificationService>(
+                    struct DeleteEventStreamingGroupSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
-                        T: UpdateNotificationService,
+                        T: EventNotificationService,
                     > tonic::server::UnaryService<
                         super::DeleteEventStreamingGroupRequest,
                     > for DeleteEventStreamingGroupSvc<T> {
@@ -738,7 +738,7 @@ pub mod update_notification_service_server {
             }
         }
     }
-    impl<T: UpdateNotificationService> Clone for UpdateNotificationServiceServer<T> {
+    impl<T: EventNotificationService> Clone for EventNotificationServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -748,7 +748,7 @@ pub mod update_notification_service_server {
             }
         }
     }
-    impl<T: UpdateNotificationService> Clone for _Inner<T> {
+    impl<T: EventNotificationService> Clone for _Inner<T> {
         fn clone(&self) -> Self {
             Self(self.0.clone())
         }
@@ -758,8 +758,8 @@ pub mod update_notification_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: UpdateNotificationService> tonic::server::NamedService
-    for UpdateNotificationServiceServer<T> {
-        const NAME: &'static str = "aruna.api.notification.services.v1.UpdateNotificationService";
+    impl<T: EventNotificationService> tonic::server::NamedService
+    for EventNotificationServiceServer<T> {
+        const NAME: &'static str = "aruna.api.notification.services.v1.EventNotificationService";
     }
 }

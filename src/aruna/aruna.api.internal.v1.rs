@@ -4,12 +4,9 @@ pub struct Authorization {
     /// Should include the APItoken
     #[prost(string, tag = "1")]
     pub secretkey: ::prost::alloc::string::String,
-    /// Can be empty for now
+    /// Is the API-Token ID
     #[prost(string, tag = "2")]
     pub accesskey: ::prost::alloc::string::String,
-    /// If the secret is an APIToken (or S3-style access / secretkey)
-    #[prost(bool, tag = "3")]
-    pub is_token: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -44,6 +41,18 @@ pub struct AuthorizeResponse {
     /// Ok -> Authorization granted, empty or not ok -> dismiss
     #[prost(bool, tag = "1")]
     pub ok: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSecretRequest {
+    #[prost(string, tag = "1")]
+    pub accesskey: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSecretResponse {
+    #[prost(message, optional, tag = "1")]
+    pub authorization: ::core::option::Option<Authorization>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -164,6 +173,25 @@ pub mod internal_authorize_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn get_secret(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetSecretRequest>,
+        ) -> Result<tonic::Response<super::GetSecretResponse>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalAuthorizeService/GetSecret",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -177,6 +205,10 @@ pub mod internal_authorize_service_server {
             &self,
             request: tonic::Request<super::AuthorizeRequest>,
         ) -> Result<tonic::Response<super::AuthorizeResponse>, tonic::Status>;
+        async fn get_secret(
+            &self,
+            request: tonic::Request<super::GetSecretRequest>,
+        ) -> Result<tonic::Response<super::GetSecretResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct InternalAuthorizeServiceServer<T: InternalAuthorizeService> {
@@ -265,6 +297,44 @@ pub mod internal_authorize_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = AuthorizeSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalAuthorizeService/GetSecret" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetSecretSvc<T: InternalAuthorizeService>(pub Arc<T>);
+                    impl<
+                        T: InternalAuthorizeService,
+                    > tonic::server::UnaryService<super::GetSecretRequest>
+                    for GetSecretSvc<T> {
+                        type Response = super::GetSecretResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetSecretRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_secret(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetSecretSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
