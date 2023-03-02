@@ -10,8 +10,6 @@ pub struct CreateEventStreamingGroupRequest {
     pub resource_id: ::prost::alloc::string::String,
     #[prost(bool, tag = "3")]
     pub include_subresource: bool,
-    #[prost(string, tag = "7")]
-    pub stream_group_id: ::prost::alloc::string::String,
     #[prost(
         oneof = "create_event_streaming_group_request::StreamType",
         tags = "4, 5, 6"
@@ -41,25 +39,41 @@ pub struct CreateEventStreamingGroupResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReadStreamGroupMessagesRequest {
-    #[prost(bool, tag = "3")]
-    pub close: bool,
-    #[prost(oneof = "read_stream_group_messages_request::StreamAction", tags = "1, 2")]
-    pub stream_action: ::core::option::Option<
-        read_stream_group_messages_request::StreamAction,
-    >,
+pub struct GetEventMessageBatchRequest {
+    #[prost(string, tag = "1")]
+    pub stream_group_id: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub batch_size: u32,
 }
-/// Nested message and enum types in `ReadStreamGroupMessagesRequest`.
-pub mod read_stream_group_messages_request {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum StreamAction {
-        #[prost(message, tag = "1")]
-        Init(super::NotificationStreamInit),
-        #[prost(message, tag = "2")]
-        Ack(super::NotficationStreamAck),
-    }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEventMessageBatchResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub messages: ::prost::alloc::vec::Vec<EventNotificationMessage>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEventMessageBatchStreamRequest {
+    #[prost(string, tag = "1")]
+    pub stream_group_id: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub batch_size: u32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEventMessageBatchStreamResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub messages: ::prost::alloc::vec::Vec<EventNotificationMessage>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AcknowledgeMessageBatchRequest {
+    #[prost(message, repeated, tag = "1")]
+    pub replies: ::prost::alloc::vec::Vec<Reply>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AcknowledgeMessageBatchResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupRequest {
@@ -69,26 +83,6 @@ pub struct DeleteEventStreamingGroupRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamInit {
-    #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotficationStreamAck {
-    #[prost(string, repeated, tag = "1")]
-    pub ack_chunk_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReadStreamGroupMessagesResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub notification: ::prost::alloc::vec::Vec<NotificationStreamResponse>,
-    #[prost(string, tag = "2")]
-    pub ack_chunk_id: ::prost::alloc::string::String,
-}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromSequence {
@@ -106,16 +100,6 @@ pub struct StreamFromDate {
 pub struct StreamAll {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct NotificationStreamResponse {
-    #[prost(message, optional, tag = "1")]
-    pub message: ::core::option::Option<EventNotificationMessage>,
-    #[prost(uint64, tag = "2")]
-    pub sequence: u64,
-    #[prost(message, optional, tag = "3")]
-    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventNotificationMessage {
     #[prost(
         enumeration = "super::super::super::storage::models::v1::ResourceType",
@@ -126,6 +110,18 @@ pub struct EventNotificationMessage {
     pub resource_id: ::prost::alloc::string::String,
     #[prost(enumeration = "EventType", tag = "3")]
     pub updated_type: i32,
+    #[prost(message, optional, tag = "4")]
+    pub reply: ::core::option::Option<Reply>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Reply {
+    #[prost(string, tag = "1")]
+    pub reply: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub salt: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub hmac: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -267,6 +263,88 @@ pub mod update_notification_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        /// GetEventMessageBatch
+        ///
+        /// Reads a set of messages from a given stream group
+        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
+        pub async fn get_event_message_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetEventMessageBatchRequest>,
+        ) -> Result<
+            tonic::Response<super::GetEventMessageBatchResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatch",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        /// GetEventMessageBatch
+        ///
+        /// Reads a set of messages from a given stream group
+        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
+        pub async fn get_event_message_batch_stream(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetEventMessageBatchStreamRequest>,
+        ) -> Result<
+            tonic::Response<
+                tonic::codec::Streaming<super::GetEventMessageBatchStreamResponse>,
+            >,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatchStream",
+            );
+            self.inner.server_streaming(request.into_request(), path, codec).await
+        }
+        /// AcknowledgeMessageBatch
+        ///
+        /// List of messages to acknowledge
+        /// Each reply is protected by a salt and and hmac that verifies the message
+        pub async fn acknowledge_message_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AcknowledgeMessageBatchRequest>,
+        ) -> Result<
+            tonic::Response<super::AcknowledgeMessageBatchResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.notification.services.v1.UpdateNotificationService/AcknowledgeMessageBatch",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         /// DeleteEventStreamingGroup
         ///
         /// Deletes a existing EventStreamingGroup by ID
@@ -292,35 +370,6 @@ pub mod update_notification_service_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        /// ReadStreamGroupMessages
-        ///
-        /// Reads a stream of messages for a specific StreamGroup
-        pub async fn read_stream_group_messages(
-            &mut self,
-            request: impl tonic::IntoStreamingRequest<
-                Message = super::ReadStreamGroupMessagesRequest,
-            >,
-        ) -> Result<
-            tonic::Response<
-                tonic::codec::Streaming<super::ReadStreamGroupMessagesResponse>,
-            >,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v1.UpdateNotificationService/ReadStreamGroupMessages",
-            );
-            self.inner.streaming(request.into_streaming_request(), path, codec).await
-        }
     }
 }
 /// Generated server implementations.
@@ -340,6 +389,44 @@ pub mod update_notification_service_server {
             tonic::Response<super::CreateEventStreamingGroupResponse>,
             tonic::Status,
         >;
+        /// GetEventMessageBatch
+        ///
+        /// Reads a set of messages from a given stream group
+        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
+        async fn get_event_message_batch(
+            &self,
+            request: tonic::Request<super::GetEventMessageBatchRequest>,
+        ) -> Result<tonic::Response<super::GetEventMessageBatchResponse>, tonic::Status>;
+        /// Server streaming response type for the GetEventMessageBatchStream method.
+        type GetEventMessageBatchStreamStream: futures_core::Stream<
+                Item = Result<super::GetEventMessageBatchStreamResponse, tonic::Status>,
+            >
+            + Send
+            + 'static;
+        /// GetEventMessageBatch
+        ///
+        /// Reads a set of messages from a given stream group
+        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
+        async fn get_event_message_batch_stream(
+            &self,
+            request: tonic::Request<super::GetEventMessageBatchStreamRequest>,
+        ) -> Result<
+            tonic::Response<Self::GetEventMessageBatchStreamStream>,
+            tonic::Status,
+        >;
+        /// AcknowledgeMessageBatch
+        ///
+        /// List of messages to acknowledge
+        /// Each reply is protected by a salt and and hmac that verifies the message
+        async fn acknowledge_message_batch(
+            &self,
+            request: tonic::Request<super::AcknowledgeMessageBatchRequest>,
+        ) -> Result<
+            tonic::Response<super::AcknowledgeMessageBatchResponse>,
+            tonic::Status,
+        >;
         /// DeleteEventStreamingGroup
         ///
         /// Deletes a existing EventStreamingGroup by ID
@@ -350,21 +437,6 @@ pub mod update_notification_service_server {
             tonic::Response<super::DeleteEventStreamingGroupResponse>,
             tonic::Status,
         >;
-        /// Server streaming response type for the ReadStreamGroupMessages method.
-        type ReadStreamGroupMessagesStream: futures_core::Stream<
-                Item = Result<super::ReadStreamGroupMessagesResponse, tonic::Status>,
-            >
-            + Send
-            + 'static;
-        /// ReadStreamGroupMessages
-        ///
-        /// Reads a stream of messages for a specific StreamGroup
-        async fn read_stream_group_messages(
-            &self,
-            request: tonic::Request<
-                tonic::Streaming<super::ReadStreamGroupMessagesRequest>,
-            >,
-        ) -> Result<tonic::Response<Self::ReadStreamGroupMessagesStream>, tonic::Status>;
     }
     /// UpdateNotificationService
     ///
@@ -474,6 +546,138 @@ pub mod update_notification_service_server {
                     };
                     Box::pin(fut)
                 }
+                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatch" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetEventMessageBatchSvc<T: UpdateNotificationService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: UpdateNotificationService,
+                    > tonic::server::UnaryService<super::GetEventMessageBatchRequest>
+                    for GetEventMessageBatchSvc<T> {
+                        type Response = super::GetEventMessageBatchResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetEventMessageBatchRequest>,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_event_message_batch(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetEventMessageBatchSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.notification.services.v1.UpdateNotificationService/GetEventMessageBatchStream" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetEventMessageBatchStreamSvc<T: UpdateNotificationService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: UpdateNotificationService,
+                    > tonic::server::ServerStreamingService<
+                        super::GetEventMessageBatchStreamRequest,
+                    > for GetEventMessageBatchStreamSvc<T> {
+                        type Response = super::GetEventMessageBatchStreamResponse;
+                        type ResponseStream = T::GetEventMessageBatchStreamStream;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::ResponseStream>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::GetEventMessageBatchStreamRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_event_message_batch_stream(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetEventMessageBatchStreamSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.server_streaming(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.notification.services.v1.UpdateNotificationService/AcknowledgeMessageBatch" => {
+                    #[allow(non_camel_case_types)]
+                    struct AcknowledgeMessageBatchSvc<T: UpdateNotificationService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: UpdateNotificationService,
+                    > tonic::server::UnaryService<super::AcknowledgeMessageBatchRequest>
+                    for AcknowledgeMessageBatchSvc<T> {
+                        type Response = super::AcknowledgeMessageBatchResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::AcknowledgeMessageBatchRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).acknowledge_message_batch(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AcknowledgeMessageBatchSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/aruna.api.notification.services.v1.UpdateNotificationService/DeleteEventStreamingGroup" => {
                     #[allow(non_camel_case_types)]
                     struct DeleteEventStreamingGroupSvc<T: UpdateNotificationService>(
@@ -515,52 +719,6 @@ pub mod update_notification_service_server {
                                 send_compression_encodings,
                             );
                         let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.notification.services.v1.UpdateNotificationService/ReadStreamGroupMessages" => {
-                    #[allow(non_camel_case_types)]
-                    struct ReadStreamGroupMessagesSvc<T: UpdateNotificationService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: UpdateNotificationService,
-                    > tonic::server::StreamingService<
-                        super::ReadStreamGroupMessagesRequest,
-                    > for ReadStreamGroupMessagesSvc<T> {
-                        type Response = super::ReadStreamGroupMessagesResponse;
-                        type ResponseStream = T::ReadStreamGroupMessagesStream;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::ResponseStream>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                tonic::Streaming<super::ReadStreamGroupMessagesRequest>,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).read_stream_group_messages(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = ReadStreamGroupMessagesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
