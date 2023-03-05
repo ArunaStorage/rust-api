@@ -644,45 +644,6 @@ impl EndpointType {
         }
     }
 }
-/// This file contains parameters for queries that return a list of resources.
-/// The results are paginated.
-/// The page request specifies the page size and last_id.
-/// If page_size is not specified, it defaults to 20.
-/// If page_size is -1, it returns all objects.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PageRequest {
-    /// This is the last ID of the previous returned request
-    #[prost(string, tag = "1")]
-    pub last_uuid: ::prost::alloc::string::String,
-    /// Default to 20, -1 for all
-    #[prost(int64, tag = "2")]
-    pub page_size: i64,
-}
-/// LabelFilter is used to filter resources by labels.
-/// The labels are specified as a map of key-value pairs.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct LabelFilter {
-    #[prost(message, repeated, tag = "1")]
-    pub labels: ::prost::alloc::vec::Vec<KeyValue>,
-    /// True if and, if empty or false or
-    #[prost(bool, tag = "2")]
-    pub and_or_or: bool,
-    /// Should only the keys be considered ?
-    #[prost(bool, tag = "3")]
-    pub keys_only: bool,
-}
-/// This is a combined query for either a list of resource IDs or filtered by
-/// Label Can be expanded in the future to allow for more complex queries
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct LabelOrIdQuery {
-    #[prost(message, optional, tag = "1")]
-    pub labels: ::core::option::Option<LabelFilter>,
-    #[prost(string, repeated, tag = "2")]
-    pub ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
 /// A Project is a list of collections with associated users
 /// This is used to manage access to multiple collections at the same time
 /// Each Collection can only be in one Project at a time
@@ -887,4 +848,43 @@ impl TokenType {
             _ => None,
         }
     }
+}
+/// This file contains parameters for queries that return a list of resources.
+/// The results are paginated.
+/// The page request specifies the page size and last_id.
+/// If page_size is not specified, it defaults to 20.
+/// If page_size is -1, it returns all objects.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PageRequest {
+    /// This is the last ID of the previous returned request
+    #[prost(string, tag = "1")]
+    pub last_uuid: ::prost::alloc::string::String,
+    /// Default to 20, -1 for all
+    #[prost(int64, tag = "2")]
+    pub page_size: i64,
+}
+/// LabelFilter is used to filter resources by labels.
+/// The labels are specified as a map of key-value pairs.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LabelFilter {
+    #[prost(message, repeated, tag = "1")]
+    pub labels: ::prost::alloc::vec::Vec<KeyValue>,
+    /// True if and, if empty or false or
+    #[prost(bool, tag = "2")]
+    pub and_or_or: bool,
+    /// Should only the keys be considered ?
+    #[prost(bool, tag = "3")]
+    pub keys_only: bool,
+}
+/// This is a combined query for either a list of resource IDs or filtered by
+/// Label Can be expanded in the future to allow for more complex queries
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LabelOrIdQuery {
+    #[prost(message, optional, tag = "1")]
+    pub labels: ::core::option::Option<LabelFilter>,
+    #[prost(string, repeated, tag = "2")]
+    pub ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
