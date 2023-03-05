@@ -10,6 +10,8 @@ pub struct CreateEventStreamingGroupRequest {
     pub resource_id: ::prost::alloc::string::String,
     #[prost(bool, tag = "3")]
     pub include_subresource: bool,
+    #[prost(message, optional, tag = "7")]
+    pub hierarchy: ::core::option::Option<EventStreamingGroupHierarchy>,
     #[prost(
         oneof = "create_event_streaming_group_request::StreamType",
         tags = "4, 5, 6"
@@ -30,6 +32,18 @@ pub mod create_event_streaming_group_request {
         #[prost(message, tag = "6")]
         StreamFromSequence(super::StreamFromSequence),
     }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EventStreamingGroupHierarchy {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub object_group_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
