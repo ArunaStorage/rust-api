@@ -388,27 +388,62 @@ pub mod internal_authorize_service_server {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroupRelation {
-    #[prost(string, tag = "1")]
-    pub shared_object_group_id: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "2")]
-    pub object_group_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+pub struct EmittedResource {
+    #[prost(oneof = "emitted_resource::Resource", tags = "1, 2, 3, 4")]
+    pub resource: ::core::option::Option<emitted_resource::Resource>,
+}
+/// Nested message and enum types in `EmittedResource`.
+pub mod emitted_resource {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Resource {
+        #[prost(message, tag = "1")]
+        Project(super::ProjectResource),
+        #[prost(message, tag = "2")]
+        Collection(super::CollectionResource),
+        #[prost(message, tag = "3")]
+        Object(super::ObjectResource),
+        #[prost(message, tag = "4")]
+        ObjectGroup(super::ObjectGroupResource),
+    }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Relation {
-    /// The shared revision id of an object
+pub struct ProjectResource {
     #[prost(string, tag = "1")]
-    pub shared_object: ::prost::alloc::string::String,
-    /// The associated objectgroup(s)
-    #[prost(message, repeated, tag = "2")]
-    pub object_groups: ::prost::alloc::vec::Vec<ObjectGroupRelation>,
-    /// Collection ID
+    pub project_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CollectionResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
-    pub collection: ::prost::alloc::string::String,
-    /// Project ID
+    pub shared_object_id: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
-    pub project: ::prost::alloc::string::String,
+    pub object_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectGroupResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub shared_object_group_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub object_group_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -427,7 +462,7 @@ pub struct EmitEventRequest {
     pub event_type: i32,
     /// All relations of the resource, only parents are shown
     #[prost(message, repeated, tag = "4")]
-    pub relations: ::prost::alloc::vec::Vec<Relation>,
+    pub resources: ::prost::alloc::vec::Vec<EmittedResource>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
