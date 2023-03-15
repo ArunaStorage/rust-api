@@ -1371,8 +1371,8 @@ pub struct GetOrCreateObjectByPathResponse {
     pub collection_id: ::prost::alloc::string::String,
     #[prost(enumeration = "super::super::storage::models::v1::DataClass", tag = "3")]
     pub dataclass: i32,
-    #[prost(message, optional, tag = "4")]
-    pub hash: ::core::option::Option<super::super::storage::models::v1::Hash>,
+    #[prost(message, repeated, tag = "4")]
+    pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

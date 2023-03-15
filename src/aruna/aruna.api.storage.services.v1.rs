@@ -3428,13 +3428,13 @@ pub struct GetObjectsByPathRequest {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectCollectionIDsByPathRequest {
+pub struct GetProjectCollectionIdsByPathRequest {
     #[prost(string, tag = "1")]
     pub path: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetProjectCollectionIDsByPathResponse {
+pub struct GetProjectCollectionIdsByPathResponse {
     #[prost(string, tag = "1")]
     pub project_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -4156,11 +4156,11 @@ pub mod object_service_client {
         ///
         /// Gets a specific object by object_path
         /// !! Paths are collection specific !!
-        pub async fn get_project_collection_i_ds_by_path(
+        pub async fn get_project_collection_ids_by_path(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetProjectCollectionIDsByPathRequest>,
+            request: impl tonic::IntoRequest<super::GetProjectCollectionIdsByPathRequest>,
         ) -> Result<
-            tonic::Response<super::GetProjectCollectionIDsByPathResponse>,
+            tonic::Response<super::GetProjectCollectionIdsByPathResponse>,
             tonic::Status,
         > {
             self.inner
@@ -4174,7 +4174,7 @@ pub mod object_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v1.ObjectService/GetProjectCollectionIDsByPath",
+                "/aruna.api.storage.services.v1.ObjectService/GetProjectCollectionIdsByPath",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -4469,11 +4469,11 @@ pub mod object_service_server {
         ///
         /// Gets a specific object by object_path
         /// !! Paths are collection specific !!
-        async fn get_project_collection_i_ds_by_path(
+        async fn get_project_collection_ids_by_path(
             &self,
-            request: tonic::Request<super::GetProjectCollectionIDsByPathRequest>,
+            request: tonic::Request<super::GetProjectCollectionIdsByPathRequest>,
         ) -> Result<
-            tonic::Response<super::GetProjectCollectionIDsByPathResponse>,
+            tonic::Response<super::GetProjectCollectionIdsByPathResponse>,
             tonic::Status,
         >;
     }
@@ -5505,17 +5505,17 @@ pub mod object_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v1.ObjectService/GetProjectCollectionIDsByPath" => {
+                "/aruna.api.storage.services.v1.ObjectService/GetProjectCollectionIdsByPath" => {
                     #[allow(non_camel_case_types)]
-                    struct GetProjectCollectionIDsByPathSvc<T: ObjectService>(
+                    struct GetProjectCollectionIdsByPathSvc<T: ObjectService>(
                         pub Arc<T>,
                     );
                     impl<
                         T: ObjectService,
                     > tonic::server::UnaryService<
-                        super::GetProjectCollectionIDsByPathRequest,
-                    > for GetProjectCollectionIDsByPathSvc<T> {
-                        type Response = super::GetProjectCollectionIDsByPathResponse;
+                        super::GetProjectCollectionIdsByPathRequest,
+                    > for GetProjectCollectionIdsByPathSvc<T> {
+                        type Response = super::GetProjectCollectionIdsByPathResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -5523,12 +5523,12 @@ pub mod object_service_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::GetProjectCollectionIDsByPathRequest,
+                                super::GetProjectCollectionIdsByPathRequest,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move {
-                                (*inner).get_project_collection_i_ds_by_path(request).await
+                                (*inner).get_project_collection_ids_by_path(request).await
                             };
                             Box::pin(fut)
                         }
@@ -5538,7 +5538,7 @@ pub mod object_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetProjectCollectionIDsByPathSvc(inner);
+                        let method = GetProjectCollectionIdsByPathSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
