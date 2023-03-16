@@ -1365,6 +1365,9 @@ pub struct GetOrCreateObjectByPathRequest {
     /// Will only be used if no staging object exists
     #[prost(message, optional, tag = "3")]
     pub object: ::core::option::Option<super::super::storage::services::v1::StageObject>,
+    /// Should this only get the object NOT create -> fail
+    #[prost(bool, tag = "4")]
+    pub get_only: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
