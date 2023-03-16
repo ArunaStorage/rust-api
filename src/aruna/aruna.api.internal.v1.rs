@@ -1330,6 +1330,8 @@ pub struct FinalizeObjectRequest {
     pub location: ::core::option::Option<Location>,
     #[prost(message, repeated, tag = "4")]
     pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
+    #[prost(int64, tag = "5")]
+    pub content_length: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1375,6 +1377,10 @@ pub struct GetOrCreateObjectByPathResponse {
     pub dataclass: i32,
     #[prost(message, repeated, tag = "4")]
     pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
+    #[prost(int64, tag = "5")]
+    pub revision_number: i64,
+    #[prost(bool, tag = "6")]
+    pub created: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
