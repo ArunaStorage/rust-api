@@ -1287,6 +1287,10 @@ pub struct PartETag {
 pub struct InitMultipartUploadRequest {
     #[prost(string, tag = "1")]
     pub path: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub collection_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1301,7 +1305,11 @@ pub struct FinishMultipartUploadRequest {
     pub upload_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub path: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
+    #[prost(string, tag = "3")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "5")]
     pub part_etags: ::prost::alloc::vec::Vec<PartETag>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
