@@ -47,6 +47,9 @@ pub struct User {
     /// Is the user admin ?
     #[prost(bool, tag = "5")]
     pub is_admin: bool,
+    /// Is service account
+    #[prost(bool, tag = "6")]
+    pub is_service_account: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -67,6 +70,10 @@ pub struct Token {
     pub project_id: ::prost::alloc::string::String,
     #[prost(enumeration = "Permission", tag = "9")]
     pub permission: i32,
+    #[prost(bool, tag = "10")]
+    pub is_session: bool,
+    #[prost(message, optional, tag = "11")]
+    pub used_at: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -307,6 +314,8 @@ pub struct Endpoint {
     pub is_public: bool,
     #[prost(bool, tag = "8")]
     pub is_default: bool,
+    #[prost(enumeration = "EndpointStatus", tag = "9")]
+    pub status: i32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -691,6 +700,7 @@ pub enum Status {
     Unavailable = 3,
     Error = 4,
     Trash = 5,
+    Finalizing = 6,
 }
 impl Status {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -705,6 +715,7 @@ impl Status {
             Status::Unavailable => "STATUS_UNAVAILABLE",
             Status::Error => "STATUS_ERROR",
             Status::Trash => "STATUS_TRASH",
+            Status::Finalizing => "STATUS_FINALIZING",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -716,6 +727,45 @@ impl Status {
             "STATUS_UNAVAILABLE" => Some(Self::Unavailable),
             "STATUS_ERROR" => Some(Self::Error),
             "STATUS_TRASH" => Some(Self::Trash),
+            "STATUS_FINALIZING" => Some(Self::Finalizing),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EndpointStatus {
+    Unspecified = 0,
+    Initializing = 1,
+    Available = 2,
+    Degraded = 3,
+    Unavailable = 4,
+    Maintenance = 5,
+}
+impl EndpointStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            EndpointStatus::Unspecified => "ENDPOINT_STATUS_UNSPECIFIED",
+            EndpointStatus::Initializing => "ENDPOINT_STATUS_INITIALIZING",
+            EndpointStatus::Available => "ENDPOINT_STATUS_AVAILABLE",
+            EndpointStatus::Degraded => "ENDPOINT_STATUS_DEGRADED",
+            EndpointStatus::Unavailable => "ENDPOINT_STATUS_UNAVAILABLE",
+            EndpointStatus::Maintenance => "ENDPOINT_STATUS_MAINTENANCE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ENDPOINT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "ENDPOINT_STATUS_INITIALIZING" => Some(Self::Initializing),
+            "ENDPOINT_STATUS_AVAILABLE" => Some(Self::Available),
+            "ENDPOINT_STATUS_DEGRADED" => Some(Self::Degraded),
+            "ENDPOINT_STATUS_UNAVAILABLE" => Some(Self::Unavailable),
+            "ENDPOINT_STATUS_MAINTENANCE" => Some(Self::Maintenance),
             _ => None,
         }
     }
