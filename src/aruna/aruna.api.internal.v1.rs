@@ -1630,6 +1630,8 @@ pub struct GetOrCreateObjectByPathRequest {
     /// Should this only get the object NOT create -> fail
     #[prost(bool, tag = "4")]
     pub get_only: bool,
+    #[prost(string, tag = "5")]
+    pub endpoint_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
