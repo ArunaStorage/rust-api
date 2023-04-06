@@ -8,9 +8,15 @@ pub struct ExpiresAt {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RegisterUserRequest {
-    /// Optional user_displayname
+    /// user_displayname
     #[prost(string, tag = "1")]
     pub display_name: ::prost::alloc::string::String,
+    /// Mail address
+    #[prost(string, tag = "2")]
+    pub email: ::prost::alloc::string::String,
+    /// Project description string (optional)
+    #[prost(string, tag = "3")]
+    pub project: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -39,6 +45,9 @@ pub struct CreateApiTokenRequest {
     /// Token permissions
     #[prost(enumeration = "super::super::models::v1::Permission", tag = "5")]
     pub permission: i32,
+    /// Session token
+    #[prost(bool, tag = "6")]
+    pub is_session: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -171,6 +180,11 @@ pub struct ActivateUserRequest {
     /// User to activate
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
+    /// (optional) add user to project
+    #[prost(message, optional, tag = "2")]
+    pub project_perms: ::core::option::Option<
+        super::super::models::v1::ProjectPermission,
+    >,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -185,6 +199,38 @@ pub struct GetNotActivatedUsersResponse {
     #[prost(message, repeated, tag = "1")]
     pub users: ::prost::alloc::vec::Vec<super::super::models::v1::User>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAllUsersRequest {
+    #[prost(bool, tag = "1")]
+    pub include_permissions: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UserWithPerms {
+    #[prost(message, optional, tag = "1")]
+    pub user: ::core::option::Option<super::super::models::v1::User>,
+    #[prost(message, repeated, tag = "2")]
+    pub project_perms: ::prost::alloc::vec::Vec<
+        super::super::models::v1::ProjectPermission,
+    >,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAllUsersResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub user_with_perms: ::prost::alloc::vec::Vec<UserWithPerms>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeactivateUserRequest {
+    /// User to activate
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeactivateUserResponse {}
 /// Generated client implementations.
 pub mod user_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -305,6 +351,41 @@ pub mod user_service_client {
                     GrpcMethod::new(
                         "aruna.api.storage.services.v1.UserService",
                         "RegisterUser",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// DeActivateUser
+        ///
+        /// Status: ALPHA
+        ///
+        /// This deactivates a specific user (Admin request)
+        pub async fn deactivate_user(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeactivateUserRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeactivateUserResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v1.UserService/DeactivateUser",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v1.UserService",
+                        "DeactivateUser",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -660,6 +741,41 @@ pub mod user_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// GetAllUsers
+        ///
+        /// Status: ALPHA
+        ///
+        /// Get all users inkluding permissions (Admin only)
+        pub async fn get_all_users(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetAllUsersRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAllUsersResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v1.UserService/GetAllUsers",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v1.UserService",
+                        "GetAllUsers",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -679,6 +795,18 @@ pub mod user_service_server {
             request: tonic::Request<super::RegisterUserRequest>,
         ) -> std::result::Result<
             tonic::Response<super::RegisterUserResponse>,
+            tonic::Status,
+        >;
+        /// DeActivateUser
+        ///
+        /// Status: ALPHA
+        ///
+        /// This deactivates a specific user (Admin request)
+        async fn deactivate_user(
+            &self,
+            request: tonic::Request<super::DeactivateUserRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeactivateUserResponse>,
             tonic::Status,
         >;
         /// ActivateUser
@@ -799,6 +927,18 @@ pub mod user_service_server {
             tonic::Response<super::GetNotActivatedUsersResponse>,
             tonic::Status,
         >;
+        /// GetAllUsers
+        ///
+        /// Status: ALPHA
+        ///
+        /// Get all users inkluding permissions (Admin only)
+        async fn get_all_users(
+            &self,
+            request: tonic::Request<super::GetAllUsersRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAllUsersResponse>,
+            tonic::Status,
+        >;
     }
     /// UserService
     ///
@@ -914,6 +1054,52 @@ pub mod user_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = RegisterUserSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v1.UserService/DeactivateUser" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeactivateUserSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::DeactivateUserRequest>
+                    for DeactivateUserSvc<T> {
+                        type Response = super::DeactivateUserResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::DeactivateUserRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).deactivate_user(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeactivateUserSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1372,6 +1558,52 @@ pub mod user_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetNotActivatedUsersSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v1.UserService/GetAllUsers" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetAllUsersSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::GetAllUsersRequest>
+                    for GetAllUsersSvc<T> {
+                        type Response = super::GetAllUsersResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetAllUsersRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_all_users(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetAllUsersSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
