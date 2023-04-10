@@ -218,17 +218,6 @@ pub mod internal_proxy_service_client {
     pub struct InternalProxyServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl InternalProxyServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
-    }
     impl<T> InternalProxyServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
@@ -396,17 +385,6 @@ pub mod internal_proxy_notifier_service_client {
     #[derive(Debug, Clone)]
     pub struct InternalProxyNotifierServiceClient<T> {
         inner: tonic::client::Grpc<T>,
-    }
-    impl InternalProxyNotifierServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
     }
     impl<T> InternalProxyNotifierServiceClient<T>
     where
@@ -1519,17 +1497,6 @@ pub mod internal_event_emitter_service_client {
     pub struct InternalEventEmitterServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl InternalEventEmitterServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
-    }
     impl<T> InternalEventEmitterServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
@@ -1640,17 +1607,6 @@ pub mod internal_event_service_client {
     #[derive(Debug, Clone)]
     pub struct InternalEventServiceClient<T> {
         inner: tonic::client::Grpc<T>,
-    }
-    impl InternalEventServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
     }
     impl<T> InternalEventServiceClient<T>
     where
@@ -2461,17 +2417,6 @@ pub mod internal_authorize_service_client {
     #[derive(Debug, Clone)]
     pub struct InternalAuthorizeServiceClient<T> {
         inner: tonic::client::Grpc<T>,
-    }
-    impl InternalAuthorizeServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
     }
     impl<T> InternalAuthorizeServiceClient<T>
     where
