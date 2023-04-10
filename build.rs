@@ -54,4 +54,19 @@ fn main() {
             ]
         )
         .unwrap();
+
+    tonic_build
+        ::configure()
+        .build_server(true)
+        .build_transport(false)
+        .out_dir("./src/aruna_no_transport")
+        .compile(
+            &protos,
+            &[
+                "./src/protos".to_string(),
+                "./src/protos/aruna/api/google".to_string(),
+                "./src/protos/aruna/api/protoc-gen-openapiv2".to_string(),
+            ]
+        )
+        .unwrap();
 }
