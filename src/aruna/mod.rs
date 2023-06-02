@@ -29,6 +29,14 @@ pub mod aruna {
                 pub mod v1;
             }
         }
+        #[path = ""]
+        pub mod bundler {
+            #[path = ""]
+            pub mod services {
+                #[path = "aruna.api.bundler.services.v1.rs"]
+                pub mod v1;
+            }
+        }
     }
 }
 pub mod implements;
