@@ -1,236 +1,198 @@
-/// Locations is the path to the requested data.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Location {
-    #[prost(enumeration = "LocationType", tag = "1")]
-    pub r#type: i32,
-    /// This is the bucket name for S3. This is the folder name
-    #[prost(string, tag = "2")]
-    pub bucket: ::prost::alloc::string::String,
-    /// for local file.
-    ///
-    /// This is the key name for S3. This is the file name for local file.
-    #[prost(string, tag = "3")]
-    pub path: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub endpoint_id: ::prost::alloc::string::String,
-    #[prost(bool, tag = "5")]
-    pub is_compressed: bool,
-    #[prost(bool, tag = "6")]
-    pub is_encrypted: bool,
-    #[prost(string, tag = "7")]
-    pub encryption_key: ::prost::alloc::string::String,
+pub struct EmittedResource {
+    #[prost(oneof = "emitted_resource::Resource", tags = "1, 2, 3, 4")]
+    pub resource: ::core::option::Option<emitted_resource::Resource>,
 }
-/// Etag / Part combination to finish a presigned multipart upload.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PartETag {
-    #[prost(int64, tag = "1")]
-    pub part_number: i64,
-    #[prost(string, tag = "2")]
-    pub etag: ::prost::alloc::string::String,
+/// Nested message and enum types in `EmittedResource`.
+pub mod emitted_resource {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Resource {
+        #[prost(message, tag = "1")]
+        Project(super::ProjectResource),
+        #[prost(message, tag = "2")]
+        Collection(super::CollectionResource),
+        #[prost(message, tag = "3")]
+        Object(super::ObjectResource),
+        #[prost(message, tag = "4")]
+        ObjectGroup(super::ObjectGroupResource),
+    }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InitMultipartUploadRequest {
+pub struct ProjectResource {
     #[prost(string, tag = "1")]
-    pub path: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub collection_id: ::prost::alloc::string::String,
+    pub project_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InitMultipartUploadResponse {
-    #[prost(string, tag = "1")]
-    pub upload_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FinishMultipartUploadRequest {
-    #[prost(string, tag = "1")]
-    pub upload_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub path: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "5")]
-    pub part_etags: ::prost::alloc::vec::Vec<PartETag>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FinishMultipartUploadResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteObjectRequest {
-    #[prost(message, optional, tag = "1")]
-    pub location: ::core::option::Option<Location>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteObjectResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FinalizeObjectRequest {
-    /// This should be stored temporarily
-    #[prost(string, tag = "1")]
-    pub object_id: ::prost::alloc::string::String,
-    /// This should be stored temporarily
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-    /// This will be the final location of the object
-    #[prost(message, optional, tag = "3")]
-    pub location: ::core::option::Option<Location>,
-    #[prost(message, repeated, tag = "4")]
-    pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
-    #[prost(int64, tag = "5")]
-    pub content_length: i64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FinalizeObjectResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetOrCreateEncryptionKeyRequest {
-    #[prost(string, tag = "1")]
-    pub path: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub hash: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetOrCreateEncryptionKeyResponse {
-    #[prost(string, tag = "1")]
-    pub encryption_key: ::prost::alloc::string::String,
-    #[prost(bool, tag = "2")]
-    pub created: bool,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetOrCreateObjectByPathRequest {
-    #[prost(string, tag = "1")]
-    pub path: ::prost::alloc::string::String,
-    /// Validate if the user has correct permissions
-    #[prost(string, tag = "2")]
-    pub access_key: ::prost::alloc::string::String,
-    /// Will only be used if no staging object exists
-    #[prost(message, optional, tag = "3")]
-    pub object: ::core::option::Option<super::super::storage::services::v1::StageObject>,
-    /// Should this only get the object NOT create -> fail
-    #[prost(bool, tag = "4")]
-    pub get_only: bool,
-    #[prost(string, tag = "5")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetOrCreateObjectByPathResponse {
-    #[prost(string, tag = "1")]
-    pub object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "super::super::storage::models::v1::DataClass", tag = "3")]
-    pub dataclass: i32,
-    #[prost(message, repeated, tag = "4")]
-    pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
-    #[prost(int64, tag = "5")]
-    pub revision_number: i64,
-    #[prost(bool, tag = "6")]
-    pub created: bool,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectLocationRequest {
-    #[prost(string, tag = "1")]
-    pub path: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub revision_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub access_key: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CorsConfig {
-    #[prost(string, repeated, tag = "1")]
-    pub allowed_methods: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, repeated, tag = "2")]
-    pub allowed_origins: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, repeated, tag = "3")]
-    pub allowed_headers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetObjectLocationResponse {
-    #[prost(message, optional, tag = "1")]
-    pub object: ::core::option::Option<super::super::storage::models::v1::Object>,
-    #[prost(message, optional, tag = "2")]
-    pub location: ::core::option::Option<Location>,
-    #[prost(message, repeated, tag = "3")]
-    pub cors_configurations: ::prost::alloc::vec::Vec<CorsConfig>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetCollectionByBucketRequest {
-    #[prost(string, tag = "1")]
-    pub bucket: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub access_key: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetCollectionByBucketResponse {
+pub struct CollectionResource {
     #[prost(string, tag = "1")]
     pub project_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub collection_id: ::prost::alloc::string::String,
 }
-/// Enum to support multiple target Locations.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum LocationType {
-    Unspecified = 0,
-    S3 = 1,
-    File = 2,
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub shared_object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub object_id: ::prost::alloc::string::String,
 }
-impl LocationType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            LocationType::Unspecified => "LOCATION_TYPE_UNSPECIFIED",
-            LocationType::S3 => "LOCATION_TYPE_S3",
-            LocationType::File => "LOCATION_TYPE_FILE",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "LOCATION_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "LOCATION_TYPE_S3" => Some(Self::S3),
-            "LOCATION_TYPE_FILE" => Some(Self::File),
-            _ => None,
-        }
-    }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectGroupResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub shared_object_group_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub object_group_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EmitEventRequest {
+    /// The resource Type e.g. Collection / Object etc.
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
+    pub event_resource: i32,
+    /// The resource ID
+    #[prost(string, tag = "2")]
+    pub resource_id: ::prost::alloc::string::String,
+    /// Event type (CRUD)
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "3"
+    )]
+    pub event_type: i32,
+    /// All relations of the resource, only parents are shown
+    #[prost(message, repeated, tag = "4")]
+    pub resources: ::prost::alloc::vec::Vec<EmittedResource>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EmitEventResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StreamGroup {
+    /// Stream group ID
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Event this streamgroup is listening for
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "2"
+    )]
+    pub event_type: i32,
+    /// Type of the resource (Collection, Object etc.)
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
+    pub resource_type: i32,
+    /// Resource ID
+    #[prost(string, tag = "4")]
+    pub resource_id: ::prost::alloc::string::String,
+    /// Should all "sub" resources be included
+    #[prost(bool, tag = "5")]
+    pub notify_on_sub_resource: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateStreamGroupRequest {
+    /// Authorization for the user who wants to create this stream group
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+    /// Event type
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "2"
+    )]
+    pub event_type: i32,
+    /// Type of the resource (Collection, Object etc.)
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
+    pub resource_type: i32,
+    /// Resource ID
+    #[prost(string, tag = "4")]
+    pub resource_id: ::prost::alloc::string::String,
+    /// Should all "sub" resources be included
+    #[prost(bool, tag = "5")]
+    pub notify_on_sub_resource: bool,
+    /// Subject derived from a resource hierarchy
+    #[prost(string, tag = "6")]
+    pub subject: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateStreamGroupResponse {
+    /// The stream_group
+    #[prost(message, optional, tag = "1")]
+    pub stream_group: ::core::option::Option<StreamGroup>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetStreamGroupRequest {
+    /// User token
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+    /// Stream group ID
+    #[prost(string, tag = "2")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetStreamGroupResponse {
+    /// Stream group
+    #[prost(message, optional, tag = "1")]
+    pub stream_group: ::core::option::Option<StreamGroup>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteStreamGroupRequest {
+    /// User token
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+    /// Stream group ID
+    #[prost(string, tag = "2")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteStreamGroupResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSharedRevisionRequest {
+    /// Resource Type (ObjectGroup or Object)
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
+    pub resource_type: i32,
+    /// Resource ID
+    #[prost(string, tag = "2")]
+    pub resource_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSharedRevisionResponse {
+    /// Shared revision ID
+    #[prost(string, tag = "1")]
+    pub shared_revision_id: ::prost::alloc::string::String,
 }
 /// Generated client implementations.
-pub mod internal_proxy_service_client {
+pub mod internal_event_emitter_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// Service hosted by the notification service application
+    /// the API server emits events to the notification service
+    /// Server --> Notification System
     #[derive(Debug, Clone)]
-    pub struct InternalProxyServiceClient<T> {
+    pub struct InternalEventEmitterServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl<T> InternalProxyServiceClient<T>
+    impl<T> InternalEventEmitterServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
         T::Error: Into<StdError>,
@@ -248,7 +210,7 @@ pub mod internal_proxy_service_client {
         pub fn with_interceptor<F>(
             inner: T,
             interceptor: F,
-        ) -> InternalProxyServiceClient<InterceptedService<T, F>>
+        ) -> InternalEventEmitterServiceClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -262,175 +224,7 @@ pub mod internal_proxy_service_client {
                 http::Request<tonic::body::BoxBody>,
             >>::Error: Into<StdError> + Send + Sync,
         {
-            InternalProxyServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        pub async fn init_multipart_upload(
-            &mut self,
-            request: impl tonic::IntoRequest<super::InitMultipartUploadRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::InitMultipartUploadResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyService/InitMultipartUpload",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyService",
-                        "InitMultipartUpload",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn finish_multipart_upload(
-            &mut self,
-            request: impl tonic::IntoRequest<super::FinishMultipartUploadRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::FinishMultipartUploadResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyService/FinishMultipartUpload",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyService",
-                        "FinishMultipartUpload",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn delete_object(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteObjectRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteObjectResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyService/DeleteObject",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyService",
-                        "DeleteObject",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-    }
-}
-/// Generated client implementations.
-pub mod internal_proxy_notifier_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    /// This service enables a "return" channel for dataproxy to aruna server communication
-    /// Mainly used to notify the backend of validation / move events after the upload of new files
-    #[derive(Debug, Clone)]
-    pub struct InternalProxyNotifierServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl<T> InternalProxyNotifierServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InternalProxyNotifierServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            InternalProxyNotifierServiceClient::new(
+            InternalEventEmitterServiceClient::new(
                 InterceptedService::new(inner, interceptor),
             )
         }
@@ -465,11 +259,11 @@ pub mod internal_proxy_notifier_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        pub async fn get_or_create_object_by_path(
+        pub async fn emit_event(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetOrCreateObjectByPathRequest>,
+            request: impl tonic::IntoRequest<super::EmitEventRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetOrCreateObjectByPathResponse>,
+            tonic::Response<super::EmitEventResponse>,
             tonic::Status,
         > {
             self.inner
@@ -483,23 +277,102 @@ pub mod internal_proxy_notifier_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateObjectByPath",
+                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyNotifierService",
-                        "GetOrCreateObjectByPath",
+                        "aruna.api.internal.v1.InternalEventEmitterService",
+                        "EmitEvent",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn finalize_object(
+    }
+}
+/// Generated client implementations.
+pub mod internal_event_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// Service that allows the notification service to issue requests
+    /// to the server application
+    /// Notification System --> Server
+    #[derive(Debug, Clone)]
+    pub struct InternalEventServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl<T> InternalEventServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InternalEventServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            InternalEventServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn create_stream_group(
             &mut self,
-            request: impl tonic::IntoRequest<super::FinalizeObjectRequest>,
+            request: impl tonic::IntoRequest<super::CreateStreamGroupRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::FinalizeObjectResponse>,
+            tonic::Response<super::CreateStreamGroupResponse>,
             tonic::Status,
         > {
             self.inner
@@ -513,23 +386,23 @@ pub mod internal_proxy_notifier_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyNotifierService/FinalizeObject",
+                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyNotifierService",
-                        "FinalizeObject",
+                        "aruna.api.internal.v1.InternalEventService",
+                        "CreateStreamGroup",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn get_or_create_encryption_key(
+        pub async fn get_stream_group(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetOrCreateEncryptionKeyRequest>,
+            request: impl tonic::IntoRequest<super::GetStreamGroupRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetOrCreateEncryptionKeyResponse>,
+            tonic::Response<super::GetStreamGroupResponse>,
             tonic::Status,
         > {
             self.inner
@@ -543,23 +416,23 @@ pub mod internal_proxy_notifier_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateEncryptionKey",
+                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyNotifierService",
-                        "GetOrCreateEncryptionKey",
+                        "aruna.api.internal.v1.InternalEventService",
+                        "GetStreamGroup",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn get_object_location(
+        pub async fn delete_stream_group(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetObjectLocationRequest>,
+            request: impl tonic::IntoRequest<super::DeleteStreamGroupRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetObjectLocationResponse>,
+            tonic::Response<super::DeleteStreamGroupResponse>,
             tonic::Status,
         > {
             self.inner
@@ -573,23 +446,23 @@ pub mod internal_proxy_notifier_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetObjectLocation",
+                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyNotifierService",
-                        "GetObjectLocation",
+                        "aruna.api.internal.v1.InternalEventService",
+                        "DeleteStreamGroup",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn get_collection_by_bucket(
+        pub async fn get_shared_revision(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetCollectionByBucketRequest>,
+            request: impl tonic::IntoRequest<super::GetSharedRevisionRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetCollectionByBucketResponse>,
+            tonic::Response<super::GetSharedRevisionResponse>,
             tonic::Status,
         > {
             self.inner
@@ -603,14 +476,14 @@ pub mod internal_proxy_notifier_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetCollectionByBucket",
+                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalProxyNotifierService",
-                        "GetCollectionByBucket",
+                        "aruna.api.internal.v1.InternalEventService",
+                        "GetSharedRevision",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -618,36 +491,25 @@ pub mod internal_proxy_notifier_service_client {
     }
 }
 /// Generated server implementations.
-pub mod internal_proxy_service_server {
+pub mod internal_event_emitter_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalProxyServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventEmitterServiceServer.
     #[async_trait]
-    pub trait InternalProxyService: Send + Sync + 'static {
-        async fn init_multipart_upload(
+    pub trait InternalEventEmitterService: Send + Sync + 'static {
+        async fn emit_event(
             &self,
-            request: tonic::Request<super::InitMultipartUploadRequest>,
+            request: tonic::Request<super::EmitEventRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::InitMultipartUploadResponse>,
-            tonic::Status,
-        >;
-        async fn finish_multipart_upload(
-            &self,
-            request: tonic::Request<super::FinishMultipartUploadRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::FinishMultipartUploadResponse>,
-            tonic::Status,
-        >;
-        async fn delete_object(
-            &self,
-            request: tonic::Request<super::DeleteObjectRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteObjectResponse>,
+            tonic::Response<super::EmitEventResponse>,
             tonic::Status,
         >;
     }
+    /// Service hosted by the notification service application
+    /// the API server emits events to the notification service
+    /// Server --> Notification System
     #[derive(Debug)]
-    pub struct InternalProxyServiceServer<T: InternalProxyService> {
+    pub struct InternalEventEmitterServiceServer<T: InternalEventEmitterService> {
         inner: _Inner<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
@@ -655,7 +517,7 @@ pub mod internal_proxy_service_server {
         max_encoding_message_size: Option<usize>,
     }
     struct _Inner<T>(Arc<T>);
-    impl<T: InternalProxyService> InternalProxyServiceServer<T> {
+    impl<T: InternalEventEmitterService> InternalEventEmitterServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -708,9 +570,9 @@ pub mod internal_proxy_service_server {
         }
     }
     impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalProxyServiceServer<T>
+    for InternalEventEmitterServiceServer<T>
     where
-        T: InternalProxyService,
+        T: InternalEventEmitterService,
         B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
@@ -726,26 +588,24 @@ pub mod internal_proxy_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.internal.v1.InternalProxyService/InitMultipartUpload" => {
+                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent" => {
                     #[allow(non_camel_case_types)]
-                    struct InitMultipartUploadSvc<T: InternalProxyService>(pub Arc<T>);
+                    struct EmitEventSvc<T: InternalEventEmitterService>(pub Arc<T>);
                     impl<
-                        T: InternalProxyService,
-                    > tonic::server::UnaryService<super::InitMultipartUploadRequest>
-                    for InitMultipartUploadSvc<T> {
-                        type Response = super::InitMultipartUploadResponse;
+                        T: InternalEventEmitterService,
+                    > tonic::server::UnaryService<super::EmitEventRequest>
+                    for EmitEventSvc<T> {
+                        type Response = super::EmitEventResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::InitMultipartUploadRequest>,
+                            request: tonic::Request<super::EmitEventRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).init_multipart_upload(request).await
-                            };
+                            let fut = async move { (*inner).emit_event(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -756,99 +616,7 @@ pub mod internal_proxy_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = InitMultipartUploadSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalProxyService/FinishMultipartUpload" => {
-                    #[allow(non_camel_case_types)]
-                    struct FinishMultipartUploadSvc<T: InternalProxyService>(pub Arc<T>);
-                    impl<
-                        T: InternalProxyService,
-                    > tonic::server::UnaryService<super::FinishMultipartUploadRequest>
-                    for FinishMultipartUploadSvc<T> {
-                        type Response = super::FinishMultipartUploadResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::FinishMultipartUploadRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).finish_multipart_upload(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = FinishMultipartUploadSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalProxyService/DeleteObject" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteObjectSvc<T: InternalProxyService>(pub Arc<T>);
-                    impl<
-                        T: InternalProxyService,
-                    > tonic::server::UnaryService<super::DeleteObjectRequest>
-                    for DeleteObjectSvc<T> {
-                        type Response = super::DeleteObjectResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteObjectRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).delete_object(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteObjectSvc(inner);
+                        let method = EmitEventSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -879,7 +647,7 @@ pub mod internal_proxy_service_server {
             }
         }
     }
-    impl<T: InternalProxyService> Clone for InternalProxyServiceServer<T> {
+    impl<T: InternalEventEmitterService> Clone for InternalEventEmitterServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -891,7 +659,7 @@ pub mod internal_proxy_service_server {
             }
         }
     }
-    impl<T: InternalProxyService> Clone for _Inner<T> {
+    impl<T: InternalEventEmitterService> Clone for _Inner<T> {
         fn clone(&self) -> Self {
             Self(Arc::clone(&self.0))
         }
@@ -901,58 +669,52 @@ pub mod internal_proxy_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: InternalProxyService> tonic::server::NamedService
-    for InternalProxyServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalProxyService";
+    impl<T: InternalEventEmitterService> tonic::server::NamedService
+    for InternalEventEmitterServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalEventEmitterService";
     }
 }
 /// Generated server implementations.
-pub mod internal_proxy_notifier_service_server {
+pub mod internal_event_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalProxyNotifierServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventServiceServer.
     #[async_trait]
-    pub trait InternalProxyNotifierService: Send + Sync + 'static {
-        async fn get_or_create_object_by_path(
+    pub trait InternalEventService: Send + Sync + 'static {
+        async fn create_stream_group(
             &self,
-            request: tonic::Request<super::GetOrCreateObjectByPathRequest>,
+            request: tonic::Request<super::CreateStreamGroupRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetOrCreateObjectByPathResponse>,
+            tonic::Response<super::CreateStreamGroupResponse>,
             tonic::Status,
         >;
-        async fn finalize_object(
+        async fn get_stream_group(
             &self,
-            request: tonic::Request<super::FinalizeObjectRequest>,
+            request: tonic::Request<super::GetStreamGroupRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::FinalizeObjectResponse>,
+            tonic::Response<super::GetStreamGroupResponse>,
             tonic::Status,
         >;
-        async fn get_or_create_encryption_key(
+        async fn delete_stream_group(
             &self,
-            request: tonic::Request<super::GetOrCreateEncryptionKeyRequest>,
+            request: tonic::Request<super::DeleteStreamGroupRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetOrCreateEncryptionKeyResponse>,
+            tonic::Response<super::DeleteStreamGroupResponse>,
             tonic::Status,
         >;
-        async fn get_object_location(
+        async fn get_shared_revision(
             &self,
-            request: tonic::Request<super::GetObjectLocationRequest>,
+            request: tonic::Request<super::GetSharedRevisionRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetObjectLocationResponse>,
-            tonic::Status,
-        >;
-        async fn get_collection_by_bucket(
-            &self,
-            request: tonic::Request<super::GetCollectionByBucketRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetCollectionByBucketResponse>,
+            tonic::Response<super::GetSharedRevisionResponse>,
             tonic::Status,
         >;
     }
-    /// This service enables a "return" channel for dataproxy to aruna server communication
-    /// Mainly used to notify the backend of validation / move events after the upload of new files
+    /// Service that allows the notification service to issue requests
+    /// to the server application
+    /// Notification System --> Server
     #[derive(Debug)]
-    pub struct InternalProxyNotifierServiceServer<T: InternalProxyNotifierService> {
+    pub struct InternalEventServiceServer<T: InternalEventService> {
         inner: _Inner<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
@@ -960,7 +722,7 @@ pub mod internal_proxy_notifier_service_server {
         max_encoding_message_size: Option<usize>,
     }
     struct _Inner<T>(Arc<T>);
-    impl<T: InternalProxyNotifierService> InternalProxyNotifierServiceServer<T> {
+    impl<T: InternalEventService> InternalEventServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -1013,9 +775,9 @@ pub mod internal_proxy_notifier_service_server {
         }
     }
     impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalProxyNotifierServiceServer<T>
+    for InternalEventServiceServer<T>
     where
-        T: InternalProxyNotifierService,
+        T: InternalEventService,
         B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
@@ -1031,29 +793,25 @@ pub mod internal_proxy_notifier_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateObjectByPath" => {
+                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct GetOrCreateObjectByPathSvc<T: InternalProxyNotifierService>(
-                        pub Arc<T>,
-                    );
+                    struct CreateStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
                     impl<
-                        T: InternalProxyNotifierService,
-                    > tonic::server::UnaryService<super::GetOrCreateObjectByPathRequest>
-                    for GetOrCreateObjectByPathSvc<T> {
-                        type Response = super::GetOrCreateObjectByPathResponse;
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::CreateStreamGroupRequest>
+                    for CreateStreamGroupSvc<T> {
+                        type Response = super::CreateStreamGroupResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<
-                                super::GetOrCreateObjectByPathRequest,
-                            >,
+                            request: tonic::Request<super::CreateStreamGroupRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_or_create_object_by_path(request).await
+                                (*inner).create_stream_group(request).await
                             };
                             Box::pin(fut)
                         }
@@ -1065,7 +823,7 @@ pub mod internal_proxy_notifier_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetOrCreateObjectByPathSvc(inner);
+                        let method = CreateStreamGroupSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1081,27 +839,25 @@ pub mod internal_proxy_notifier_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.internal.v1.InternalProxyNotifierService/FinalizeObject" => {
+                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct FinalizeObjectSvc<T: InternalProxyNotifierService>(
-                        pub Arc<T>,
-                    );
+                    struct GetStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
                     impl<
-                        T: InternalProxyNotifierService,
-                    > tonic::server::UnaryService<super::FinalizeObjectRequest>
-                    for FinalizeObjectSvc<T> {
-                        type Response = super::FinalizeObjectResponse;
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::GetStreamGroupRequest>
+                    for GetStreamGroupSvc<T> {
+                        type Response = super::GetStreamGroupResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::FinalizeObjectRequest>,
+                            request: tonic::Request<super::GetStreamGroupRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).finalize_object(request).await
+                                (*inner).get_stream_group(request).await
                             };
                             Box::pin(fut)
                         }
@@ -1113,7 +869,7 @@ pub mod internal_proxy_notifier_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = FinalizeObjectSvc(inner);
+                        let method = GetStreamGroupSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1129,29 +885,25 @@ pub mod internal_proxy_notifier_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateEncryptionKey" => {
+                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup" => {
                     #[allow(non_camel_case_types)]
-                    struct GetOrCreateEncryptionKeySvc<T: InternalProxyNotifierService>(
-                        pub Arc<T>,
-                    );
+                    struct DeleteStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
                     impl<
-                        T: InternalProxyNotifierService,
-                    > tonic::server::UnaryService<super::GetOrCreateEncryptionKeyRequest>
-                    for GetOrCreateEncryptionKeySvc<T> {
-                        type Response = super::GetOrCreateEncryptionKeyResponse;
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::DeleteStreamGroupRequest>
+                    for DeleteStreamGroupSvc<T> {
+                        type Response = super::DeleteStreamGroupResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<
-                                super::GetOrCreateEncryptionKeyRequest,
-                            >,
+                            request: tonic::Request<super::DeleteStreamGroupRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_or_create_encryption_key(request).await
+                                (*inner).delete_stream_group(request).await
                             };
                             Box::pin(fut)
                         }
@@ -1163,7 +915,7 @@ pub mod internal_proxy_notifier_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetOrCreateEncryptionKeySvc(inner);
+                        let method = DeleteStreamGroupSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1179,27 +931,25 @@ pub mod internal_proxy_notifier_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetObjectLocation" => {
+                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision" => {
                     #[allow(non_camel_case_types)]
-                    struct GetObjectLocationSvc<T: InternalProxyNotifierService>(
-                        pub Arc<T>,
-                    );
+                    struct GetSharedRevisionSvc<T: InternalEventService>(pub Arc<T>);
                     impl<
-                        T: InternalProxyNotifierService,
-                    > tonic::server::UnaryService<super::GetObjectLocationRequest>
-                    for GetObjectLocationSvc<T> {
-                        type Response = super::GetObjectLocationResponse;
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::GetSharedRevisionRequest>
+                    for GetSharedRevisionSvc<T> {
+                        type Response = super::GetSharedRevisionResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetObjectLocationRequest>,
+                            request: tonic::Request<super::GetSharedRevisionRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_object_location(request).await
+                                (*inner).get_shared_revision(request).await
                             };
                             Box::pin(fut)
                         }
@@ -1211,55 +961,7 @@ pub mod internal_proxy_notifier_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetObjectLocationSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalProxyNotifierService/GetCollectionByBucket" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetCollectionByBucketSvc<T: InternalProxyNotifierService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: InternalProxyNotifierService,
-                    > tonic::server::UnaryService<super::GetCollectionByBucketRequest>
-                    for GetCollectionByBucketSvc<T> {
-                        type Response = super::GetCollectionByBucketResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetCollectionByBucketRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).get_collection_by_bucket(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetCollectionByBucketSvc(inner);
+                        let method = GetSharedRevisionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1290,8 +992,7 @@ pub mod internal_proxy_notifier_service_server {
             }
         }
     }
-    impl<T: InternalProxyNotifierService> Clone
-    for InternalProxyNotifierServiceServer<T> {
+    impl<T: InternalEventService> Clone for InternalEventServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -1303,7 +1004,7 @@ pub mod internal_proxy_notifier_service_server {
             }
         }
     }
-    impl<T: InternalProxyNotifierService> Clone for _Inner<T> {
+    impl<T: InternalEventService> Clone for _Inner<T> {
         fn clone(&self) -> Self {
             Self(Arc::clone(&self.0))
         }
@@ -1313,9 +1014,9 @@ pub mod internal_proxy_notifier_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: InternalProxyNotifierService> tonic::server::NamedService
-    for InternalProxyNotifierServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalProxyNotifierService";
+    impl<T: InternalEventService> tonic::server::NamedService
+    for InternalEventServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalEventService";
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -2680,201 +2381,239 @@ pub mod internal_authorize_service_server {
         const NAME: &'static str = "aruna.api.internal.v1.InternalAuthorizeService";
     }
 }
+/// Locations is the path to the requested data.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmittedResource {
-    #[prost(oneof = "emitted_resource::Resource", tags = "1, 2, 3, 4")]
-    pub resource: ::core::option::Option<emitted_resource::Resource>,
+pub struct Location {
+    #[prost(enumeration = "LocationType", tag = "1")]
+    pub r#type: i32,
+    /// This is the bucket name for S3. This is the folder name
+    #[prost(string, tag = "2")]
+    pub bucket: ::prost::alloc::string::String,
+    /// for local file.
+    ///
+    /// This is the key name for S3. This is the file name for local file.
+    #[prost(string, tag = "3")]
+    pub path: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub endpoint_id: ::prost::alloc::string::String,
+    #[prost(bool, tag = "5")]
+    pub is_compressed: bool,
+    #[prost(bool, tag = "6")]
+    pub is_encrypted: bool,
+    #[prost(string, tag = "7")]
+    pub encryption_key: ::prost::alloc::string::String,
 }
-/// Nested message and enum types in `EmittedResource`.
-pub mod emitted_resource {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Resource {
-        #[prost(message, tag = "1")]
-        Project(super::ProjectResource),
-        #[prost(message, tag = "2")]
-        Collection(super::CollectionResource),
-        #[prost(message, tag = "3")]
-        Object(super::ObjectResource),
-        #[prost(message, tag = "4")]
-        ObjectGroup(super::ObjectGroupResource),
+/// Etag / Part combination to finish a presigned multipart upload.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PartETag {
+    #[prost(int64, tag = "1")]
+    pub part_number: i64,
+    #[prost(string, tag = "2")]
+    pub etag: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InitMultipartUploadRequest {
+    #[prost(string, tag = "1")]
+    pub path: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub collection_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InitMultipartUploadResponse {
+    #[prost(string, tag = "1")]
+    pub upload_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FinishMultipartUploadRequest {
+    #[prost(string, tag = "1")]
+    pub upload_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub path: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "5")]
+    pub part_etags: ::prost::alloc::vec::Vec<PartETag>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FinishMultipartUploadResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteObjectRequest {
+    #[prost(message, optional, tag = "1")]
+    pub location: ::core::option::Option<Location>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteObjectResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FinalizeObjectRequest {
+    /// This should be stored temporarily
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    /// This should be stored temporarily
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    /// This will be the final location of the object
+    #[prost(message, optional, tag = "3")]
+    pub location: ::core::option::Option<Location>,
+    #[prost(message, repeated, tag = "4")]
+    pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
+    #[prost(int64, tag = "5")]
+    pub content_length: i64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FinalizeObjectResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetOrCreateEncryptionKeyRequest {
+    #[prost(string, tag = "1")]
+    pub path: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub hash: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetOrCreateEncryptionKeyResponse {
+    #[prost(string, tag = "1")]
+    pub encryption_key: ::prost::alloc::string::String,
+    #[prost(bool, tag = "2")]
+    pub created: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetOrCreateObjectByPathRequest {
+    #[prost(string, tag = "1")]
+    pub path: ::prost::alloc::string::String,
+    /// Validate if the user has correct permissions
+    #[prost(string, tag = "2")]
+    pub access_key: ::prost::alloc::string::String,
+    /// Will only be used if no staging object exists
+    #[prost(message, optional, tag = "3")]
+    pub object: ::core::option::Option<super::super::storage::services::v1::StageObject>,
+    /// Should this only get the object NOT create -> fail
+    #[prost(bool, tag = "4")]
+    pub get_only: bool,
+    #[prost(string, tag = "5")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetOrCreateObjectByPathResponse {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::super::storage::models::v1::DataClass", tag = "3")]
+    pub dataclass: i32,
+    #[prost(message, repeated, tag = "4")]
+    pub hashes: ::prost::alloc::vec::Vec<super::super::storage::models::v1::Hash>,
+    #[prost(int64, tag = "5")]
+    pub revision_number: i64,
+    #[prost(bool, tag = "6")]
+    pub created: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectLocationRequest {
+    #[prost(string, tag = "1")]
+    pub path: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub revision_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub access_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CorsConfig {
+    #[prost(string, repeated, tag = "1")]
+    pub allowed_methods: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "2")]
+    pub allowed_origins: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "3")]
+    pub allowed_headers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetObjectLocationResponse {
+    #[prost(message, optional, tag = "1")]
+    pub object: ::core::option::Option<super::super::storage::models::v1::Object>,
+    #[prost(message, optional, tag = "2")]
+    pub location: ::core::option::Option<Location>,
+    #[prost(message, repeated, tag = "3")]
+    pub cors_configurations: ::prost::alloc::vec::Vec<CorsConfig>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetCollectionByBucketRequest {
+    #[prost(string, tag = "1")]
+    pub bucket: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub access_key: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetCollectionByBucketResponse {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+}
+/// Enum to support multiple target Locations.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum LocationType {
+    Unspecified = 0,
+    S3 = 1,
+    File = 2,
+}
+impl LocationType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            LocationType::Unspecified => "LOCATION_TYPE_UNSPECIFIED",
+            LocationType::S3 => "LOCATION_TYPE_S3",
+            LocationType::File => "LOCATION_TYPE_FILE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "LOCATION_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "LOCATION_TYPE_S3" => Some(Self::S3),
+            "LOCATION_TYPE_FILE" => Some(Self::File),
+            _ => None,
+        }
     }
 }
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CollectionResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub shared_object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub object_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroupResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub shared_object_group_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub object_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmitEventRequest {
-    /// The resource Type e.g. Collection / Object etc.
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
-    pub event_resource: i32,
-    /// The resource ID
-    #[prost(string, tag = "2")]
-    pub resource_id: ::prost::alloc::string::String,
-    /// Event type (CRUD)
-    #[prost(
-        enumeration = "super::super::notification::services::v1::EventType",
-        tag = "3"
-    )]
-    pub event_type: i32,
-    /// All relations of the resource, only parents are shown
-    #[prost(message, repeated, tag = "4")]
-    pub resources: ::prost::alloc::vec::Vec<EmittedResource>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmitEventResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamGroup {
-    /// Stream group ID
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    /// Event this streamgroup is listening for
-    #[prost(
-        enumeration = "super::super::notification::services::v1::EventType",
-        tag = "2"
-    )]
-    pub event_type: i32,
-    /// Type of the resource (Collection, Object etc.)
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
-    pub resource_type: i32,
-    /// Resource ID
-    #[prost(string, tag = "4")]
-    pub resource_id: ::prost::alloc::string::String,
-    /// Should all "sub" resources be included
-    #[prost(bool, tag = "5")]
-    pub notify_on_sub_resource: bool,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateStreamGroupRequest {
-    /// Authorization for the user who wants to create this stream group
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-    /// Event type
-    #[prost(
-        enumeration = "super::super::notification::services::v1::EventType",
-        tag = "2"
-    )]
-    pub event_type: i32,
-    /// Type of the resource (Collection, Object etc.)
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
-    pub resource_type: i32,
-    /// Resource ID
-    #[prost(string, tag = "4")]
-    pub resource_id: ::prost::alloc::string::String,
-    /// Should all "sub" resources be included
-    #[prost(bool, tag = "5")]
-    pub notify_on_sub_resource: bool,
-    /// Subject derived from a resource hierarchy
-    #[prost(string, tag = "6")]
-    pub subject: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateStreamGroupResponse {
-    /// The stream_group
-    #[prost(message, optional, tag = "1")]
-    pub stream_group: ::core::option::Option<StreamGroup>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetStreamGroupRequest {
-    /// User token
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-    /// Stream group ID
-    #[prost(string, tag = "2")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetStreamGroupResponse {
-    /// Stream group
-    #[prost(message, optional, tag = "1")]
-    pub stream_group: ::core::option::Option<StreamGroup>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteStreamGroupRequest {
-    /// User token
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-    /// Stream group ID
-    #[prost(string, tag = "2")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteStreamGroupResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetSharedRevisionRequest {
-    /// Resource Type (ObjectGroup or Object)
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
-    pub resource_type: i32,
-    /// Resource ID
-    #[prost(string, tag = "2")]
-    pub resource_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetSharedRevisionResponse {
-    /// Shared revision ID
-    #[prost(string, tag = "1")]
-    pub shared_revision_id: ::prost::alloc::string::String,
-}
 /// Generated client implementations.
-pub mod internal_event_emitter_service_client {
+pub mod internal_proxy_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
-    /// Service hosted by the notification service application
-    /// the API server emits events to the notification service
-    /// Server --> Notification System
     #[derive(Debug, Clone)]
-    pub struct InternalEventEmitterServiceClient<T> {
+    pub struct InternalProxyServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl<T> InternalEventEmitterServiceClient<T>
+    impl<T> InternalProxyServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
         T::Error: Into<StdError>,
@@ -2892,7 +2631,7 @@ pub mod internal_event_emitter_service_client {
         pub fn with_interceptor<F>(
             inner: T,
             interceptor: F,
-        ) -> InternalEventEmitterServiceClient<InterceptedService<T, F>>
+        ) -> InternalProxyServiceClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -2906,7 +2645,175 @@ pub mod internal_event_emitter_service_client {
                 http::Request<tonic::body::BoxBody>,
             >>::Error: Into<StdError> + Send + Sync,
         {
-            InternalEventEmitterServiceClient::new(
+            InternalProxyServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn init_multipart_upload(
+            &mut self,
+            request: impl tonic::IntoRequest<super::InitMultipartUploadRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::InitMultipartUploadResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalProxyService/InitMultipartUpload",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalProxyService",
+                        "InitMultipartUpload",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn finish_multipart_upload(
+            &mut self,
+            request: impl tonic::IntoRequest<super::FinishMultipartUploadRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::FinishMultipartUploadResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalProxyService/FinishMultipartUpload",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalProxyService",
+                        "FinishMultipartUpload",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn delete_object(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteObjectRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteObjectResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalProxyService/DeleteObject",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalProxyService",
+                        "DeleteObject",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated client implementations.
+pub mod internal_proxy_notifier_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// This service enables a "return" channel for dataproxy to aruna server communication
+    /// Mainly used to notify the backend of validation / move events after the upload of new files
+    #[derive(Debug, Clone)]
+    pub struct InternalProxyNotifierServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl<T> InternalProxyNotifierServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InternalProxyNotifierServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            InternalProxyNotifierServiceClient::new(
                 InterceptedService::new(inner, interceptor),
             )
         }
@@ -2941,11 +2848,11 @@ pub mod internal_event_emitter_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        pub async fn emit_event(
+        pub async fn get_or_create_object_by_path(
             &mut self,
-            request: impl tonic::IntoRequest<super::EmitEventRequest>,
+            request: impl tonic::IntoRequest<super::GetOrCreateObjectByPathRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::EmitEventResponse>,
+            tonic::Response<super::GetOrCreateObjectByPathResponse>,
             tonic::Status,
         > {
             self.inner
@@ -2959,102 +2866,23 @@ pub mod internal_event_emitter_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent",
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateObjectByPath",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventEmitterService",
-                        "EmitEvent",
+                        "aruna.api.internal.v1.InternalProxyNotifierService",
+                        "GetOrCreateObjectByPath",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-    }
-}
-/// Generated client implementations.
-pub mod internal_event_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    /// Service that allows the notification service to issue requests
-    /// to the server application
-    /// Notification System --> Server
-    #[derive(Debug, Clone)]
-    pub struct InternalEventServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl<T> InternalEventServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InternalEventServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            InternalEventServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        pub async fn create_stream_group(
+        pub async fn finalize_object(
             &mut self,
-            request: impl tonic::IntoRequest<super::CreateStreamGroupRequest>,
+            request: impl tonic::IntoRequest<super::FinalizeObjectRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::CreateStreamGroupResponse>,
+            tonic::Response<super::FinalizeObjectResponse>,
             tonic::Status,
         > {
             self.inner
@@ -3068,23 +2896,23 @@ pub mod internal_event_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup",
+                "/aruna.api.internal.v1.InternalProxyNotifierService/FinalizeObject",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "CreateStreamGroup",
+                        "aruna.api.internal.v1.InternalProxyNotifierService",
+                        "FinalizeObject",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn get_stream_group(
+        pub async fn get_or_create_encryption_key(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetStreamGroupRequest>,
+            request: impl tonic::IntoRequest<super::GetOrCreateEncryptionKeyRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetStreamGroupResponse>,
+            tonic::Response<super::GetOrCreateEncryptionKeyResponse>,
             tonic::Status,
         > {
             self.inner
@@ -3098,23 +2926,23 @@ pub mod internal_event_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup",
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateEncryptionKey",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "GetStreamGroup",
+                        "aruna.api.internal.v1.InternalProxyNotifierService",
+                        "GetOrCreateEncryptionKey",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn delete_stream_group(
+        pub async fn get_object_location(
             &mut self,
-            request: impl tonic::IntoRequest<super::DeleteStreamGroupRequest>,
+            request: impl tonic::IntoRequest<super::GetObjectLocationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::DeleteStreamGroupResponse>,
+            tonic::Response<super::GetObjectLocationResponse>,
             tonic::Status,
         > {
             self.inner
@@ -3128,23 +2956,23 @@ pub mod internal_event_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup",
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetObjectLocation",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "DeleteStreamGroup",
+                        "aruna.api.internal.v1.InternalProxyNotifierService",
+                        "GetObjectLocation",
                     ),
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn get_shared_revision(
+        pub async fn get_collection_by_bucket(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetSharedRevisionRequest>,
+            request: impl tonic::IntoRequest<super::GetCollectionByBucketRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetSharedRevisionResponse>,
+            tonic::Response<super::GetCollectionByBucketResponse>,
             tonic::Status,
         > {
             self.inner
@@ -3158,14 +2986,14 @@ pub mod internal_event_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision",
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetCollectionByBucket",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "GetSharedRevision",
+                        "aruna.api.internal.v1.InternalProxyNotifierService",
+                        "GetCollectionByBucket",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -3173,25 +3001,36 @@ pub mod internal_event_service_client {
     }
 }
 /// Generated server implementations.
-pub mod internal_event_emitter_service_server {
+pub mod internal_proxy_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventEmitterServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalProxyServiceServer.
     #[async_trait]
-    pub trait InternalEventEmitterService: Send + Sync + 'static {
-        async fn emit_event(
+    pub trait InternalProxyService: Send + Sync + 'static {
+        async fn init_multipart_upload(
             &self,
-            request: tonic::Request<super::EmitEventRequest>,
+            request: tonic::Request<super::InitMultipartUploadRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::EmitEventResponse>,
+            tonic::Response<super::InitMultipartUploadResponse>,
+            tonic::Status,
+        >;
+        async fn finish_multipart_upload(
+            &self,
+            request: tonic::Request<super::FinishMultipartUploadRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::FinishMultipartUploadResponse>,
+            tonic::Status,
+        >;
+        async fn delete_object(
+            &self,
+            request: tonic::Request<super::DeleteObjectRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteObjectResponse>,
             tonic::Status,
         >;
     }
-    /// Service hosted by the notification service application
-    /// the API server emits events to the notification service
-    /// Server --> Notification System
     #[derive(Debug)]
-    pub struct InternalEventEmitterServiceServer<T: InternalEventEmitterService> {
+    pub struct InternalProxyServiceServer<T: InternalProxyService> {
         inner: _Inner<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
@@ -3199,7 +3038,7 @@ pub mod internal_event_emitter_service_server {
         max_encoding_message_size: Option<usize>,
     }
     struct _Inner<T>(Arc<T>);
-    impl<T: InternalEventEmitterService> InternalEventEmitterServiceServer<T> {
+    impl<T: InternalProxyService> InternalProxyServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -3252,9 +3091,9 @@ pub mod internal_event_emitter_service_server {
         }
     }
     impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalEventEmitterServiceServer<T>
+    for InternalProxyServiceServer<T>
     where
-        T: InternalEventEmitterService,
+        T: InternalProxyService,
         B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
@@ -3270,24 +3109,26 @@ pub mod internal_event_emitter_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent" => {
+                "/aruna.api.internal.v1.InternalProxyService/InitMultipartUpload" => {
                     #[allow(non_camel_case_types)]
-                    struct EmitEventSvc<T: InternalEventEmitterService>(pub Arc<T>);
+                    struct InitMultipartUploadSvc<T: InternalProxyService>(pub Arc<T>);
                     impl<
-                        T: InternalEventEmitterService,
-                    > tonic::server::UnaryService<super::EmitEventRequest>
-                    for EmitEventSvc<T> {
-                        type Response = super::EmitEventResponse;
+                        T: InternalProxyService,
+                    > tonic::server::UnaryService<super::InitMultipartUploadRequest>
+                    for InitMultipartUploadSvc<T> {
+                        type Response = super::InitMultipartUploadResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::EmitEventRequest>,
+                            request: tonic::Request<super::InitMultipartUploadRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).emit_event(request).await };
+                            let fut = async move {
+                                (*inner).init_multipart_upload(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -3298,7 +3139,99 @@ pub mod internal_event_emitter_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = EmitEventSvc(inner);
+                        let method = InitMultipartUploadSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalProxyService/FinishMultipartUpload" => {
+                    #[allow(non_camel_case_types)]
+                    struct FinishMultipartUploadSvc<T: InternalProxyService>(pub Arc<T>);
+                    impl<
+                        T: InternalProxyService,
+                    > tonic::server::UnaryService<super::FinishMultipartUploadRequest>
+                    for FinishMultipartUploadSvc<T> {
+                        type Response = super::FinishMultipartUploadResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::FinishMultipartUploadRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).finish_multipart_upload(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = FinishMultipartUploadSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalProxyService/DeleteObject" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteObjectSvc<T: InternalProxyService>(pub Arc<T>);
+                    impl<
+                        T: InternalProxyService,
+                    > tonic::server::UnaryService<super::DeleteObjectRequest>
+                    for DeleteObjectSvc<T> {
+                        type Response = super::DeleteObjectResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::DeleteObjectRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).delete_object(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteObjectSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -3329,7 +3262,7 @@ pub mod internal_event_emitter_service_server {
             }
         }
     }
-    impl<T: InternalEventEmitterService> Clone for InternalEventEmitterServiceServer<T> {
+    impl<T: InternalProxyService> Clone for InternalProxyServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -3341,7 +3274,7 @@ pub mod internal_event_emitter_service_server {
             }
         }
     }
-    impl<T: InternalEventEmitterService> Clone for _Inner<T> {
+    impl<T: InternalProxyService> Clone for _Inner<T> {
         fn clone(&self) -> Self {
             Self(Arc::clone(&self.0))
         }
@@ -3351,52 +3284,58 @@ pub mod internal_event_emitter_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: InternalEventEmitterService> tonic::server::NamedService
-    for InternalEventEmitterServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalEventEmitterService";
+    impl<T: InternalProxyService> tonic::server::NamedService
+    for InternalProxyServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalProxyService";
     }
 }
 /// Generated server implementations.
-pub mod internal_event_service_server {
+pub mod internal_proxy_notifier_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalProxyNotifierServiceServer.
     #[async_trait]
-    pub trait InternalEventService: Send + Sync + 'static {
-        async fn create_stream_group(
+    pub trait InternalProxyNotifierService: Send + Sync + 'static {
+        async fn get_or_create_object_by_path(
             &self,
-            request: tonic::Request<super::CreateStreamGroupRequest>,
+            request: tonic::Request<super::GetOrCreateObjectByPathRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::CreateStreamGroupResponse>,
+            tonic::Response<super::GetOrCreateObjectByPathResponse>,
             tonic::Status,
         >;
-        async fn get_stream_group(
+        async fn finalize_object(
             &self,
-            request: tonic::Request<super::GetStreamGroupRequest>,
+            request: tonic::Request<super::FinalizeObjectRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetStreamGroupResponse>,
+            tonic::Response<super::FinalizeObjectResponse>,
             tonic::Status,
         >;
-        async fn delete_stream_group(
+        async fn get_or_create_encryption_key(
             &self,
-            request: tonic::Request<super::DeleteStreamGroupRequest>,
+            request: tonic::Request<super::GetOrCreateEncryptionKeyRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::DeleteStreamGroupResponse>,
+            tonic::Response<super::GetOrCreateEncryptionKeyResponse>,
             tonic::Status,
         >;
-        async fn get_shared_revision(
+        async fn get_object_location(
             &self,
-            request: tonic::Request<super::GetSharedRevisionRequest>,
+            request: tonic::Request<super::GetObjectLocationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetSharedRevisionResponse>,
+            tonic::Response<super::GetObjectLocationResponse>,
+            tonic::Status,
+        >;
+        async fn get_collection_by_bucket(
+            &self,
+            request: tonic::Request<super::GetCollectionByBucketRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetCollectionByBucketResponse>,
             tonic::Status,
         >;
     }
-    /// Service that allows the notification service to issue requests
-    /// to the server application
-    /// Notification System --> Server
+    /// This service enables a "return" channel for dataproxy to aruna server communication
+    /// Mainly used to notify the backend of validation / move events after the upload of new files
     #[derive(Debug)]
-    pub struct InternalEventServiceServer<T: InternalEventService> {
+    pub struct InternalProxyNotifierServiceServer<T: InternalProxyNotifierService> {
         inner: _Inner<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
@@ -3404,7 +3343,7 @@ pub mod internal_event_service_server {
         max_encoding_message_size: Option<usize>,
     }
     struct _Inner<T>(Arc<T>);
-    impl<T: InternalEventService> InternalEventServiceServer<T> {
+    impl<T: InternalProxyNotifierService> InternalProxyNotifierServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -3457,9 +3396,9 @@ pub mod internal_event_service_server {
         }
     }
     impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalEventServiceServer<T>
+    for InternalProxyNotifierServiceServer<T>
     where
-        T: InternalEventService,
+        T: InternalProxyNotifierService,
         B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
@@ -3475,25 +3414,29 @@ pub mod internal_event_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup" => {
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateObjectByPath" => {
                     #[allow(non_camel_case_types)]
-                    struct CreateStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
+                    struct GetOrCreateObjectByPathSvc<T: InternalProxyNotifierService>(
+                        pub Arc<T>,
+                    );
                     impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::CreateStreamGroupRequest>
-                    for CreateStreamGroupSvc<T> {
-                        type Response = super::CreateStreamGroupResponse;
+                        T: InternalProxyNotifierService,
+                    > tonic::server::UnaryService<super::GetOrCreateObjectByPathRequest>
+                    for GetOrCreateObjectByPathSvc<T> {
+                        type Response = super::GetOrCreateObjectByPathResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::CreateStreamGroupRequest>,
+                            request: tonic::Request<
+                                super::GetOrCreateObjectByPathRequest,
+                            >,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).create_stream_group(request).await
+                                (*inner).get_or_create_object_by_path(request).await
                             };
                             Box::pin(fut)
                         }
@@ -3505,7 +3448,7 @@ pub mod internal_event_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = CreateStreamGroupSvc(inner);
+                        let method = GetOrCreateObjectByPathSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -3521,25 +3464,27 @@ pub mod internal_event_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup" => {
+                "/aruna.api.internal.v1.InternalProxyNotifierService/FinalizeObject" => {
                     #[allow(non_camel_case_types)]
-                    struct GetStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
+                    struct FinalizeObjectSvc<T: InternalProxyNotifierService>(
+                        pub Arc<T>,
+                    );
                     impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::GetStreamGroupRequest>
-                    for GetStreamGroupSvc<T> {
-                        type Response = super::GetStreamGroupResponse;
+                        T: InternalProxyNotifierService,
+                    > tonic::server::UnaryService<super::FinalizeObjectRequest>
+                    for FinalizeObjectSvc<T> {
+                        type Response = super::FinalizeObjectResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetStreamGroupRequest>,
+                            request: tonic::Request<super::FinalizeObjectRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_stream_group(request).await
+                                (*inner).finalize_object(request).await
                             };
                             Box::pin(fut)
                         }
@@ -3551,7 +3496,7 @@ pub mod internal_event_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetStreamGroupSvc(inner);
+                        let method = FinalizeObjectSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -3567,25 +3512,29 @@ pub mod internal_event_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup" => {
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetOrCreateEncryptionKey" => {
                     #[allow(non_camel_case_types)]
-                    struct DeleteStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
+                    struct GetOrCreateEncryptionKeySvc<T: InternalProxyNotifierService>(
+                        pub Arc<T>,
+                    );
                     impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::DeleteStreamGroupRequest>
-                    for DeleteStreamGroupSvc<T> {
-                        type Response = super::DeleteStreamGroupResponse;
+                        T: InternalProxyNotifierService,
+                    > tonic::server::UnaryService<super::GetOrCreateEncryptionKeyRequest>
+                    for GetOrCreateEncryptionKeySvc<T> {
+                        type Response = super::GetOrCreateEncryptionKeyResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::DeleteStreamGroupRequest>,
+                            request: tonic::Request<
+                                super::GetOrCreateEncryptionKeyRequest,
+                            >,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).delete_stream_group(request).await
+                                (*inner).get_or_create_encryption_key(request).await
                             };
                             Box::pin(fut)
                         }
@@ -3597,7 +3546,7 @@ pub mod internal_event_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = DeleteStreamGroupSvc(inner);
+                        let method = GetOrCreateEncryptionKeySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -3613,25 +3562,27 @@ pub mod internal_event_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision" => {
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetObjectLocation" => {
                     #[allow(non_camel_case_types)]
-                    struct GetSharedRevisionSvc<T: InternalEventService>(pub Arc<T>);
+                    struct GetObjectLocationSvc<T: InternalProxyNotifierService>(
+                        pub Arc<T>,
+                    );
                     impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::GetSharedRevisionRequest>
-                    for GetSharedRevisionSvc<T> {
-                        type Response = super::GetSharedRevisionResponse;
+                        T: InternalProxyNotifierService,
+                    > tonic::server::UnaryService<super::GetObjectLocationRequest>
+                    for GetObjectLocationSvc<T> {
+                        type Response = super::GetObjectLocationResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetSharedRevisionRequest>,
+                            request: tonic::Request<super::GetObjectLocationRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_shared_revision(request).await
+                                (*inner).get_object_location(request).await
                             };
                             Box::pin(fut)
                         }
@@ -3643,7 +3594,55 @@ pub mod internal_event_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetSharedRevisionSvc(inner);
+                        let method = GetObjectLocationSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalProxyNotifierService/GetCollectionByBucket" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetCollectionByBucketSvc<T: InternalProxyNotifierService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: InternalProxyNotifierService,
+                    > tonic::server::UnaryService<super::GetCollectionByBucketRequest>
+                    for GetCollectionByBucketSvc<T> {
+                        type Response = super::GetCollectionByBucketResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetCollectionByBucketRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_collection_by_bucket(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetCollectionByBucketSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -3674,7 +3673,8 @@ pub mod internal_event_service_server {
             }
         }
     }
-    impl<T: InternalEventService> Clone for InternalEventServiceServer<T> {
+    impl<T: InternalProxyNotifierService> Clone
+    for InternalProxyNotifierServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -3686,7 +3686,7 @@ pub mod internal_event_service_server {
             }
         }
     }
-    impl<T: InternalEventService> Clone for _Inner<T> {
+    impl<T: InternalProxyNotifierService> Clone for _Inner<T> {
         fn clone(&self) -> Self {
             Self(Arc::clone(&self.0))
         }
@@ -3696,8 +3696,8 @@ pub mod internal_event_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: InternalEventService> tonic::server::NamedService
-    for InternalEventServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalEventService";
+    impl<T: InternalProxyNotifierService> tonic::server::NamedService
+    for InternalProxyNotifierServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalProxyNotifierService";
     }
 }
