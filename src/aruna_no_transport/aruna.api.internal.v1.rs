@@ -1,1576 +1,3 @@
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmittedResource {
-    #[prost(oneof = "emitted_resource::Resource", tags = "1, 2, 3, 4")]
-    pub resource: ::core::option::Option<emitted_resource::Resource>,
-}
-/// Nested message and enum types in `EmittedResource`.
-pub mod emitted_resource {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Resource {
-        #[prost(message, tag = "1")]
-        Project(super::ProjectResource),
-        #[prost(message, tag = "2")]
-        Collection(super::CollectionResource),
-        #[prost(message, tag = "3")]
-        Object(super::ObjectResource),
-        #[prost(message, tag = "4")]
-        ObjectGroup(super::ObjectGroupResource),
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CollectionResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub shared_object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub object_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ObjectGroupResource {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub shared_object_group_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub object_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmitEventRequest {
-    /// The resource Type e.g. Collection / Object etc.
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
-    pub event_resource: i32,
-    /// The resource ID
-    #[prost(string, tag = "2")]
-    pub resource_id: ::prost::alloc::string::String,
-    /// Event type (CRUD)
-    #[prost(
-        enumeration = "super::super::notification::services::v1::EventType",
-        tag = "3"
-    )]
-    pub event_type: i32,
-    /// All relations of the resource, only parents are shown
-    #[prost(message, repeated, tag = "4")]
-    pub resources: ::prost::alloc::vec::Vec<EmittedResource>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EmitEventResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamGroup {
-    /// Stream group ID
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    /// Event this streamgroup is listening for
-    #[prost(
-        enumeration = "super::super::notification::services::v1::EventType",
-        tag = "2"
-    )]
-    pub event_type: i32,
-    /// Type of the resource (Collection, Object etc.)
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
-    pub resource_type: i32,
-    /// Resource ID
-    #[prost(string, tag = "4")]
-    pub resource_id: ::prost::alloc::string::String,
-    /// Should all "sub" resources be included
-    #[prost(bool, tag = "5")]
-    pub notify_on_sub_resource: bool,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateStreamGroupRequest {
-    /// Authorization for the user who wants to create this stream group
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-    /// Event type
-    #[prost(
-        enumeration = "super::super::notification::services::v1::EventType",
-        tag = "2"
-    )]
-    pub event_type: i32,
-    /// Type of the resource (Collection, Object etc.)
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
-    pub resource_type: i32,
-    /// Resource ID
-    #[prost(string, tag = "4")]
-    pub resource_id: ::prost::alloc::string::String,
-    /// Should all "sub" resources be included
-    #[prost(bool, tag = "5")]
-    pub notify_on_sub_resource: bool,
-    /// Subject derived from a resource hierarchy
-    #[prost(string, tag = "6")]
-    pub subject: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateStreamGroupResponse {
-    /// The stream_group
-    #[prost(message, optional, tag = "1")]
-    pub stream_group: ::core::option::Option<StreamGroup>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetStreamGroupRequest {
-    /// User token
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-    /// Stream group ID
-    #[prost(string, tag = "2")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetStreamGroupResponse {
-    /// Stream group
-    #[prost(message, optional, tag = "1")]
-    pub stream_group: ::core::option::Option<StreamGroup>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteStreamGroupRequest {
-    /// User token
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-    /// Stream group ID
-    #[prost(string, tag = "2")]
-    pub stream_group_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteStreamGroupResponse {}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetSharedRevisionRequest {
-    /// Resource Type (ObjectGroup or Object)
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
-    pub resource_type: i32,
-    /// Resource ID
-    #[prost(string, tag = "2")]
-    pub resource_id: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetSharedRevisionResponse {
-    /// Shared revision ID
-    #[prost(string, tag = "1")]
-    pub shared_revision_id: ::prost::alloc::string::String,
-}
-/// Generated client implementations.
-pub mod internal_event_emitter_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    /// Service hosted by the notification service application
-    /// the API server emits events to the notification service
-    /// Server --> Notification System
-    #[derive(Debug, Clone)]
-    pub struct InternalEventEmitterServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl<T> InternalEventEmitterServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InternalEventEmitterServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            InternalEventEmitterServiceClient::new(
-                InterceptedService::new(inner, interceptor),
-            )
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        pub async fn emit_event(
-            &mut self,
-            request: impl tonic::IntoRequest<super::EmitEventRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::EmitEventResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventEmitterService",
-                        "EmitEvent",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-    }
-}
-/// Generated client implementations.
-pub mod internal_event_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    /// Service that allows the notification service to issue requests
-    /// to the server application
-    /// Notification System --> Server
-    #[derive(Debug, Clone)]
-    pub struct InternalEventServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl<T> InternalEventServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InternalEventServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            InternalEventServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        pub async fn create_stream_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateStreamGroupRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateStreamGroupResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "CreateStreamGroup",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn get_stream_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetStreamGroupRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetStreamGroupResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "GetStreamGroup",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn delete_stream_group(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteStreamGroupRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteStreamGroupResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "DeleteStreamGroup",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn get_shared_revision(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetSharedRevisionRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetSharedRevisionResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalEventService",
-                        "GetSharedRevision",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-    }
-}
-/// Generated server implementations.
-pub mod internal_event_emitter_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventEmitterServiceServer.
-    #[async_trait]
-    pub trait InternalEventEmitterService: Send + Sync + 'static {
-        async fn emit_event(
-            &self,
-            request: tonic::Request<super::EmitEventRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::EmitEventResponse>,
-            tonic::Status,
-        >;
-    }
-    /// Service hosted by the notification service application
-    /// the API server emits events to the notification service
-    /// Server --> Notification System
-    #[derive(Debug)]
-    pub struct InternalEventEmitterServiceServer<T: InternalEventEmitterService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: EnabledCompressionEncodings,
-        send_compression_encodings: EnabledCompressionEncodings,
-        max_decoding_message_size: Option<usize>,
-        max_encoding_message_size: Option<usize>,
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: InternalEventEmitterService> InternalEventEmitterServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            Self::from_arc(Arc::new(inner))
-        }
-        pub fn from_arc(inner: Arc<T>) -> Self {
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-                max_decoding_message_size: None,
-                max_encoding_message_size: None,
-            }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-        /// Enable decompressing requests with the given encoding.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.accept_compression_encodings.enable(encoding);
-            self
-        }
-        /// Compress responses with the given encoding, if the client supports it.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.send_compression_encodings.enable(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.max_decoding_message_size = Some(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.max_encoding_message_size = Some(limit);
-            self
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalEventEmitterServiceServer<T>
-    where
-        T: InternalEventEmitterService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = std::convert::Infallible;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(
-            &mut self,
-            _cx: &mut Context<'_>,
-        ) -> Poll<std::result::Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent" => {
-                    #[allow(non_camel_case_types)]
-                    struct EmitEventSvc<T: InternalEventEmitterService>(pub Arc<T>);
-                    impl<
-                        T: InternalEventEmitterService,
-                    > tonic::server::UnaryService<super::EmitEventRequest>
-                    for EmitEventSvc<T> {
-                        type Response = super::EmitEventResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::EmitEventRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).emit_event(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = EmitEventSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
-            }
-        }
-    }
-    impl<T: InternalEventEmitterService> Clone for InternalEventEmitterServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-                max_decoding_message_size: self.max_decoding_message_size,
-                max_encoding_message_size: self.max_encoding_message_size,
-            }
-        }
-    }
-    impl<T: InternalEventEmitterService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(Arc::clone(&self.0))
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: InternalEventEmitterService> tonic::server::NamedService
-    for InternalEventEmitterServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalEventEmitterService";
-    }
-}
-/// Generated server implementations.
-pub mod internal_event_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventServiceServer.
-    #[async_trait]
-    pub trait InternalEventService: Send + Sync + 'static {
-        async fn create_stream_group(
-            &self,
-            request: tonic::Request<super::CreateStreamGroupRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateStreamGroupResponse>,
-            tonic::Status,
-        >;
-        async fn get_stream_group(
-            &self,
-            request: tonic::Request<super::GetStreamGroupRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetStreamGroupResponse>,
-            tonic::Status,
-        >;
-        async fn delete_stream_group(
-            &self,
-            request: tonic::Request<super::DeleteStreamGroupRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteStreamGroupResponse>,
-            tonic::Status,
-        >;
-        async fn get_shared_revision(
-            &self,
-            request: tonic::Request<super::GetSharedRevisionRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetSharedRevisionResponse>,
-            tonic::Status,
-        >;
-    }
-    /// Service that allows the notification service to issue requests
-    /// to the server application
-    /// Notification System --> Server
-    #[derive(Debug)]
-    pub struct InternalEventServiceServer<T: InternalEventService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: EnabledCompressionEncodings,
-        send_compression_encodings: EnabledCompressionEncodings,
-        max_decoding_message_size: Option<usize>,
-        max_encoding_message_size: Option<usize>,
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: InternalEventService> InternalEventServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            Self::from_arc(Arc::new(inner))
-        }
-        pub fn from_arc(inner: Arc<T>) -> Self {
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-                max_decoding_message_size: None,
-                max_encoding_message_size: None,
-            }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-        /// Enable decompressing requests with the given encoding.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.accept_compression_encodings.enable(encoding);
-            self
-        }
-        /// Compress responses with the given encoding, if the client supports it.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.send_compression_encodings.enable(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.max_decoding_message_size = Some(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.max_encoding_message_size = Some(limit);
-            self
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalEventServiceServer<T>
-    where
-        T: InternalEventService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = std::convert::Infallible;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(
-            &mut self,
-            _cx: &mut Context<'_>,
-        ) -> Poll<std::result::Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
-                    impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::CreateStreamGroupRequest>
-                    for CreateStreamGroupSvc<T> {
-                        type Response = super::CreateStreamGroupResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateStreamGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).create_stream_group(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateStreamGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
-                    impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::GetStreamGroupRequest>
-                    for GetStreamGroupSvc<T> {
-                        type Response = super::GetStreamGroupResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetStreamGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).get_stream_group(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetStreamGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
-                    impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::DeleteStreamGroupRequest>
-                    for DeleteStreamGroupSvc<T> {
-                        type Response = super::DeleteStreamGroupResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteStreamGroupRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).delete_stream_group(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteStreamGroupSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetSharedRevisionSvc<T: InternalEventService>(pub Arc<T>);
-                    impl<
-                        T: InternalEventService,
-                    > tonic::server::UnaryService<super::GetSharedRevisionRequest>
-                    for GetSharedRevisionSvc<T> {
-                        type Response = super::GetSharedRevisionResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetSharedRevisionRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).get_shared_revision(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetSharedRevisionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
-            }
-        }
-    }
-    impl<T: InternalEventService> Clone for InternalEventServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-                max_decoding_message_size: self.max_decoding_message_size,
-                max_encoding_message_size: self.max_encoding_message_size,
-            }
-        }
-    }
-    impl<T: InternalEventService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(Arc::clone(&self.0))
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: InternalEventService> tonic::server::NamedService
-    for InternalEventServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalEventService";
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Authorization {
-    /// Should include the APItoken
-    #[prost(string, tag = "1")]
-    pub secretkey: ::prost::alloc::string::String,
-    /// Is the API-Token ID
-    #[prost(string, tag = "2")]
-    pub accesskey: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Identifier {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(enumeration = "IdType", tag = "2")]
-    pub idtype: i32,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AuthorizeRequest {
-    /// The resource type
-    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
-    pub resource: i32,
-    /// Id of the resource (PATH / OBJECT UUID)
-    #[prost(message, optional, tag = "2")]
-    pub identifier: ::core::option::Option<Identifier>,
-    /// Which action should be performed (CRUD)
-    #[prost(
-        enumeration = "super::super::storage::models::v1::ResourceAction",
-        tag = "3"
-    )]
-    pub resource_action: i32,
-    /// Authorization
-    #[prost(message, optional, tag = "4")]
-    pub authorization: ::core::option::Option<Authorization>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AuthorizeResponse {
-    /// Ok -> Authorization granted, empty or not ok -> dismiss
-    #[prost(bool, tag = "1")]
-    pub ok: bool,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetSecretRequest {
-    #[prost(string, tag = "1")]
-    pub accesskey: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetSecretResponse {
-    #[prost(message, optional, tag = "1")]
-    pub authorization: ::core::option::Option<Authorization>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetTokenFromSecretRequest {
-    #[prost(message, optional, tag = "1")]
-    pub authorization: ::core::option::Option<Authorization>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetTokenFromSecretResponse {
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum IdType {
-    Unspecified = 0,
-    Uuid = 1,
-    Path = 2,
-}
-impl IdType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            IdType::Unspecified => "ID_TYPE_UNSPECIFIED",
-            IdType::Uuid => "ID_TYPE_UUID",
-            IdType::Path => "ID_TYPE_PATH",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "ID_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "ID_TYPE_UUID" => Some(Self::Uuid),
-            "ID_TYPE_PATH" => Some(Self::Path),
-            _ => None,
-        }
-    }
-}
-/// Generated client implementations.
-pub mod internal_authorize_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    #[derive(Debug, Clone)]
-    pub struct InternalAuthorizeServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl<T> InternalAuthorizeServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InternalAuthorizeServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            InternalAuthorizeServiceClient::new(
-                InterceptedService::new(inner, interceptor),
-            )
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        pub async fn authorize(
-            &mut self,
-            request: impl tonic::IntoRequest<super::AuthorizeRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AuthorizeResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalAuthorizeService/Authorize",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalAuthorizeService",
-                        "Authorize",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn get_secret(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetSecretRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetSecretResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalAuthorizeService/GetSecret",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalAuthorizeService",
-                        "GetSecret",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn get_token_from_secret(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetTokenFromSecretRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetTokenFromSecretResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.internal.v1.InternalAuthorizeService/GetTokenFromSecret",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.internal.v1.InternalAuthorizeService",
-                        "GetTokenFromSecret",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-    }
-}
-/// Generated server implementations.
-pub mod internal_authorize_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with InternalAuthorizeServiceServer.
-    #[async_trait]
-    pub trait InternalAuthorizeService: Send + Sync + 'static {
-        async fn authorize(
-            &self,
-            request: tonic::Request<super::AuthorizeRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AuthorizeResponse>,
-            tonic::Status,
-        >;
-        async fn get_secret(
-            &self,
-            request: tonic::Request<super::GetSecretRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetSecretResponse>,
-            tonic::Status,
-        >;
-        async fn get_token_from_secret(
-            &self,
-            request: tonic::Request<super::GetTokenFromSecretRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetTokenFromSecretResponse>,
-            tonic::Status,
-        >;
-    }
-    #[derive(Debug)]
-    pub struct InternalAuthorizeServiceServer<T: InternalAuthorizeService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: EnabledCompressionEncodings,
-        send_compression_encodings: EnabledCompressionEncodings,
-        max_decoding_message_size: Option<usize>,
-        max_encoding_message_size: Option<usize>,
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: InternalAuthorizeService> InternalAuthorizeServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            Self::from_arc(Arc::new(inner))
-        }
-        pub fn from_arc(inner: Arc<T>) -> Self {
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-                max_decoding_message_size: None,
-                max_encoding_message_size: None,
-            }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-        /// Enable decompressing requests with the given encoding.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.accept_compression_encodings.enable(encoding);
-            self
-        }
-        /// Compress responses with the given encoding, if the client supports it.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.send_compression_encodings.enable(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.max_decoding_message_size = Some(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.max_encoding_message_size = Some(limit);
-            self
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for InternalAuthorizeServiceServer<T>
-    where
-        T: InternalAuthorizeService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = std::convert::Infallible;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(
-            &mut self,
-            _cx: &mut Context<'_>,
-        ) -> Poll<std::result::Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/aruna.api.internal.v1.InternalAuthorizeService/Authorize" => {
-                    #[allow(non_camel_case_types)]
-                    struct AuthorizeSvc<T: InternalAuthorizeService>(pub Arc<T>);
-                    impl<
-                        T: InternalAuthorizeService,
-                    > tonic::server::UnaryService<super::AuthorizeRequest>
-                    for AuthorizeSvc<T> {
-                        type Response = super::AuthorizeResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::AuthorizeRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).authorize(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AuthorizeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalAuthorizeService/GetSecret" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetSecretSvc<T: InternalAuthorizeService>(pub Arc<T>);
-                    impl<
-                        T: InternalAuthorizeService,
-                    > tonic::server::UnaryService<super::GetSecretRequest>
-                    for GetSecretSvc<T> {
-                        type Response = super::GetSecretResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetSecretRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).get_secret(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetSecretSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.internal.v1.InternalAuthorizeService/GetTokenFromSecret" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetTokenFromSecretSvc<T: InternalAuthorizeService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: InternalAuthorizeService,
-                    > tonic::server::UnaryService<super::GetTokenFromSecretRequest>
-                    for GetTokenFromSecretSvc<T> {
-                        type Response = super::GetTokenFromSecretResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetTokenFromSecretRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).get_token_from_secret(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetTokenFromSecretSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
-            }
-        }
-    }
-    impl<T: InternalAuthorizeService> Clone for InternalAuthorizeServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-                max_decoding_message_size: self.max_decoding_message_size,
-                max_encoding_message_size: self.max_encoding_message_size,
-            }
-        }
-    }
-    impl<T: InternalAuthorizeService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(Arc::clone(&self.0))
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: InternalAuthorizeService> tonic::server::NamedService
-    for InternalAuthorizeServiceServer<T> {
-        const NAME: &'static str = "aruna.api.internal.v1.InternalAuthorizeService";
-    }
-}
 /// Locations is the path to the requested data.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -3699,5 +2126,1578 @@ pub mod internal_bundler_backchannel_service_server {
     impl<T: InternalBundlerBackchannelService> tonic::server::NamedService
     for InternalBundlerBackchannelServiceServer<T> {
         const NAME: &'static str = "aruna.api.internal.v1.InternalBundlerBackchannelService";
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Authorization {
+    /// Should include the APItoken
+    #[prost(string, tag = "1")]
+    pub secretkey: ::prost::alloc::string::String,
+    /// Is the API-Token ID
+    #[prost(string, tag = "2")]
+    pub accesskey: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Identifier {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(enumeration = "IdType", tag = "2")]
+    pub idtype: i32,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AuthorizeRequest {
+    /// The resource type
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
+    pub resource: i32,
+    /// Id of the resource (PATH / OBJECT UUID)
+    #[prost(message, optional, tag = "2")]
+    pub identifier: ::core::option::Option<Identifier>,
+    /// Which action should be performed (CRUD)
+    #[prost(
+        enumeration = "super::super::storage::models::v1::ResourceAction",
+        tag = "3"
+    )]
+    pub resource_action: i32,
+    /// Authorization
+    #[prost(message, optional, tag = "4")]
+    pub authorization: ::core::option::Option<Authorization>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AuthorizeResponse {
+    /// Ok -> Authorization granted, empty or not ok -> dismiss
+    #[prost(bool, tag = "1")]
+    pub ok: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSecretRequest {
+    #[prost(string, tag = "1")]
+    pub accesskey: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSecretResponse {
+    #[prost(message, optional, tag = "1")]
+    pub authorization: ::core::option::Option<Authorization>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTokenFromSecretRequest {
+    #[prost(message, optional, tag = "1")]
+    pub authorization: ::core::option::Option<Authorization>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTokenFromSecretResponse {
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum IdType {
+    Unspecified = 0,
+    Uuid = 1,
+    Path = 2,
+}
+impl IdType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            IdType::Unspecified => "ID_TYPE_UNSPECIFIED",
+            IdType::Uuid => "ID_TYPE_UUID",
+            IdType::Path => "ID_TYPE_PATH",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ID_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "ID_TYPE_UUID" => Some(Self::Uuid),
+            "ID_TYPE_PATH" => Some(Self::Path),
+            _ => None,
+        }
+    }
+}
+/// Generated client implementations.
+pub mod internal_authorize_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct InternalAuthorizeServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl<T> InternalAuthorizeServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InternalAuthorizeServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            InternalAuthorizeServiceClient::new(
+                InterceptedService::new(inner, interceptor),
+            )
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn authorize(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AuthorizeRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AuthorizeResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalAuthorizeService/Authorize",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalAuthorizeService",
+                        "Authorize",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_secret(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetSecretRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetSecretResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalAuthorizeService/GetSecret",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalAuthorizeService",
+                        "GetSecret",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_token_from_secret(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetTokenFromSecretRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetTokenFromSecretResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalAuthorizeService/GetTokenFromSecret",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalAuthorizeService",
+                        "GetTokenFromSecret",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated server implementations.
+pub mod internal_authorize_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalAuthorizeServiceServer.
+    #[async_trait]
+    pub trait InternalAuthorizeService: Send + Sync + 'static {
+        async fn authorize(
+            &self,
+            request: tonic::Request<super::AuthorizeRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AuthorizeResponse>,
+            tonic::Status,
+        >;
+        async fn get_secret(
+            &self,
+            request: tonic::Request<super::GetSecretRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetSecretResponse>,
+            tonic::Status,
+        >;
+        async fn get_token_from_secret(
+            &self,
+            request: tonic::Request<super::GetTokenFromSecretRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetTokenFromSecretResponse>,
+            tonic::Status,
+        >;
+    }
+    #[derive(Debug)]
+    pub struct InternalAuthorizeServiceServer<T: InternalAuthorizeService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
+        max_decoding_message_size: Option<usize>,
+        max_encoding_message_size: Option<usize>,
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: InternalAuthorizeService> InternalAuthorizeServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            Self::from_arc(Arc::new(inner))
+        }
+        pub fn from_arc(inner: Arc<T>) -> Self {
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+                max_decoding_message_size: None,
+                max_encoding_message_size: None,
+            }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.max_decoding_message_size = Some(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.max_encoding_message_size = Some(limit);
+            self
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>>
+    for InternalAuthorizeServiceServer<T>
+    where
+        T: InternalAuthorizeService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = std::convert::Infallible;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(
+            &mut self,
+            _cx: &mut Context<'_>,
+        ) -> Poll<std::result::Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/aruna.api.internal.v1.InternalAuthorizeService/Authorize" => {
+                    #[allow(non_camel_case_types)]
+                    struct AuthorizeSvc<T: InternalAuthorizeService>(pub Arc<T>);
+                    impl<
+                        T: InternalAuthorizeService,
+                    > tonic::server::UnaryService<super::AuthorizeRequest>
+                    for AuthorizeSvc<T> {
+                        type Response = super::AuthorizeResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::AuthorizeRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).authorize(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AuthorizeSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalAuthorizeService/GetSecret" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetSecretSvc<T: InternalAuthorizeService>(pub Arc<T>);
+                    impl<
+                        T: InternalAuthorizeService,
+                    > tonic::server::UnaryService<super::GetSecretRequest>
+                    for GetSecretSvc<T> {
+                        type Response = super::GetSecretResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetSecretRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).get_secret(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetSecretSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalAuthorizeService/GetTokenFromSecret" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetTokenFromSecretSvc<T: InternalAuthorizeService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: InternalAuthorizeService,
+                    > tonic::server::UnaryService<super::GetTokenFromSecretRequest>
+                    for GetTokenFromSecretSvc<T> {
+                        type Response = super::GetTokenFromSecretResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetTokenFromSecretRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_token_from_secret(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetTokenFromSecretSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
+            }
+        }
+    }
+    impl<T: InternalAuthorizeService> Clone for InternalAuthorizeServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+                max_decoding_message_size: self.max_decoding_message_size,
+                max_encoding_message_size: self.max_encoding_message_size,
+            }
+        }
+    }
+    impl<T: InternalAuthorizeService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(Arc::clone(&self.0))
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: InternalAuthorizeService> tonic::server::NamedService
+    for InternalAuthorizeServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalAuthorizeService";
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EmittedResource {
+    #[prost(oneof = "emitted_resource::Resource", tags = "1, 2, 3, 4")]
+    pub resource: ::core::option::Option<emitted_resource::Resource>,
+}
+/// Nested message and enum types in `EmittedResource`.
+pub mod emitted_resource {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Resource {
+        #[prost(message, tag = "1")]
+        Project(super::ProjectResource),
+        #[prost(message, tag = "2")]
+        Collection(super::CollectionResource),
+        #[prost(message, tag = "3")]
+        Object(super::ObjectResource),
+        #[prost(message, tag = "4")]
+        ObjectGroup(super::ObjectGroupResource),
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProjectResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CollectionResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub shared_object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub object_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectGroupResource {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub shared_object_group_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub object_group_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EmitEventRequest {
+    /// The resource Type e.g. Collection / Object etc.
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
+    pub event_resource: i32,
+    /// The resource ID
+    #[prost(string, tag = "2")]
+    pub resource_id: ::prost::alloc::string::String,
+    /// Event type (CRUD)
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "3"
+    )]
+    pub event_type: i32,
+    /// All relations of the resource, only parents are shown
+    #[prost(message, repeated, tag = "4")]
+    pub resources: ::prost::alloc::vec::Vec<EmittedResource>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EmitEventResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StreamGroup {
+    /// Stream group ID
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Event this streamgroup is listening for
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "2"
+    )]
+    pub event_type: i32,
+    /// Type of the resource (Collection, Object etc.)
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
+    pub resource_type: i32,
+    /// Resource ID
+    #[prost(string, tag = "4")]
+    pub resource_id: ::prost::alloc::string::String,
+    /// Should all "sub" resources be included
+    #[prost(bool, tag = "5")]
+    pub notify_on_sub_resource: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateStreamGroupRequest {
+    /// Authorization for the user who wants to create this stream group
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+    /// Event type
+    #[prost(
+        enumeration = "super::super::notification::services::v1::EventType",
+        tag = "2"
+    )]
+    pub event_type: i32,
+    /// Type of the resource (Collection, Object etc.)
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "3")]
+    pub resource_type: i32,
+    /// Resource ID
+    #[prost(string, tag = "4")]
+    pub resource_id: ::prost::alloc::string::String,
+    /// Should all "sub" resources be included
+    #[prost(bool, tag = "5")]
+    pub notify_on_sub_resource: bool,
+    /// Subject derived from a resource hierarchy
+    #[prost(string, tag = "6")]
+    pub subject: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateStreamGroupResponse {
+    /// The stream_group
+    #[prost(message, optional, tag = "1")]
+    pub stream_group: ::core::option::Option<StreamGroup>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetStreamGroupRequest {
+    /// User token
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+    /// Stream group ID
+    #[prost(string, tag = "2")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetStreamGroupResponse {
+    /// Stream group
+    #[prost(message, optional, tag = "1")]
+    pub stream_group: ::core::option::Option<StreamGroup>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteStreamGroupRequest {
+    /// User token
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+    /// Stream group ID
+    #[prost(string, tag = "2")]
+    pub stream_group_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteStreamGroupResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSharedRevisionRequest {
+    /// Resource Type (ObjectGroup or Object)
+    #[prost(enumeration = "super::super::storage::models::v1::ResourceType", tag = "1")]
+    pub resource_type: i32,
+    /// Resource ID
+    #[prost(string, tag = "2")]
+    pub resource_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSharedRevisionResponse {
+    /// Shared revision ID
+    #[prost(string, tag = "1")]
+    pub shared_revision_id: ::prost::alloc::string::String,
+}
+/// Generated client implementations.
+pub mod internal_event_emitter_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// Service hosted by the notification service application
+    /// the API server emits events to the notification service
+    /// Server --> Notification System
+    #[derive(Debug, Clone)]
+    pub struct InternalEventEmitterServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl<T> InternalEventEmitterServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InternalEventEmitterServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            InternalEventEmitterServiceClient::new(
+                InterceptedService::new(inner, interceptor),
+            )
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn emit_event(
+            &mut self,
+            request: impl tonic::IntoRequest<super::EmitEventRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::EmitEventResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalEventEmitterService",
+                        "EmitEvent",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated client implementations.
+pub mod internal_event_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// Service that allows the notification service to issue requests
+    /// to the server application
+    /// Notification System --> Server
+    #[derive(Debug, Clone)]
+    pub struct InternalEventServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl<T> InternalEventServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InternalEventServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            InternalEventServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn create_stream_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateStreamGroupRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateStreamGroupResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalEventService",
+                        "CreateStreamGroup",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_stream_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetStreamGroupRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetStreamGroupResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalEventService",
+                        "GetStreamGroup",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn delete_stream_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteStreamGroupRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteStreamGroupResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalEventService",
+                        "DeleteStreamGroup",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_shared_revision(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetSharedRevisionRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetSharedRevisionResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.internal.v1.InternalEventService",
+                        "GetSharedRevision",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated server implementations.
+pub mod internal_event_emitter_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventEmitterServiceServer.
+    #[async_trait]
+    pub trait InternalEventEmitterService: Send + Sync + 'static {
+        async fn emit_event(
+            &self,
+            request: tonic::Request<super::EmitEventRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::EmitEventResponse>,
+            tonic::Status,
+        >;
+    }
+    /// Service hosted by the notification service application
+    /// the API server emits events to the notification service
+    /// Server --> Notification System
+    #[derive(Debug)]
+    pub struct InternalEventEmitterServiceServer<T: InternalEventEmitterService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
+        max_decoding_message_size: Option<usize>,
+        max_encoding_message_size: Option<usize>,
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: InternalEventEmitterService> InternalEventEmitterServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            Self::from_arc(Arc::new(inner))
+        }
+        pub fn from_arc(inner: Arc<T>) -> Self {
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+                max_decoding_message_size: None,
+                max_encoding_message_size: None,
+            }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.max_decoding_message_size = Some(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.max_encoding_message_size = Some(limit);
+            self
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>>
+    for InternalEventEmitterServiceServer<T>
+    where
+        T: InternalEventEmitterService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = std::convert::Infallible;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(
+            &mut self,
+            _cx: &mut Context<'_>,
+        ) -> Poll<std::result::Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/aruna.api.internal.v1.InternalEventEmitterService/EmitEvent" => {
+                    #[allow(non_camel_case_types)]
+                    struct EmitEventSvc<T: InternalEventEmitterService>(pub Arc<T>);
+                    impl<
+                        T: InternalEventEmitterService,
+                    > tonic::server::UnaryService<super::EmitEventRequest>
+                    for EmitEventSvc<T> {
+                        type Response = super::EmitEventResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::EmitEventRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).emit_event(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = EmitEventSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
+            }
+        }
+    }
+    impl<T: InternalEventEmitterService> Clone for InternalEventEmitterServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+                max_decoding_message_size: self.max_decoding_message_size,
+                max_encoding_message_size: self.max_encoding_message_size,
+            }
+        }
+    }
+    impl<T: InternalEventEmitterService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(Arc::clone(&self.0))
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: InternalEventEmitterService> tonic::server::NamedService
+    for InternalEventEmitterServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalEventEmitterService";
+    }
+}
+/// Generated server implementations.
+pub mod internal_event_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    /// Generated trait containing gRPC methods that should be implemented for use with InternalEventServiceServer.
+    #[async_trait]
+    pub trait InternalEventService: Send + Sync + 'static {
+        async fn create_stream_group(
+            &self,
+            request: tonic::Request<super::CreateStreamGroupRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateStreamGroupResponse>,
+            tonic::Status,
+        >;
+        async fn get_stream_group(
+            &self,
+            request: tonic::Request<super::GetStreamGroupRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetStreamGroupResponse>,
+            tonic::Status,
+        >;
+        async fn delete_stream_group(
+            &self,
+            request: tonic::Request<super::DeleteStreamGroupRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteStreamGroupResponse>,
+            tonic::Status,
+        >;
+        async fn get_shared_revision(
+            &self,
+            request: tonic::Request<super::GetSharedRevisionRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetSharedRevisionResponse>,
+            tonic::Status,
+        >;
+    }
+    /// Service that allows the notification service to issue requests
+    /// to the server application
+    /// Notification System --> Server
+    #[derive(Debug)]
+    pub struct InternalEventServiceServer<T: InternalEventService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
+        max_decoding_message_size: Option<usize>,
+        max_encoding_message_size: Option<usize>,
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: InternalEventService> InternalEventServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            Self::from_arc(Arc::new(inner))
+        }
+        pub fn from_arc(inner: Arc<T>) -> Self {
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+                max_decoding_message_size: None,
+                max_encoding_message_size: None,
+            }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.max_decoding_message_size = Some(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.max_encoding_message_size = Some(limit);
+            self
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>>
+    for InternalEventServiceServer<T>
+    where
+        T: InternalEventService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = std::convert::Infallible;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(
+            &mut self,
+            _cx: &mut Context<'_>,
+        ) -> Poll<std::result::Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/aruna.api.internal.v1.InternalEventService/CreateStreamGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
+                    impl<
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::CreateStreamGroupRequest>
+                    for CreateStreamGroupSvc<T> {
+                        type Response = super::CreateStreamGroupResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateStreamGroupRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).create_stream_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateStreamGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalEventService/GetStreamGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
+                    impl<
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::GetStreamGroupRequest>
+                    for GetStreamGroupSvc<T> {
+                        type Response = super::GetStreamGroupResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetStreamGroupRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_stream_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetStreamGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalEventService/DeleteStreamGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteStreamGroupSvc<T: InternalEventService>(pub Arc<T>);
+                    impl<
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::DeleteStreamGroupRequest>
+                    for DeleteStreamGroupSvc<T> {
+                        type Response = super::DeleteStreamGroupResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::DeleteStreamGroupRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).delete_stream_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteStreamGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.internal.v1.InternalEventService/GetSharedRevision" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetSharedRevisionSvc<T: InternalEventService>(pub Arc<T>);
+                    impl<
+                        T: InternalEventService,
+                    > tonic::server::UnaryService<super::GetSharedRevisionRequest>
+                    for GetSharedRevisionSvc<T> {
+                        type Response = super::GetSharedRevisionResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetSharedRevisionRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_shared_revision(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetSharedRevisionSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
+            }
+        }
+    }
+    impl<T: InternalEventService> Clone for InternalEventServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+                max_decoding_message_size: self.max_decoding_message_size,
+                max_encoding_message_size: self.max_encoding_message_size,
+            }
+        }
+    }
+    impl<T: InternalEventService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(Arc::clone(&self.0))
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: InternalEventService> tonic::server::NamedService
+    for InternalEventServiceServer<T> {
+        const NAME: &'static str = "aruna.api.internal.v1.InternalEventService";
     }
 }
