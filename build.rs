@@ -41,6 +41,18 @@ fn main() {
         protos.push(rel_path);
     }
 
+    let service_entries = fs::read_dir("./src/protos/aruna/api/hooks/services/v1/").unwrap();
+
+    for entry in service_entries {
+        let dir = entry.unwrap();
+        let rel_path = format!(
+            "{}{}",
+            "./src/protos/aruna/api/hooks/services/v1/",
+            dir.file_name().to_str().unwrap()
+        );
+        protos.push(rel_path);
+    }
+
     let service_entries = fs::read_dir("./src/protos/aruna/api/internal/v1/").unwrap();
 
     for entry in service_entries {
