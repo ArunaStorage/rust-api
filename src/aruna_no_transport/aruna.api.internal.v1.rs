@@ -1358,7 +1358,10 @@ pub struct EnableBundleRequest {
 pub struct EnableBundleResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetBundlesRequest {}
+pub struct GetBundlesRequest {
+    #[prost(string, tag = "1")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetBundlesResponse {

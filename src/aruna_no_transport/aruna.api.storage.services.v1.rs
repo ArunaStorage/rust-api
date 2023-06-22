@@ -2252,9 +2252,11 @@ pub struct DeleteCollectionResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddKeyValuesToCollectionRequest {
-    #[prost(message, repeated, tag = "1")]
-    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    #[prost(string, tag = "1")]
+    pub collection_id: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
+    pub labels: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
+    #[prost(message, repeated, tag = "3")]
     pub hooks: ::prost::alloc::vec::Vec<super::super::models::v1::KeyValue>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -5512,12 +5514,6 @@ pub struct AddEndpointRequest {
     /// Endpoint type
     #[prost(enumeration = "super::super::models::v1::EndpointType", tag = "2")]
     pub ep_type: i32,
-    /// Public hostname of the proxy
-    #[prost(string, tag = "3")]
-    pub proxy_hostname: ::prost::alloc::string::String,
-    /// Internal hostname for the proxy
-    #[prost(string, tag = "4")]
-    pub internal_hostname: ::prost::alloc::string::String,
     /// (optional) URL to a offsite documentation
     #[prost(string, tag = "5")]
     pub documentation_path: ::prost::alloc::string::String,
@@ -5527,6 +5523,14 @@ pub struct AddEndpointRequest {
     /// (optional) ED25519 Pubkey -> Pubkey to validate endpoint authenticated tokens
     #[prost(string, tag = "7")]
     pub pubkey: ::prost::alloc::string::String,
+    /// Added option to make a Dataproxy a bundler
+    #[prost(bool, tag = "8")]
+    pub is_bundler: bool,
+    /// List of EndpointHostConfigs
+    #[prost(message, repeated, tag = "9")]
+    pub host_configs: ::prost::alloc::vec::Vec<
+        super::super::models::v1::EndpointHostConfig,
+    >,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
