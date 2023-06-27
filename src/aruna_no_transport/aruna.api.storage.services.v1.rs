@@ -9559,8 +9559,9 @@ pub struct GetObjectsAsListV2Response {
     pub max_keys: u32,
     #[prost(uint32, tag = "5")]
     pub key_count: u32,
+    /// Does not contain URLs, only paths
     #[prost(message, repeated, tag = "6")]
-    pub contents: ::prost::alloc::vec::Vec<super::super::models::v1::Object>,
+    pub contents: ::prost::alloc::vec::Vec<ObjectWithUrl>,
     #[prost(message, repeated, tag = "7")]
     pub prefixes: ::prost::alloc::vec::Vec<CommonPrefix>,
     #[prost(string, optional, tag = "8")]
@@ -10564,7 +10565,7 @@ pub mod object_service_client {
         ///
         /// Status: ALPHA
         ///
-        /// Gets a list of objects represented similar to a S3 ListObjectsV2 request
+        /// Gets a list of ObjectWithURLs represented similar to a S3 ListObjectsV2 request
         /// !! Paths are collection specific !!
         pub async fn get_objects_as_list_v2(
             &mut self,
@@ -10958,7 +10959,7 @@ pub mod object_service_server {
         ///
         /// Status: ALPHA
         ///
-        /// Gets a list of objects represented similar to a S3 ListObjectsV2 request
+        /// Gets a list of ObjectWithURLs represented similar to a S3 ListObjectsV2 request
         /// !! Paths are collection specific !!
         async fn get_objects_as_list_v2(
             &self,
