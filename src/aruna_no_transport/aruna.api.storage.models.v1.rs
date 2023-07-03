@@ -14,6 +14,9 @@ pub struct Project {
     pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, tag = "5")]
     pub description: ::prost::alloc::string::String,
+    /// Project binary flag(s)
+    #[prost(int64, tag = "6")]
+    pub flags: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -28,6 +31,9 @@ pub struct ProjectOverview {
     pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag = "5")]
     pub user_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Project binary flag(s)
+    #[prost(int64, tag = "6")]
+    pub flags: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

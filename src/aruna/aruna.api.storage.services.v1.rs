@@ -3816,6 +3816,9 @@ pub struct CreateProjectRequest {
     /// Description for the project
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
+    /// Project binary flag(s)
+    #[prost(int64, tag = "3")]
+    pub flag: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -3885,6 +3888,9 @@ pub struct UpdateProjectRequest {
     /// Update description
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
+    /// Project binary flag(s)
+    #[prost(int64, tag = "4")]
+    pub flag: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
