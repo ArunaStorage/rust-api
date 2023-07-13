@@ -252,10 +252,10 @@ pub struct DataproxyInfo {
     pub name: ::prost::alloc::string::String,
     /// Endpoint type
     #[prost(
-        enumeration = "super::super::super::storage::models::v2::EndpointType",
+        enumeration = "super::super::super::storage::models::v2::EndpointVariant",
         tag = "3"
     )]
-    pub ep_type: i32,
+    pub ep_variant: i32,
     /// Is this endpoint public
     #[prost(bool, tag = "4")]
     pub is_public: bool,

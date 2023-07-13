@@ -190,28 +190,23 @@ pub struct EndpointHostConfig {
     pub ssl: bool,
     #[prost(bool, tag = "4")]
     pub public: bool,
-    #[prost(enumeration = "EndpointHostType", tag = "5")]
-    pub host_type: i32,
+    #[prost(enumeration = "EndpointHostVariant", tag = "5")]
+    pub host_variant: i32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Endpoint {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    #[prost(enumeration = "EndpointType", tag = "2")]
-    pub ep_type: i32,
+    #[prost(enumeration = "EndpointVariant", tag = "2")]
+    pub ep_variant: i32,
     #[prost(string, tag = "3")]
     pub name: ::prost::alloc::string::String,
     #[prost(bool, tag = "4")]
     pub is_public: bool,
-    /// Aruna Servers that this endpoint is default for
-    #[prost(string, repeated, tag = "5")]
-    pub default_for: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(enumeration = "ComponentStatus", tag = "6")]
+    #[prost(enumeration = "ComponentStatus", tag = "5")]
     pub status: i32,
-    #[prost(bool, tag = "7")]
-    pub is_bundler: bool,
-    #[prost(message, repeated, tag = "8")]
+    #[prost(message, repeated, tag = "6")]
     pub host_configs: ::prost::alloc::vec::Vec<EndpointHostConfig>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -395,29 +390,29 @@ impl DataClass {
 /// Which kind of endpoint
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum EndpointType {
+pub enum EndpointVariant {
     Unspecified = 0,
     Persistent = 1,
     Volatile = 2,
 }
-impl EndpointType {
+impl EndpointVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            EndpointType::Unspecified => "ENDPOINT_TYPE_UNSPECIFIED",
-            EndpointType::Persistent => "ENDPOINT_TYPE_PERSISTENT",
-            EndpointType::Volatile => "ENDPOINT_TYPE_VOLATILE",
+            EndpointVariant::Unspecified => "ENDPOINT_VARIANT_UNSPECIFIED",
+            EndpointVariant::Persistent => "ENDPOINT_VARIANT_PERSISTENT",
+            EndpointVariant::Volatile => "ENDPOINT_VARIANT_VOLATILE",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "ENDPOINT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "ENDPOINT_TYPE_PERSISTENT" => Some(Self::Persistent),
-            "ENDPOINT_TYPE_VOLATILE" => Some(Self::Volatile),
+            "ENDPOINT_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
+            "ENDPOINT_VARIANT_PERSISTENT" => Some(Self::Persistent),
+            "ENDPOINT_VARIANT_VOLATILE" => Some(Self::Volatile),
             _ => None,
         }
     }
@@ -425,29 +420,29 @@ impl EndpointType {
 /// Which features does the endpoint have
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum EndpointHostType {
+pub enum EndpointHostVariant {
     Unspecified = 0,
     Proxy = 1,
     Bundler = 2,
 }
-impl EndpointHostType {
+impl EndpointHostVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            EndpointHostType::Unspecified => "ENDPOINT_HOST_TYPE_UNSPECIFIED",
-            EndpointHostType::Proxy => "ENDPOINT_HOST_TYPE_PROXY",
-            EndpointHostType::Bundler => "ENDPOINT_HOST_TYPE_BUNDLER",
+            EndpointHostVariant::Unspecified => "ENDPOINT_HOST_VARIANT_UNSPECIFIED",
+            EndpointHostVariant::Proxy => "ENDPOINT_HOST_VARIANT_PROXY",
+            EndpointHostVariant::Bundler => "ENDPOINT_HOST_VARIANT_BUNDLER",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "ENDPOINT_HOST_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "ENDPOINT_HOST_TYPE_PROXY" => Some(Self::Proxy),
-            "ENDPOINT_HOST_TYPE_BUNDLER" => Some(Self::Bundler),
+            "ENDPOINT_HOST_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
+            "ENDPOINT_HOST_VARIANT_PROXY" => Some(Self::Proxy),
+            "ENDPOINT_HOST_VARIANT_BUNDLER" => Some(Self::Bundler),
             _ => None,
         }
     }
