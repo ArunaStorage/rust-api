@@ -1,34 +1,25 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateBundleRequest {
-    #[prost(string, tag = "1")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "2")]
+    #[prost(string, repeated, tag = "1")]
     pub object_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag = "3")]
+    #[prost(string, tag = "2")]
     pub filename: ::prost::alloc::string::String,
-    #[prost(enumeration = "ArchiveType", tag = "4")]
+    #[prost(enumeration = "ArchiveType", tag = "3")]
     pub archive_type: i32,
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "4")]
     pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
-    /// Optional endpoint_id
-    #[prost(string, tag = "6")]
-    pub endpoint_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateBundleResponse {
     #[prost(string, tag = "1")]
-    pub bundle_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
     pub url: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteBundleRequest {
     #[prost(string, tag = "1")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
     pub bundle_id: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]

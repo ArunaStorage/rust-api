@@ -5,61 +5,49 @@ use std::fs;
 fn main() {
     let mut protos: Vec<String> = Vec::new();
 
-    let service_entries = fs::read_dir("./src/protos/aruna/api/storage/services/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/storage/services/v2/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "./src/protos/aruna/api/storage/services/v1/",
+            "./src/protos/aruna/api/storage/services/v2/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    let service_entries = fs::read_dir("./src/protos/aruna/api/notification/services/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/notification/services/v2/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "./src/protos/aruna/api/notification/services/v1/",
+            "./src/protos/aruna/api/notification/services/v2/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    let service_entries = fs::read_dir("./src/protos/aruna/api/bundler/services/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/dataproxy/services/v2/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "./src/protos/aruna/api/bundler/services/v1/",
+            "./src/protos/aruna/api/dataproxy/services/v2/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);
     }
 
-    let service_entries = fs::read_dir("./src/protos/aruna/api/hooks/services/v1/").unwrap();
+    let service_entries = fs::read_dir("./src/protos/aruna/api/hooks/services/v2/").unwrap();
 
     for entry in service_entries {
         let dir = entry.unwrap();
         let rel_path = format!(
             "{}{}",
-            "./src/protos/aruna/api/hooks/services/v1/",
-            dir.file_name().to_str().unwrap()
-        );
-        protos.push(rel_path);
-    }
-
-    let service_entries = fs::read_dir("./src/protos/aruna/api/internal/v1/").unwrap();
-
-    for entry in service_entries {
-        let dir = entry.unwrap();
-        let rel_path = format!(
-            "{}{}",
-            "./src/protos/aruna/api/internal/v1/",
+            "./src/protos/aruna/api/hooks/services/v2/",
             dir.file_name().to_str().unwrap()
         );
         protos.push(rel_path);

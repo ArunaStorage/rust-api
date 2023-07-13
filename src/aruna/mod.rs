@@ -7,44 +7,38 @@ pub mod aruna {
         pub mod storage {
             #[path = ""]
             pub mod models {
-                #[path = "aruna.api.storage.models.v1.rs"]
-                pub mod v1;
+                #[path = "aruna.api.storage.models.v2.rs"]
+                pub mod v2;
             }
             #[path = ""]
             pub mod services {
-                #[path = "aruna.api.storage.services.v1.rs"]
-                pub mod v1;
+                #[path = "aruna.api.storage.services.v2.rs"]
+                pub mod v2;
             }
-        }
-        #[path = ""]
-        pub mod internal {
-            #[path = "aruna.api.internal.v1.rs"]
-            pub mod v1;
         }
         #[path = ""]
         pub mod notification {
             #[path = ""]
             pub mod services {
-                #[path = "aruna.api.notification.services.v1.rs"]
-                pub mod v1;
+                #[path = "aruna.api.notification.services.v2.rs"]
+                pub mod v2;
             }
         }
         #[path = ""]
-        pub mod bundler {
+        pub mod dataproxy {
             #[path = ""]
             pub mod services {
-                #[path = "aruna.api.bundler.services.v1.rs"]
-                pub mod v1;
+                #[path = "aruna.api.dataproxy.services.v2.rs"]
+                pub mod v2;
             }
         }
         #[path = ""]
         pub mod hooks {
             #[path = ""]
             pub mod services {
-                #[path = "aruna.api.hooks.services.v1.rs"]
-                pub mod v1;
+                #[path = "aruna.api.hooks.services.v2.rs"]
+                pub mod v2;
             }
         }
     }
 }
-pub mod implements;

@@ -1,224 +1,3 @@
-/// A Project is a list of collections with associated users
-/// This is used to manage access to multiple collections at the same time
-/// Each Collection can only be in one Project at a time
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Project {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub user_permissions: ::prost::alloc::vec::Vec<ProjectPermission>,
-    #[prost(string, repeated, tag = "4")]
-    pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag = "5")]
-    pub description: ::prost::alloc::string::String,
-    /// Project binary flag(s)
-    #[prost(int64, tag = "6")]
-    pub flags: i64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectOverview {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "4")]
-    pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, repeated, tag = "5")]
-    pub user_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// Project binary flag(s)
-    #[prost(int64, tag = "6")]
-    pub flags: i64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct User {
-    /// Internal Aruna UserID
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    /// Oidc subject ID
-    #[prost(string, tag = "2")]
-    pub external_id: ::prost::alloc::string::String,
-    /// (optional) User display_name
-    #[prost(string, tag = "3")]
-    pub display_name: ::prost::alloc::string::String,
-    /// Is the user activated
-    #[prost(bool, tag = "4")]
-    pub active: bool,
-    /// Is the user admin ?
-    #[prost(bool, tag = "5")]
-    pub is_admin: bool,
-    /// Is service account
-    #[prost(bool, tag = "6")]
-    pub is_service_account: bool,
-    /// User email (empty if service account)
-    #[prost(string, tag = "7")]
-    pub email: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Token {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(enumeration = "TokenType", tag = "4")]
-    pub token_type: i32,
-    #[prost(message, optional, tag = "5")]
-    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "6")]
-    pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(string, tag = "7")]
-    pub collection_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "Permission", tag = "9")]
-    pub permission: i32,
-    #[prost(bool, tag = "10")]
-    pub is_session: bool,
-    #[prost(message, optional, tag = "11")]
-    pub used_at: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectPermission {
-    #[prost(string, tag = "1")]
-    pub user_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "Permission", tag = "3")]
-    pub permission: i32,
-    #[prost(bool, tag = "4")]
-    pub service_account: bool,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ProjectPermissionDisplayName {
-    #[prost(string, tag = "1")]
-    pub user_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub project_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "Permission", tag = "3")]
-    pub permission: i32,
-    #[prost(string, tag = "4")]
-    pub display_name: ::prost::alloc::string::String,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum Permission {
-    Unspecified = 0,
-    /// No permissions granted, used for users that are in the
-    None = 1,
-    /// project but have no default permissions
-    ///
-    /// Read only
-    Read = 2,
-    /// Append objects to the collection cannot modify existing objects
-    Append = 3,
-    /// Can Read/Append/Modify objects in the collection
-    Modify = 4,
-    /// that owns the object / Create new collections
-    ///
-    /// Can modify the collections itself and permanently
-    Admin = 5,
-}
-impl Permission {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Permission::Unspecified => "PERMISSION_UNSPECIFIED",
-            Permission::None => "PERMISSION_NONE",
-            Permission::Read => "PERMISSION_READ",
-            Permission::Append => "PERMISSION_APPEND",
-            Permission::Modify => "PERMISSION_MODIFY",
-            Permission::Admin => "PERMISSION_ADMIN",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "PERMISSION_UNSPECIFIED" => Some(Self::Unspecified),
-            "PERMISSION_NONE" => Some(Self::None),
-            "PERMISSION_READ" => Some(Self::Read),
-            "PERMISSION_APPEND" => Some(Self::Append),
-            "PERMISSION_MODIFY" => Some(Self::Modify),
-            "PERMISSION_ADMIN" => Some(Self::Admin),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum PermType {
-    Unspecified = 0,
-    /// Regular OAuth users
-    User = 1,
-    /// Anonymous users without an OAuth token
-    Anonymous = 2,
-    /// Access token on behalf of a user
-    Token = 3,
-}
-impl PermType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            PermType::Unspecified => "PERM_TYPE_UNSPECIFIED",
-            PermType::User => "PERM_TYPE_USER",
-            PermType::Anonymous => "PERM_TYPE_ANONYMOUS",
-            PermType::Token => "PERM_TYPE_TOKEN",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "PERM_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "PERM_TYPE_USER" => Some(Self::User),
-            "PERM_TYPE_ANONYMOUS" => Some(Self::Anonymous),
-            "PERM_TYPE_TOKEN" => Some(Self::Token),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum TokenType {
-    Unspecified = 0,
-    Personal = 1,
-    Scoped = 2,
-}
-impl TokenType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            TokenType::Unspecified => "TOKEN_TYPE_UNSPECIFIED",
-            TokenType::Personal => "TOKEN_TYPE_PERSONAL",
-            TokenType::Scoped => "TOKEN_TYPE_SCOPED",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "TOKEN_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "TOKEN_TYPE_PERSONAL" => Some(Self::Personal),
-            "TOKEN_TYPE_SCOPED" => Some(Self::Scoped),
-            _ => None,
-        }
-    }
-}
 /// A key value pair for hooks and labels
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -306,20 +85,6 @@ pub struct Source {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct EndpointHostConfig {
-    #[prost(string, tag = "1")]
-    pub url: ::prost::alloc::string::String,
-    #[prost(bool, tag = "2")]
-    pub is_primary: bool,
-    #[prost(bool, tag = "3")]
-    pub ssl: bool,
-    #[prost(bool, tag = "4")]
-    pub public: bool,
-    #[prost(enumeration = "EndpointHostType", tag = "5")]
-    pub host_type: i32,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Endpoint {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
@@ -327,6 +92,10 @@ pub struct Endpoint {
     pub ep_type: i32,
     #[prost(string, tag = "3")]
     pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub proxy_hostname: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub internal_hostname: ::prost::alloc::string::String,
     #[prost(string, tag = "6")]
     pub documentation_path: ::prost::alloc::string::String,
     #[prost(bool, tag = "7")]
@@ -335,10 +104,6 @@ pub struct Endpoint {
     pub is_default: bool,
     #[prost(enumeration = "EndpointStatus", tag = "9")]
     pub status: i32,
-    #[prost(bool, tag = "10")]
-    pub is_bundler: bool,
-    #[prost(message, repeated, tag = "11")]
-    pub host_configs: ::prost::alloc::vec::Vec<EndpointHostConfig>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -922,38 +687,6 @@ impl EndpointType {
         }
     }
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum EndpointHostType {
-    Unspecified = 0,
-    Proxy = 1,
-    Internal = 2,
-    Bundler = 3,
-}
-impl EndpointHostType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            EndpointHostType::Unspecified => "ENDPOINT_HOST_TYPE_UNSPECIFIED",
-            EndpointHostType::Proxy => "ENDPOINT_HOST_TYPE_PROXY",
-            EndpointHostType::Internal => "ENDPOINT_HOST_TYPE_INTERNAL",
-            EndpointHostType::Bundler => "ENDPOINT_HOST_TYPE_BUNDLER",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "ENDPOINT_HOST_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "ENDPOINT_HOST_TYPE_PROXY" => Some(Self::Proxy),
-            "ENDPOINT_HOST_TYPE_INTERNAL" => Some(Self::Internal),
-            "ENDPOINT_HOST_TYPE_BUNDLER" => Some(Self::Bundler),
-            _ => None,
-        }
-    }
-}
 /// This file contains parameters for queries that return a list of resources.
 /// The results are paginated.
 /// The page request specifies the page size and last_id.
@@ -992,4 +725,219 @@ pub struct LabelOrIdQuery {
     pub labels: ::core::option::Option<LabelFilter>,
     #[prost(string, repeated, tag = "2")]
     pub ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// A Project is a list of collections with associated users
+/// This is used to manage access to multiple collections at the same time
+/// Each Collection can only be in one Project at a time
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Project {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub user_permissions: ::prost::alloc::vec::Vec<ProjectPermission>,
+    #[prost(string, repeated, tag = "4")]
+    pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag = "5")]
+    pub description: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProjectOverview {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "4")]
+    pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "5")]
+    pub user_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct User {
+    /// Internal Aruna UserID
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Oidc subject ID
+    #[prost(string, tag = "2")]
+    pub external_id: ::prost::alloc::string::String,
+    /// (optional) User display_name
+    #[prost(string, tag = "3")]
+    pub display_name: ::prost::alloc::string::String,
+    /// Is the user activated
+    #[prost(bool, tag = "4")]
+    pub active: bool,
+    /// Is the user admin ?
+    #[prost(bool, tag = "5")]
+    pub is_admin: bool,
+    /// Is service account
+    #[prost(bool, tag = "6")]
+    pub is_service_account: bool,
+    /// User email (empty if service account)
+    #[prost(string, tag = "7")]
+    pub email: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Token {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(enumeration = "TokenType", tag = "4")]
+    pub token_type: i32,
+    #[prost(message, optional, tag = "5")]
+    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "6")]
+    pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(string, tag = "7")]
+    pub collection_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "8")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "Permission", tag = "9")]
+    pub permission: i32,
+    #[prost(bool, tag = "10")]
+    pub is_session: bool,
+    #[prost(message, optional, tag = "11")]
+    pub used_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProjectPermission {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "Permission", tag = "3")]
+    pub permission: i32,
+    #[prost(bool, tag = "4")]
+    pub service_account: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProjectPermissionDisplayName {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "Permission", tag = "3")]
+    pub permission: i32,
+    #[prost(string, tag = "4")]
+    pub display_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum Permission {
+    Unspecified = 0,
+    /// No permissions granted, used for users that are in the
+    None = 1,
+    /// project but have no default permissions
+    ///
+    /// Read only
+    Read = 2,
+    /// Append objects to the collection cannot modify existing objects
+    Append = 3,
+    /// Can Read/Append/Modify objects in the collection
+    Modify = 4,
+    /// that owns the object / Create new collections
+    ///
+    /// Can modify the collections itself and permanently
+    Admin = 5,
+}
+impl Permission {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Permission::Unspecified => "PERMISSION_UNSPECIFIED",
+            Permission::None => "PERMISSION_NONE",
+            Permission::Read => "PERMISSION_READ",
+            Permission::Append => "PERMISSION_APPEND",
+            Permission::Modify => "PERMISSION_MODIFY",
+            Permission::Admin => "PERMISSION_ADMIN",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PERMISSION_UNSPECIFIED" => Some(Self::Unspecified),
+            "PERMISSION_NONE" => Some(Self::None),
+            "PERMISSION_READ" => Some(Self::Read),
+            "PERMISSION_APPEND" => Some(Self::Append),
+            "PERMISSION_MODIFY" => Some(Self::Modify),
+            "PERMISSION_ADMIN" => Some(Self::Admin),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PermType {
+    Unspecified = 0,
+    /// Regular OAuth users
+    User = 1,
+    /// Anonymous users without an OAuth token
+    Anonymous = 2,
+    /// Access token on behalf of a user
+    Token = 3,
+}
+impl PermType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            PermType::Unspecified => "PERM_TYPE_UNSPECIFIED",
+            PermType::User => "PERM_TYPE_USER",
+            PermType::Anonymous => "PERM_TYPE_ANONYMOUS",
+            PermType::Token => "PERM_TYPE_TOKEN",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PERM_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "PERM_TYPE_USER" => Some(Self::User),
+            "PERM_TYPE_ANONYMOUS" => Some(Self::Anonymous),
+            "PERM_TYPE_TOKEN" => Some(Self::Token),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TokenType {
+    Unspecified = 0,
+    Personal = 1,
+    Scoped = 2,
+}
+impl TokenType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            TokenType::Unspecified => "TOKEN_TYPE_UNSPECIFIED",
+            TokenType::Personal => "TOKEN_TYPE_PERSONAL",
+            TokenType::Scoped => "TOKEN_TYPE_SCOPED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "TOKEN_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "TOKEN_TYPE_PERSONAL" => Some(Self::Personal),
+            "TOKEN_TYPE_SCOPED" => Some(Self::Scoped),
+            _ => None,
+        }
+    }
 }
