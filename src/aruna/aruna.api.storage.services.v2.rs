@@ -5003,8 +5003,8 @@ pub struct UpdateObjectRequest {
     #[prost(message, repeated, tag = "5")]
     pub remove_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
     /// New DataClass
-    #[prost(enumeration = "super::super::models::v2::DataClass", optional, tag = "7")]
-    pub data_class: ::core::option::Option<i32>,
+    #[prost(enumeration = "super::super::models::v2::DataClass", tag = "7")]
+    pub data_class: i32,
     #[prost(message, repeated, tag = "12")]
     pub hashes: ::prost::alloc::vec::Vec<super::super::models::v2::Hash>,
     /// Parent can be one of all other resources

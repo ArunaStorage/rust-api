@@ -295,10 +295,16 @@ pub struct NewVersion {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct NewPubkey {
+    #[prost(string, tag = "1")]
+    pub pubkey: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AnouncementEvent {
-    #[prost(message, optional, tag = "6")]
+    #[prost(message, optional, tag = "7")]
     pub reply: ::core::option::Option<Reply>,
-    #[prost(oneof = "anouncement_event::EventVariant", tags = "1, 2, 3, 4, 5")]
+    #[prost(oneof = "anouncement_event::EventVariant", tags = "1, 2, 3, 4, 5, 6")]
     pub event_variant: ::core::option::Option<anouncement_event::EventVariant>,
 }
 /// Nested message and enum types in `AnouncementEvent`.
@@ -316,6 +322,8 @@ pub mod anouncement_event {
         Downtime(super::ScheduledDowntime),
         #[prost(message, tag = "5")]
         Version(super::NewVersion),
+        #[prost(message, tag = "6")]
+        Pubkey(super::NewPubkey),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
