@@ -134,9 +134,11 @@ pub mod external_relation {
 pub struct InternalRelation {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "RelationDirection", tag = "4")]
+    #[prost(enumeration = "ResourceVariant", tag = "2")]
+    pub resource_variant: i32,
+    #[prost(enumeration = "RelationDirection", tag = "5")]
     pub direction: i32,
-    #[prost(oneof = "internal_relation::Variant", tags = "2, 3")]
+    #[prost(oneof = "internal_relation::Variant", tags = "3, 4")]
     pub variant: ::core::option::Option<internal_relation::Variant>,
 }
 /// Nested message and enum types in `InternalRelation`.
@@ -144,9 +146,9 @@ pub mod internal_relation {
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Variant {
-        #[prost(enumeration = "super::InternalRelationVariant", tag = "2")]
+        #[prost(enumeration = "super::InternalRelationVariant", tag = "3")]
         DefinedVariant(i32),
-        #[prost(string, tag = "3")]
+        #[prost(string, tag = "4")]
         CustomVariant(::prost::alloc::string::String),
     }
 }
@@ -776,6 +778,41 @@ impl Hashalgorithm {
             "HASHALGORITHM_UNSPECIFIED" => Some(Self::Unspecified),
             "HASHALGORITHM_MD5" => Some(Self::Md5),
             "HASHALGORITHM_SHA256" => Some(Self::Sha256),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ResourceVariant {
+    Unspecified = 0,
+    Project = 1,
+    Collection = 2,
+    Dataset = 3,
+    Object = 4,
+}
+impl ResourceVariant {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            ResourceVariant::Unspecified => "RESOURCE_VARIANT_UNSPECIFIED",
+            ResourceVariant::Project => "RESOURCE_VARIANT_PROJECT",
+            ResourceVariant::Collection => "RESOURCE_VARIANT_COLLECTION",
+            ResourceVariant::Dataset => "RESOURCE_VARIANT_DATASET",
+            ResourceVariant::Object => "RESOURCE_VARIANT_OBJECT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "RESOURCE_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
+            "RESOURCE_VARIANT_PROJECT" => Some(Self::Project),
+            "RESOURCE_VARIANT_COLLECTION" => Some(Self::Collection),
+            "RESOURCE_VARIANT_DATASET" => Some(Self::Dataset),
+            "RESOURCE_VARIANT_OBJECT" => Some(Self::Object),
             _ => None,
         }
     }

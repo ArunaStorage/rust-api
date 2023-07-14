@@ -5,7 +5,12 @@ pub struct Resource {
     pub resource_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub resource_name: ::prost::alloc::string::String,
-    #[prost(enumeration = "ResourceVariant", tag = "3")]
+    #[prost(string, tag = "3")]
+    pub associated_id: ::prost::alloc::string::String,
+    #[prost(
+        enumeration = "super::super::super::storage::models::v2::ResourceVariant",
+        tag = "4"
+    )]
     pub resource_variant: i32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -311,41 +316,6 @@ pub mod anouncement_event {
         Downtime(super::ScheduledDowntime),
         #[prost(message, tag = "5")]
         Version(super::NewVersion),
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum ResourceVariant {
-    Unspecified = 0,
-    Project = 1,
-    Collection = 2,
-    Dataset = 3,
-    Object = 4,
-}
-impl ResourceVariant {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            ResourceVariant::Unspecified => "RESOURCE_VARIANT_UNSPECIFIED",
-            ResourceVariant::Project => "RESOURCE_VARIANT_PROJECT",
-            ResourceVariant::Collection => "RESOURCE_VARIANT_COLLECTION",
-            ResourceVariant::Dataset => "RESOURCE_VARIANT_DATASET",
-            ResourceVariant::Object => "RESOURCE_VARIANT_OBJECT",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "RESOURCE_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
-            "RESOURCE_VARIANT_PROJECT" => Some(Self::Project),
-            "RESOURCE_VARIANT_COLLECTION" => Some(Self::Collection),
-            "RESOURCE_VARIANT_DATASET" => Some(Self::Dataset),
-            "RESOURCE_VARIANT_OBJECT" => Some(Self::Object),
-            _ => None,
-        }
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

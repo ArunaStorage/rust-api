@@ -4909,14 +4909,17 @@ pub struct FinishObjectStagingRequest {
     /// ObjectId
     #[prost(string, tag = "1")]
     pub object_id: ::prost::alloc::string::String,
+    /// Final content len
+    #[prost(int64, tag = "2")]
+    pub content_len: i64,
     /// Hash of the uploaded data - used to verify the data integrity.
     /// This supports multiple hashing algorithms.
-    #[prost(message, repeated, tag = "2")]
+    #[prost(message, repeated, tag = "3")]
     pub hashes: ::prost::alloc::vec::Vec<super::super::models::v2::Hash>,
     /// If the upload was multipart, this is the list of parts that were uploaded.
     /// Should be empty if the upload was not multipart.
     /// (optional)
-    #[prost(message, repeated, tag = "3")]
+    #[prost(message, repeated, tag = "4")]
     pub completed_parts: ::prost::alloc::vec::Vec<CompletedParts>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
