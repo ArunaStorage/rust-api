@@ -4,9 +4,9 @@ pub struct Resource {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub resource_name: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
     pub associated_id: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub persistent_resource_id: bool,
     #[prost(
         enumeration = "super::super::super::storage::models::v2::ResourceVariant",
         tag = "4"
@@ -126,74 +126,6 @@ pub struct StreamFromDate {
 pub struct StreamAll {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RelationUpdate {
-    #[prost(message, repeated, tag = "2")]
-    pub add_relations: ::prost::alloc::vec::Vec<
-        super::super::super::storage::models::v2::Relation,
-    >,
-    #[prost(message, repeated, tag = "3")]
-    pub remove_relations: ::prost::alloc::vec::Vec<
-        super::super::super::storage::models::v2::Relation,
-    >,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Fields {
-    #[prost(string, repeated, tag = "1")]
-    pub updated_fields: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ResourceEventContext {
-    #[prost(oneof = "resource_event_context::Event", tags = "1, 2, 3")]
-    pub event: ::core::option::Option<resource_event_context::Event>,
-}
-/// Nested message and enum types in `ResourceEventContext`.
-pub mod resource_event_context {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Event {
-        #[prost(message, tag = "1")]
-        UpdatedFields(super::Fields),
-        #[prost(message, tag = "2")]
-        RelationUpdates(super::RelationUpdate),
-        #[prost(string, tag = "3")]
-        CustomContext(::prost::alloc::string::String),
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Token {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub permission: ::core::option::Option<
-        super::super::super::storage::models::v2::Permission,
-    >,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UserEventContext {
-    #[prost(oneof = "user_event_context::Event", tags = "1, 2, 3, 4")]
-    pub event: ::core::option::Option<user_event_context::Event>,
-}
-/// Nested message and enum types in `UserEventContext`.
-pub mod user_event_context {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Event {
-        #[prost(string, tag = "1")]
-        UpdatedField(::prost::alloc::string::String),
-        #[prost(bool, tag = "2")]
-        Admin(bool),
-        #[prost(message, tag = "3")]
-        Token(super::Token),
-        #[prost(message, tag = "4")]
-        Permission(super::super::super::super::storage::models::v2::Permission),
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventMessage {
     #[prost(oneof = "event_message::MessageVariant", tags = "1, 2, 3")]
     pub message_variant: ::core::option::Option<event_message::MessageVariant>,
@@ -216,11 +148,9 @@ pub mod event_message {
 pub struct ResourceEvent {
     #[prost(message, optional, tag = "1")]
     pub resource: ::core::option::Option<Resource>,
-    #[prost(enumeration = "ResourceEventType", tag = "2")]
-    pub event_type: i32,
+    #[prost(enumeration = "EventVariant", tag = "2")]
+    pub event_variant: i32,
     #[prost(message, optional, tag = "3")]
-    pub context: ::core::option::Option<ResourceEventContext>,
-    #[prost(message, optional, tag = "4")]
     pub reply: ::core::option::Option<Reply>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -228,13 +158,9 @@ pub struct ResourceEvent {
 pub struct UserEvent {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub user_name: ::prost::alloc::string::String,
-    #[prost(enumeration = "UserEventType", tag = "3")]
-    pub event_type: i32,
-    #[prost(message, optional, tag = "4")]
-    pub context: ::core::option::Option<UserEventContext>,
-    #[prost(message, optional, tag = "5")]
+    #[prost(enumeration = "EventVariant", tag = "2")]
+    pub event_variant: i32,
+    #[prost(message, optional, tag = "3")]
     pub reply: ::core::option::Option<Reply>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -246,30 +172,6 @@ pub struct Reply {
     pub salt: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub hmac: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DataproxyInfo {
-    #[prost(string, tag = "1")]
-    pub endpoint_id: ::prost::alloc::string::String,
-    /// Endpoint name
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-    /// Endpoint type
-    #[prost(
-        enumeration = "super::super::super::storage::models::v2::EndpointVariant",
-        tag = "3"
-    )]
-    pub ep_variant: i32,
-    /// Is this endpoint public
-    #[prost(bool, tag = "4")]
-    pub is_public: bool,
-    /// required public_key
-    #[prost(string, tag = "5")]
-    pub pubkey: ::prost::alloc::string::String,
-    /// url
-    #[prost(string, tag = "6")]
-    pub url: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -302,9 +204,9 @@ pub struct NewPubkey {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AnouncementEvent {
-    #[prost(message, optional, tag = "7")]
+    #[prost(message, optional, tag = "8")]
     pub reply: ::core::option::Option<Reply>,
-    #[prost(oneof = "anouncement_event::EventVariant", tags = "1, 2, 3, 4, 5, 6")]
+    #[prost(oneof = "anouncement_event::EventVariant", tags = "1, 2, 3, 4, 5, 6, 7")]
     pub event_variant: ::core::option::Option<anouncement_event::EventVariant>,
 }
 /// Nested message and enum types in `AnouncementEvent`.
@@ -312,83 +214,53 @@ pub mod anouncement_event {
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum EventVariant {
-        #[prost(message, tag = "1")]
-        NewDataProxy(super::DataproxyInfo),
-        #[prost(message, tag = "2")]
-        RemoveDataProxy(super::DataproxyInfo),
-        #[prost(message, tag = "3")]
-        UpdateDataProxy(super::DataproxyInfo),
-        #[prost(message, tag = "4")]
-        Downtime(super::ScheduledDowntime),
-        #[prost(message, tag = "5")]
-        Version(super::NewVersion),
+        #[prost(string, tag = "1")]
+        NewDataProxyId(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        RemoveDataProxyId(::prost::alloc::string::String),
+        #[prost(string, tag = "3")]
+        UpdateDataProxyId(::prost::alloc::string::String),
+        #[prost(bool, tag = "4")]
+        NewPubkey(bool),
+        #[prost(bool, tag = "5")]
+        RemovePubkey(bool),
         #[prost(message, tag = "6")]
-        Pubkey(super::NewPubkey),
+        Downtime(super::ScheduledDowntime),
+        #[prost(message, tag = "7")]
+        Version(super::NewVersion),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum ResourceEventType {
+pub enum EventVariant {
     Unspecified = 0,
     Created = 1,
     Available = 2,
     Updated = 3,
     Deleted = 4,
 }
-impl ResourceEventType {
+impl EventVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            ResourceEventType::Unspecified => "RESOURCE_EVENT_TYPE_UNSPECIFIED",
-            ResourceEventType::Created => "RESOURCE_EVENT_TYPE_CREATED",
-            ResourceEventType::Available => "RESOURCE_EVENT_TYPE_AVAILABLE",
-            ResourceEventType::Updated => "RESOURCE_EVENT_TYPE_UPDATED",
-            ResourceEventType::Deleted => "RESOURCE_EVENT_TYPE_DELETED",
+            EventVariant::Unspecified => "EVENT_VARIANT_UNSPECIFIED",
+            EventVariant::Created => "EVENT_VARIANT_CREATED",
+            EventVariant::Available => "EVENT_VARIANT_AVAILABLE",
+            EventVariant::Updated => "EVENT_VARIANT_UPDATED",
+            EventVariant::Deleted => "EVENT_VARIANT_DELETED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "RESOURCE_EVENT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "RESOURCE_EVENT_TYPE_CREATED" => Some(Self::Created),
-            "RESOURCE_EVENT_TYPE_AVAILABLE" => Some(Self::Available),
-            "RESOURCE_EVENT_TYPE_UPDATED" => Some(Self::Updated),
-            "RESOURCE_EVENT_TYPE_DELETED" => Some(Self::Deleted),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum UserEventType {
-    Unspecified = 0,
-    Created = 1,
-    Updated = 2,
-    Deleted = 3,
-}
-impl UserEventType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            UserEventType::Unspecified => "USER_EVENT_TYPE_UNSPECIFIED",
-            UserEventType::Created => "USER_EVENT_TYPE_CREATED",
-            UserEventType::Updated => "USER_EVENT_TYPE_UPDATED",
-            UserEventType::Deleted => "USER_EVENT_TYPE_DELETED",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "USER_EVENT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "USER_EVENT_TYPE_CREATED" => Some(Self::Created),
-            "USER_EVENT_TYPE_UPDATED" => Some(Self::Updated),
-            "USER_EVENT_TYPE_DELETED" => Some(Self::Deleted),
+            "EVENT_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
+            "EVENT_VARIANT_CREATED" => Some(Self::Created),
+            "EVENT_VARIANT_AVAILABLE" => Some(Self::Available),
+            "EVENT_VARIANT_UPDATED" => Some(Self::Updated),
+            "EVENT_VARIANT_DELETED" => Some(Self::Deleted),
             _ => None,
         }
     }

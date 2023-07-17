@@ -1254,6 +1254,25 @@ pub struct GetStorageStatusResponse {
     #[prost(message, repeated, tag = "1")]
     pub location_status: ::prost::alloc::vec::Vec<LocationStatus>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPubkeysRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Pubkey {
+    #[prost(int32, tag = "1")]
+    pub id: i32,
+    #[prost(string, tag = "2")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub location: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPubkeysResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub pubkeys: ::prost::alloc::vec::Vec<Pubkey>,
+}
 /// Generated client implementations.
 pub mod storage_status_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -1404,6 +1423,36 @@ pub mod storage_status_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        pub async fn get_pubkeys(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetPubkeysRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetPubkeysResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.StorageStatusService/GetPubkeys",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.StorageStatusService",
+                        "GetPubkeys",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -1436,6 +1485,13 @@ pub mod storage_status_service_server {
             request: tonic::Request<super::GetStorageStatusRequest>,
         ) -> std::result::Result<
             tonic::Response<super::GetStorageStatusResponse>,
+            tonic::Status,
+        >;
+        async fn get_pubkeys(
+            &self,
+            request: tonic::Request<super::GetPubkeysRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetPubkeysResponse>,
             tonic::Status,
         >;
     }
@@ -1601,6 +1657,50 @@ pub mod storage_status_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetStorageStatusSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.StorageStatusService/GetPubkeys" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetPubkeysSvc<T: StorageStatusService>(pub Arc<T>);
+                    impl<
+                        T: StorageStatusService,
+                    > tonic::server::UnaryService<super::GetPubkeysRequest>
+                    for GetPubkeysSvc<T> {
+                        type Response = super::GetPubkeysResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetPubkeysRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).get_pubkeys(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetPubkeysSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -6266,6 +6366,20 @@ pub struct GetUserResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUserRedactedRequest {
+    /// Optional user_id
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUserRedactedResponse {
+    /// User info
+    #[prost(message, optional, tag = "1")]
+    pub user: ::core::option::Option<super::super::models::v2::User>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserDisplayNameRequest {
     /// New display name
     #[prost(string, tag = "1")]
@@ -6740,6 +6854,43 @@ pub mod user_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// GetUserRequestRedacted
+        ///
+        /// Status: STABLE
+        ///
+        /// This is a request that returns the user information of the
+        /// current user or if invoked by an admin from another user
+        /// Redacts personal information like name or email
+        pub async fn get_user_redacted(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetUserRedactedRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetUserRedactedResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.UserService/GetUserRedacted",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.UserService",
+                        "GetUserRedacted",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
         /// UpdateUserDisplayName
         ///
         /// Status: STABLE
@@ -7030,6 +7181,20 @@ pub mod user_service_server {
             &self,
             request: tonic::Request<super::GetUserRequest>,
         ) -> std::result::Result<tonic::Response<super::GetUserResponse>, tonic::Status>;
+        /// GetUserRequestRedacted
+        ///
+        /// Status: STABLE
+        ///
+        /// This is a request that returns the user information of the
+        /// current user or if invoked by an admin from another user
+        /// Redacts personal information like name or email
+        async fn get_user_redacted(
+            &self,
+            request: tonic::Request<super::GetUserRedactedRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetUserRedactedResponse>,
+            tonic::Status,
+        >;
         /// UpdateUserDisplayName
         ///
         /// Status: STABLE
@@ -7571,6 +7736,52 @@ pub mod user_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetUserSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.UserService/GetUserRedacted" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetUserRedactedSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::GetUserRedactedRequest>
+                    for GetUserRedactedSvc<T> {
+                        type Response = super::GetUserRedactedResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetUserRedactedRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_user_redacted(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetUserRedactedSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

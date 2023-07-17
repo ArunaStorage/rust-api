@@ -1,12 +1,20 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExternalId {
+    #[prost(string, tag = "1")]
+    pub external_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub idp: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
     /// Internal Aruna UserID
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     /// Oidc subject ID
-    #[prost(string, repeated, tag = "2")]
-    pub external_id: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "2")]
+    pub external_ids: ::prost::alloc::vec::Vec<ExternalId>,
     /// (optional) User display_name
     #[prost(string, tag = "3")]
     pub display_name: ::prost::alloc::string::String,
@@ -78,8 +86,10 @@ pub struct UserAttributes {
     #[prost(bool, tag = "2")]
     pub service_account: bool,
     #[prost(message, repeated, tag = "3")]
-    pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttributes>,
+    pub tokens: ::prost::alloc::vec::Vec<Token>,
     #[prost(message, repeated, tag = "4")]
+    pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttributes>,
+    #[prost(message, repeated, tag = "5")]
     pub personal_permissions: ::prost::alloc::vec::Vec<Permission>,
 }
 /// A key value pair for hooks and labels
