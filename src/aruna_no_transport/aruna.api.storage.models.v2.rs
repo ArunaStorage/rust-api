@@ -125,19 +125,11 @@ pub mod relation {
 pub struct ExternalRelation {
     #[prost(string, tag = "1")]
     pub identifier: ::prost::alloc::string::String,
-    #[prost(oneof = "external_relation::Variant", tags = "2, 3")]
-    pub variant: ::core::option::Option<external_relation::Variant>,
-}
-/// Nested message and enum types in `ExternalRelation`.
-pub mod external_relation {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Variant {
-        #[prost(enumeration = "super::ExternalRelationVariant", tag = "2")]
-        DefinedVariant(i32),
-        #[prost(string, tag = "3")]
-        CustomVariant(::prost::alloc::string::String),
-    }
+    #[prost(enumeration = "ExternalRelationVariant", tag = "2")]
+    pub defined_variant: i32,
+    /// Will only be filled if defined_variant == CUSTOM
+    #[prost(string, optional, tag = "3")]
+    pub custom_variant: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -146,21 +138,13 @@ pub struct InternalRelation {
     pub resource_id: ::prost::alloc::string::String,
     #[prost(enumeration = "ResourceVariant", tag = "2")]
     pub resource_variant: i32,
+    #[prost(enumeration = "InternalRelationVariant", tag = "3")]
+    pub defined_variant: i32,
+    /// Will only be filled if defined_variant == CUSTOM
+    #[prost(string, optional, tag = "4")]
+    pub custom_variant: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(enumeration = "RelationDirection", tag = "5")]
     pub direction: i32,
-    #[prost(oneof = "internal_relation::Variant", tags = "3, 4")]
-    pub variant: ::core::option::Option<internal_relation::Variant>,
-}
-/// Nested message and enum types in `InternalRelation`.
-pub mod internal_relation {
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Variant {
-        #[prost(enumeration = "super::InternalRelationVariant", tag = "3")]
-        DefinedVariant(i32),
-        #[prost(string, tag = "4")]
-        CustomVariant(::prost::alloc::string::String),
-    }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -539,6 +523,7 @@ pub enum ExternalRelationVariant {
     Unspecified = 0,
     Url = 1,
     Identifier = 2,
+    Custom = 3,
 }
 impl ExternalRelationVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -552,6 +537,7 @@ impl ExternalRelationVariant {
             }
             ExternalRelationVariant::Url => "EXTERNAL_RELATION_VARIANT_URL",
             ExternalRelationVariant::Identifier => "EXTERNAL_RELATION_VARIANT_IDENTIFIER",
+            ExternalRelationVariant::Custom => "EXTERNAL_RELATION_VARIANT_CUSTOM",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -560,6 +546,7 @@ impl ExternalRelationVariant {
             "EXTERNAL_RELATION_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
             "EXTERNAL_RELATION_VARIANT_URL" => Some(Self::Url),
             "EXTERNAL_RELATION_VARIANT_IDENTIFIER" => Some(Self::Identifier),
+            "EXTERNAL_RELATION_VARIANT_CUSTOM" => Some(Self::Custom),
             _ => None,
         }
     }
@@ -571,9 +558,10 @@ pub enum InternalRelationVariant {
     Unspecified = 0,
     BelongsTo = 1,
     Origin = 2,
-    Derived = 3,
+    Version = 3,
     Metadata = 4,
     Policy = 5,
+    Custom = 6,
 }
 impl InternalRelationVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -587,9 +575,10 @@ impl InternalRelationVariant {
             }
             InternalRelationVariant::BelongsTo => "INTERNAL_RELATION_VARIANT_BELONGS_TO",
             InternalRelationVariant::Origin => "INTERNAL_RELATION_VARIANT_ORIGIN",
-            InternalRelationVariant::Derived => "INTERNAL_RELATION_VARIANT_DERIVED",
+            InternalRelationVariant::Version => "INTERNAL_RELATION_VARIANT_VERSION",
             InternalRelationVariant::Metadata => "INTERNAL_RELATION_VARIANT_METADATA",
             InternalRelationVariant::Policy => "INTERNAL_RELATION_VARIANT_POLICY",
+            InternalRelationVariant::Custom => "INTERNAL_RELATION_VARIANT_CUSTOM",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -598,9 +587,10 @@ impl InternalRelationVariant {
             "INTERNAL_RELATION_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
             "INTERNAL_RELATION_VARIANT_BELONGS_TO" => Some(Self::BelongsTo),
             "INTERNAL_RELATION_VARIANT_ORIGIN" => Some(Self::Origin),
-            "INTERNAL_RELATION_VARIANT_DERIVED" => Some(Self::Derived),
+            "INTERNAL_RELATION_VARIANT_VERSION" => Some(Self::Version),
             "INTERNAL_RELATION_VARIANT_METADATA" => Some(Self::Metadata),
             "INTERNAL_RELATION_VARIANT_POLICY" => Some(Self::Policy),
+            "INTERNAL_RELATION_VARIANT_CUSTOM" => Some(Self::Custom),
             _ => None,
         }
     }
