@@ -1,3 +1,4 @@
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Resource {
@@ -7,25 +8,45 @@ pub struct Resource {
     pub associated_id: ::prost::alloc::string::String,
     #[prost(bool, tag = "3")]
     pub persistent_resource_id: bool,
+    #[prost(string, tag = "4")]
+    pub checksum: ::prost::alloc::string::String,
     #[prost(
         enumeration = "super::super::super::storage::models::v2::ResourceVariant",
-        tag = "4"
+        tag = "5"
     )]
     pub resource_variant: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StreamTarget {
-    #[prost(oneof = "stream_target::Target", tags = "1, 2, 3, 4")]
-    pub target: ::core::option::Option<stream_target::Target>,
+pub struct ResourceTarget {
+    #[prost(string, tag = "1")]
+    pub resource_id: ::prost::alloc::string::String,
+    #[prost(
+        enumeration = "super::super::super::storage::models::v2::ResourceVariant",
+        tag = "2"
+    )]
+    pub resource_variant: i32,
 }
-/// Nested message and enum types in `StreamTarget`.
-pub mod stream_target {
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateStreamConsumerRequest {
+    #[prost(bool, tag = "5")]
+    pub include_subresources: bool,
+    #[prost(oneof = "create_stream_consumer_request::Target", tags = "1, 2, 3, 4")]
+    pub target: ::core::option::Option<create_stream_consumer_request::Target>,
+    #[prost(oneof = "create_stream_consumer_request::StreamType", tags = "6, 7, 8")]
+    pub stream_type: ::core::option::Option<create_stream_consumer_request::StreamType>,
+}
+/// Nested message and enum types in `CreateStreamConsumerRequest`.
+pub mod create_stream_consumer_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Target {
         #[prost(message, tag = "1")]
-        Resource(super::Resource),
+        Resource(super::ResourceTarget),
         #[prost(bool, tag = "2")]
         User(bool),
         #[prost(bool, tag = "3")]
@@ -33,97 +54,98 @@ pub mod stream_target {
         #[prost(bool, tag = "4")]
         All(bool),
     }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateStreamConsumerRequest {
-    #[prost(message, optional, tag = "1")]
-    pub target: ::core::option::Option<StreamTarget>,
-    #[prost(bool, tag = "2")]
-    pub include_subresources: bool,
-    #[prost(oneof = "create_stream_consumer_request::StreamType", tags = "3, 4, 5")]
-    pub stream_type: ::core::option::Option<create_stream_consumer_request::StreamType>,
-}
-/// Nested message and enum types in `CreateStreamConsumerRequest`.
-pub mod create_stream_consumer_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum StreamType {
-        #[prost(message, tag = "3")]
+        #[prost(message, tag = "6")]
         StreamAll(super::StreamAll),
-        #[prost(message, tag = "4")]
+        #[prost(message, tag = "7")]
         StreamFromDate(super::StreamFromDate),
-        #[prost(message, tag = "5")]
+        #[prost(message, tag = "8")]
         StreamFromSequence(super::StreamFromSequence),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateStreamConsumerResponse {
     #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
+    pub stream_consumer: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEventMessageBatchRequest {
     #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
+    pub stream_consumer: ::prost::alloc::string::String,
     #[prost(uint32, tag = "2")]
     pub batch_size: u32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEventMessageBatchResponse {
     #[prost(message, repeated, tag = "1")]
     pub messages: ::prost::alloc::vec::Vec<EventMessage>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEventMessageBatchStreamRequest {
     #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
+    pub stream_consumer: ::prost::alloc::string::String,
     #[prost(uint32, tag = "2")]
     pub batch_size: u32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEventMessageBatchStreamResponse {
     #[prost(message, repeated, tag = "1")]
     pub messages: ::prost::alloc::vec::Vec<EventMessage>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AcknowledgeMessageBatchRequest {
     #[prost(message, repeated, tag = "1")]
     pub replies: ::prost::alloc::vec::Vec<Reply>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AcknowledgeMessageBatchResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupRequest {
     #[prost(string, tag = "1")]
-    pub stream_group_id: ::prost::alloc::string::String,
+    pub stream_consumer: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEventStreamingGroupResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromSequence {
     #[prost(uint64, tag = "1")]
     pub sequence: u64,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamFromDate {
     #[prost(message, optional, tag = "1")]
-    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
+    pub timestamp: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StreamAll {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventMessage {
@@ -132,6 +154,7 @@ pub struct EventMessage {
 }
 /// Nested message and enum types in `EventMessage`.
 pub mod event_message {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum MessageVariant {
@@ -143,6 +166,7 @@ pub mod event_message {
         AnnouncementEvent(super::AnouncementEvent),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResourceEvent {
@@ -153,6 +177,7 @@ pub struct ResourceEvent {
     #[prost(message, optional, tag = "3")]
     pub reply: ::core::option::Option<Reply>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserEvent {
@@ -160,9 +185,12 @@ pub struct UserEvent {
     pub user_id: ::prost::alloc::string::String,
     #[prost(enumeration = "EventVariant", tag = "2")]
     pub event_variant: i32,
-    #[prost(message, optional, tag = "3")]
+    #[prost(string, tag = "3")]
+    pub checksum: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "4")]
     pub reply: ::core::option::Option<Reply>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Reply {
@@ -173,6 +201,7 @@ pub struct Reply {
     #[prost(string, tag = "3")]
     pub hmac: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ScheduledDowntime {
@@ -181,10 +210,11 @@ pub struct ScheduledDowntime {
     #[prost(string, tag = "2")]
     pub component: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
-    pub from: ::core::option::Option<::prost_types::Timestamp>,
+    pub from: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(message, optional, tag = "4")]
-    pub to: ::core::option::Option<::prost_types::Timestamp>,
+    pub to: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NewVersion {
@@ -195,12 +225,14 @@ pub struct NewVersion {
     #[prost(string, tag = "3")]
     pub new_version: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NewPubkey {
     #[prost(string, tag = "1")]
     pub pubkey: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AnouncementEvent {
@@ -211,6 +243,7 @@ pub struct AnouncementEvent {
 }
 /// Nested message and enum types in `AnouncementEvent`.
 pub mod anouncement_event {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum EventVariant {
@@ -230,6 +263,7 @@ pub mod anouncement_event {
         Version(super::NewVersion),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum EventVariant {

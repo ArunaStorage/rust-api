@@ -1,3 +1,4 @@
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateBundleRequest {
@@ -8,20 +9,23 @@ pub struct CreateBundleRequest {
     pub filename: ::prost::alloc::string::String,
     /// Default 1 Month
     #[prost(message, optional, tag = "3")]
-    pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateBundleResponse {
     #[prost(string, tag = "1")]
     pub bundle_url: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteBundleRequest {
     #[prost(string, tag = "1")]
     pub bundle_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteBundleResponse {}
@@ -406,6 +410,7 @@ pub mod bundler_service_server {
         const NAME: &'static str = "aruna.api.dataproxy.services.v2.BundlerService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DataProxyInfo {
@@ -414,6 +419,7 @@ pub struct DataProxyInfo {
     #[prost(int64, tag = "2")]
     pub available_space: i64,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RequestReplicationRequest {
@@ -422,6 +428,7 @@ pub struct RequestReplicationRequest {
     #[prost(bool, tag = "2")]
     pub user_initialized: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DataInfo {
@@ -434,12 +441,14 @@ pub struct DataInfo {
     #[prost(bool, tag = "4")]
     pub is_compressed: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DataInfos {
     #[prost(message, repeated, tag = "1")]
     pub data_info: ::prost::alloc::vec::Vec<DataInfo>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RequestReplicationResponse {
@@ -448,6 +457,7 @@ pub struct RequestReplicationResponse {
 }
 /// Nested message and enum types in `RequestReplicationResponse`.
 pub mod request_replication_response {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Response {
@@ -457,21 +467,25 @@ pub mod request_replication_response {
         Ack(bool),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InitReplicationRequest {
     #[prost(message, optional, tag = "1")]
     pub data_infos: ::core::option::Option<DataInfos>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InitReplicationResponse {
     #[prost(bool, tag = "1")]
     pub ack: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCredentialsRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCredentialsResponse {
@@ -480,6 +494,7 @@ pub struct GetCredentialsResponse {
     #[prost(string, tag = "2")]
     pub secret_key: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct S3Path {
@@ -488,6 +503,7 @@ pub struct S3Path {
     #[prost(string, tag = "2")]
     pub key: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushReplicaRequest {
@@ -498,6 +514,7 @@ pub struct PushReplicaRequest {
 }
 /// Nested message and enum types in `PushReplicaRequest`.
 pub mod push_replica_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Resource {
@@ -507,12 +524,14 @@ pub mod push_replica_request {
         S3Path(super::S3Path),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushReplicaResponse {
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PullReplicaRequest {
@@ -521,6 +540,7 @@ pub struct PullReplicaRequest {
 }
 /// Nested message and enum types in `PullReplicaRequest`.
 pub mod pull_replica_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Resource {
@@ -530,18 +550,21 @@ pub mod pull_replica_request {
         S3Path(super::S3Path),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PullReplicaResponse {
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplicationStatusRequest {
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplicationStatusResponse {
@@ -550,6 +573,7 @@ pub struct ReplicationStatusResponse {
     #[prost(string, tag = "2")]
     pub message: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ReplicationStatus {

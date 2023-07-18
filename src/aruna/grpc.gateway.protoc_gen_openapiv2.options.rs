@@ -26,6 +26,7 @@
 ///     produces: "application/json";
 ///   };
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Swagger {
@@ -89,7 +90,7 @@ pub struct Swagger {
     #[prost(map = "string, message", tag = "15")]
     pub extensions: ::std::collections::HashMap<
         ::prost::alloc::string::String,
-        ::prost_types::Value,
+        ::prost_wkt_types::Value,
     >,
 }
 /// `Operation` is a representation of OpenAPI v2 specification's Operation
@@ -120,6 +121,7 @@ pub struct Swagger {
 ///       };
 ///     }
 ///   }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Operation {
@@ -177,7 +179,7 @@ pub struct Operation {
     #[prost(map = "string, message", tag = "13")]
     pub extensions: ::std::collections::HashMap<
         ::prost::alloc::string::String,
-        ::prost_types::Value,
+        ::prost_wkt_types::Value,
     >,
 }
 /// `Header` is a representation of OpenAPI v2 specification's Header object.
@@ -185,6 +187,7 @@ pub struct Operation {
 /// See:
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#headerObject>
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Header {
@@ -215,6 +218,7 @@ pub struct Header {
 /// See:
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#responseObject>
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {
@@ -243,7 +247,7 @@ pub struct Response {
     #[prost(map = "string, message", tag = "5")]
     pub extensions: ::std::collections::HashMap<
         ::prost::alloc::string::String,
-        ::prost_types::Value,
+        ::prost_wkt_types::Value,
     >,
 }
 /// `Info` is a representation of OpenAPI v2 specification's Info object.
@@ -272,6 +276,7 @@ pub struct Response {
 ///     ...
 ///   };
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Info {
@@ -298,7 +303,7 @@ pub struct Info {
     #[prost(map = "string, message", tag = "7")]
     pub extensions: ::std::collections::HashMap<
         ::prost::alloc::string::String,
-        ::prost_types::Value,
+        ::prost_wkt_types::Value,
     >,
 }
 /// `Contact` is a representation of OpenAPI v2 specification's Contact object.
@@ -321,6 +326,7 @@ pub struct Info {
 ///     ...
 ///   };
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contact {
@@ -356,6 +362,7 @@ pub struct Contact {
 ///     ...
 ///   };
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct License {
@@ -383,6 +390,7 @@ pub struct License {
 ///     ...
 ///   };
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExternalDocumentation {
@@ -400,6 +408,7 @@ pub struct ExternalDocumentation {
 /// See:
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Schema {
@@ -456,6 +465,7 @@ pub struct Schema {
 ///         }];
 ///   }
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct JsonSchema {
@@ -534,7 +544,7 @@ pub struct JsonSchema {
     #[prost(map = "string, message", tag = "48")]
     pub extensions: ::std::collections::HashMap<
         ::prost::alloc::string::String,
-        ::prost_types::Value,
+        ::prost_wkt_types::Value,
     >,
 }
 /// Nested message and enum types in `JSONSchema`.
@@ -542,6 +552,7 @@ pub mod json_schema {
     /// 'FieldConfiguration' provides additional field level properties used when
     /// generating the OpenAPI v2 file. These properties are not defined by
     /// OpenAPIv2, but they are used to control the generation.
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct FieldConfiguration {
@@ -552,6 +563,7 @@ pub mod json_schema {
         #[prost(string, tag = "47")]
         pub path_param_name: ::prost::alloc::string::String,
     }
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[derive(
         Clone,
         Copy,
@@ -612,6 +624,7 @@ pub mod json_schema {
 /// See:
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#tagObject>
 ///
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Tag {
@@ -632,6 +645,7 @@ pub struct Tag {
 /// A declaration of the security schemes available to be used in the
 /// specification. This does not enforce the security schemes on the operations
 /// and only serves to provide the relevant details for each scheme.
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SecurityDefinitions {
@@ -653,6 +667,7 @@ pub struct SecurityDefinitions {
 /// operations. Supported schemes are basic authentication, an API key (either as
 /// a header or as a query parameter) and OAuth2's common flows (implicit,
 /// password, application and access code).
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SecurityScheme {
@@ -694,13 +709,14 @@ pub struct SecurityScheme {
     #[prost(map = "string, message", tag = "9")]
     pub extensions: ::std::collections::HashMap<
         ::prost::alloc::string::String,
-        ::prost_types::Value,
+        ::prost_wkt_types::Value,
     >,
 }
 /// Nested message and enum types in `SecurityScheme`.
 pub mod security_scheme {
     /// The type of the security scheme. Valid values are "basic",
     /// "apiKey" or "oauth2".
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[derive(
         Clone,
         Copy,
@@ -744,6 +760,7 @@ pub mod security_scheme {
         }
     }
     /// The location of the API key. Valid values are "query" or "header".
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[derive(
         Clone,
         Copy,
@@ -785,6 +802,7 @@ pub mod security_scheme {
     }
     /// The flow used by the OAuth2 security scheme. Valid values are
     /// "implicit", "password", "application" or "accessCode".
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[derive(
         Clone,
         Copy,
@@ -843,6 +861,7 @@ pub mod security_scheme {
 ///
 /// The name used for each property MUST correspond to a security scheme
 /// declared in the Security Definitions.
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SecurityRequirement {
@@ -861,6 +880,7 @@ pub mod security_requirement {
     /// If the security scheme is of type "oauth2", then the value is a list of
     /// scope names required for the execution. For other security scheme types,
     /// the array MUST be empty.
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct SecurityRequirementValue {
@@ -874,6 +894,7 @@ pub mod security_requirement {
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#scopesObject>
 ///
 /// Lists the available scopes for an OAuth2 security scheme.
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Scopes {
@@ -887,6 +908,7 @@ pub struct Scopes {
 }
 /// Scheme describes the schemes supported by the OpenAPI Swagger
 /// and Operation objects.
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Scheme {

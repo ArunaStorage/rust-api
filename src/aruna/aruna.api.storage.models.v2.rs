@@ -1,3 +1,4 @@
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExternalId {
@@ -6,6 +7,7 @@ pub struct ExternalId {
     #[prost(string, tag = "2")]
     pub idp: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
@@ -28,6 +30,7 @@ pub struct User {
     #[prost(message, optional, tag = "6")]
     pub attributes: ::core::option::Option<UserAttributes>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Permission {
@@ -38,6 +41,7 @@ pub struct Permission {
 }
 /// Nested message and enum types in `Permission`.
 pub mod permission {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum ResourceId {
@@ -51,6 +55,7 @@ pub mod permission {
         ObjectId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Token {
@@ -61,15 +66,16 @@ pub struct Token {
     #[prost(string, tag = "3")]
     pub user_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "4")]
-    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(message, optional, tag = "5")]
-    pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     /// Tokens can either be personal or resource "specific"
     #[prost(message, optional, tag = "6")]
     pub permission: ::core::option::Option<Permission>,
     #[prost(message, optional, tag = "7")]
-    pub used_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub used_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CustomAttributes {
@@ -78,6 +84,7 @@ pub struct CustomAttributes {
     #[prost(string, tag = "2")]
     pub attribute_value: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserAttributes {
@@ -93,6 +100,7 @@ pub struct UserAttributes {
     pub personal_permissions: ::prost::alloc::vec::Vec<Permission>,
 }
 /// A key value pair for hooks and labels
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct KeyValue {
@@ -103,6 +111,7 @@ pub struct KeyValue {
     #[prost(enumeration = "KeyValueVariant", tag = "3")]
     pub variant: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Relation {
@@ -111,6 +120,7 @@ pub struct Relation {
 }
 /// Nested message and enum types in `Relation`.
 pub mod relation {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Relation {
@@ -120,6 +130,7 @@ pub mod relation {
         Internal(super::InternalRelation),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExternalRelation {
@@ -131,6 +142,7 @@ pub struct ExternalRelation {
     #[prost(string, optional, tag = "3")]
     pub custom_variant: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InternalRelation {
@@ -146,6 +158,7 @@ pub struct InternalRelation {
     #[prost(enumeration = "RelationDirection", tag = "5")]
     pub direction: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PageRequest {
@@ -157,6 +170,7 @@ pub struct PageRequest {
     pub page_size: i64,
 }
 /// Stats for a set of objects
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Stats {
@@ -165,8 +179,9 @@ pub struct Stats {
     #[prost(int64, tag = "2")]
     pub size: i64,
     #[prost(message, optional, tag = "3")]
-    pub last_updated: ::core::option::Option<::prost_types::Timestamp>,
+    pub last_updated: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Hash {
@@ -175,6 +190,7 @@ pub struct Hash {
     #[prost(string, tag = "2")]
     pub hash: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EndpointHostConfig {
@@ -189,6 +205,7 @@ pub struct EndpointHostConfig {
     #[prost(enumeration = "EndpointHostVariant", tag = "5")]
     pub host_variant: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Endpoint {
@@ -205,6 +222,7 @@ pub struct Endpoint {
     #[prost(message, repeated, tag = "6")]
     pub host_configs: ::prost::alloc::vec::Vec<EndpointHostConfig>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenericResource {
@@ -213,6 +231,7 @@ pub struct GenericResource {
 }
 /// Nested message and enum types in `GenericResource`.
 pub mod generic_resource {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Resource {
@@ -226,6 +245,7 @@ pub mod generic_resource {
         Object(super::Object),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Project {
@@ -248,7 +268,7 @@ pub struct Project {
     #[prost(enumeration = "DataClass", tag = "7")]
     pub data_class: i32,
     #[prost(message, optional, tag = "8")]
-    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
     #[prost(enumeration = "Status", tag = "10")]
@@ -256,6 +276,7 @@ pub struct Project {
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Collection {
@@ -279,7 +300,7 @@ pub struct Collection {
     #[prost(enumeration = "DataClass", tag = "7")]
     pub data_class: i32,
     #[prost(message, optional, tag = "8")]
-    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
     #[prost(enumeration = "Status", tag = "10")]
@@ -287,6 +308,7 @@ pub struct Collection {
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Dataset {
@@ -307,7 +329,7 @@ pub struct Dataset {
     #[prost(enumeration = "DataClass", tag = "7")]
     pub data_class: i32,
     #[prost(message, optional, tag = "8")]
-    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
     #[prost(enumeration = "Status", tag = "10")]
@@ -315,6 +337,7 @@ pub struct Dataset {
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Object {
@@ -336,7 +359,7 @@ pub struct Object {
     #[prost(enumeration = "DataClass", tag = "7")]
     pub data_class: i32,
     #[prost(message, optional, tag = "8")]
-    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
     #[prost(enumeration = "Status", tag = "10")]
@@ -348,6 +371,7 @@ pub struct Object {
     pub hashes: ::prost::alloc::vec::Vec<Hash>,
 }
 /// Dataclass defines the confidentiality of the object
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum DataClass {
@@ -384,6 +408,7 @@ impl DataClass {
     }
 }
 /// Which kind of endpoint
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum EndpointVariant {
@@ -414,6 +439,7 @@ impl EndpointVariant {
     }
 }
 /// Which features does the endpoint have
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum EndpointHostVariant {
@@ -444,6 +470,7 @@ impl EndpointHostVariant {
     }
 }
 /// Permission Levels
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum PermissionLevel {
@@ -483,6 +510,7 @@ impl PermissionLevel {
     }
 }
 /// KeyValueVariants
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum KeyValueVariant {
@@ -517,6 +545,7 @@ impl KeyValueVariant {
     }
 }
 /// External Relations
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ExternalRelationVariant {
@@ -552,6 +581,7 @@ impl ExternalRelationVariant {
     }
 }
 /// InternalRelations
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum InternalRelationVariant {
@@ -596,6 +626,7 @@ impl InternalRelationVariant {
     }
 }
 /// internal object relation type (direction)
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum RelationDirection {
@@ -627,6 +658,7 @@ impl RelationDirection {
 }
 /// Used for the internal associated services to validate permissions
 /// Actions are similar to HTTP verbs
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ResourceAction {
@@ -666,6 +698,7 @@ impl ResourceAction {
     }
 }
 /// An arbitrary status for Objects
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Status {
@@ -715,6 +748,7 @@ impl Status {
     }
 }
 /// Status for endpoints
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ComponentStatus {
@@ -753,6 +787,7 @@ impl ComponentStatus {
         }
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Hashalgorithm {
@@ -782,6 +817,7 @@ impl Hashalgorithm {
         }
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ResourceVariant {

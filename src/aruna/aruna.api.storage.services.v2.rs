@@ -1,3 +1,4 @@
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectRequest {
@@ -19,6 +20,7 @@ pub struct CreateProjectRequest {
     #[prost(enumeration = "super::super::models::v2::DataClass", tag = "5")]
     pub data_class: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateProjectResponse {
@@ -26,6 +28,7 @@ pub struct CreateProjectResponse {
     #[prost(message, optional, tag = "1")]
     pub project: ::core::option::Option<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectRequest {
@@ -33,6 +36,7 @@ pub struct GetProjectRequest {
     #[prost(string, tag = "1")]
     pub project_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectResponse {
@@ -40,6 +44,7 @@ pub struct GetProjectResponse {
     #[prost(message, optional, tag = "1")]
     pub project: ::core::option::Option<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectsRequest {
@@ -47,6 +52,7 @@ pub struct GetProjectsRequest {
     #[prost(string, repeated, tag = "1")]
     pub project_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectsResponse {
@@ -54,6 +60,7 @@ pub struct GetProjectsResponse {
     #[prost(message, repeated, tag = "1")]
     pub projects: ::prost::alloc::vec::Vec<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteProjectRequest {
@@ -61,9 +68,11 @@ pub struct DeleteProjectRequest {
     #[prost(string, tag = "1")]
     pub project_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteProjectResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectNameRequest {
@@ -72,12 +81,14 @@ pub struct UpdateProjectNameRequest {
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectNameResponse {
     #[prost(message, optional, tag = "1")]
     pub project: ::core::option::Option<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectDescriptionRequest {
@@ -86,12 +97,14 @@ pub struct UpdateProjectDescriptionRequest {
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectDescriptionResponse {
     #[prost(message, optional, tag = "1")]
     pub project: ::core::option::Option<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectKeyValuesRequest {
@@ -102,12 +115,14 @@ pub struct UpdateProjectKeyValuesRequest {
     #[prost(message, repeated, tag = "3")]
     pub remove_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectKeyValuesResponse {
     #[prost(message, optional, tag = "1")]
     pub project: ::core::option::Option<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectDataClassRequest {
@@ -116,18 +131,21 @@ pub struct UpdateProjectDataClassRequest {
     #[prost(enumeration = "super::super::models::v2::DataClass", tag = "2")]
     pub data_class: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateProjectDataClassResponse {
     #[prost(message, optional, tag = "1")]
     pub project: ::core::option::Option<super::super::models::v2::Project>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ArchiveProjectRequest {
     #[prost(string, tag = "1")]
     pub project_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ArchiveProjectResponse {
@@ -1193,9 +1211,11 @@ pub mod project_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.ProjectService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetStorageVersionRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SemanticVersion {
@@ -1212,6 +1232,7 @@ pub struct SemanticVersion {
     #[prost(string, tag = "5")]
     pub labels: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocationVersion {
@@ -1221,6 +1242,7 @@ pub struct LocationVersion {
     #[prost(message, repeated, tag = "2")]
     pub version: ::prost::alloc::vec::Vec<ComponentVersion>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ComponentVersion {
@@ -1231,15 +1253,18 @@ pub struct ComponentVersion {
     pub version: ::core::option::Option<SemanticVersion>,
 }
 /// Version of each component by location
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetStorageVersionResponse {
     #[prost(message, repeated, tag = "1")]
     pub location_version: ::prost::alloc::vec::Vec<LocationVersion>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetStorageStatusRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocationStatus {
@@ -1249,6 +1274,7 @@ pub struct LocationStatus {
     #[prost(message, repeated, tag = "2")]
     pub component_status: ::prost::alloc::vec::Vec<ComponentStatus>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ComponentStatus {
@@ -1258,6 +1284,7 @@ pub struct ComponentStatus {
     #[prost(enumeration = "super::super::models::v2::ComponentStatus", tag = "2")]
     pub status: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetStorageStatusResponse {
@@ -1265,9 +1292,11 @@ pub struct GetStorageStatusResponse {
     #[prost(message, repeated, tag = "1")]
     pub location_status: ::prost::alloc::vec::Vec<LocationStatus>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPubkeysRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Pubkey {
@@ -1278,6 +1307,7 @@ pub struct Pubkey {
     #[prost(string, tag = "3")]
     pub location: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPubkeysResponse {
@@ -1780,6 +1810,7 @@ pub mod storage_status_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.StorageStatusService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateCollectionRequest {
@@ -1807,6 +1838,7 @@ pub struct CreateCollectionRequest {
 /// Nested message and enum types in `CreateCollectionRequest`.
 pub mod create_collection_request {
     /// Parent_id MUST be collection
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Parent {
@@ -1814,6 +1846,7 @@ pub mod create_collection_request {
         ProjectId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateCollectionResponse {
@@ -1821,6 +1854,7 @@ pub struct CreateCollectionResponse {
     #[prost(message, optional, tag = "1")]
     pub collection: ::core::option::Option<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionRequest {
@@ -1828,6 +1862,7 @@ pub struct GetCollectionRequest {
     #[prost(string, tag = "1")]
     pub collection_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionResponse {
@@ -1835,12 +1870,14 @@ pub struct GetCollectionResponse {
     #[prost(message, optional, tag = "1")]
     pub collection: ::core::option::Option<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionsRequest {
     #[prost(string, repeated, tag = "1")]
     pub collection_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCollectionsResponse {
@@ -1848,15 +1885,18 @@ pub struct GetCollectionsResponse {
     #[prost(message, repeated, tag = "1")]
     pub collections: ::prost::alloc::vec::Vec<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteCollectionRequest {
     #[prost(string, tag = "1")]
     pub collection_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteCollectionResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionNameRequest {
@@ -1865,12 +1905,14 @@ pub struct UpdateCollectionNameRequest {
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionNameResponse {
     #[prost(message, optional, tag = "1")]
     pub collection: ::core::option::Option<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionDescriptionRequest {
@@ -1879,12 +1921,14 @@ pub struct UpdateCollectionDescriptionRequest {
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionDescriptionResponse {
     #[prost(message, optional, tag = "1")]
     pub collection: ::core::option::Option<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionKeyValuesRequest {
@@ -1895,12 +1939,14 @@ pub struct UpdateCollectionKeyValuesRequest {
     #[prost(message, repeated, tag = "3")]
     pub remove_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionKeyValuesResponse {
     #[prost(message, optional, tag = "1")]
     pub collection: ::core::option::Option<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionDataClassRequest {
@@ -1909,18 +1955,21 @@ pub struct UpdateCollectionDataClassRequest {
     #[prost(enumeration = "super::super::models::v2::DataClass", tag = "2")]
     pub data_class: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateCollectionDataClassResponse {
     #[prost(message, optional, tag = "1")]
     pub collection: ::core::option::Option<super::super::models::v2::Collection>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SnapshotCollectionRequest {
     #[prost(string, tag = "1")]
     pub collection_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SnapshotCollectionResponse {
@@ -3002,6 +3051,7 @@ pub mod collection_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.CollectionService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDatasetRequest {
@@ -3029,6 +3079,7 @@ pub struct CreateDatasetRequest {
 /// Nested message and enum types in `CreateDatasetRequest`.
 pub mod create_dataset_request {
     /// Parent_id MUST be dataset
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Parent {
@@ -3038,6 +3089,7 @@ pub mod create_dataset_request {
         CollectionId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDatasetResponse {
@@ -3045,6 +3097,7 @@ pub struct CreateDatasetResponse {
     #[prost(message, optional, tag = "1")]
     pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetRequest {
@@ -3052,6 +3105,7 @@ pub struct GetDatasetRequest {
     #[prost(string, tag = "1")]
     pub dataset_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetResponse {
@@ -3059,12 +3113,14 @@ pub struct GetDatasetResponse {
     #[prost(message, optional, tag = "1")]
     pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetsRequest {
     #[prost(string, repeated, tag = "1")]
     pub dataset_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDatasetsResponse {
@@ -3072,15 +3128,18 @@ pub struct GetDatasetsResponse {
     #[prost(message, repeated, tag = "1")]
     pub datasets: ::prost::alloc::vec::Vec<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetRequest {
     #[prost(string, tag = "1")]
     pub dataset_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteDatasetResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetNameRequest {
@@ -3089,12 +3148,14 @@ pub struct UpdateDatasetNameRequest {
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetNameResponse {
     #[prost(message, optional, tag = "1")]
     pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetDescriptionRequest {
@@ -3103,12 +3164,14 @@ pub struct UpdateDatasetDescriptionRequest {
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetDescriptionResponse {
     #[prost(message, optional, tag = "1")]
     pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetKeyValuesRequest {
@@ -3119,12 +3182,14 @@ pub struct UpdateDatasetKeyValuesRequest {
     #[prost(message, repeated, tag = "3")]
     pub remove_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetKeyValuesResponse {
     #[prost(message, optional, tag = "1")]
     pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetDataClassRequest {
@@ -3133,18 +3198,21 @@ pub struct UpdateDatasetDataClassRequest {
     #[prost(enumeration = "super::super::models::v2::DataClass", tag = "2")]
     pub data_class: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateDatasetDataClassResponse {
     #[prost(message, optional, tag = "1")]
     pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SnapshotDatasetRequest {
     #[prost(string, tag = "1")]
     pub dataset_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SnapshotDatasetResponse {
@@ -4210,6 +4278,7 @@ pub mod dataset_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.DatasetService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateWorkspaceTemplateRequest {
@@ -4226,18 +4295,21 @@ pub struct CreateWorkspaceTemplateRequest {
     #[prost(message, repeated, tag = "4")]
     pub key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateWorkspaceTemplateResponse {
     #[prost(string, tag = "1")]
     pub template_name: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateWorkspaceRequest {
     #[prost(string, tag = "1")]
     pub workspace_template: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateWorkspaceResponse {
@@ -4250,15 +4322,18 @@ pub struct CreateWorkspaceResponse {
     #[prost(string, tag = "4")]
     pub secret_key: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteWorkspaceRequest {
     #[prost(string, tag = "1")]
     pub workspace_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteWorkspaceResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClaimWorkspaceRequest {
@@ -4270,9 +4345,11 @@ pub struct ClaimWorkspaceRequest {
     #[prost(string, tag = "2")]
     pub token: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClaimWorkspaceResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MoveWorkspaceDataRequest {
@@ -4282,6 +4359,7 @@ pub struct MoveWorkspaceDataRequest {
     #[prost(string, tag = "2")]
     pub project_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MoveWorkspaceDataResponse {}
@@ -4969,6 +5047,7 @@ pub mod workspace_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.WorkspaceService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectRequest {
@@ -4998,6 +5077,7 @@ pub struct CreateObjectRequest {
 /// Nested message and enum types in `CreateObjectRequest`.
 pub mod create_object_request {
     /// Parent can be one of all other resources
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Parent {
@@ -5009,12 +5089,14 @@ pub mod create_object_request {
         DatasetId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateObjectResponse {
     #[prost(message, optional, tag = "1")]
     pub object: ::core::option::Option<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUploadUrlRequest {
@@ -5028,6 +5110,7 @@ pub struct GetUploadUrlRequest {
     #[prost(int32, tag = "3")]
     pub part_number: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUploadUrlResponse {
@@ -5035,12 +5118,14 @@ pub struct GetUploadUrlResponse {
     #[prost(string, tag = "1")]
     pub url: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDownloadUrlRequest {
     #[prost(string, tag = "1")]
     pub object_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDownloadUrlResponse {
@@ -5048,6 +5133,7 @@ pub struct GetDownloadUrlResponse {
     #[prost(string, tag = "1")]
     pub url: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CompletedParts {
@@ -5058,6 +5144,7 @@ pub struct CompletedParts {
     #[prost(int64, tag = "2")]
     pub part: i64,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectStagingRequest {
@@ -5077,6 +5164,7 @@ pub struct FinishObjectStagingRequest {
     #[prost(message, repeated, tag = "4")]
     pub completed_parts: ::prost::alloc::vec::Vec<CompletedParts>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FinishObjectStagingResponse {
@@ -5084,6 +5172,7 @@ pub struct FinishObjectStagingResponse {
     #[prost(message, optional, tag = "1")]
     pub object: ::core::option::Option<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectRequest {
@@ -5114,6 +5203,7 @@ pub struct UpdateObjectRequest {
 /// Nested message and enum types in `UpdateObjectRequest`.
 pub mod update_object_request {
     /// Parent can be one of all other resources
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Parent {
@@ -5125,6 +5215,7 @@ pub mod update_object_request {
         DatasetId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateObjectResponse {
@@ -5133,6 +5224,7 @@ pub struct UpdateObjectResponse {
     #[prost(bool, tag = "2")]
     pub new_revision: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CloneObjectRequest {
@@ -5146,6 +5238,7 @@ pub struct CloneObjectRequest {
 /// Nested message and enum types in `CloneObjectRequest`.
 pub mod clone_object_request {
     ///
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Parent {
@@ -5157,6 +5250,7 @@ pub mod clone_object_request {
         DatasetId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CloneObjectResponse {
@@ -5164,6 +5258,7 @@ pub struct CloneObjectResponse {
     #[prost(message, optional, tag = "1")]
     pub object: ::core::option::Option<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectRequest {
@@ -5174,9 +5269,11 @@ pub struct DeleteObjectRequest {
     #[prost(bool, tag = "2")]
     pub with_revisions: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteObjectResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectRequest {
@@ -5184,12 +5281,14 @@ pub struct GetObjectRequest {
     #[prost(string, tag = "1")]
     pub object_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectResponse {
     #[prost(message, optional, tag = "1")]
     pub object: ::core::option::Option<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectsRequest {
@@ -5197,6 +5296,7 @@ pub struct GetObjectsRequest {
     #[prost(string, repeated, tag = "1")]
     pub object_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectsResponse {
@@ -5204,6 +5304,7 @@ pub struct GetObjectsResponse {
     #[prost(message, repeated, tag = "1")]
     pub objects: ::prost::alloc::vec::Vec<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectRevisionsRequest {
@@ -5211,6 +5312,7 @@ pub struct GetObjectRevisionsRequest {
     #[prost(string, tag = "2")]
     pub object_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectRevisionsResponse {
@@ -5218,6 +5320,7 @@ pub struct GetObjectRevisionsResponse {
     #[prost(message, repeated, tag = "1")]
     pub objects: ::prost::alloc::vec::Vec<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLatestObjectRevisionRequest {
@@ -5225,6 +5328,7 @@ pub struct GetLatestObjectRevisionRequest {
     #[prost(string, tag = "1")]
     pub object_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLatestObjectRevisionResponse {
@@ -5232,6 +5336,7 @@ pub struct GetLatestObjectRevisionResponse {
     #[prost(message, optional, tag = "1")]
     pub object: ::core::option::Option<super::super::models::v2::Object>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetObjectEndpointsRequest {
@@ -6324,6 +6429,7 @@ pub mod object_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.ObjectService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RegisterUserRequest {
@@ -6337,6 +6443,7 @@ pub struct RegisterUserRequest {
     #[prost(string, tag = "3")]
     pub project: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RegisterUserResponse {
@@ -6344,6 +6451,7 @@ pub struct RegisterUserResponse {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenRequest {
@@ -6355,8 +6463,9 @@ pub struct CreateApiTokenRequest {
     pub permission: ::core::option::Option<super::super::models::v2::Permission>,
     /// Token expiry
     #[prost(message, optional, tag = "3")]
-    pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateApiTokenResponse {
@@ -6369,6 +6478,7 @@ pub struct CreateApiTokenResponse {
     #[prost(string, tag = "2")]
     pub token_secret: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetApiTokenRequest {
@@ -6376,6 +6486,7 @@ pub struct GetApiTokenRequest {
     #[prost(string, tag = "1")]
     pub token_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetApiTokenResponse {
@@ -6383,9 +6494,11 @@ pub struct GetApiTokenResponse {
     #[prost(message, optional, tag = "1")]
     pub token: ::core::option::Option<super::super::models::v2::Token>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetApiTokensRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetApiTokensResponse {
@@ -6393,6 +6506,7 @@ pub struct GetApiTokensResponse {
     #[prost(message, repeated, tag = "1")]
     pub token: ::prost::alloc::vec::Vec<super::super::models::v2::Token>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokenRequest {
@@ -6400,9 +6514,11 @@ pub struct DeleteApiTokenRequest {
     #[prost(string, tag = "1")]
     pub token_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokenResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokensRequest {
@@ -6413,9 +6529,11 @@ pub struct DeleteApiTokensRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteApiTokensResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserRequest {
@@ -6423,6 +6541,7 @@ pub struct GetUserRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserResponse {
@@ -6430,6 +6549,7 @@ pub struct GetUserResponse {
     #[prost(message, optional, tag = "1")]
     pub user: ::core::option::Option<super::super::models::v2::User>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserRedactedRequest {
@@ -6437,6 +6557,7 @@ pub struct GetUserRedactedRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUserRedactedResponse {
@@ -6444,6 +6565,7 @@ pub struct GetUserRedactedResponse {
     #[prost(message, optional, tag = "1")]
     pub user: ::core::option::Option<super::super::models::v2::User>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserDisplayNameRequest {
@@ -6451,6 +6573,7 @@ pub struct UpdateUserDisplayNameRequest {
     #[prost(string, tag = "1")]
     pub new_display_name: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserDisplayNameResponse {
@@ -6458,6 +6581,7 @@ pub struct UpdateUserDisplayNameResponse {
     #[prost(message, optional, tag = "1")]
     pub user: ::core::option::Option<super::super::models::v2::User>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ActivateUserRequest {
@@ -6465,12 +6589,15 @@ pub struct ActivateUserRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ActivateUserResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetNotActivatedUsersRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetNotActivatedUsersResponse {
@@ -6478,15 +6605,18 @@ pub struct GetNotActivatedUsersResponse {
     #[prost(message, repeated, tag = "1")]
     pub users: ::prost::alloc::vec::Vec<super::super::models::v2::User>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetAllUsersRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetAllUsersResponse {
     #[prost(message, repeated, tag = "1")]
     pub user: ::prost::alloc::vec::Vec<super::super::models::v2::User>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeactivateUserRequest {
@@ -6494,9 +6624,11 @@ pub struct DeactivateUserRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeactivateUserResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserEmailRequest {
@@ -6506,12 +6638,14 @@ pub struct UpdateUserEmailRequest {
     #[prost(string, tag = "2")]
     pub new_email: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUserEmailResponse {
     #[prost(message, optional, tag = "1")]
     pub user: ::core::option::Option<super::super::models::v2::User>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MergeUserAccountRequest {
@@ -6520,6 +6654,7 @@ pub struct MergeUserAccountRequest {
     #[prost(string, tag = "2")]
     pub from_user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MergeUserAccountResponse {
@@ -8145,6 +8280,7 @@ pub mod user_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.UserService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserPermission {
@@ -8155,6 +8291,7 @@ pub struct UserPermission {
     #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "3")]
     pub permission_level: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResourceAuthorization {
@@ -8163,6 +8300,7 @@ pub struct ResourceAuthorization {
     #[prost(message, repeated, tag = "2")]
     pub user_permission: ::prost::alloc::vec::Vec<UserPermission>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateAuthorizationRequest {
@@ -8174,6 +8312,7 @@ pub struct CreateAuthorizationRequest {
     #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "3")]
     pub permission_level: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateAuthorizationResponse {
@@ -8186,6 +8325,7 @@ pub struct CreateAuthorizationResponse {
     #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "4")]
     pub permission_level: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetAuthorizationsRequest {
@@ -8194,12 +8334,14 @@ pub struct GetAuthorizationsRequest {
     #[prost(bool, tag = "2")]
     pub recursive: bool,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetAuthorizationsResponse {
     #[prost(message, repeated, tag = "1")]
     pub authorizations: ::prost::alloc::vec::Vec<ResourceAuthorization>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteAuthorizationRequest {
@@ -8208,9 +8350,11 @@ pub struct DeleteAuthorizationRequest {
     #[prost(string, tag = "2")]
     pub user_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteAuthorizationResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateAuthorizationsRequest {
@@ -8221,6 +8365,7 @@ pub struct UpdateAuthorizationsRequest {
     #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "3")]
     pub permission_level: i32,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateAuthorizationsResponse {
@@ -8828,6 +8973,7 @@ pub mod authorization_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.AuthorizationService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEndpointRequest {
@@ -8849,6 +8995,7 @@ pub struct CreateEndpointRequest {
         super::super::models::v2::EndpointHostConfig,
     >,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateEndpointResponse {
@@ -8856,15 +9003,18 @@ pub struct CreateEndpointResponse {
     #[prost(message, optional, tag = "1")]
     pub endpoint: ::core::option::Option<super::super::models::v2::Endpoint>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct OnboardEndpointRequest {}
+pub struct FullSyncEndpointRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct OnboardEndpointResponse {
+pub struct FullSyncEndpointResponse {
     #[prost(string, tag = "1")]
     pub url: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointRequest {
@@ -8875,6 +9025,7 @@ pub struct GetEndpointRequest {
 /// Nested message and enum types in `GetEndpointRequest`.
 pub mod get_endpoint_request {
     /// Either endpoint_name or id
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Endpoint {
@@ -8886,6 +9037,7 @@ pub mod get_endpoint_request {
         EndpointId(::prost::alloc::string::String),
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointResponse {
@@ -8894,9 +9046,11 @@ pub struct GetEndpointResponse {
     pub endpoint: ::core::option::Option<super::super::models::v2::Endpoint>,
 }
 /// Requests all endpoints
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointsRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEndpointsResponse {
@@ -8904,6 +9058,7 @@ pub struct GetEndpointsResponse {
     #[prost(message, repeated, tag = "1")]
     pub endpoints: ::prost::alloc::vec::Vec<super::super::models::v2::Endpoint>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEndpointRequest {
@@ -8911,12 +9066,15 @@ pub struct DeleteEndpointRequest {
     #[prost(string, tag = "1")]
     pub endpoint_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteEndpointResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDefaultEndpointRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDefaultEndpointResponse {
@@ -9048,17 +9206,16 @@ pub mod endpoint_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// OnboardEndpoint
+        /// FullSyncEndpoint
         ///
         /// Status: BETA
         ///
-        /// Registers a new Endpoint (Aruna DataProxy) to the server
-        /// Needs admin permissions
-        pub async fn onboard_endpoint(
+        /// Requests a full sync of all endpoint related data
+        pub async fn full_sync_endpoint(
             &mut self,
-            request: impl tonic::IntoRequest<super::OnboardEndpointRequest>,
+            request: impl tonic::IntoRequest<super::FullSyncEndpointRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::OnboardEndpointResponse>,
+            tonic::Response<super::FullSyncEndpointResponse>,
             tonic::Status,
         > {
             self.inner
@@ -9072,14 +9229,14 @@ pub mod endpoint_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.EndpointService/OnboardEndpoint",
+                "/aruna.api.storage.services.v2.EndpointService/FullSyncEndpoint",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.storage.services.v2.EndpointService",
-                        "OnboardEndpoint",
+                        "FullSyncEndpoint",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -9248,17 +9405,16 @@ pub mod endpoint_service_server {
             tonic::Response<super::CreateEndpointResponse>,
             tonic::Status,
         >;
-        /// OnboardEndpoint
+        /// FullSyncEndpoint
         ///
         /// Status: BETA
         ///
-        /// Registers a new Endpoint (Aruna DataProxy) to the server
-        /// Needs admin permissions
-        async fn onboard_endpoint(
+        /// Requests a full sync of all endpoint related data
+        async fn full_sync_endpoint(
             &self,
-            request: tonic::Request<super::OnboardEndpointRequest>,
+            request: tonic::Request<super::FullSyncEndpointRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::OnboardEndpointResponse>,
+            tonic::Response<super::FullSyncEndpointResponse>,
             tonic::Status,
         >;
         /// GetEndpoint
@@ -9440,25 +9596,25 @@ pub mod endpoint_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v2.EndpointService/OnboardEndpoint" => {
+                "/aruna.api.storage.services.v2.EndpointService/FullSyncEndpoint" => {
                     #[allow(non_camel_case_types)]
-                    struct OnboardEndpointSvc<T: EndpointService>(pub Arc<T>);
+                    struct FullSyncEndpointSvc<T: EndpointService>(pub Arc<T>);
                     impl<
                         T: EndpointService,
-                    > tonic::server::UnaryService<super::OnboardEndpointRequest>
-                    for OnboardEndpointSvc<T> {
-                        type Response = super::OnboardEndpointResponse;
+                    > tonic::server::UnaryService<super::FullSyncEndpointRequest>
+                    for FullSyncEndpointSvc<T> {
+                        type Response = super::FullSyncEndpointResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::OnboardEndpointRequest>,
+                            request: tonic::Request<super::FullSyncEndpointRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).onboard_endpoint(request).await
+                                (*inner).full_sync_endpoint(request).await
                             };
                             Box::pin(fut)
                         }
@@ -9470,7 +9626,7 @@ pub mod endpoint_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = OnboardEndpointSvc(inner);
+                        let method = FullSyncEndpointSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -9711,6 +9867,7 @@ pub mod endpoint_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.EndpointService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SearchResourcesRequest {
@@ -9721,6 +9878,7 @@ pub struct SearchResourcesRequest {
     #[prost(int64, tag = "3")]
     pub offset: i64,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SearchResourcesResponse {
@@ -10042,6 +10200,7 @@ pub mod search_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.SearchService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ModifyRelationsRequest {
@@ -10052,15 +10211,18 @@ pub struct ModifyRelationsRequest {
     #[prost(message, repeated, tag = "3")]
     pub remove_relations: ::prost::alloc::vec::Vec<super::super::models::v2::Relation>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ModifyRelationsResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetHierachyRequest {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DatasetRelations {
@@ -10069,6 +10231,7 @@ pub struct DatasetRelations {
     #[prost(string, repeated, tag = "2")]
     pub object_children: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CollectionRelations {
@@ -10079,6 +10242,7 @@ pub struct CollectionRelations {
     #[prost(string, repeated, tag = "3")]
     pub object_children: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProjectRelations {
@@ -10091,6 +10255,7 @@ pub struct ProjectRelations {
     #[prost(string, repeated, tag = "4")]
     pub object_children: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetHierachyResponse {
@@ -10099,6 +10264,7 @@ pub struct GetHierachyResponse {
 }
 /// Nested message and enum types in `GetHierachyResponse`.
 pub mod get_hierachy_response {
+    #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Graph {
@@ -10517,6 +10683,7 @@ pub mod relations_service_server {
         const NAME: &'static str = "aruna.api.storage.services.v2.RelationsService";
     }
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateServiceAccountRequest {
@@ -10525,6 +10692,7 @@ pub struct CreateServiceAccountRequest {
     #[prost(message, optional, tag = "3")]
     pub permission: ::core::option::Option<super::super::models::v2::Permission>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceAccount {
@@ -10535,12 +10703,14 @@ pub struct ServiceAccount {
     #[prost(message, optional, tag = "3")]
     pub permission: ::core::option::Option<super::super::models::v2::Permission>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateServiceAccountResponse {
     #[prost(message, optional, tag = "1")]
     pub service_account: ::core::option::Option<ServiceAccount>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateServiceAccountTokenRequest {
@@ -10554,8 +10724,9 @@ pub struct CreateServiceAccountTokenRequest {
     pub name: ::prost::alloc::string::String,
     /// (optional) Token expiry
     #[prost(message, optional, tag = "4")]
-    pub expires_at: ::core::option::Option<::prost_types::Timestamp>,
+    pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateServiceAccountTokenResponse {
@@ -10566,6 +10737,7 @@ pub struct CreateServiceAccountTokenResponse {
     #[prost(string, tag = "2")]
     pub token_secret: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetServiceAccountPermissionRequest {
@@ -10574,12 +10746,14 @@ pub struct SetServiceAccountPermissionRequest {
     #[prost(message, optional, tag = "2")]
     pub permission: ::core::option::Option<super::super::models::v2::Permission>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetServiceAccountPermissionResponse {
     #[prost(message, optional, tag = "1")]
     pub service_account: ::core::option::Option<ServiceAccount>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetServiceAccountTokenRequest {
@@ -10588,6 +10762,7 @@ pub struct GetServiceAccountTokenRequest {
     #[prost(string, tag = "2")]
     pub token_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetServiceAccountTokenResponse {
@@ -10595,12 +10770,14 @@ pub struct GetServiceAccountTokenResponse {
     #[prost(message, optional, tag = "1")]
     pub token: ::core::option::Option<super::super::models::v2::Token>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetServiceAccountTokensRequest {
     #[prost(string, tag = "1")]
     pub svc_account_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetServiceAccountTokensResponse {
@@ -10608,6 +10785,7 @@ pub struct GetServiceAccountTokensResponse {
     #[prost(message, repeated, tag = "1")]
     pub token: ::prost::alloc::vec::Vec<super::super::models::v2::Token>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountTokenRequest {
@@ -10616,24 +10794,29 @@ pub struct DeleteServiceAccountTokenRequest {
     #[prost(string, tag = "2")]
     pub token_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountTokenResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountTokensRequest {
     #[prost(string, tag = "1")]
     pub svc_account_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountTokensResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountRequest {
     #[prost(string, tag = "1")]
     pub svc_account_id: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountResponse {}
