@@ -54,6 +54,9 @@ fn main() {
     }
 
     tonic_build::configure()
+        .type_attribute(".", "#[derive(serde::Deserialize, serde::Serialize)]")
+        .compile_well_known_types(true)
+        .extern_path(".google.protobuf", "::prost_wkt_types")
         .build_server(true)
         .out_dir("./src/aruna")
         .compile(
@@ -67,6 +70,9 @@ fn main() {
         .unwrap();
 
     tonic_build::configure()
+        .type_attribute(".", "#[derive(serde::Deserialize, serde::Serialize)]")
+        .compile_well_known_types(true)
+        .extern_path(".google.protobuf", "::prost_wkt_types")
         .build_server(true)
         .build_transport(false)
         .out_dir("./src/aruna_no_transport")
