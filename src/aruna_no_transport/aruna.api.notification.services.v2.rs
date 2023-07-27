@@ -47,8 +47,8 @@ pub mod create_stream_consumer_request {
     pub enum Target {
         #[prost(message, tag = "1")]
         Resource(super::ResourceTarget),
-        #[prost(bool, tag = "2")]
-        User(bool),
+        #[prost(string, tag = "2")]
+        User(::prost::alloc::string::String),
         #[prost(bool, tag = "3")]
         Anouncements(bool),
         #[prost(bool, tag = "4")]
@@ -119,14 +119,14 @@ pub struct AcknowledgeMessageBatchResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteEventStreamingGroupRequest {
+pub struct DeleteStreamConsumerRequest {
     #[prost(string, tag = "1")]
     pub stream_consumer: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteEventStreamingGroupResponse {}
+pub struct DeleteStreamConsumerResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -378,9 +378,9 @@ pub mod event_notification_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        /// CreateEventStreamingGroup
+        /// CreateStreamConsumer
         ///
-        /// Creates a new EventStreamingGroup
+        /// Creates a new event stream consumer.
         pub async fn create_stream_consumer(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateStreamConsumerRequest>,
@@ -519,12 +519,12 @@ pub mod event_notification_service_client {
         }
         /// DeleteEventStreamingGroup
         ///
-        /// Deletes a existing EventStreamingGroup by ID
-        pub async fn delete_event_streaming_group(
+        /// Deletes an existing event stream consumer by ID.
+        pub async fn delete_stream_consumer(
             &mut self,
-            request: impl tonic::IntoRequest<super::DeleteEventStreamingGroupRequest>,
+            request: impl tonic::IntoRequest<super::DeleteStreamConsumerRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::DeleteEventStreamingGroupResponse>,
+            tonic::Response<super::DeleteStreamConsumerResponse>,
             tonic::Status,
         > {
             self.inner
@@ -538,14 +538,14 @@ pub mod event_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v2.EventNotificationService/DeleteEventStreamingGroup",
+                "/aruna.api.notification.services.v2.EventNotificationService/DeleteStreamConsumer",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.notification.services.v2.EventNotificationService",
-                        "DeleteEventStreamingGroup",
+                        "DeleteStreamConsumer",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -559,9 +559,9 @@ pub mod event_notification_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with EventNotificationServiceServer.
     #[async_trait]
     pub trait EventNotificationService: Send + Sync + 'static {
-        /// CreateEventStreamingGroup
+        /// CreateStreamConsumer
         ///
-        /// Creates a new EventStreamingGroup
+        /// Creates a new event stream consumer.
         async fn create_stream_consumer(
             &self,
             request: tonic::Request<super::CreateStreamConsumerRequest>,
@@ -615,12 +615,12 @@ pub mod event_notification_service_server {
         >;
         /// DeleteEventStreamingGroup
         ///
-        /// Deletes a existing EventStreamingGroup by ID
-        async fn delete_event_streaming_group(
+        /// Deletes an existing event stream consumer by ID.
+        async fn delete_stream_consumer(
             &self,
-            request: tonic::Request<super::DeleteEventStreamingGroupRequest>,
+            request: tonic::Request<super::DeleteStreamConsumerRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::DeleteEventStreamingGroupResponse>,
+            tonic::Response<super::DeleteStreamConsumerResponse>,
             tonic::Status,
         >;
     }
@@ -905,30 +905,27 @@ pub mod event_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v2.EventNotificationService/DeleteEventStreamingGroup" => {
+                "/aruna.api.notification.services.v2.EventNotificationService/DeleteStreamConsumer" => {
                     #[allow(non_camel_case_types)]
-                    struct DeleteEventStreamingGroupSvc<T: EventNotificationService>(
+                    struct DeleteStreamConsumerSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
                         T: EventNotificationService,
-                    > tonic::server::UnaryService<
-                        super::DeleteEventStreamingGroupRequest,
-                    > for DeleteEventStreamingGroupSvc<T> {
-                        type Response = super::DeleteEventStreamingGroupResponse;
+                    > tonic::server::UnaryService<super::DeleteStreamConsumerRequest>
+                    for DeleteStreamConsumerSvc<T> {
+                        type Response = super::DeleteStreamConsumerResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<
-                                super::DeleteEventStreamingGroupRequest,
-                            >,
+                            request: tonic::Request<super::DeleteStreamConsumerRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).delete_event_streaming_group(request).await
+                                (*inner).delete_stream_consumer(request).await
                             };
                             Box::pin(fut)
                         }
@@ -940,7 +937,7 @@ pub mod event_notification_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = DeleteEventStreamingGroupSvc(inner);
+                        let method = DeleteStreamConsumerSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

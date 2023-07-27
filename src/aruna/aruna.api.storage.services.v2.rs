@@ -6648,18 +6648,40 @@ pub struct UpdateUserEmailResponse {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MergeUserAccountRequest {
+pub struct GetS3CredentialsUserRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub from_user_id: ::prost::alloc::string::String,
+    pub endpoint_id: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MergeUserAccountResponse {
-    #[prost(message, optional, tag = "1")]
-    pub user: ::core::option::Option<super::super::models::v2::User>,
+pub struct GetS3CredentialsUserResponse {
+    #[prost(string, tag = "1")]
+    pub s3_access_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub s3_secret_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub s3_endpoint_url: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDataproxyTokenUserRequest {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub context: ::core::option::Option<super::super::models::v2::Context>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDataproxyTokenUserResponse {
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
 }
 /// Generated client implementations.
 pub mod user_service_client {
@@ -7243,16 +7265,16 @@ pub mod user_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// MergeUserAccount
+        /// GetS3Credentials
         ///
         /// Status: ALPHA
         ///
-        /// Get all users including permissions (Admin only)
-        pub async fn merge_user_account(
+        /// Gets s3 credentials for a specific user and data_proxy
+        pub async fn get_s3_credentials_user(
             &mut self,
-            request: impl tonic::IntoRequest<super::MergeUserAccountRequest>,
+            request: impl tonic::IntoRequest<super::GetS3CredentialsUserRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::MergeUserAccountResponse>,
+            tonic::Response<super::GetS3CredentialsUserResponse>,
             tonic::Status,
         > {
             self.inner
@@ -7266,14 +7288,49 @@ pub mod user_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.UserService/MergeUserAccount",
+                "/aruna.api.storage.services.v2.UserService/GetS3CredentialsUser",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.storage.services.v2.UserService",
-                        "MergeUserAccount",
+                        "GetS3CredentialsUser",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetDataproxyToken
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets token for a specific user and data_proxy
+        pub async fn get_dataproxy_token_user(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDataproxyTokenUserRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataproxyTokenUserResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.UserService/GetDataproxyTokenUser",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.UserService",
+                        "GetDataproxyTokenUser",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -7455,16 +7512,28 @@ pub mod user_service_server {
             tonic::Response<super::GetAllUsersResponse>,
             tonic::Status,
         >;
-        /// MergeUserAccount
+        /// GetS3Credentials
         ///
         /// Status: ALPHA
         ///
-        /// Get all users including permissions (Admin only)
-        async fn merge_user_account(
+        /// Gets s3 credentials for a specific user and data_proxy
+        async fn get_s3_credentials_user(
             &self,
-            request: tonic::Request<super::MergeUserAccountRequest>,
+            request: tonic::Request<super::GetS3CredentialsUserRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::MergeUserAccountResponse>,
+            tonic::Response<super::GetS3CredentialsUserResponse>,
+            tonic::Status,
+        >;
+        /// GetDataproxyToken
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets token for a specific user and data_proxy
+        async fn get_dataproxy_token_user(
+            &self,
+            request: tonic::Request<super::GetDataproxyTokenUserRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataproxyTokenUserResponse>,
             tonic::Status,
         >;
     }
@@ -8193,25 +8262,25 @@ pub mod user_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v2.UserService/MergeUserAccount" => {
+                "/aruna.api.storage.services.v2.UserService/GetS3CredentialsUser" => {
                     #[allow(non_camel_case_types)]
-                    struct MergeUserAccountSvc<T: UserService>(pub Arc<T>);
+                    struct GetS3CredentialsUserSvc<T: UserService>(pub Arc<T>);
                     impl<
                         T: UserService,
-                    > tonic::server::UnaryService<super::MergeUserAccountRequest>
-                    for MergeUserAccountSvc<T> {
-                        type Response = super::MergeUserAccountResponse;
+                    > tonic::server::UnaryService<super::GetS3CredentialsUserRequest>
+                    for GetS3CredentialsUserSvc<T> {
+                        type Response = super::GetS3CredentialsUserResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MergeUserAccountRequest>,
+                            request: tonic::Request<super::GetS3CredentialsUserRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).merge_user_account(request).await
+                                (*inner).get_s3_credentials_user(request).await
                             };
                             Box::pin(fut)
                         }
@@ -8223,7 +8292,53 @@ pub mod user_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = MergeUserAccountSvc(inner);
+                        let method = GetS3CredentialsUserSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.UserService/GetDataproxyTokenUser" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDataproxyTokenUserSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::GetDataproxyTokenUserRequest>
+                    for GetDataproxyTokenUserSvc<T> {
+                        type Response = super::GetDataproxyTokenUserResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetDataproxyTokenUserRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_dataproxy_token_user(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetDataproxyTokenUserSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -9876,6 +9991,8 @@ pub struct SearchResourcesRequest {
     #[prost(string, tag = "2")]
     pub filter: ::prost::alloc::string::String,
     #[prost(int64, tag = "3")]
+    pub limit: i64,
+    #[prost(int64, tag = "4")]
     pub offset: i64,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -9891,6 +10008,20 @@ pub struct SearchResourcesResponse {
     /// The last index returned
     #[prost(int64, tag = "3")]
     pub last_index: i64,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPublicResourceRequest {
+    #[prost(string, tag = "1")]
+    pub resource_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPublicResourceResponse {
+    #[prost(message, optional, tag = "1")]
+    pub resources: ::core::option::Option<super::super::models::v2::GenericResource>,
 }
 /// Generated client implementations.
 pub mod search_service_client {
@@ -10012,6 +10143,41 @@ pub mod search_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// GetPublicResource
+        ///
+        /// Status: BETA
+        ///
+        /// Retrieves a public resource by its ID.
+        pub async fn get_public_resource(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetPublicResourceRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetPublicResourceResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.SearchService/GetPublicResource",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.SearchService",
+                        "GetPublicResource",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -10031,6 +10197,18 @@ pub mod search_service_server {
             request: tonic::Request<super::SearchResourcesRequest>,
         ) -> std::result::Result<
             tonic::Response<super::SearchResourcesResponse>,
+            tonic::Status,
+        >;
+        /// GetPublicResource
+        ///
+        /// Status: BETA
+        ///
+        /// Retrieves a public resource by its ID.
+        async fn get_public_resource(
+            &self,
+            request: tonic::Request<super::GetPublicResourceRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetPublicResourceResponse>,
             tonic::Status,
         >;
     }
@@ -10159,6 +10337,52 @@ pub mod search_service_server {
                     };
                     Box::pin(fut)
                 }
+                "/aruna.api.storage.services.v2.SearchService/GetPublicResource" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetPublicResourceSvc<T: SearchService>(pub Arc<T>);
+                    impl<
+                        T: SearchService,
+                    > tonic::server::UnaryService<super::GetPublicResourceRequest>
+                    for GetPublicResourceSvc<T> {
+                        type Response = super::GetPublicResourceResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetPublicResourceRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_public_resource(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetPublicResourceSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => {
                     Box::pin(async move {
                         Ok(
@@ -10218,7 +10442,7 @@ pub struct ModifyRelationsResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetHierachyRequest {
+pub struct GetHierarchyRequest {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
 }
@@ -10258,12 +10482,12 @@ pub struct ProjectRelations {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetHierachyResponse {
-    #[prost(oneof = "get_hierachy_response::Graph", tags = "1, 2, 3")]
-    pub graph: ::core::option::Option<get_hierachy_response::Graph>,
+pub struct GetHierarchyResponse {
+    #[prost(oneof = "get_hierarchy_response::Graph", tags = "1, 2, 3")]
+    pub graph: ::core::option::Option<get_hierarchy_response::Graph>,
 }
-/// Nested message and enum types in `GetHierachyResponse`.
-pub mod get_hierachy_response {
+/// Nested message and enum types in `GetHierarchyResponse`.
+pub mod get_hierarchy_response {
     #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
@@ -10404,11 +10628,11 @@ pub mod relations_service_client {
         /// Status: BETA
         ///
         /// Gets all downstream hierarchy relations from a resource
-        pub async fn get_hierachy(
+        pub async fn get_hierarchy(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetHierachyRequest>,
+            request: impl tonic::IntoRequest<super::GetHierarchyRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetHierachyResponse>,
+            tonic::Response<super::GetHierarchyResponse>,
             tonic::Status,
         > {
             self.inner
@@ -10422,14 +10646,14 @@ pub mod relations_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.RelationsService/GetHierachy",
+                "/aruna.api.storage.services.v2.RelationsService/GetHierarchy",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.storage.services.v2.RelationsService",
-                        "GetHierachy",
+                        "GetHierarchy",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -10460,11 +10684,11 @@ pub mod relations_service_server {
         /// Status: BETA
         ///
         /// Gets all downstream hierarchy relations from a resource
-        async fn get_hierachy(
+        async fn get_hierarchy(
             &self,
-            request: tonic::Request<super::GetHierachyRequest>,
+            request: tonic::Request<super::GetHierarchyRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetHierachyResponse>,
+            tonic::Response<super::GetHierarchyResponse>,
             tonic::Status,
         >;
     }
@@ -10596,25 +10820,25 @@ pub mod relations_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v2.RelationsService/GetHierachy" => {
+                "/aruna.api.storage.services.v2.RelationsService/GetHierarchy" => {
                     #[allow(non_camel_case_types)]
-                    struct GetHierachySvc<T: RelationsService>(pub Arc<T>);
+                    struct GetHierarchySvc<T: RelationsService>(pub Arc<T>);
                     impl<
                         T: RelationsService,
-                    > tonic::server::UnaryService<super::GetHierachyRequest>
-                    for GetHierachySvc<T> {
-                        type Response = super::GetHierachyResponse;
+                    > tonic::server::UnaryService<super::GetHierarchyRequest>
+                    for GetHierarchySvc<T> {
+                        type Response = super::GetHierarchyResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetHierachyRequest>,
+                            request: tonic::Request<super::GetHierarchyRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_hierachy(request).await
+                                (*inner).get_hierarchy(request).await
                             };
                             Box::pin(fut)
                         }
@@ -10626,7 +10850,7 @@ pub mod relations_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetHierachySvc(inner);
+                        let method = GetHierarchySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -10689,7 +10913,7 @@ pub mod relations_service_server {
 pub struct CreateServiceAccountRequest {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "2")]
     pub permission: ::core::option::Option<super::super::models::v2::Permission>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -10820,6 +11044,44 @@ pub struct DeleteServiceAccountRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetS3CredentialsSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetS3CredentialsSvcAccountResponse {
+    #[prost(string, tag = "1")]
+    pub s3_access_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub s3_secret_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub s3_endpoint_url: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDataproxyTokenSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub context: ::core::option::Option<super::super::models::v2::Context>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDataproxyTokenSvcAccountResponse {
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+}
 /// Generated client implementations.
 pub mod service_account_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -11196,6 +11458,76 @@ pub mod service_account_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// GetS3Credentials
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets s3 credentials for a specific user and data_proxy
+        pub async fn get_s3_credentials_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetS3CredentialsSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "GetS3CredentialsSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetDataproxyToken
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets token for a specific user and data_proxy
+        pub async fn get_dataproxy_token_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDataproxyTokenSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataproxyTokenSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetDataproxyTokenSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "GetDataproxyTokenSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -11305,6 +11637,30 @@ pub mod service_account_service_server {
             request: tonic::Request<super::DeleteServiceAccountRequest>,
         ) -> std::result::Result<
             tonic::Response<super::DeleteServiceAccountResponse>,
+            tonic::Status,
+        >;
+        /// GetS3Credentials
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets s3 credentials for a specific user and data_proxy
+        async fn get_s3_credentials_svc_account(
+            &self,
+            request: tonic::Request<super::GetS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// GetDataproxyToken
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets token for a specific user and data_proxy
+        async fn get_dataproxy_token_svc_account(
+            &self,
+            request: tonic::Request<super::GetDataproxyTokenSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataproxyTokenSvcAccountResponse>,
             tonic::Status,
         >;
     }
@@ -11772,6 +12128,108 @@ pub mod service_account_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = DeleteServiceAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetS3CredentialsSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::GetS3CredentialsSvcAccountRequest,
+                    > for GetS3CredentialsSvcAccountSvc<T> {
+                        type Response = super::GetS3CredentialsSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::GetS3CredentialsSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_s3_credentials_svc_account(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetS3CredentialsSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetDataproxyTokenSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDataproxyTokenSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::GetDataproxyTokenSvcAccountRequest,
+                    > for GetDataproxyTokenSvcAccountSvc<T> {
+                        type Response = super::GetDataproxyTokenSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::GetDataproxyTokenSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_dataproxy_token_svc_account(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetDataproxyTokenSvcAccountSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

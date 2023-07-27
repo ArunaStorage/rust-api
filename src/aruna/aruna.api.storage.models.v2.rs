@@ -1,12 +1,4 @@
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ExternalId {
-    #[prost(string, tag = "1")]
-    pub external_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub idp: ::prost::alloc::string::String,
-}
+/// ------------- USERS & PERMISSIONS -----------------------
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -15,8 +7,8 @@ pub struct User {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     /// Oidc subject ID
-    #[prost(message, repeated, tag = "2")]
-    pub external_ids: ::prost::alloc::vec::Vec<ExternalId>,
+    #[prost(string, tag = "2")]
+    pub external_id: ::prost::alloc::string::String,
     /// (optional) User display_name
     #[prost(string, tag = "3")]
     pub display_name: ::prost::alloc::string::String,
@@ -63,17 +55,13 @@ pub struct Token {
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub user_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "4")]
+    #[prost(message, optional, tag = "3")]
     pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "4")]
     pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     /// Tokens can either be personal or resource "specific"
-    #[prost(message, optional, tag = "6")]
+    #[prost(message, optional, tag = "5")]
     pub permission: ::core::option::Option<Permission>,
-    #[prost(message, optional, tag = "7")]
-    pub used_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -221,6 +209,36 @@ pub struct Endpoint {
     pub status: i32,
     #[prost(message, repeated, tag = "6")]
     pub host_configs: ::prost::alloc::vec::Vec<EndpointHostConfig>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Copy {
+    #[prost(string, tag = "1")]
+    pub resource: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub target_endpoint: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub push: bool,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Context {
+    #[prost(oneof = "context::Context", tags = "1, 2")]
+    pub context: ::core::option::Option<context::Context>,
+}
+/// Nested message and enum types in `Context`.
+pub mod context {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Context {
+        #[prost(bool, tag = "1")]
+        S3Credentials(bool),
+        #[prost(message, tag = "2")]
+        Copy(super::Copy),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
