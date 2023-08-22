@@ -268,6 +268,7 @@ pub enum EventVariant {
     Available = 2,
     Updated = 3,
     Deleted = 4,
+    Snapshotted = 5,
 }
 impl EventVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -281,6 +282,7 @@ impl EventVariant {
             EventVariant::Available => "EVENT_VARIANT_AVAILABLE",
             EventVariant::Updated => "EVENT_VARIANT_UPDATED",
             EventVariant::Deleted => "EVENT_VARIANT_DELETED",
+            EventVariant::Snapshotted => "EVENT_VARIANT_SNAPSHOTTED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -291,6 +293,7 @@ impl EventVariant {
             "EVENT_VARIANT_AVAILABLE" => Some(Self::Available),
             "EVENT_VARIANT_UPDATED" => Some(Self::Updated),
             "EVENT_VARIANT_DELETED" => Some(Self::Deleted),
+            "EVENT_VARIANT_SNAPSHOTTED" => Some(Self::Snapshotted),
             _ => None,
         }
     }
