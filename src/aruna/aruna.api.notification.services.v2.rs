@@ -4,15 +4,13 @@
 pub struct Resource {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub associated_id: ::prost::alloc::string::String,
-    #[prost(bool, tag = "3")]
+    #[prost(bool, tag = "2")]
     pub persistent_resource_id: bool,
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub checksum: ::prost::alloc::string::String,
     #[prost(
         enumeration = "super::super::super::storage::models::v2::ResourceVariant",
-        tag = "5"
+        tag = "4"
     )]
     pub resource_variant: i32,
 }
@@ -92,18 +90,16 @@ pub struct GetEventMessageBatchResponse {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetEventMessageBatchStreamRequest {
+pub struct GetEventMessageStreamRequest {
     #[prost(string, tag = "1")]
     pub stream_consumer: ::prost::alloc::string::String,
-    #[prost(uint32, tag = "2")]
-    pub batch_size: u32,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetEventMessageBatchStreamResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub messages: ::prost::alloc::vec::Vec<EventMessage>,
+pub struct GetEventMessageStreamResponse {
+    #[prost(message, optional, tag = "1")]
+    pub messages: ::core::option::Option<EventMessage>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -253,10 +249,10 @@ pub mod anouncement_event {
         RemoveDataProxyId(::prost::alloc::string::String),
         #[prost(string, tag = "3")]
         UpdateDataProxyId(::prost::alloc::string::String),
-        #[prost(bool, tag = "4")]
-        NewPubkey(bool),
-        #[prost(bool, tag = "5")]
-        RemovePubkey(bool),
+        #[prost(int32, tag = "4")]
+        NewPubkey(i32),
+        #[prost(int32, tag = "5")]
+        RemovePubkey(i32),
         #[prost(message, tag = "6")]
         Downtime(super::ScheduledDowntime),
         #[prost(message, tag = "7")]
@@ -425,8 +421,8 @@ pub mod event_notification_service_client {
         /// GetEventMessageBatch
         ///
         /// Reads a set of messages from a given stream group
-        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
-        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
+        /// Each message contains a separate acknowledgement message thatis protected by a salt and an hmac for verification.
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message.
         pub async fn get_event_message_batch(
             &mut self,
             request: impl tonic::IntoRequest<super::GetEventMessageBatchRequest>,
@@ -459,15 +455,15 @@ pub mod event_notification_service_client {
         }
         /// GetEventMessageBatch
         ///
-        /// Reads a set of messages from a given stream group
-        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
-        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
-        pub async fn get_event_message_batch_stream(
+        /// Opens a stream which pushes each received notification individual and just-in-time.
+        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification.
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message.
+        pub async fn get_event_message_stream(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetEventMessageBatchStreamRequest>,
+            request: impl tonic::IntoRequest<super::GetEventMessageStreamRequest>,
         ) -> std::result::Result<
             tonic::Response<
-                tonic::codec::Streaming<super::GetEventMessageBatchStreamResponse>,
+                tonic::codec::Streaming<super::GetEventMessageStreamResponse>,
             >,
             tonic::Status,
         > {
@@ -482,14 +478,14 @@ pub mod event_notification_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.notification.services.v2.EventNotificationService/GetEventMessageBatchStream",
+                "/aruna.api.notification.services.v2.EventNotificationService/GetEventMessageStream",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.notification.services.v2.EventNotificationService",
-                        "GetEventMessageBatchStream",
+                        "GetEventMessageStream",
                     ),
                 );
             self.inner.server_streaming(req, path, codec).await
@@ -583,8 +579,8 @@ pub mod event_notification_service_server {
         /// GetEventMessageBatch
         ///
         /// Reads a set of messages from a given stream group
-        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
-        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
+        /// Each message contains a separate acknowledgement message thatis protected by a salt and an hmac for verification.
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message.
         async fn get_event_message_batch(
             &self,
             request: tonic::Request<super::GetEventMessageBatchRequest>,
@@ -592,10 +588,10 @@ pub mod event_notification_service_server {
             tonic::Response<super::GetEventMessageBatchResponse>,
             tonic::Status,
         >;
-        /// Server streaming response type for the GetEventMessageBatchStream method.
-        type GetEventMessageBatchStreamStream: futures_core::Stream<
+        /// Server streaming response type for the GetEventMessageStream method.
+        type GetEventMessageStreamStream: futures_core::Stream<
                 Item = std::result::Result<
-                    super::GetEventMessageBatchStreamResponse,
+                    super::GetEventMessageStreamResponse,
                     tonic::Status,
                 >,
             >
@@ -603,14 +599,14 @@ pub mod event_notification_service_server {
             + 'static;
         /// GetEventMessageBatch
         ///
-        /// Reads a set of messages from a given stream group
-        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification
-        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message
-        async fn get_event_message_batch_stream(
+        /// Opens a stream which pushes each received notification individual and just-in-time.
+        /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification.
+        /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message.
+        async fn get_event_message_stream(
             &self,
-            request: tonic::Request<super::GetEventMessageBatchStreamRequest>,
+            request: tonic::Request<super::GetEventMessageStreamRequest>,
         ) -> std::result::Result<
-            tonic::Response<Self::GetEventMessageBatchStreamStream>,
+            tonic::Response<Self::GetEventMessageStreamStream>,
             tonic::Status,
         >;
         /// AcknowledgeMessageBatch
@@ -814,31 +810,29 @@ pub mod event_notification_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.notification.services.v2.EventNotificationService/GetEventMessageBatchStream" => {
+                "/aruna.api.notification.services.v2.EventNotificationService/GetEventMessageStream" => {
                     #[allow(non_camel_case_types)]
-                    struct GetEventMessageBatchStreamSvc<T: EventNotificationService>(
+                    struct GetEventMessageStreamSvc<T: EventNotificationService>(
                         pub Arc<T>,
                     );
                     impl<
                         T: EventNotificationService,
                     > tonic::server::ServerStreamingService<
-                        super::GetEventMessageBatchStreamRequest,
-                    > for GetEventMessageBatchStreamSvc<T> {
-                        type Response = super::GetEventMessageBatchStreamResponse;
-                        type ResponseStream = T::GetEventMessageBatchStreamStream;
+                        super::GetEventMessageStreamRequest,
+                    > for GetEventMessageStreamSvc<T> {
+                        type Response = super::GetEventMessageStreamResponse;
+                        type ResponseStream = T::GetEventMessageStreamStream;
                         type Future = BoxFuture<
                             tonic::Response<Self::ResponseStream>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<
-                                super::GetEventMessageBatchStreamRequest,
-                            >,
+                            request: tonic::Request<super::GetEventMessageStreamRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_event_message_batch_stream(request).await
+                                (*inner).get_event_message_stream(request).await
                             };
                             Box::pin(fut)
                         }
@@ -850,7 +844,7 @@ pub mod event_notification_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetEventMessageBatchStreamSvc(inner);
+                        let method = GetEventMessageStreamSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

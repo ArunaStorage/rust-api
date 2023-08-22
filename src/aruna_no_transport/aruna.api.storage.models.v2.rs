@@ -82,9 +82,11 @@ pub struct UserAttributes {
     pub service_account: bool,
     #[prost(message, repeated, tag = "3")]
     pub tokens: ::prost::alloc::vec::Vec<Token>,
-    #[prost(message, repeated, tag = "4")]
-    pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttributes>,
+    #[prost(string, repeated, tag = "4")]
+    pub trusted_endpoints: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "5")]
+    pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttributes>,
+    #[prost(message, repeated, tag = "6")]
     pub personal_permissions: ::prost::alloc::vec::Vec<Permission>,
 }
 /// A key value pair for hooks and labels
@@ -213,6 +215,17 @@ pub struct Endpoint {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DataEndpoint {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Hint if the objects' project
+    /// is fully synced to the endpoint
+    #[prost(bool, tag = "2")]
+    pub full_synced: bool,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Copy {
     #[prost(string, tag = "1")]
     pub resource: ::prost::alloc::string::String,
@@ -293,6 +306,8 @@ pub struct Project {
     pub status: i32,
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
+    #[prost(message, repeated, tag = "12")]
+    pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -325,6 +340,8 @@ pub struct Collection {
     pub status: i32,
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
+    #[prost(message, repeated, tag = "12")]
+    pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -354,6 +371,8 @@ pub struct Dataset {
     pub status: i32,
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
+    #[prost(message, repeated, tag = "12")]
+    pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -384,8 +403,10 @@ pub struct Object {
     pub status: i32,
     #[prost(bool, tag = "11")]
     pub dynamic: bool,
-    /// Object specific attributes
     #[prost(message, repeated, tag = "12")]
+    pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
+    /// Object specific attributes
+    #[prost(message, repeated, tag = "13")]
     pub hashes: ::prost::alloc::vec::Vec<Hash>,
 }
 /// Dataclass defines the confidentiality of the object
