@@ -99,7 +99,7 @@ pub struct GetEventMessageStreamRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEventMessageStreamResponse {
     #[prost(message, optional, tag = "1")]
-    pub messages: ::core::option::Option<EventMessage>,
+    pub message: ::core::option::Option<EventMessage>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]

@@ -3087,8 +3087,22 @@ pub struct FullSyncEndpointRequest {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FullSyncEndpointResponse {
-    #[prost(string, tag = "1")]
-    pub url: ::prost::alloc::string::String,
+    #[prost(oneof = "full_sync_endpoint_response::Target", tags = "1, 2, 3")]
+    pub target: ::core::option::Option<full_sync_endpoint_response::Target>,
+}
+/// Nested message and enum types in `FullSyncEndpointResponse`.
+pub mod full_sync_endpoint_response {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Target {
+        #[prost(message, tag = "1")]
+        GenericResource(super::super::super::models::v2::GenericResource),
+        #[prost(message, tag = "2")]
+        User(super::super::super::models::v2::User),
+        #[prost(message, tag = "3")]
+        Pubkey(super::super::super::models::v2::Pubkey),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -3291,7 +3305,7 @@ pub mod endpoint_service_client {
             &mut self,
             request: impl tonic::IntoRequest<super::FullSyncEndpointRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::FullSyncEndpointResponse>,
+            tonic::Response<tonic::codec::Streaming<super::FullSyncEndpointResponse>>,
             tonic::Status,
         > {
             self.inner
@@ -3315,7 +3329,7 @@ pub mod endpoint_service_client {
                         "FullSyncEndpoint",
                     ),
                 );
-            self.inner.unary(req, path, codec).await
+            self.inner.server_streaming(req, path, codec).await
         }
         /// GetEndpoint
         ///
@@ -3481,6 +3495,15 @@ pub mod endpoint_service_server {
             tonic::Response<super::CreateEndpointResponse>,
             tonic::Status,
         >;
+        /// Server streaming response type for the FullSyncEndpoint method.
+        type FullSyncEndpointStream: futures_core::Stream<
+                Item = std::result::Result<
+                    super::FullSyncEndpointResponse,
+                    tonic::Status,
+                >,
+            >
+            + Send
+            + 'static;
         /// FullSyncEndpoint
         ///
         /// Status: BETA
@@ -3490,7 +3513,7 @@ pub mod endpoint_service_server {
             &self,
             request: tonic::Request<super::FullSyncEndpointRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::FullSyncEndpointResponse>,
+            tonic::Response<Self::FullSyncEndpointStream>,
             tonic::Status,
         >;
         /// GetEndpoint
@@ -3677,11 +3700,13 @@ pub mod endpoint_service_server {
                     struct FullSyncEndpointSvc<T: EndpointService>(pub Arc<T>);
                     impl<
                         T: EndpointService,
-                    > tonic::server::UnaryService<super::FullSyncEndpointRequest>
-                    for FullSyncEndpointSvc<T> {
+                    > tonic::server::ServerStreamingService<
+                        super::FullSyncEndpointRequest,
+                    > for FullSyncEndpointSvc<T> {
                         type Response = super::FullSyncEndpointResponse;
+                        type ResponseStream = T::FullSyncEndpointStream;
                         type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
+                            tonic::Response<Self::ResponseStream>,
                             tonic::Status,
                         >;
                         fn call(
@@ -3713,7 +3738,7 @@ pub mod endpoint_service_server {
                                 max_decoding_message_size,
                                 max_encoding_message_size,
                             );
-                        let res = grpc.unary(method, req).await;
+                        let res = grpc.server_streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
@@ -8465,20 +8490,9 @@ pub struct GetPubkeysRequest {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Pubkey {
-    #[prost(int32, tag = "1")]
-    pub id: i32,
-    #[prost(string, tag = "2")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub location: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPubkeysResponse {
     #[prost(message, repeated, tag = "1")]
-    pub pubkeys: ::prost::alloc::vec::Vec<Pubkey>,
+    pub pubkeys: ::prost::alloc::vec::Vec<super::super::models::v2::Pubkey>,
 }
 /// Generated client implementations.
 pub mod storage_status_service_client {
@@ -11674,7 +11688,7 @@ pub struct DeleteAuthorizationResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateAuthorizationsRequest {
+pub struct UpdateAuthorizationRequest {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -11685,7 +11699,7 @@ pub struct UpdateAuthorizationsRequest {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateAuthorizationsResponse {
+pub struct UpdateAuthorizationResponse {
     #[prost(message, optional, tag = "1")]
     pub user_permission: ::core::option::Option<UserPermission>,
 }
@@ -11890,11 +11904,11 @@ pub mod authorization_service_client {
         ///
         /// This creates a user-specific attribute that handles permission for a
         /// specific resource
-        pub async fn update_authorizations(
+        pub async fn update_authorization(
             &mut self,
-            request: impl tonic::IntoRequest<super::UpdateAuthorizationsRequest>,
+            request: impl tonic::IntoRequest<super::UpdateAuthorizationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::UpdateAuthorizationsResponse>,
+            tonic::Response<super::UpdateAuthorizationResponse>,
             tonic::Status,
         > {
             self.inner
@@ -11908,14 +11922,14 @@ pub mod authorization_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.AuthorizationService/UpdateAuthorizations",
+                "/aruna.api.storage.services.v2.AuthorizationService/UpdateAuthorization",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.storage.services.v2.AuthorizationService",
-                        "UpdateAuthorizations",
+                        "UpdateAuthorization",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -11973,11 +11987,11 @@ pub mod authorization_service_server {
         ///
         /// This creates a user-specific attribute that handles permission for a
         /// specific resource
-        async fn update_authorizations(
+        async fn update_authorization(
             &self,
-            request: tonic::Request<super::UpdateAuthorizationsRequest>,
+            request: tonic::Request<super::UpdateAuthorizationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::UpdateAuthorizationsResponse>,
+            tonic::Response<super::UpdateAuthorizationResponse>,
             tonic::Status,
         >;
     }
@@ -12202,25 +12216,25 @@ pub mod authorization_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v2.AuthorizationService/UpdateAuthorizations" => {
+                "/aruna.api.storage.services.v2.AuthorizationService/UpdateAuthorization" => {
                     #[allow(non_camel_case_types)]
-                    struct UpdateAuthorizationsSvc<T: AuthorizationService>(pub Arc<T>);
+                    struct UpdateAuthorizationSvc<T: AuthorizationService>(pub Arc<T>);
                     impl<
                         T: AuthorizationService,
-                    > tonic::server::UnaryService<super::UpdateAuthorizationsRequest>
-                    for UpdateAuthorizationsSvc<T> {
-                        type Response = super::UpdateAuthorizationsResponse;
+                    > tonic::server::UnaryService<super::UpdateAuthorizationRequest>
+                    for UpdateAuthorizationSvc<T> {
+                        type Response = super::UpdateAuthorizationResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::UpdateAuthorizationsRequest>,
+                            request: tonic::Request<super::UpdateAuthorizationRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).update_authorizations(request).await
+                                (*inner).update_authorization(request).await
                             };
                             Box::pin(fut)
                         }
@@ -12232,7 +12246,7 @@ pub mod authorization_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = UpdateAuthorizationsSvc(inner);
+                        let method = UpdateAuthorizationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
