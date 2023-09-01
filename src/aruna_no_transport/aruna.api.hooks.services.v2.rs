@@ -19,19 +19,47 @@ pub struct ExternalHook {
     pub credentials: ::core::option::Option<Credentials>,
     #[prost(string, tag = "3")]
     pub json_template: ::prost::alloc::string::String,
+    #[prost(enumeration = "Method", tag = "4")]
+    pub method: i32,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddLabel {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub value: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddHook {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub value: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InternalHook {
-    #[prost(enumeration = "InternalAction", tag = "1")]
-    pub internal_action: i32,
-    /// Either key or target ID
-    #[prost(string, tag = "2")]
-    pub target_id: ::prost::alloc::string::String,
-    /// Optional value
-    #[prost(string, tag = "3")]
-    pub value: ::prost::alloc::string::String,
+    #[prost(oneof = "internal_hook::InternalAction", tags = "1, 2, 3")]
+    pub internal_action: ::core::option::Option<internal_hook::InternalAction>,
+}
+/// Nested message and enum types in `InternalHook`.
+pub mod internal_hook {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum InternalAction {
+        #[prost(message, tag = "1")]
+        AddLabel(super::AddLabel),
+        #[prost(message, tag = "2")]
+        AddHook(super::AddHook),
+        #[prost(message, tag = "3")]
+        AddRelation(super::super::super::super::storage::models::v2::Relation),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -105,6 +133,14 @@ pub struct HookCallbackRequest {
     pub remove_key_values: ::prost::alloc::vec::Vec<
         super::super::super::storage::models::v2::KeyValue,
     >,
+    #[prost(string, tag = "4")]
+    pub secret: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub hook_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "7")]
+    pub pubkey_serial: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -170,32 +206,29 @@ impl TriggerType {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum InternalAction {
+pub enum Method {
     Unspecified = 0,
-    AddLabel = 1,
-    AddHook = 2,
-    CreateRelation = 3,
+    Put = 1,
+    Post = 2,
 }
-impl InternalAction {
+impl Method {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            InternalAction::Unspecified => "INTERNAL_ACTION_UNSPECIFIED",
-            InternalAction::AddLabel => "INTERNAL_ACTION_ADD_LABEL",
-            InternalAction::AddHook => "INTERNAL_ACTION_ADD_HOOK",
-            InternalAction::CreateRelation => "INTERNAL_ACTION_CREATE_RELATION",
+            Method::Unspecified => "METHOD_UNSPECIFIED",
+            Method::Put => "METHOD_PUT",
+            Method::Post => "METHOD_POST",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "INTERNAL_ACTION_UNSPECIFIED" => Some(Self::Unspecified),
-            "INTERNAL_ACTION_ADD_LABEL" => Some(Self::AddLabel),
-            "INTERNAL_ACTION_ADD_HOOK" => Some(Self::AddHook),
-            "INTERNAL_ACTION_CREATE_RELATION" => Some(Self::CreateRelation),
+            "METHOD_UNSPECIFIED" => Some(Self::Unspecified),
+            "METHOD_PUT" => Some(Self::Put),
+            "METHOD_POST" => Some(Self::Post),
             _ => None,
         }
     }

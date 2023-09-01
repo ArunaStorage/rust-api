@@ -494,8 +494,8 @@ impl EndpointVariant {
 #[repr(i32)]
 pub enum EndpointHostVariant {
     Unspecified = 0,
-    Proxy = 1,
-    Bundler = 2,
+    Grpc = 1,
+    S3 = 2,
 }
 impl EndpointHostVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -505,16 +505,16 @@ impl EndpointHostVariant {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             EndpointHostVariant::Unspecified => "ENDPOINT_HOST_VARIANT_UNSPECIFIED",
-            EndpointHostVariant::Proxy => "ENDPOINT_HOST_VARIANT_PROXY",
-            EndpointHostVariant::Bundler => "ENDPOINT_HOST_VARIANT_BUNDLER",
+            EndpointHostVariant::Grpc => "ENDPOINT_HOST_VARIANT_GRPC",
+            EndpointHostVariant::S3 => "ENDPOINT_HOST_VARIANT_S3",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "ENDPOINT_HOST_VARIANT_UNSPECIFIED" => Some(Self::Unspecified),
-            "ENDPOINT_HOST_VARIANT_PROXY" => Some(Self::Proxy),
-            "ENDPOINT_HOST_VARIANT_BUNDLER" => Some(Self::Bundler),
+            "ENDPOINT_HOST_VARIANT_GRPC" => Some(Self::Grpc),
+            "ENDPOINT_HOST_VARIANT_S3" => Some(Self::S3),
             _ => None,
         }
     }

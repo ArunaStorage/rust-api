@@ -28,16 +28,18 @@ pub struct SearchResourcesResponse {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetPublicResourceRequest {
+pub struct GetResourceRequest {
     #[prost(string, tag = "1")]
     pub resource_id: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetPublicResourceResponse {
+pub struct GetResourceResponse {
     #[prost(message, optional, tag = "1")]
-    pub resources: ::core::option::Option<super::super::models::v2::GenericResource>,
+    pub resource: ::core::option::Option<super::super::models::v2::GenericResource>,
+    #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "2")]
+    pub permission: i32,
 }
 /// Generated client implementations.
 pub mod search_service_client {
@@ -153,11 +155,11 @@ pub mod search_service_client {
         /// Status: BETA
         ///
         /// Retrieves a public resource by its ID.
-        pub async fn get_public_resource(
+        pub async fn get_resource(
             &mut self,
-            request: impl tonic::IntoRequest<super::GetPublicResourceRequest>,
+            request: impl tonic::IntoRequest<super::GetResourceRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetPublicResourceResponse>,
+            tonic::Response<super::GetResourceResponse>,
             tonic::Status,
         > {
             self.inner
@@ -171,14 +173,14 @@ pub mod search_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.SearchService/GetPublicResource",
+                "/aruna.api.storage.services.v2.SearchService/GetResource",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.storage.services.v2.SearchService",
-                        "GetPublicResource",
+                        "GetResource",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -209,11 +211,11 @@ pub mod search_service_server {
         /// Status: BETA
         ///
         /// Retrieves a public resource by its ID.
-        async fn get_public_resource(
+        async fn get_resource(
             &self,
-            request: tonic::Request<super::GetPublicResourceRequest>,
+            request: tonic::Request<super::GetResourceRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::GetPublicResourceResponse>,
+            tonic::Response<super::GetResourceResponse>,
             tonic::Status,
         >;
     }
@@ -342,25 +344,25 @@ pub mod search_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.storage.services.v2.SearchService/GetPublicResource" => {
+                "/aruna.api.storage.services.v2.SearchService/GetResource" => {
                     #[allow(non_camel_case_types)]
-                    struct GetPublicResourceSvc<T: SearchService>(pub Arc<T>);
+                    struct GetResourceSvc<T: SearchService>(pub Arc<T>);
                     impl<
                         T: SearchService,
-                    > tonic::server::UnaryService<super::GetPublicResourceRequest>
-                    for GetPublicResourceSvc<T> {
-                        type Response = super::GetPublicResourceResponse;
+                    > tonic::server::UnaryService<super::GetResourceRequest>
+                    for GetResourceSvc<T> {
+                        type Response = super::GetResourceResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::GetPublicResourceRequest>,
+                            request: tonic::Request<super::GetResourceRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_public_resource(request).await
+                                (*inner).get_resource(request).await
                             };
                             Box::pin(fut)
                         }
@@ -372,7 +374,7 @@ pub mod search_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetPublicResourceSvc(inner);
+                        let method = GetResourceSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
