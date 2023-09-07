@@ -139,8 +139,8 @@ pub struct HookCallbackRequest {
     pub hook_id: ::prost::alloc::string::String,
     #[prost(string, tag = "6")]
     pub object_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "7")]
-    pub pubkey_serial: ::prost::alloc::string::String,
+    #[prost(int32, tag = "7")]
+    pub pubkey_serial: i32,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]

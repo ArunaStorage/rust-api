@@ -35,11 +35,32 @@ pub struct GetResourceRequest {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetResourceResponse {
+pub struct ResourceWithPermission {
     #[prost(message, optional, tag = "1")]
     pub resource: ::core::option::Option<super::super::models::v2::GenericResource>,
     #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "2")]
     pub permission: i32,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetResourceResponse {
+    #[prost(message, optional, tag = "1")]
+    pub resource: ::core::option::Option<ResourceWithPermission>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetResourcesRequest {
+    #[prost(string, repeated, tag = "1")]
+    pub resource_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetResourcesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub resources: ::prost::alloc::vec::Vec<ResourceWithPermission>,
 }
 /// Generated client implementations.
 pub mod search_service_client {
@@ -150,11 +171,11 @@ pub mod search_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// GetPublicResource
+        /// GetResource
         ///
         /// Status: BETA
         ///
-        /// Retrieves a public resource by its ID.
+        /// Retrieves resource by its ID.
         pub async fn get_resource(
             &mut self,
             request: impl tonic::IntoRequest<super::GetResourceRequest>,
@@ -185,6 +206,41 @@ pub mod search_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// GetResources
+        ///
+        /// Status: BETA
+        ///
+        /// Retrieves resources by a list of IDs.
+        pub async fn get_resources(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetResourcesRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetResourcesResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.SearchService/GetResources",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.SearchService",
+                        "GetResources",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -206,16 +262,28 @@ pub mod search_service_server {
             tonic::Response<super::SearchResourcesResponse>,
             tonic::Status,
         >;
-        /// GetPublicResource
+        /// GetResource
         ///
         /// Status: BETA
         ///
-        /// Retrieves a public resource by its ID.
+        /// Retrieves resource by its ID.
         async fn get_resource(
             &self,
             request: tonic::Request<super::GetResourceRequest>,
         ) -> std::result::Result<
             tonic::Response<super::GetResourceResponse>,
+            tonic::Status,
+        >;
+        /// GetResources
+        ///
+        /// Status: BETA
+        ///
+        /// Retrieves resources by a list of IDs.
+        async fn get_resources(
+            &self,
+            request: tonic::Request<super::GetResourcesRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetResourcesResponse>,
             tonic::Status,
         >;
     }
@@ -375,6 +443,52 @@ pub mod search_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetResourceSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.SearchService/GetResources" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetResourcesSvc<T: SearchService>(pub Arc<T>);
+                    impl<
+                        T: SearchService,
+                    > tonic::server::UnaryService<super::GetResourcesRequest>
+                    for GetResourcesSvc<T> {
+                        type Response = super::GetResourcesResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetResourcesRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_resources(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetResourcesSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -6615,6 +6729,48 @@ pub struct GetDataproxyTokenUserResponse {
     #[prost(string, tag = "1")]
     pub token: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPersonalNotificationsRequest {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct References {
+    /// UserRequestAccess
+    #[prost(string, tag = "1")]
+    pub ref_type: ::prost::alloc::string::String,
+    /// "User A"
+    #[prost(string, tag = "2")]
+    pub ref_name: ::prost::alloc::string::String,
+    /// 0123AAA123AAA (id)
+    #[prost(string, tag = "3")]
+    pub ref_value: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UserNotification {
+    /// Request access
+    #[prost(string, tag = "1")]
+    pub variant: ::prost::alloc::string::String,
+    /// User A has requested access for resource B
+    #[prost(string, tag = "2")]
+    pub message: ::prost::alloc::string::String,
+    /// References to resource in the "message"
+    #[prost(message, repeated, tag = "3")]
+    pub refs: ::prost::alloc::vec::Vec<References>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPersonalNotificationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub notifications: ::prost::alloc::vec::Vec<UserNotification>,
+}
 /// Generated client implementations.
 pub mod user_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -7256,6 +7412,36 @@ pub mod user_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        pub async fn get_personal_notifications(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetPersonalNotificationsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetPersonalNotificationsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.UserService/GetPersonalNotifications",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.UserService",
+                        "GetPersonalNotifications",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -7455,6 +7641,13 @@ pub mod user_service_server {
             request: tonic::Request<super::GetDataproxyTokenUserRequest>,
         ) -> std::result::Result<
             tonic::Response<super::GetDataproxyTokenUserResponse>,
+            tonic::Status,
+        >;
+        async fn get_personal_notifications(
+            &self,
+            request: tonic::Request<super::GetPersonalNotificationsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetPersonalNotificationsResponse>,
             tonic::Status,
         >;
     }
@@ -8275,6 +8468,54 @@ pub mod user_service_server {
                     };
                     Box::pin(fut)
                 }
+                "/aruna.api.storage.services.v2.UserService/GetPersonalNotifications" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetPersonalNotificationsSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::GetPersonalNotificationsRequest>
+                    for GetPersonalNotificationsSvc<T> {
+                        type Response = super::GetPersonalNotificationsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::GetPersonalNotificationsRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_personal_notifications(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetPersonalNotificationsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => {
                     Box::pin(async move {
                         Ok(
@@ -8407,6 +8648,44 @@ pub struct GetPubkeysRequest {}
 pub struct GetPubkeysResponse {
     #[prost(message, repeated, tag = "1")]
     pub pubkeys: ::prost::alloc::vec::Vec<super::super::models::v2::Pubkey>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Anouncement {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub content: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnouncementsRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnouncementsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub anouncements: ::prost::alloc::vec::Vec<Anouncement>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetAnouncementsRequest {
+    #[prost(message, repeated, tag = "1")]
+    pub anouncements_upsert: ::prost::alloc::vec::Vec<Anouncement>,
+    #[prost(string, repeated, tag = "2")]
+    pub anouncements_delete: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetAnouncementsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub anouncements: ::prost::alloc::vec::Vec<Anouncement>,
 }
 /// Generated client implementations.
 pub mod storage_status_service_client {
@@ -8588,6 +8867,66 @@ pub mod storage_status_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        pub async fn get_anouncements(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetAnouncementsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAnouncementsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.StorageStatusService/GetAnouncements",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.StorageStatusService",
+                        "GetAnouncements",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn set_anouncements(
+            &mut self,
+            request: impl tonic::IntoRequest<super::SetAnouncementsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SetAnouncementsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.StorageStatusService/SetAnouncements",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.StorageStatusService",
+                        "SetAnouncements",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -8627,6 +8966,20 @@ pub mod storage_status_service_server {
             request: tonic::Request<super::GetPubkeysRequest>,
         ) -> std::result::Result<
             tonic::Response<super::GetPubkeysResponse>,
+            tonic::Status,
+        >;
+        async fn get_anouncements(
+            &self,
+            request: tonic::Request<super::GetAnouncementsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAnouncementsResponse>,
+            tonic::Status,
+        >;
+        async fn set_anouncements(
+            &self,
+            request: tonic::Request<super::SetAnouncementsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SetAnouncementsResponse>,
             tonic::Status,
         >;
     }
@@ -8836,6 +9189,98 @@ pub mod storage_status_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetPubkeysSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.StorageStatusService/GetAnouncements" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetAnouncementsSvc<T: StorageStatusService>(pub Arc<T>);
+                    impl<
+                        T: StorageStatusService,
+                    > tonic::server::UnaryService<super::GetAnouncementsRequest>
+                    for GetAnouncementsSvc<T> {
+                        type Response = super::GetAnouncementsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetAnouncementsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).get_anouncements(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetAnouncementsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.StorageStatusService/SetAnouncements" => {
+                    #[allow(non_camel_case_types)]
+                    struct SetAnouncementsSvc<T: StorageStatusService>(pub Arc<T>);
+                    impl<
+                        T: StorageStatusService,
+                    > tonic::server::UnaryService<super::SetAnouncementsRequest>
+                    for SetAnouncementsSvc<T> {
+                        type Response = super::SetAnouncementsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::SetAnouncementsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).set_anouncements(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SetAnouncementsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

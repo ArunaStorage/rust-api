@@ -569,6 +569,7 @@ pub enum KeyValueVariant {
     /// A Label that only admins can remove
     StaticLabel = 2,
     Hook = 3,
+    HookStatus = 4,
 }
 impl KeyValueVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -581,6 +582,7 @@ impl KeyValueVariant {
             KeyValueVariant::Label => "KEY_VALUE_VARIANT_LABEL",
             KeyValueVariant::StaticLabel => "KEY_VALUE_VARIANT_STATIC_LABEL",
             KeyValueVariant::Hook => "KEY_VALUE_VARIANT_HOOK",
+            KeyValueVariant::HookStatus => "KEY_VALUE_VARIANT_HOOK_STATUS",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -590,6 +592,7 @@ impl KeyValueVariant {
             "KEY_VALUE_VARIANT_LABEL" => Some(Self::Label),
             "KEY_VALUE_VARIANT_STATIC_LABEL" => Some(Self::StaticLabel),
             "KEY_VALUE_VARIANT_HOOK" => Some(Self::Hook),
+            "KEY_VALUE_VARIANT_HOOK_STATUS" => Some(Self::HookStatus),
             _ => None,
         }
     }
