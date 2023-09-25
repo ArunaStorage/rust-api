@@ -17,9 +17,13 @@ pub struct ExternalHook {
     pub url: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub credentials: ::core::option::Option<Credentials>,
-    #[prost(string, tag = "3")]
-    pub json_template: ::prost::alloc::string::String,
-    #[prost(enumeration = "Method", tag = "4")]
+    /// If empty a basic JSON template will be used
+    #[prost(string, optional, tag = "3")]
+    pub custom_template: ::core::option::Option<::prost::alloc::string::String>,
+    /// Optional Project/Collection/Dataset where hooks can upload results.
+    #[prost(string, optional, tag = "4")]
+    pub result_object: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(enumeration = "Method", tag = "5")]
     pub method: i32,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -92,14 +96,18 @@ pub struct Credentials {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateHookRequest {
-    #[prost(message, optional, tag = "1")]
-    pub trigger: ::core::option::Option<Trigger>,
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
+    pub trigger: ::core::option::Option<Trigger>,
+    #[prost(message, optional, tag = "3")]
     pub hook: ::core::option::Option<Hook>,
-    #[prost(uint64, tag = "3")]
+    #[prost(uint64, tag = "4")]
     pub timeout: u64,
-    #[prost(string, tag = "4")]
-    pub project_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "5")]
+    pub project_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag = "6")]
+    pub description: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -123,24 +131,48 @@ pub struct DeleteHookResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HookCallbackRequest {
-    #[prost(bool, tag = "1")]
-    pub success: bool,
-    #[prost(message, repeated, tag = "2")]
+    #[prost(string, tag = "3")]
+    pub secret: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub hook_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(int32, tag = "6")]
+    pub pubkey_serial: i32,
+    #[prost(oneof = "hook_callback_request::Status", tags = "1, 2")]
+    pub status: ::core::option::Option<hook_callback_request::Status>,
+}
+/// Nested message and enum types in `HookCallbackRequest`.
+pub mod hook_callback_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Status {
+        #[prost(message, tag = "1")]
+        Finished(super::Finished),
+        #[prost(message, tag = "2")]
+        Error(super::Error),
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Finished {
+    #[prost(message, repeated, tag = "1")]
     pub add_key_values: ::prost::alloc::vec::Vec<
         super::super::super::storage::models::v2::KeyValue,
     >,
-    #[prost(message, repeated, tag = "3")]
+    #[prost(message, repeated, tag = "2")]
     pub remove_key_values: ::prost::alloc::vec::Vec<
         super::super::super::storage::models::v2::KeyValue,
     >,
-    #[prost(string, tag = "4")]
-    pub secret: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub hook_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
-    pub object_id: ::prost::alloc::string::String,
-    #[prost(int32, tag = "7")]
-    pub pubkey_serial: i32,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Error {
+    #[prost(string, tag = "1")]
+    pub error: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -149,9 +181,16 @@ pub struct HookCallbackResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ListHooksRequest {
+pub struct ListProjectHooksRequest {
     #[prost(string, tag = "1")]
     pub project_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListOwnedHooksRequest {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -159,20 +198,46 @@ pub struct ListHooksRequest {
 pub struct HookInfo {
     #[prost(string, tag = "1")]
     pub hook_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
+    #[prost(string, repeated, tag = "2")]
+    pub project_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag = "3")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "5")]
     pub hook: ::core::option::Option<Hook>,
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "6")]
     pub trigger: ::core::option::Option<Trigger>,
-    #[prost(uint64, tag = "4")]
+    #[prost(uint64, tag = "7")]
     pub timeout: u64,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ListHooksResponse {
+pub struct ListProjectHooksResponse {
     #[prost(message, repeated, tag = "1")]
     pub infos: ::prost::alloc::vec::Vec<HookInfo>,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListOwnedHooksResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub infos: ::prost::alloc::vec::Vec<HookInfo>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddProjectsToHookRequest {
+    #[prost(string, tag = "1")]
+    pub hook_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub project_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddProjectsToHookResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -180,6 +245,9 @@ pub enum TriggerType {
     Unspecified = 0,
     HookAdded = 1,
     ObjectCreated = 2,
+    LabelAdded = 3,
+    StaticLabelAdded = 4,
+    HookStatusChanged = 5,
 }
 impl TriggerType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -191,6 +259,9 @@ impl TriggerType {
             TriggerType::Unspecified => "TRIGGER_TYPE_UNSPECIFIED",
             TriggerType::HookAdded => "TRIGGER_TYPE_HOOK_ADDED",
             TriggerType::ObjectCreated => "TRIGGER_TYPE_OBJECT_CREATED",
+            TriggerType::LabelAdded => "TRIGGER_TYPE_LABEL_ADDED",
+            TriggerType::StaticLabelAdded => "TRIGGER_TYPE_STATIC_LABEL_ADDED",
+            TriggerType::HookStatusChanged => "TRIGGER_TYPE_HOOK_STATUS_CHANGED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -199,6 +270,9 @@ impl TriggerType {
             "TRIGGER_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "TRIGGER_TYPE_HOOK_ADDED" => Some(Self::HookAdded),
             "TRIGGER_TYPE_OBJECT_CREATED" => Some(Self::ObjectCreated),
+            "TRIGGER_TYPE_LABEL_ADDED" => Some(Self::LabelAdded),
+            "TRIGGER_TYPE_STATIC_LABEL_ADDED" => Some(Self::StaticLabelAdded),
+            "TRIGGER_TYPE_HOOK_STATUS_CHANGED" => Some(Self::HookStatusChanged),
             _ => None,
         }
     }
@@ -312,6 +386,7 @@ pub mod hooks_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
+        /// Created Hooks are always associated with the owner that creates the hook
         pub async fn create_hook(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateHookRequest>,
@@ -342,11 +417,11 @@ pub mod hooks_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        pub async fn list_hooks(
+        pub async fn add_projects_to_hook(
             &mut self,
-            request: impl tonic::IntoRequest<super::ListHooksRequest>,
+            request: impl tonic::IntoRequest<super::AddProjectsToHookRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::ListHooksResponse>,
+            tonic::Response<super::AddProjectsToHookResponse>,
             tonic::Status,
         > {
             self.inner
@@ -360,14 +435,74 @@ pub mod hooks_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.hooks.services.v2.HooksService/ListHooks",
+                "/aruna.api.hooks.services.v2.HooksService/AddProjectsToHook",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.hooks.services.v2.HooksService",
-                        "ListHooks",
+                        "AddProjectsToHook",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_project_hooks(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListProjectHooksRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListProjectHooksResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.hooks.services.v2.HooksService/ListProjectHooks",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.hooks.services.v2.HooksService",
+                        "ListProjectHooks",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_owned_hooks(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListOwnedHooksRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListOwnedHooksResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.hooks.services.v2.HooksService/ListOwnedHooks",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.hooks.services.v2.HooksService",
+                        "ListOwnedHooks",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -441,6 +576,7 @@ pub mod hooks_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with HooksServiceServer.
     #[async_trait]
     pub trait HooksService: Send + Sync + 'static {
+        /// Created Hooks are always associated with the owner that creates the hook
         async fn create_hook(
             &self,
             request: tonic::Request<super::CreateHookRequest>,
@@ -448,11 +584,25 @@ pub mod hooks_service_server {
             tonic::Response<super::CreateHookResponse>,
             tonic::Status,
         >;
-        async fn list_hooks(
+        async fn add_projects_to_hook(
             &self,
-            request: tonic::Request<super::ListHooksRequest>,
+            request: tonic::Request<super::AddProjectsToHookRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::ListHooksResponse>,
+            tonic::Response<super::AddProjectsToHookResponse>,
+            tonic::Status,
+        >;
+        async fn list_project_hooks(
+            &self,
+            request: tonic::Request<super::ListProjectHooksRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListProjectHooksResponse>,
+            tonic::Status,
+        >;
+        async fn list_owned_hooks(
+            &self,
+            request: tonic::Request<super::ListOwnedHooksRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListOwnedHooksResponse>,
             tonic::Status,
         >;
         async fn delete_hook(
@@ -598,24 +748,26 @@ pub mod hooks_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.hooks.services.v2.HooksService/ListHooks" => {
+                "/aruna.api.hooks.services.v2.HooksService/AddProjectsToHook" => {
                     #[allow(non_camel_case_types)]
-                    struct ListHooksSvc<T: HooksService>(pub Arc<T>);
+                    struct AddProjectsToHookSvc<T: HooksService>(pub Arc<T>);
                     impl<
                         T: HooksService,
-                    > tonic::server::UnaryService<super::ListHooksRequest>
-                    for ListHooksSvc<T> {
-                        type Response = super::ListHooksResponse;
+                    > tonic::server::UnaryService<super::AddProjectsToHookRequest>
+                    for AddProjectsToHookSvc<T> {
+                        type Response = super::AddProjectsToHookResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::ListHooksRequest>,
+                            request: tonic::Request<super::AddProjectsToHookRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).list_hooks(request).await };
+                            let fut = async move {
+                                (*inner).add_projects_to_hook(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -626,7 +778,99 @@ pub mod hooks_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ListHooksSvc(inner);
+                        let method = AddProjectsToHookSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.hooks.services.v2.HooksService/ListProjectHooks" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListProjectHooksSvc<T: HooksService>(pub Arc<T>);
+                    impl<
+                        T: HooksService,
+                    > tonic::server::UnaryService<super::ListProjectHooksRequest>
+                    for ListProjectHooksSvc<T> {
+                        type Response = super::ListProjectHooksResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::ListProjectHooksRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).list_project_hooks(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListProjectHooksSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.hooks.services.v2.HooksService/ListOwnedHooks" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListOwnedHooksSvc<T: HooksService>(pub Arc<T>);
+                    impl<
+                        T: HooksService,
+                    > tonic::server::UnaryService<super::ListOwnedHooksRequest>
+                    for ListOwnedHooksSvc<T> {
+                        type Response = super::ListOwnedHooksResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::ListOwnedHooksRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).list_owned_hooks(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListOwnedHooksSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
