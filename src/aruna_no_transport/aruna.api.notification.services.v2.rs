@@ -581,7 +581,7 @@ pub mod event_notification_service_server {
             tonic::Status,
         >;
         /// Server streaming response type for the GetEventMessageStream method.
-        type GetEventMessageStreamStream: futures_core::Stream<
+        type GetEventMessageStreamStream: tonic::codegen::tokio_stream::Stream<
                 Item = std::result::Result<
                     super::GetEventMessageStreamResponse,
                     tonic::Status,
@@ -726,7 +726,11 @@ pub mod event_notification_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).create_stream_consumer(request).await
+                                <T as EventNotificationService>::create_stream_consumer(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -774,7 +778,11 @@ pub mod event_notification_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_event_message_batch(request).await
+                                <T as EventNotificationService>::get_event_message_batch(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -824,7 +832,11 @@ pub mod event_notification_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).get_event_message_stream(request).await
+                                <T as EventNotificationService>::get_event_message_stream(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -874,7 +886,11 @@ pub mod event_notification_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).acknowledge_message_batch(request).await
+                                <T as EventNotificationService>::acknowledge_message_batch(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -922,7 +938,11 @@ pub mod event_notification_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).delete_stream_consumer(request).await
+                                <T as EventNotificationService>::delete_stream_consumer(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
                             };
                             Box::pin(fut)
                         }

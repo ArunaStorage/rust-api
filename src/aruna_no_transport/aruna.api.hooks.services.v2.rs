@@ -720,7 +720,9 @@ pub mod hooks_service_server {
                             request: tonic::Request<super::CreateHookRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).create_hook(request).await };
+                            let fut = async move {
+                                <T as HooksService>::create_hook(&inner, request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -765,7 +767,8 @@ pub mod hooks_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).add_projects_to_hook(request).await
+                                <T as HooksService>::add_projects_to_hook(&inner, request)
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -811,7 +814,8 @@ pub mod hooks_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).list_project_hooks(request).await
+                                <T as HooksService>::list_project_hooks(&inner, request)
+                                    .await
                             };
                             Box::pin(fut)
                         }
@@ -857,7 +861,7 @@ pub mod hooks_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).list_owned_hooks(request).await
+                                <T as HooksService>::list_owned_hooks(&inner, request).await
                             };
                             Box::pin(fut)
                         }
@@ -902,7 +906,9 @@ pub mod hooks_service_server {
                             request: tonic::Request<super::DeleteHookRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).delete_hook(request).await };
+                            let fut = async move {
+                                <T as HooksService>::delete_hook(&inner, request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -947,7 +953,7 @@ pub mod hooks_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).hook_callback(request).await
+                                <T as HooksService>::hook_callback(&inner, request).await
                             };
                             Box::pin(fut)
                         }
