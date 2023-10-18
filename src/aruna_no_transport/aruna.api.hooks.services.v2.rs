@@ -20,9 +20,7 @@ pub struct ExternalHook {
     /// If empty a basic JSON template will be used
     #[prost(string, optional, tag = "3")]
     pub custom_template: ::core::option::Option<::prost::alloc::string::String>,
-    /// Optional Project/Collection/Dataset where hooks can upload results.
-    #[prost(string, optional, tag = "4")]
-    pub result_object: ::core::option::Option<::prost::alloc::string::String>,
+    /// TODO: Optional request headers
     #[prost(enumeration = "Method", tag = "5")]
     pub method: i32,
 }
@@ -189,6 +187,7 @@ pub struct ListProjectHooksRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListOwnedHooksRequest {
+    /// ADMIN only
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
 }
