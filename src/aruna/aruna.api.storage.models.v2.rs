@@ -267,6 +267,24 @@ pub mod context {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct License {
+    /// CC-BY-SA-4.0
+    #[prost(string, tag = "1")]
+    pub tag: ::prost::alloc::string::String,
+    /// Creative Commons Attribution-ShareAlike 4.0 International
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub text: ::prost::alloc::string::String,
+    /// url is optional
+    ///
+    /// <https://creativecommons.org/licenses/by-sa/4.0/>
+    #[prost(string, tag = "4")]
+    pub url: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenericResource {
     #[prost(oneof = "generic_resource::Resource", tags = "1, 2, 3, 4")]
     pub resource: ::core::option::Option<generic_resource::Resource>,
@@ -319,6 +337,10 @@ pub struct Project {
     pub dynamic: bool,
     #[prost(message, repeated, tag = "12")]
     pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
+    #[prost(string, tag = "13")]
+    pub metadata_license_tag: ::prost::alloc::string::String,
+    #[prost(string, tag = "14")]
+    pub default_data_license_tag: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -353,6 +375,10 @@ pub struct Collection {
     pub dynamic: bool,
     #[prost(message, repeated, tag = "12")]
     pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
+    #[prost(string, tag = "13")]
+    pub metadata_license_tag: ::prost::alloc::string::String,
+    #[prost(string, tag = "14")]
+    pub default_data_license_tag: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -384,6 +410,10 @@ pub struct Dataset {
     pub dynamic: bool,
     #[prost(message, repeated, tag = "12")]
     pub endpoints: ::prost::alloc::vec::Vec<DataEndpoint>,
+    #[prost(string, tag = "13")]
+    pub metadata_license_tag: ::prost::alloc::string::String,
+    #[prost(string, tag = "14")]
+    pub default_data_license_tag: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -419,6 +449,10 @@ pub struct Object {
     /// Object specific attributes
     #[prost(message, repeated, tag = "13")]
     pub hashes: ::prost::alloc::vec::Vec<Hash>,
+    #[prost(string, tag = "14")]
+    pub metadata_license_tag: ::prost::alloc::string::String,
+    #[prost(string, tag = "15")]
+    pub data_license_tag: ::prost::alloc::string::String,
 }
 /// Dataclass defines the confidentiality of the object
 #[derive(serde::Deserialize, serde::Serialize)]
