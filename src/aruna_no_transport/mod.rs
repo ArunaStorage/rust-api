@@ -40,5 +40,10 @@ pub mod aruna {
                 pub mod v2;
             }
         }
+        #[path = ""]
+        pub mod health {
+            #[path = "aruna.api.health.v2.rs"]
+            pub mod v2;
+        }
     }
 }
