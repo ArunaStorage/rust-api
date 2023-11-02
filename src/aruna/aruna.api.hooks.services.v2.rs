@@ -4,10 +4,8 @@
 pub struct Trigger {
     #[prost(enumeration = "TriggerType", tag = "1")]
     pub trigger_type: i32,
-    #[prost(string, tag = "2")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub value: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub filters: ::prost::alloc::vec::Vec<Filter>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -20,7 +18,6 @@ pub struct ExternalHook {
     /// If empty a basic JSON template will be used
     #[prost(string, optional, tag = "3")]
     pub custom_template: ::core::option::Option<::prost::alloc::string::String>,
-    /// TODO: Optional request headers
     #[prost(enumeration = "Method", tag = "5")]
     pub method: i32,
 }
@@ -89,6 +86,29 @@ pub mod hook {
 pub struct Credentials {
     #[prost(string, tag = "1")]
     pub token: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Filter {
+    #[prost(oneof = "filter::FilterVariant", tags = "1, 2")]
+    pub filter_variant: ::core::option::Option<filter::FilterVariant>,
+}
+/// Nested message and enum types in `Filter`.
+pub mod filter {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum FilterVariant {
+        /// Regex that matches name field
+        #[prost(string, tag = "1")]
+        Name(::prost::alloc::string::String),
+        /// Regex that matches key AND value
+        ///
+        /// TODO: ObjectType & ObjectStatus
+        #[prost(message, tag = "2")]
+        KeyValue(super::super::super::super::storage::models::v2::KeyValue),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -243,10 +263,11 @@ pub struct AddProjectsToHookResponse {}
 pub enum TriggerType {
     Unspecified = 0,
     HookAdded = 1,
-    ObjectCreated = 2,
+    ResourceCreated = 2,
     LabelAdded = 3,
     StaticLabelAdded = 4,
     HookStatusChanged = 5,
+    ObjectFinished = 6,
 }
 impl TriggerType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -257,10 +278,11 @@ impl TriggerType {
         match self {
             TriggerType::Unspecified => "TRIGGER_TYPE_UNSPECIFIED",
             TriggerType::HookAdded => "TRIGGER_TYPE_HOOK_ADDED",
-            TriggerType::ObjectCreated => "TRIGGER_TYPE_OBJECT_CREATED",
+            TriggerType::ResourceCreated => "TRIGGER_TYPE_RESOURCE_CREATED",
             TriggerType::LabelAdded => "TRIGGER_TYPE_LABEL_ADDED",
             TriggerType::StaticLabelAdded => "TRIGGER_TYPE_STATIC_LABEL_ADDED",
             TriggerType::HookStatusChanged => "TRIGGER_TYPE_HOOK_STATUS_CHANGED",
+            TriggerType::ObjectFinished => "TRIGGER_TYPE_OBJECT_FINISHED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -268,10 +290,11 @@ impl TriggerType {
         match value {
             "TRIGGER_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "TRIGGER_TYPE_HOOK_ADDED" => Some(Self::HookAdded),
-            "TRIGGER_TYPE_OBJECT_CREATED" => Some(Self::ObjectCreated),
+            "TRIGGER_TYPE_RESOURCE_CREATED" => Some(Self::ResourceCreated),
             "TRIGGER_TYPE_LABEL_ADDED" => Some(Self::LabelAdded),
             "TRIGGER_TYPE_STATIC_LABEL_ADDED" => Some(Self::StaticLabelAdded),
             "TRIGGER_TYPE_HOOK_STATUS_CHANGED" => Some(Self::HookStatusChanged),
+            "TRIGGER_TYPE_OBJECT_FINISHED" => Some(Self::ObjectFinished),
             _ => None,
         }
     }

@@ -48,7 +48,7 @@ pub mod create_stream_consumer_request {
         #[prost(string, tag = "2")]
         User(::prost::alloc::string::String),
         #[prost(bool, tag = "3")]
-        Anouncements(bool),
+        Announcements(bool),
         #[prost(bool, tag = "4")]
         All(bool),
     }
@@ -159,7 +159,7 @@ pub mod event_message {
         #[prost(message, tag = "2")]
         UserEvent(super::UserEvent),
         #[prost(message, tag = "3")]
-        AnnouncementEvent(super::AnouncementEvent),
+        AnnouncementEvent(super::AnnouncementEvent),
     }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -231,14 +231,14 @@ pub struct NewPubkey {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AnouncementEvent {
+pub struct AnnouncementEvent {
     #[prost(message, optional, tag = "8")]
     pub reply: ::core::option::Option<Reply>,
-    #[prost(oneof = "anouncement_event::EventVariant", tags = "1, 2, 3, 4, 5, 6, 7")]
-    pub event_variant: ::core::option::Option<anouncement_event::EventVariant>,
+    #[prost(oneof = "announcement_event::EventVariant", tags = "1, 2, 3, 4, 5, 6, 7")]
+    pub event_variant: ::core::option::Option<announcement_event::EventVariant>,
 }
-/// Nested message and enum types in `AnouncementEvent`.
-pub mod anouncement_event {
+/// Nested message and enum types in `AnnouncementEvent`.
+pub mod announcement_event {
     #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
