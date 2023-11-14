@@ -6,9 +6,6 @@ pub struct User {
     /// Internal Aruna UserID
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    /// Oidc subject ID
-    #[prost(string, tag = "2")]
-    pub external_id: ::prost::alloc::string::String,
     /// (optional) User display_name
     #[prost(string, tag = "3")]
     pub display_name: ::prost::alloc::string::String,
@@ -86,6 +83,15 @@ pub struct CustomAttributes {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OidcMapping {
+    #[prost(string, tag = "1")]
+    pub external_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub oidc_url: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserAttributes {
     #[prost(bool, tag = "1")]
     pub global_admin: bool,
@@ -99,6 +105,8 @@ pub struct UserAttributes {
     pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttributes>,
     #[prost(message, repeated, tag = "6")]
     pub personal_permissions: ::prost::alloc::vec::Vec<Permission>,
+    #[prost(message, repeated, tag = "7")]
+    pub external_ids: ::prost::alloc::vec::Vec<OidcMapping>,
 }
 /// A key value pair for hooks and labels
 #[derive(serde::Deserialize, serde::Serialize)]
