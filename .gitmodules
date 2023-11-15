@@ -1,4 +1,4 @@
 [submodule "protos"]
 	path = src/protos
-	url = https://github.com:ArunaStorage/ArunaAPI.git
+	url = https://github.com/ArunaStorage/ArunaAPI.git
 	branch = feat/replication
