@@ -305,7 +305,9 @@ pub mod event_notification_service_client {
     use tonic::codegen::http::Uri;
     /// EventNotificationService
     ///
-    /// A service to receive events in the AOS storage
+    /// Status: BETA
+    ///
+    /// A service to receive events for CRUD operations on resources (users, resources etc.)
     #[derive(Debug, Clone)]
     pub struct EventNotificationServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -379,6 +381,8 @@ pub mod event_notification_service_client {
         }
         /// CreateStreamConsumer
         ///
+        /// Status: BETA
+        ///
         /// Creates a new event stream consumer.
         pub async fn create_stream_consumer(
             &mut self,
@@ -411,6 +415,8 @@ pub mod event_notification_service_client {
             self.inner.unary(req, path, codec).await
         }
         /// GetEventMessageBatch
+        ///
+        /// Status: BETA
         ///
         /// Reads a set of messages from a given stream group
         /// Each message contains a separate acknowledgement message thatis protected by a salt and an hmac for verification.
@@ -446,6 +452,8 @@ pub mod event_notification_service_client {
             self.inner.unary(req, path, codec).await
         }
         /// GetEventMessageBatch
+        ///
+        /// Status: BETA
         ///
         /// Opens a stream which pushes each received notification individual and just-in-time.
         /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification.
@@ -484,6 +492,8 @@ pub mod event_notification_service_client {
         }
         /// AcknowledgeMessageBatch
         ///
+        /// Status: BETA
+        ///
         /// List of messages to acknowledge
         /// Each reply is protected by a salt and and hmac that verifies the message
         pub async fn acknowledge_message_batch(
@@ -517,6 +527,8 @@ pub mod event_notification_service_client {
             self.inner.unary(req, path, codec).await
         }
         /// DeleteEventStreamingGroup
+        ///
+        /// Status: BETA
         ///
         /// Deletes an existing event stream consumer by ID.
         pub async fn delete_stream_consumer(
@@ -560,6 +572,8 @@ pub mod event_notification_service_server {
     pub trait EventNotificationService: Send + Sync + 'static {
         /// CreateStreamConsumer
         ///
+        /// Status: BETA
+        ///
         /// Creates a new event stream consumer.
         async fn create_stream_consumer(
             &self,
@@ -569,6 +583,8 @@ pub mod event_notification_service_server {
             tonic::Status,
         >;
         /// GetEventMessageBatch
+        ///
+        /// Status: BETA
         ///
         /// Reads a set of messages from a given stream group
         /// Each message contains a separate acknowledgement message thatis protected by a salt and an hmac for verification.
@@ -591,6 +607,8 @@ pub mod event_notification_service_server {
             + 'static;
         /// GetEventMessageBatch
         ///
+        /// Status: BETA
+        ///
         /// Opens a stream which pushes each received notification individual and just-in-time.
         /// Each message contains a separate acknowledgement message that is protected by a salt and an hmac for verification.
         /// The message can be send directly through the AcknowledgeMessageBatch call to acknowledge the message.
@@ -603,6 +621,8 @@ pub mod event_notification_service_server {
         >;
         /// AcknowledgeMessageBatch
         ///
+        /// Status: BETA
+        ///
         /// List of messages to acknowledge
         /// Each reply is protected by a salt and and hmac that verifies the message
         async fn acknowledge_message_batch(
@@ -613,6 +633,8 @@ pub mod event_notification_service_server {
             tonic::Status,
         >;
         /// DeleteEventStreamingGroup
+        ///
+        /// Status: BETA
         ///
         /// Deletes an existing event stream consumer by ID.
         async fn delete_stream_consumer(
@@ -625,7 +647,9 @@ pub mod event_notification_service_server {
     }
     /// EventNotificationService
     ///
-    /// A service to receive events in the AOS storage
+    /// Status: BETA
+    ///
+    /// A service to receive events for CRUD operations on resources (users, resources etc.)
     #[derive(Debug)]
     pub struct EventNotificationServiceServer<T: EventNotificationService> {
         inner: _Inner<T>,

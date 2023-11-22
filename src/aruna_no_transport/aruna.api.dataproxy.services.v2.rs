@@ -363,6 +363,11 @@ pub mod dataproxy_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// DataproxyService
+    ///
+    /// Status: ALPHA
+    ///
+    /// Service for data replication between data-proxies
     #[derive(Debug, Clone)]
     pub struct DataproxyServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -434,7 +439,7 @@ pub mod dataproxy_service_client {
         }
         /// RequestReplication
         ///
-        /// Status: BETA
+        /// Status: ALPHA
         ///
         /// Creates a replication request
         pub async fn request_replication(
@@ -469,7 +474,7 @@ pub mod dataproxy_service_client {
         }
         /// InitReplication
         ///
-        /// Status: BETA
+        /// Status: ALPHA
         ///
         /// Provides the necessary url to init replication
         pub async fn init_replication(
@@ -1108,7 +1113,7 @@ pub mod dataproxy_service_server {
     pub trait DataproxyService: Send + Sync + 'static {
         /// RequestReplication
         ///
-        /// Status: BETA
+        /// Status: ALPHA
         ///
         /// Creates a replication request
         async fn request_replication(
@@ -1120,7 +1125,7 @@ pub mod dataproxy_service_server {
         >;
         /// InitReplication
         ///
-        /// Status: BETA
+        /// Status: ALPHA
         ///
         /// Provides the necessary url to init replication
         async fn init_replication(
@@ -1131,6 +1136,11 @@ pub mod dataproxy_service_server {
             tonic::Status,
         >;
     }
+    /// DataproxyService
+    ///
+    /// Status: ALPHA
+    ///
+    /// Service for data replication between data-proxies
     #[derive(Debug)]
     pub struct DataproxyServiceServer<T: DataproxyService> {
         inner: _Inner<T>,
@@ -2461,6 +2471,11 @@ pub mod bundler_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// BundlerService
+    ///
+    /// Status: ALPHA
+    ///
+    /// Dataproxy specific service for creating and deleting bundles.
     #[derive(Debug, Clone)]
     pub struct BundlerServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -2530,6 +2545,11 @@ pub mod bundler_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
+        /// CreateBundle
+        ///
+        /// Status: ALPHA
+        ///
+        /// Creates a bundle with multiple resources, dataproxy only.
         pub async fn create_bundle(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateBundleRequest>,
@@ -2560,6 +2580,11 @@ pub mod bundler_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// DeleteBundle
+        ///
+        /// Status: ALPHA
+        ///
+        /// Delete an existing bundle, dataproxy only.
         pub async fn delete_bundle(
             &mut self,
             request: impl tonic::IntoRequest<super::DeleteBundleRequest>,
@@ -2599,6 +2624,11 @@ pub mod bundler_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with BundlerServiceServer.
     #[async_trait]
     pub trait BundlerService: Send + Sync + 'static {
+        /// CreateBundle
+        ///
+        /// Status: ALPHA
+        ///
+        /// Creates a bundle with multiple resources, dataproxy only.
         async fn create_bundle(
             &self,
             request: tonic::Request<super::CreateBundleRequest>,
@@ -2606,6 +2636,11 @@ pub mod bundler_service_server {
             tonic::Response<super::CreateBundleResponse>,
             tonic::Status,
         >;
+        /// DeleteBundle
+        ///
+        /// Status: ALPHA
+        ///
+        /// Delete an existing bundle, dataproxy only.
         async fn delete_bundle(
             &self,
             request: tonic::Request<super::DeleteBundleRequest>,
@@ -2614,6 +2649,11 @@ pub mod bundler_service_server {
             tonic::Status,
         >;
     }
+    /// BundlerService
+    ///
+    /// Status: ALPHA
+    ///
+    /// Dataproxy specific service for creating and deleting bundles.
     #[derive(Debug)]
     pub struct BundlerServiceServer<T: BundlerService> {
         inner: _Inner<T>,

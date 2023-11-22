@@ -408,7 +408,12 @@ pub mod hooks_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        /// Created Hooks are always associated with the owner that creates the hook
+        /// CreateHook
+        ///
+        /// Status: ALPHA
+        ///
+        /// Creates a replication request
+        /// Hooks are always associated with the owner that created the hook
         pub async fn create_hook(
             &mut self,
             request: impl tonic::IntoRequest<super::CreateHookRequest>,
@@ -439,6 +444,11 @@ pub mod hooks_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// AddProjectsToHook
+        ///
+        /// Status: ALPHA
+        ///
+        /// Assigns a hook to a project
         pub async fn add_projects_to_hook(
             &mut self,
             request: impl tonic::IntoRequest<super::AddProjectsToHookRequest>,
@@ -469,6 +479,11 @@ pub mod hooks_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// ListProjectHooks
+        ///
+        /// Status: ALPHA
+        ///
+        /// List all hooks assigned to a project
         pub async fn list_project_hooks(
             &mut self,
             request: impl tonic::IntoRequest<super::ListProjectHooksRequest>,
@@ -499,6 +514,11 @@ pub mod hooks_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// ListOwnedHooks
+        ///
+        /// Status: ALPHA
+        ///
+        /// List all hooks created by a user
         pub async fn list_owned_hooks(
             &mut self,
             request: impl tonic::IntoRequest<super::ListOwnedHooksRequest>,
@@ -529,6 +549,11 @@ pub mod hooks_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// DeleteHook
+        ///
+        /// Status: ALPHA
+        ///
+        /// Delete a hook by id
         pub async fn delete_hook(
             &mut self,
             request: impl tonic::IntoRequest<super::DeleteHookRequest>,
@@ -559,6 +584,12 @@ pub mod hooks_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// Callback API
+        ///
+        /// Status: ALPHA
+        ///
+        /// Externally triggered hooks should respond to this endpoint to
+        /// signal completion or failure and to provide additional flags for the object
         pub async fn hook_callback(
             &mut self,
             request: impl tonic::IntoRequest<super::HookCallbackRequest>,
@@ -598,7 +629,12 @@ pub mod hooks_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with HooksServiceServer.
     #[async_trait]
     pub trait HooksService: Send + Sync + 'static {
-        /// Created Hooks are always associated with the owner that creates the hook
+        /// CreateHook
+        ///
+        /// Status: ALPHA
+        ///
+        /// Creates a replication request
+        /// Hooks are always associated with the owner that created the hook
         async fn create_hook(
             &self,
             request: tonic::Request<super::CreateHookRequest>,
@@ -606,6 +642,11 @@ pub mod hooks_service_server {
             tonic::Response<super::CreateHookResponse>,
             tonic::Status,
         >;
+        /// AddProjectsToHook
+        ///
+        /// Status: ALPHA
+        ///
+        /// Assigns a hook to a project
         async fn add_projects_to_hook(
             &self,
             request: tonic::Request<super::AddProjectsToHookRequest>,
@@ -613,6 +654,11 @@ pub mod hooks_service_server {
             tonic::Response<super::AddProjectsToHookResponse>,
             tonic::Status,
         >;
+        /// ListProjectHooks
+        ///
+        /// Status: ALPHA
+        ///
+        /// List all hooks assigned to a project
         async fn list_project_hooks(
             &self,
             request: tonic::Request<super::ListProjectHooksRequest>,
@@ -620,6 +666,11 @@ pub mod hooks_service_server {
             tonic::Response<super::ListProjectHooksResponse>,
             tonic::Status,
         >;
+        /// ListOwnedHooks
+        ///
+        /// Status: ALPHA
+        ///
+        /// List all hooks created by a user
         async fn list_owned_hooks(
             &self,
             request: tonic::Request<super::ListOwnedHooksRequest>,
@@ -627,6 +678,11 @@ pub mod hooks_service_server {
             tonic::Response<super::ListOwnedHooksResponse>,
             tonic::Status,
         >;
+        /// DeleteHook
+        ///
+        /// Status: ALPHA
+        ///
+        /// Delete a hook by id
         async fn delete_hook(
             &self,
             request: tonic::Request<super::DeleteHookRequest>,
@@ -634,6 +690,12 @@ pub mod hooks_service_server {
             tonic::Response<super::DeleteHookResponse>,
             tonic::Status,
         >;
+        /// Callback API
+        ///
+        /// Status: ALPHA
+        ///
+        /// Externally triggered hooks should respond to this endpoint to
+        /// signal completion or failure and to provide additional flags for the object
         async fn hook_callback(
             &self,
             request: tonic::Request<super::HookCallbackRequest>,
