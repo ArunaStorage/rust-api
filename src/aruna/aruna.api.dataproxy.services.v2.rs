@@ -424,11 +424,13 @@ pub struct DataProxyInfo {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RequestReplicationRequest {
+pub struct PullReplicationRequest {
     #[prost(message, optional, tag = "1")]
     pub info: ::core::option::Option<DataProxyInfo>,
     #[prost(bool, tag = "2")]
     pub user_initialized: bool,
+    #[prost(string, repeated, tag = "3")]
+    pub object_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -453,33 +455,25 @@ pub struct DataInfos {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RequestReplicationResponse {
-    #[prost(oneof = "request_replication_response::Response", tags = "1, 2")]
-    pub response: ::core::option::Option<request_replication_response::Response>,
-}
-/// Nested message and enum types in `RequestReplicationResponse`.
-pub mod request_replication_response {
-    #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Response {
-        #[prost(message, tag = "1")]
-        DataInfos(super::DataInfos),
-        #[prost(bool, tag = "2")]
-        Ack(bool),
-    }
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InitReplicationRequest {
+pub struct PullReplicationResponse {
+    /// oneof response {
+    ///
+    ///     bool ack = 2;
+    /// }
     #[prost(message, optional, tag = "1")]
     pub data_infos: ::core::option::Option<DataInfos>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InitReplicationResponse {
+pub struct PushReplicationRequest {
+    #[prost(message, optional, tag = "1")]
+    pub data_infos: ::core::option::Option<DataInfos>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PushReplicationResponse {
     #[prost(bool, tag = "1")]
     pub ack: bool,
 }
@@ -510,7 +504,7 @@ pub struct S3Path {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushReplicaRequest {
     #[prost(string, tag = "3")]
-    pub target_location: ::prost::alloc::string::String,
+    pub target_endpoint_id: ::prost::alloc::string::String,
     #[prost(oneof = "push_replica_request::Resource", tags = "1, 2")]
     pub resource: ::core::option::Option<push_replica_request::Resource>,
 }
@@ -556,6 +550,7 @@ pub mod pull_replica_request {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PullReplicaResponse {
+    /// why ?
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
@@ -563,6 +558,7 @@ pub struct PullReplicaResponse {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplicationStatusRequest {
+    /// why ?
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
@@ -862,11 +858,11 @@ pub mod dataproxy_service_client {
         /// Status: BETA
         ///
         /// Creates a replication request
-        pub async fn request_replication(
+        pub async fn pull_replication(
             &mut self,
-            request: impl tonic::IntoRequest<super::RequestReplicationRequest>,
+            request: impl tonic::IntoRequest<super::PullReplicationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::RequestReplicationResponse>,
+            tonic::Response<super::PullReplicationResponse>,
             tonic::Status,
         > {
             self.inner
@@ -880,14 +876,14 @@ pub mod dataproxy_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.dataproxy.services.v2.DataproxyService/RequestReplication",
+                "/aruna.api.dataproxy.services.v2.DataproxyService/PullReplication",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.dataproxy.services.v2.DataproxyService",
-                        "RequestReplication",
+                        "PullReplication",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -897,11 +893,11 @@ pub mod dataproxy_service_client {
         /// Status: BETA
         ///
         /// Provides the necessary url to init replication
-        pub async fn init_replication(
+        pub async fn push_replication(
             &mut self,
-            request: impl tonic::IntoRequest<super::InitReplicationRequest>,
+            request: impl tonic::IntoRequest<super::PushReplicationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::InitReplicationResponse>,
+            tonic::Response<super::PushReplicationResponse>,
             tonic::Status,
         > {
             self.inner
@@ -915,14 +911,14 @@ pub mod dataproxy_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.dataproxy.services.v2.DataproxyService/InitReplication",
+                "/aruna.api.dataproxy.services.v2.DataproxyService/PushReplication",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
                         "aruna.api.dataproxy.services.v2.DataproxyService",
-                        "InitReplication",
+                        "PushReplication",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -1558,11 +1554,11 @@ pub mod dataproxy_service_server {
         /// Status: BETA
         ///
         /// Creates a replication request
-        async fn request_replication(
+        async fn pull_replication(
             &self,
-            request: tonic::Request<super::RequestReplicationRequest>,
+            request: tonic::Request<super::PullReplicationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::RequestReplicationResponse>,
+            tonic::Response<super::PullReplicationResponse>,
             tonic::Status,
         >;
         /// InitReplication
@@ -1570,11 +1566,11 @@ pub mod dataproxy_service_server {
         /// Status: BETA
         ///
         /// Provides the necessary url to init replication
-        async fn init_replication(
+        async fn push_replication(
             &self,
-            request: tonic::Request<super::InitReplicationRequest>,
+            request: tonic::Request<super::PushReplicationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::InitReplicationResponse>,
+            tonic::Response<super::PushReplicationResponse>,
             tonic::Status,
         >;
     }
@@ -1657,28 +1653,25 @@ pub mod dataproxy_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.dataproxy.services.v2.DataproxyService/RequestReplication" => {
+                "/aruna.api.dataproxy.services.v2.DataproxyService/PullReplication" => {
                     #[allow(non_camel_case_types)]
-                    struct RequestReplicationSvc<T: DataproxyService>(pub Arc<T>);
+                    struct PullReplicationSvc<T: DataproxyService>(pub Arc<T>);
                     impl<
                         T: DataproxyService,
-                    > tonic::server::UnaryService<super::RequestReplicationRequest>
-                    for RequestReplicationSvc<T> {
-                        type Response = super::RequestReplicationResponse;
+                    > tonic::server::UnaryService<super::PullReplicationRequest>
+                    for PullReplicationSvc<T> {
+                        type Response = super::PullReplicationResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::RequestReplicationRequest>,
+                            request: tonic::Request<super::PullReplicationRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as DataproxyService>::request_replication(
-                                        &inner,
-                                        request,
-                                    )
+                                <T as DataproxyService>::pull_replication(&inner, request)
                                     .await
                             };
                             Box::pin(fut)
@@ -1691,7 +1684,7 @@ pub mod dataproxy_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = RequestReplicationSvc(inner);
+                        let method = PullReplicationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1707,25 +1700,25 @@ pub mod dataproxy_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.dataproxy.services.v2.DataproxyService/InitReplication" => {
+                "/aruna.api.dataproxy.services.v2.DataproxyService/PushReplication" => {
                     #[allow(non_camel_case_types)]
-                    struct InitReplicationSvc<T: DataproxyService>(pub Arc<T>);
+                    struct PushReplicationSvc<T: DataproxyService>(pub Arc<T>);
                     impl<
                         T: DataproxyService,
-                    > tonic::server::UnaryService<super::InitReplicationRequest>
-                    for InitReplicationSvc<T> {
-                        type Response = super::InitReplicationResponse;
+                    > tonic::server::UnaryService<super::PushReplicationRequest>
+                    for PushReplicationSvc<T> {
+                        type Response = super::PushReplicationResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::InitReplicationRequest>,
+                            request: tonic::Request<super::PushReplicationRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as DataproxyService>::init_replication(&inner, request)
+                                <T as DataproxyService>::push_replication(&inner, request)
                                     .await
                             };
                             Box::pin(fut)
@@ -1738,7 +1731,7 @@ pub mod dataproxy_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = InitReplicationSvc(inner);
+                        let method = PushReplicationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
