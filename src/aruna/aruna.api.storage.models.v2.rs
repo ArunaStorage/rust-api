@@ -730,7 +730,8 @@ pub enum InternalRelationVariant {
     Version = 3,
     Metadata = 4,
     Policy = 5,
-    Custom = 6,
+    Deleted = 6,
+    Custom = 7,
 }
 impl InternalRelationVariant {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -747,6 +748,7 @@ impl InternalRelationVariant {
             InternalRelationVariant::Version => "INTERNAL_RELATION_VARIANT_VERSION",
             InternalRelationVariant::Metadata => "INTERNAL_RELATION_VARIANT_METADATA",
             InternalRelationVariant::Policy => "INTERNAL_RELATION_VARIANT_POLICY",
+            InternalRelationVariant::Deleted => "INTERNAL_RELATION_VARIANT_DELETED",
             InternalRelationVariant::Custom => "INTERNAL_RELATION_VARIANT_CUSTOM",
         }
     }
@@ -759,6 +761,7 @@ impl InternalRelationVariant {
             "INTERNAL_RELATION_VARIANT_VERSION" => Some(Self::Version),
             "INTERNAL_RELATION_VARIANT_METADATA" => Some(Self::Metadata),
             "INTERNAL_RELATION_VARIANT_POLICY" => Some(Self::Policy),
+            "INTERNAL_RELATION_VARIANT_DELETED" => Some(Self::Deleted),
             "INTERNAL_RELATION_VARIANT_CUSTOM" => Some(Self::Custom),
             _ => None,
         }
