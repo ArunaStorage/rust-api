@@ -1,1366 +1,6 @@
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateDatasetRequest {
-    /// dataset name
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    /// Description
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    /// dataset specific labels / hooks
-    #[prost(message, repeated, tag = "3")]
-    pub key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
-    /// Internal / External relations (URLs / IDs from external sources)
-    #[prost(message, repeated, tag = "4")]
-    pub relations: ::prost::alloc::vec::Vec<super::super::models::v2::Relation>,
-    /// DataClass
-    #[prost(enumeration = "super::super::models::v2::DataClass", tag = "5")]
-    pub data_class: i32,
-    #[prost(string, optional, tag = "8")]
-    pub metadata_license_tag: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(string, optional, tag = "9")]
-    pub default_data_license_tag: ::core::option::Option<::prost::alloc::string::String>,
-    /// Parent_id MUST be dataset
-    #[prost(oneof = "create_dataset_request::Parent", tags = "6, 7")]
-    pub parent: ::core::option::Option<create_dataset_request::Parent>,
-}
-/// Nested message and enum types in `CreateDatasetRequest`.
-pub mod create_dataset_request {
-    /// Parent_id MUST be dataset
-    #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Parent {
-        #[prost(string, tag = "6")]
-        ProjectId(::prost::alloc::string::String),
-        #[prost(string, tag = "7")]
-        CollectionId(::prost::alloc::string::String),
-    }
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateDatasetResponse {
-    /// The new dataset_id
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetRequest {
-    /// Requested id
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetResponse {
-    /// Overview of the requested dataset
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetsRequest {
-    #[prost(string, repeated, tag = "1")]
-    pub dataset_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetDatasetsResponse {
-    /// List of dataset overviews
-    #[prost(message, repeated, tag = "1")]
-    pub datasets: ::prost::alloc::vec::Vec<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteDatasetRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteDatasetResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetNameRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetNameResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetDescriptionRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetDescriptionResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetKeyValuesRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "2")]
-    pub add_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
-    #[prost(message, repeated, tag = "3")]
-    pub remove_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetKeyValuesResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetDataClassRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "super::super::models::v2::DataClass", tag = "2")]
-    pub data_class: i32,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetDataClassResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SnapshotDatasetRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SnapshotDatasetResponse {
-    /// This dataset will be returned via an Persistent Identifier! Updates will be impossible
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetLicensesRequest {
-    #[prost(string, tag = "1")]
-    pub dataset_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub metadata_license_tag: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub default_data_license_tag: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateDatasetLicensesResponse {
-    #[prost(message, optional, tag = "1")]
-    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
-}
-/// Generated client implementations.
-pub mod dataset_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    /// DatasetService
-    ///
-    /// Contains all methods that get/create or update Dataset and associated resources
-    #[derive(Debug, Clone)]
-    pub struct DatasetServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl DatasetServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
-    }
-    impl<T> DatasetServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> DatasetServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            DatasetServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        /// CreateNewDataset
-        ///
-        /// Status: BETA
-        ///
-        /// creates a new Dataset
-        pub async fn create_dataset(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateDatasetResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/CreateDataset",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "CreateDataset",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// GetDataset
-        ///
-        /// Status: BETA
-        ///
-        /// Request a specific dataset by ID
-        pub async fn get_dataset(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetDatasetResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/GetDataset",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "GetDataset",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// GetDatasets
-        ///
-        /// Status: BETA
-        ///
-        /// Queries multiple datasets by ID
-        pub async fn get_datasets(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetDatasetsRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetDatasetsResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/GetDatasets",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "GetDatasets",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// DeleteDataset
-        ///
-        /// Status: STABLE
-        ///
-        /// This request deletes the dataset.
-        pub async fn delete_dataset(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteDatasetResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/DeleteDataset",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "DeleteDataset",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// UpdateDatasetName
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset name. Caveat! Will rename the "s3 bucket" for data proxies!
-        pub async fn update_dataset_name(
-            &mut self,
-            request: impl tonic::IntoRequest<super::UpdateDatasetNameRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetNameResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetName",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "UpdateDatasetName",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// UpdateDatasetDescription
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset description.
-        pub async fn update_dataset_description(
-            &mut self,
-            request: impl tonic::IntoRequest<super::UpdateDatasetDescriptionRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetDescriptionResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDescription",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "UpdateDatasetDescription",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// UpdateDatasetKeyValues
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset key values.
-        pub async fn update_dataset_key_values(
-            &mut self,
-            request: impl tonic::IntoRequest<super::UpdateDatasetKeyValuesRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetKeyValuesResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetKeyValues",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "UpdateDatasetKeyValues",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// UpdateDatasetDataClass
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset name. All (meta) data will be overwritten.
-        pub async fn update_dataset_data_class(
-            &mut self,
-            request: impl tonic::IntoRequest<super::UpdateDatasetDataClassRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetDataClassResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDataClass",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "UpdateDatasetDataClass",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// SnapshotDatasetRequest
-        ///
-        /// Status: BETA
-        ///
-        /// Archives the full dataset, rendering all downstream relations immutable
-        pub async fn snapshot_dataset(
-            &mut self,
-            request: impl tonic::IntoRequest<super::SnapshotDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::SnapshotDatasetResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/SnapshotDataset",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "SnapshotDataset",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// UpdateLicenses
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset metadata license and/or default data license.
-        pub async fn update_dataset_licenses(
-            &mut self,
-            request: impl tonic::IntoRequest<super::UpdateDatasetLicensesRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetLicensesResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetLicenses",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.DatasetService",
-                        "UpdateDatasetLicenses",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-    }
-}
-/// Generated server implementations.
-pub mod dataset_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with DatasetServiceServer.
-    #[async_trait]
-    pub trait DatasetService: Send + Sync + 'static {
-        /// CreateNewDataset
-        ///
-        /// Status: BETA
-        ///
-        /// creates a new Dataset
-        async fn create_dataset(
-            &self,
-            request: tonic::Request<super::CreateDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateDatasetResponse>,
-            tonic::Status,
-        >;
-        /// GetDataset
-        ///
-        /// Status: BETA
-        ///
-        /// Request a specific dataset by ID
-        async fn get_dataset(
-            &self,
-            request: tonic::Request<super::GetDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetDatasetResponse>,
-            tonic::Status,
-        >;
-        /// GetDatasets
-        ///
-        /// Status: BETA
-        ///
-        /// Queries multiple datasets by ID
-        async fn get_datasets(
-            &self,
-            request: tonic::Request<super::GetDatasetsRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetDatasetsResponse>,
-            tonic::Status,
-        >;
-        /// DeleteDataset
-        ///
-        /// Status: STABLE
-        ///
-        /// This request deletes the dataset.
-        async fn delete_dataset(
-            &self,
-            request: tonic::Request<super::DeleteDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteDatasetResponse>,
-            tonic::Status,
-        >;
-        /// UpdateDatasetName
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset name. Caveat! Will rename the "s3 bucket" for data proxies!
-        async fn update_dataset_name(
-            &self,
-            request: tonic::Request<super::UpdateDatasetNameRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetNameResponse>,
-            tonic::Status,
-        >;
-        /// UpdateDatasetDescription
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset description.
-        async fn update_dataset_description(
-            &self,
-            request: tonic::Request<super::UpdateDatasetDescriptionRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetDescriptionResponse>,
-            tonic::Status,
-        >;
-        /// UpdateDatasetKeyValues
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset key values.
-        async fn update_dataset_key_values(
-            &self,
-            request: tonic::Request<super::UpdateDatasetKeyValuesRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetKeyValuesResponse>,
-            tonic::Status,
-        >;
-        /// UpdateDatasetDataClass
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset name. All (meta) data will be overwritten.
-        async fn update_dataset_data_class(
-            &self,
-            request: tonic::Request<super::UpdateDatasetDataClassRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetDataClassResponse>,
-            tonic::Status,
-        >;
-        /// SnapshotDatasetRequest
-        ///
-        /// Status: BETA
-        ///
-        /// Archives the full dataset, rendering all downstream relations immutable
-        async fn snapshot_dataset(
-            &self,
-            request: tonic::Request<super::SnapshotDatasetRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::SnapshotDatasetResponse>,
-            tonic::Status,
-        >;
-        /// UpdateLicenses
-        ///
-        /// Status: BETA
-        ///
-        /// Updates the dataset metadata license and/or default data license.
-        async fn update_dataset_licenses(
-            &self,
-            request: tonic::Request<super::UpdateDatasetLicensesRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::UpdateDatasetLicensesResponse>,
-            tonic::Status,
-        >;
-    }
-    /// DatasetService
-    ///
-    /// Contains all methods that get/create or update Dataset and associated resources
-    #[derive(Debug)]
-    pub struct DatasetServiceServer<T: DatasetService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: EnabledCompressionEncodings,
-        send_compression_encodings: EnabledCompressionEncodings,
-        max_decoding_message_size: Option<usize>,
-        max_encoding_message_size: Option<usize>,
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: DatasetService> DatasetServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            Self::from_arc(Arc::new(inner))
-        }
-        pub fn from_arc(inner: Arc<T>) -> Self {
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-                max_decoding_message_size: None,
-                max_encoding_message_size: None,
-            }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-        /// Enable decompressing requests with the given encoding.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.accept_compression_encodings.enable(encoding);
-            self
-        }
-        /// Compress responses with the given encoding, if the client supports it.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.send_compression_encodings.enable(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.max_decoding_message_size = Some(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.max_encoding_message_size = Some(limit);
-            self
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetServiceServer<T>
-    where
-        T: DatasetService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = std::convert::Infallible;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(
-            &mut self,
-            _cx: &mut Context<'_>,
-        ) -> Poll<std::result::Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/aruna.api.storage.services.v2.DatasetService/CreateDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::CreateDatasetRequest>
-                    for CreateDatasetSvc<T> {
-                        type Response = super::CreateDatasetResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::create_dataset(&inner, request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/GetDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::GetDatasetRequest>
-                    for GetDatasetSvc<T> {
-                        type Response = super::GetDatasetResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::get_dataset(&inner, request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/GetDatasets" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetDatasetsSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::GetDatasetsRequest>
-                    for GetDatasetsSvc<T> {
-                        type Response = super::GetDatasetsResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetDatasetsRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::get_datasets(&inner, request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetDatasetsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/DeleteDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::DeleteDatasetRequest>
-                    for DeleteDatasetSvc<T> {
-                        type Response = super::DeleteDatasetResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::delete_dataset(&inner, request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetName" => {
-                    #[allow(non_camel_case_types)]
-                    struct UpdateDatasetNameSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::UpdateDatasetNameRequest>
-                    for UpdateDatasetNameSvc<T> {
-                        type Response = super::UpdateDatasetNameResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::UpdateDatasetNameRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::update_dataset_name(&inner, request)
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = UpdateDatasetNameSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDescription" => {
-                    #[allow(non_camel_case_types)]
-                    struct UpdateDatasetDescriptionSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::UpdateDatasetDescriptionRequest>
-                    for UpdateDatasetDescriptionSvc<T> {
-                        type Response = super::UpdateDatasetDescriptionResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::UpdateDatasetDescriptionRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::update_dataset_description(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = UpdateDatasetDescriptionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetKeyValues" => {
-                    #[allow(non_camel_case_types)]
-                    struct UpdateDatasetKeyValuesSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::UpdateDatasetKeyValuesRequest>
-                    for UpdateDatasetKeyValuesSvc<T> {
-                        type Response = super::UpdateDatasetKeyValuesResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::UpdateDatasetKeyValuesRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::update_dataset_key_values(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = UpdateDatasetKeyValuesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDataClass" => {
-                    #[allow(non_camel_case_types)]
-                    struct UpdateDatasetDataClassSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::UpdateDatasetDataClassRequest>
-                    for UpdateDatasetDataClassSvc<T> {
-                        type Response = super::UpdateDatasetDataClassResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::UpdateDatasetDataClassRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::update_dataset_data_class(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = UpdateDatasetDataClassSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/SnapshotDataset" => {
-                    #[allow(non_camel_case_types)]
-                    struct SnapshotDatasetSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::SnapshotDatasetRequest>
-                    for SnapshotDatasetSvc<T> {
-                        type Response = super::SnapshotDatasetResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::SnapshotDatasetRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::snapshot_dataset(&inner, request)
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = SnapshotDatasetSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetLicenses" => {
-                    #[allow(non_camel_case_types)]
-                    struct UpdateDatasetLicensesSvc<T: DatasetService>(pub Arc<T>);
-                    impl<
-                        T: DatasetService,
-                    > tonic::server::UnaryService<super::UpdateDatasetLicensesRequest>
-                    for UpdateDatasetLicensesSvc<T> {
-                        type Response = super::UpdateDatasetLicensesResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::UpdateDatasetLicensesRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as DatasetService>::update_dataset_licenses(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = UpdateDatasetLicensesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
-            }
-        }
-    }
-    impl<T: DatasetService> Clone for DatasetServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-                max_decoding_message_size: self.max_decoding_message_size,
-                max_encoding_message_size: self.max_encoding_message_size,
-            }
-        }
-    }
-    impl<T: DatasetService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(Arc::clone(&self.0))
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: DatasetService> tonic::server::NamedService for DatasetServiceServer<T> {
-        const NAME: &'static str = "aruna.api.storage.services.v2.DatasetService";
-    }
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserPermission {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
@@ -4267,6 +2907,1366 @@ pub mod data_replication_service_server {
     impl<T: DataReplicationService> tonic::server::NamedService
     for DataReplicationServiceServer<T> {
         const NAME: &'static str = "aruna.api.storage.services.v2.DataReplicationService";
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDatasetRequest {
+    /// dataset name
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    /// Description
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    /// dataset specific labels / hooks
+    #[prost(message, repeated, tag = "3")]
+    pub key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
+    /// Internal / External relations (URLs / IDs from external sources)
+    #[prost(message, repeated, tag = "4")]
+    pub relations: ::prost::alloc::vec::Vec<super::super::models::v2::Relation>,
+    /// DataClass
+    #[prost(enumeration = "super::super::models::v2::DataClass", tag = "5")]
+    pub data_class: i32,
+    #[prost(string, optional, tag = "8")]
+    pub metadata_license_tag: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "9")]
+    pub default_data_license_tag: ::core::option::Option<::prost::alloc::string::String>,
+    /// Parent_id MUST be dataset
+    #[prost(oneof = "create_dataset_request::Parent", tags = "6, 7")]
+    pub parent: ::core::option::Option<create_dataset_request::Parent>,
+}
+/// Nested message and enum types in `CreateDatasetRequest`.
+pub mod create_dataset_request {
+    /// Parent_id MUST be dataset
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Parent {
+        #[prost(string, tag = "6")]
+        ProjectId(::prost::alloc::string::String),
+        #[prost(string, tag = "7")]
+        CollectionId(::prost::alloc::string::String),
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDatasetResponse {
+    /// The new dataset_id
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetRequest {
+    /// Requested id
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetResponse {
+    /// Overview of the requested dataset
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetsRequest {
+    #[prost(string, repeated, tag = "1")]
+    pub dataset_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDatasetsResponse {
+    /// List of dataset overviews
+    #[prost(message, repeated, tag = "1")]
+    pub datasets: ::prost::alloc::vec::Vec<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteDatasetRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteDatasetResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetNameRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetNameResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetDescriptionRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetDescriptionResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetKeyValuesRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub add_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
+    #[prost(message, repeated, tag = "3")]
+    pub remove_key_values: ::prost::alloc::vec::Vec<super::super::models::v2::KeyValue>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetKeyValuesResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetDataClassRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::super::models::v2::DataClass", tag = "2")]
+    pub data_class: i32,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetDataClassResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SnapshotDatasetRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SnapshotDatasetResponse {
+    /// This dataset will be returned via an Persistent Identifier! Updates will be impossible
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetLicensesRequest {
+    #[prost(string, tag = "1")]
+    pub dataset_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub metadata_license_tag: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub default_data_license_tag: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateDatasetLicensesResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dataset: ::core::option::Option<super::super::models::v2::Dataset>,
+}
+/// Generated client implementations.
+pub mod dataset_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// DatasetService
+    ///
+    /// Contains all methods that get/create or update Dataset and associated resources
+    #[derive(Debug, Clone)]
+    pub struct DatasetServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl DatasetServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> DatasetServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> DatasetServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            DatasetServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        /// CreateNewDataset
+        ///
+        /// Status: BETA
+        ///
+        /// creates a new Dataset
+        pub async fn create_dataset(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateDatasetResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/CreateDataset",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "CreateDataset",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetDataset
+        ///
+        /// Status: BETA
+        ///
+        /// Request a specific dataset by ID
+        pub async fn get_dataset(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDatasetResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/GetDataset",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "GetDataset",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetDatasets
+        ///
+        /// Status: BETA
+        ///
+        /// Queries multiple datasets by ID
+        pub async fn get_datasets(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDatasetsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDatasetsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/GetDatasets",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "GetDatasets",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// DeleteDataset
+        ///
+        /// Status: STABLE
+        ///
+        /// This request deletes the dataset.
+        pub async fn delete_dataset(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteDatasetResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/DeleteDataset",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "DeleteDataset",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// UpdateDatasetName
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset name. Caveat! Will rename the "s3 bucket" for data proxies!
+        pub async fn update_dataset_name(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateDatasetNameRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetNameResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetName",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "UpdateDatasetName",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// UpdateDatasetDescription
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset description.
+        pub async fn update_dataset_description(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateDatasetDescriptionRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetDescriptionResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDescription",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "UpdateDatasetDescription",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// UpdateDatasetKeyValues
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset key values.
+        pub async fn update_dataset_key_values(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateDatasetKeyValuesRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetKeyValuesResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetKeyValues",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "UpdateDatasetKeyValues",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// UpdateDatasetDataClass
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset name. All (meta) data will be overwritten.
+        pub async fn update_dataset_data_class(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateDatasetDataClassRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetDataClassResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDataClass",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "UpdateDatasetDataClass",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// SnapshotDatasetRequest
+        ///
+        /// Status: BETA
+        ///
+        /// Archives the full dataset, rendering all downstream relations immutable
+        pub async fn snapshot_dataset(
+            &mut self,
+            request: impl tonic::IntoRequest<super::SnapshotDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SnapshotDatasetResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/SnapshotDataset",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "SnapshotDataset",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// UpdateLicenses
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset metadata license and/or default data license.
+        pub async fn update_dataset_licenses(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateDatasetLicensesRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetLicensesResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetLicenses",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.DatasetService",
+                        "UpdateDatasetLicenses",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated server implementations.
+pub mod dataset_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    /// Generated trait containing gRPC methods that should be implemented for use with DatasetServiceServer.
+    #[async_trait]
+    pub trait DatasetService: Send + Sync + 'static {
+        /// CreateNewDataset
+        ///
+        /// Status: BETA
+        ///
+        /// creates a new Dataset
+        async fn create_dataset(
+            &self,
+            request: tonic::Request<super::CreateDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateDatasetResponse>,
+            tonic::Status,
+        >;
+        /// GetDataset
+        ///
+        /// Status: BETA
+        ///
+        /// Request a specific dataset by ID
+        async fn get_dataset(
+            &self,
+            request: tonic::Request<super::GetDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDatasetResponse>,
+            tonic::Status,
+        >;
+        /// GetDatasets
+        ///
+        /// Status: BETA
+        ///
+        /// Queries multiple datasets by ID
+        async fn get_datasets(
+            &self,
+            request: tonic::Request<super::GetDatasetsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDatasetsResponse>,
+            tonic::Status,
+        >;
+        /// DeleteDataset
+        ///
+        /// Status: STABLE
+        ///
+        /// This request deletes the dataset.
+        async fn delete_dataset(
+            &self,
+            request: tonic::Request<super::DeleteDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteDatasetResponse>,
+            tonic::Status,
+        >;
+        /// UpdateDatasetName
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset name. Caveat! Will rename the "s3 bucket" for data proxies!
+        async fn update_dataset_name(
+            &self,
+            request: tonic::Request<super::UpdateDatasetNameRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetNameResponse>,
+            tonic::Status,
+        >;
+        /// UpdateDatasetDescription
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset description.
+        async fn update_dataset_description(
+            &self,
+            request: tonic::Request<super::UpdateDatasetDescriptionRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetDescriptionResponse>,
+            tonic::Status,
+        >;
+        /// UpdateDatasetKeyValues
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset key values.
+        async fn update_dataset_key_values(
+            &self,
+            request: tonic::Request<super::UpdateDatasetKeyValuesRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetKeyValuesResponse>,
+            tonic::Status,
+        >;
+        /// UpdateDatasetDataClass
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset name. All (meta) data will be overwritten.
+        async fn update_dataset_data_class(
+            &self,
+            request: tonic::Request<super::UpdateDatasetDataClassRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetDataClassResponse>,
+            tonic::Status,
+        >;
+        /// SnapshotDatasetRequest
+        ///
+        /// Status: BETA
+        ///
+        /// Archives the full dataset, rendering all downstream relations immutable
+        async fn snapshot_dataset(
+            &self,
+            request: tonic::Request<super::SnapshotDatasetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SnapshotDatasetResponse>,
+            tonic::Status,
+        >;
+        /// UpdateLicenses
+        ///
+        /// Status: BETA
+        ///
+        /// Updates the dataset metadata license and/or default data license.
+        async fn update_dataset_licenses(
+            &self,
+            request: tonic::Request<super::UpdateDatasetLicensesRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateDatasetLicensesResponse>,
+            tonic::Status,
+        >;
+    }
+    /// DatasetService
+    ///
+    /// Contains all methods that get/create or update Dataset and associated resources
+    #[derive(Debug)]
+    pub struct DatasetServiceServer<T: DatasetService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
+        max_decoding_message_size: Option<usize>,
+        max_encoding_message_size: Option<usize>,
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: DatasetService> DatasetServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            Self::from_arc(Arc::new(inner))
+        }
+        pub fn from_arc(inner: Arc<T>) -> Self {
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+                max_decoding_message_size: None,
+                max_encoding_message_size: None,
+            }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.max_decoding_message_size = Some(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.max_encoding_message_size = Some(limit);
+            self
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for DatasetServiceServer<T>
+    where
+        T: DatasetService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = std::convert::Infallible;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(
+            &mut self,
+            _cx: &mut Context<'_>,
+        ) -> Poll<std::result::Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/aruna.api.storage.services.v2.DatasetService/CreateDataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateDatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::CreateDatasetRequest>
+                    for CreateDatasetSvc<T> {
+                        type Response = super::CreateDatasetResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateDatasetRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::create_dataset(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/GetDataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::GetDatasetRequest>
+                    for GetDatasetSvc<T> {
+                        type Response = super::GetDatasetResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetDatasetRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::get_dataset(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/GetDatasets" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDatasetsSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::GetDatasetsRequest>
+                    for GetDatasetsSvc<T> {
+                        type Response = super::GetDatasetsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetDatasetsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::get_datasets(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetDatasetsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/DeleteDataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteDatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::DeleteDatasetRequest>
+                    for DeleteDatasetSvc<T> {
+                        type Response = super::DeleteDatasetResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::DeleteDatasetRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::delete_dataset(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetName" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateDatasetNameSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::UpdateDatasetNameRequest>
+                    for UpdateDatasetNameSvc<T> {
+                        type Response = super::UpdateDatasetNameResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::UpdateDatasetNameRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::update_dataset_name(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateDatasetNameSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDescription" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateDatasetDescriptionSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::UpdateDatasetDescriptionRequest>
+                    for UpdateDatasetDescriptionSvc<T> {
+                        type Response = super::UpdateDatasetDescriptionResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::UpdateDatasetDescriptionRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::update_dataset_description(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateDatasetDescriptionSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetKeyValues" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateDatasetKeyValuesSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::UpdateDatasetKeyValuesRequest>
+                    for UpdateDatasetKeyValuesSvc<T> {
+                        type Response = super::UpdateDatasetKeyValuesResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::UpdateDatasetKeyValuesRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::update_dataset_key_values(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateDatasetKeyValuesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetDataClass" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateDatasetDataClassSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::UpdateDatasetDataClassRequest>
+                    for UpdateDatasetDataClassSvc<T> {
+                        type Response = super::UpdateDatasetDataClassResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::UpdateDatasetDataClassRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::update_dataset_data_class(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateDatasetDataClassSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/SnapshotDataset" => {
+                    #[allow(non_camel_case_types)]
+                    struct SnapshotDatasetSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::SnapshotDatasetRequest>
+                    for SnapshotDatasetSvc<T> {
+                        type Response = super::SnapshotDatasetResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::SnapshotDatasetRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::snapshot_dataset(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SnapshotDatasetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.DatasetService/UpdateDatasetLicenses" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateDatasetLicensesSvc<T: DatasetService>(pub Arc<T>);
+                    impl<
+                        T: DatasetService,
+                    > tonic::server::UnaryService<super::UpdateDatasetLicensesRequest>
+                    for UpdateDatasetLicensesSvc<T> {
+                        type Response = super::UpdateDatasetLicensesResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::UpdateDatasetLicensesRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DatasetService>::update_dataset_licenses(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateDatasetLicensesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
+            }
+        }
+    }
+    impl<T: DatasetService> Clone for DatasetServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+                max_decoding_message_size: self.max_decoding_message_size,
+                max_encoding_message_size: self.max_encoding_message_size,
+            }
+        }
+    }
+    impl<T: DatasetService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(Arc::clone(&self.0))
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: DatasetService> tonic::server::NamedService for DatasetServiceServer<T> {
+        const NAME: &'static str = "aruna.api.storage.services.v2.DatasetService";
     }
 }
 #[derive(serde::Deserialize, serde::Serialize)]

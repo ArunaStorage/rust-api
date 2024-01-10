@@ -536,8 +536,12 @@ pub struct ObjectInfo {
     pub object_id: ::prost::alloc::string::String,
     #[prost(int64, tag = "2")]
     pub chunks: i64,
+    #[prost(int64, tag = "3")]
+    pub raw_size: i64,
+    #[prost(uint32, repeated, tag = "4")]
+    pub block_list: ::prost::alloc::vec::Vec<u32>,
     /// JSON encoded proxy specific extra fields
-    #[prost(string, optional, tag = "3")]
+    #[prost(string, optional, tag = "5")]
     pub extra: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
