@@ -3571,23 +3571,39 @@ pub struct ReplicateProjectDataRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplicateProjectDataResponse {
-    #[prost(enumeration = "ReplicationStatus", tag = "1")]
+    #[prost(enumeration = "super::super::models::v2::ReplicationStatus", tag = "1")]
     pub status: i32,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PartialReplicateDataRequest {
-    #[prost(string, tag = "1")]
-    pub resource_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
+    #[prost(string, tag = "4")]
     pub endpoint_id: ::prost::alloc::string::String,
+    #[prost(oneof = "partial_replicate_data_request::DataVariant", tags = "1, 2, 3")]
+    pub data_variant: ::core::option::Option<
+        partial_replicate_data_request::DataVariant,
+    >,
+}
+/// Nested message and enum types in `PartialReplicateDataRequest`.
+pub mod partial_replicate_data_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum DataVariant {
+        #[prost(string, tag = "1")]
+        CollectionId(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        DatasetId(::prost::alloc::string::String),
+        #[prost(string, tag = "3")]
+        ObjectId(::prost::alloc::string::String),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PartialReplicateDataResponse {
-    #[prost(enumeration = "ReplicationStatus", tag = "1")]
+    #[prost(enumeration = "super::super::models::v2::ReplicationStatus", tag = "1")]
     pub status: i32,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -3595,10 +3611,10 @@ pub struct PartialReplicateDataResponse {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateReplicationStatusRequest {
     #[prost(string, tag = "1")]
-    pub resource_id: ::prost::alloc::string::String,
+    pub object_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub endpoint_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "ReplicationStatus", tag = "3")]
+    #[prost(enumeration = "super::super::models::v2::ReplicationStatus", tag = "3")]
     pub status: i32,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -3618,8 +3634,33 @@ pub struct GetReplicationStatusRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetReplicationStatusResponse {
-    #[prost(enumeration = "ReplicationStatus", tag = "1")]
-    pub status: i32,
+    #[prost(message, repeated, tag = "1")]
+    pub infos: ::prost::alloc::vec::Vec<ReplicationInfo>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReplicationInfo {
+    #[prost(message, optional, tag = "5")]
+    pub endpoint_info: ::core::option::Option<super::super::models::v2::DataEndpoint>,
+    #[prost(oneof = "replication_info::Resource", tags = "1, 2, 3, 4")]
+    pub resource: ::core::option::Option<replication_info::Resource>,
+}
+/// Nested message and enum types in `ReplicationInfo`.
+pub mod replication_info {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Resource {
+        #[prost(string, tag = "1")]
+        ProjectId(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        CollectionId(::prost::alloc::string::String),
+        #[prost(string, tag = "3")]
+        DatasetId(::prost::alloc::string::String),
+        #[prost(string, tag = "4")]
+        ObjectId(::prost::alloc::string::String),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -3634,49 +3675,12 @@ pub struct DeleteReplicationRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteReplicationResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum ReplicationStatus {
-    Unspecified = 0,
-    Waiting = 1,
-    Running = 2,
-    Finished = 3,
-    Error = 4,
-}
-impl ReplicationStatus {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            ReplicationStatus::Unspecified => "REPLICATION_STATUS_UNSPECIFIED",
-            ReplicationStatus::Waiting => "REPLICATION_STATUS_WAITING",
-            ReplicationStatus::Running => "REPLICATION_STATUS_RUNNING",
-            ReplicationStatus::Finished => "REPLICATION_STATUS_FINISHED",
-            ReplicationStatus::Error => "REPLICATION_STATUS_ERROR",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "REPLICATION_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
-            "REPLICATION_STATUS_WAITING" => Some(Self::Waiting),
-            "REPLICATION_STATUS_RUNNING" => Some(Self::Running),
-            "REPLICATION_STATUS_FINISHED" => Some(Self::Finished),
-            "REPLICATION_STATUS_ERROR" => Some(Self::Error),
-            _ => None,
-        }
-    }
-}
 /// Generated client implementations.
 pub mod data_replication_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
     /// DataReplicationService
-    ///
     /// Endpoint specific methods for syncing data
     #[derive(Debug, Clone)]
     pub struct DataReplicationServiceClient<T> {
@@ -3995,7 +3999,6 @@ pub mod data_replication_service_server {
         >;
     }
     /// DataReplicationService
-    ///
     /// Endpoint specific methods for syncing data
     #[derive(Debug)]
     pub struct DataReplicationServiceServer<T: DataReplicationService> {

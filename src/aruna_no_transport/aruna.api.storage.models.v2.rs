@@ -237,10 +237,56 @@ pub struct Endpoint {
 pub struct DataEndpoint {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
+    #[prost(enumeration = "ReplicationStatus", optional, tag = "4")]
+    pub status: ::core::option::Option<i32>,
     /// Hint if the objects' project
     /// is fully synced to the endpoint
-    #[prost(bool, tag = "2")]
-    pub full_synced: bool,
+    #[prost(oneof = "data_endpoint::Variant", tags = "2, 3")]
+    pub variant: ::core::option::Option<data_endpoint::Variant>,
+}
+/// Nested message and enum types in `DataEndpoint`.
+pub mod data_endpoint {
+    /// Hint if the objects' project
+    /// is fully synced to the endpoint
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Variant {
+        #[prost(message, tag = "2")]
+        FullSync(super::FullSync),
+        #[prost(message, tag = "3")]
+        PartialSync(super::PartialSync),
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FullSync {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PartialSync {
+    #[prost(oneof = "partial_sync::Origin", tags = "1, 2, 3, 4")]
+    pub origin: ::core::option::Option<partial_sync::Origin>,
+}
+/// Nested message and enum types in `PartialSync`.
+pub mod partial_sync {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Origin {
+        #[prost(string, tag = "1")]
+        ProjectId(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        CollectionId(::prost::alloc::string::String),
+        #[prost(string, tag = "3")]
+        DatasetId(::prost::alloc::string::String),
+        #[prost(string, tag = "4")]
+        ObjectId(::prost::alloc::string::String),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -947,6 +993,42 @@ impl ResourceVariant {
             "RESOURCE_VARIANT_COLLECTION" => Some(Self::Collection),
             "RESOURCE_VARIANT_DATASET" => Some(Self::Dataset),
             "RESOURCE_VARIANT_OBJECT" => Some(Self::Object),
+            _ => None,
+        }
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ReplicationStatus {
+    Unspecified = 0,
+    Waiting = 1,
+    Running = 2,
+    Finished = 3,
+    Error = 4,
+}
+impl ReplicationStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            ReplicationStatus::Unspecified => "REPLICATION_STATUS_UNSPECIFIED",
+            ReplicationStatus::Waiting => "REPLICATION_STATUS_WAITING",
+            ReplicationStatus::Running => "REPLICATION_STATUS_RUNNING",
+            ReplicationStatus::Finished => "REPLICATION_STATUS_FINISHED",
+            ReplicationStatus::Error => "REPLICATION_STATUS_ERROR",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "REPLICATION_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "REPLICATION_STATUS_WAITING" => Some(Self::Waiting),
+            "REPLICATION_STATUS_RUNNING" => Some(Self::Running),
+            "REPLICATION_STATUS_FINISHED" => Some(Self::Finished),
+            "REPLICATION_STATUS_ERROR" => Some(Self::Error),
             _ => None,
         }
     }

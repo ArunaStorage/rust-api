@@ -442,23 +442,142 @@ pub mod bundler_service_server {
         const NAME: &'static str = "aruna.api.dataproxy.services.v2.BundlerService";
     }
 }
+/// Messages (requests) from PROXY B
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DataProxyInfo {
+pub struct InitMessage {
     #[prost(string, tag = "1")]
     pub dataproxy_id: ::prost::alloc::string::String,
-    #[prost(int64, tag = "2")]
-    pub available_space: i64,
+    #[prost(string, repeated, tag = "2")]
+    pub object_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RequestReplicationRequest {
-    #[prost(message, optional, tag = "1")]
-    pub info: ::core::option::Option<DataProxyInfo>,
-    #[prost(bool, tag = "2")]
-    pub user_initialized: bool,
+pub struct InfoAckMessage {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ChunkAckMessage {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub chunk_idx: i64,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RetryChunkMessage {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub chunk_idx: i64,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Empty {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ErrorMessage {
+    #[prost(oneof = "error_message::Error", tags = "1, 2, 3")]
+    pub error: ::core::option::Option<error_message::Error>,
+}
+/// Nested message and enum types in `ErrorMessage`.
+pub mod error_message {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Error {
+        #[prost(message, tag = "1")]
+        RetryChunk(super::RetryChunkMessage),
+        #[prost(message, tag = "2")]
+        Abort(super::Empty),
+        #[prost(string, tag = "3")]
+        RetryObjectId(::prost::alloc::string::String),
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PullReplicationRequest {
+    #[prost(oneof = "pull_replication_request::Message", tags = "1, 2, 3, 4, 5")]
+    pub message: ::core::option::Option<pull_replication_request::Message>,
+}
+/// Nested message and enum types in `PullReplicationRequest`.
+pub mod pull_replication_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Message {
+        #[prost(message, tag = "1")]
+        InitMessage(super::InitMessage),
+        #[prost(message, tag = "2")]
+        InfoAckMessage(super::InfoAckMessage),
+        #[prost(message, tag = "3")]
+        ChunkAckMessage(super::ChunkAckMessage),
+        #[prost(message, tag = "4")]
+        ErrorMessage(super::ErrorMessage),
+        #[prost(message, tag = "5")]
+        FinishMessage(super::Empty),
+    }
+}
+/// Messages (responses) from PROXY A
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ObjectInfo {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub chunks: i64,
+    #[prost(int64, tag = "3")]
+    pub raw_size: i64,
+    #[prost(uint32, repeated, tag = "4")]
+    pub block_list: ::prost::alloc::vec::Vec<u32>,
+    /// JSON encoded proxy specific extra fields
+    #[prost(string, optional, tag = "5")]
+    pub extra: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Chunk {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+    #[prost(int64, tag = "2")]
+    pub chunk_idx: i64,
+    #[prost(bytes = "vec", tag = "3")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag = "4")]
+    pub checksum: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PullReplicationResponse {
+    #[prost(oneof = "pull_replication_response::Message", tags = "1, 2, 3")]
+    pub message: ::core::option::Option<pull_replication_response::Message>,
+}
+/// Nested message and enum types in `PullReplicationResponse`.
+pub mod pull_replication_response {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Message {
+        #[prost(message, tag = "1")]
+        ObjectInfo(super::ObjectInfo),
+        /// If no ack is received, the chunk will be resent
+        #[prost(message, tag = "2")]
+        Chunk(super::Chunk),
+        #[prost(message, tag = "3")]
+        FinishMessage(super::Empty),
+    }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -483,33 +602,14 @@ pub struct DataInfos {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RequestReplicationResponse {
-    #[prost(oneof = "request_replication_response::Response", tags = "1, 2")]
-    pub response: ::core::option::Option<request_replication_response::Response>,
-}
-/// Nested message and enum types in `RequestReplicationResponse`.
-pub mod request_replication_response {
-    #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Response {
-        #[prost(message, tag = "1")]
-        DataInfos(super::DataInfos),
-        #[prost(bool, tag = "2")]
-        Ack(bool),
-    }
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InitReplicationRequest {
+pub struct PushReplicationRequest {
     #[prost(message, optional, tag = "1")]
     pub data_infos: ::core::option::Option<DataInfos>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InitReplicationResponse {
+pub struct PushReplicationResponse {
     #[prost(bool, tag = "1")]
     pub ack: bool,
 }
@@ -540,7 +640,7 @@ pub struct S3Path {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushReplicaRequest {
     #[prost(string, tag = "3")]
-    pub target_location: ::prost::alloc::string::String,
+    pub target_endpoint_id: ::prost::alloc::string::String,
     #[prost(oneof = "push_replica_request::Resource", tags = "1, 2")]
     pub resource: ::core::option::Option<push_replica_request::Resource>,
 }
@@ -586,6 +686,7 @@ pub mod pull_replica_request {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PullReplicaResponse {
+    /// why ?
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
@@ -593,6 +694,7 @@ pub struct PullReplicaResponse {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplicationStatusRequest {
+    /// why ?
     #[prost(string, tag = "1")]
     pub replication_id: ::prost::alloc::string::String,
 }
@@ -803,7 +905,7 @@ impl ReplicationStatus {
     }
 }
 /// Generated client implementations.
-pub mod dataproxy_service_client {
+pub mod dataproxy_replication_service_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
@@ -813,10 +915,10 @@ pub mod dataproxy_service_client {
     ///
     /// Service for data replication between data-proxies
     #[derive(Debug, Clone)]
-    pub struct DataproxyServiceClient<T> {
+    pub struct DataproxyReplicationServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl DataproxyServiceClient<tonic::transport::Channel> {
+    impl DataproxyReplicationServiceClient<tonic::transport::Channel> {
         /// Attempt to create a new client by connecting to a given endpoint.
         pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
@@ -827,7 +929,7 @@ pub mod dataproxy_service_client {
             Ok(Self::new(conn))
         }
     }
-    impl<T> DataproxyServiceClient<T>
+    impl<T> DataproxyReplicationServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
         T::Error: Into<StdError>,
@@ -845,7 +947,7 @@ pub mod dataproxy_service_client {
         pub fn with_interceptor<F>(
             inner: T,
             interceptor: F,
-        ) -> DataproxyServiceClient<InterceptedService<T, F>>
+        ) -> DataproxyReplicationServiceClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -859,7 +961,9 @@ pub mod dataproxy_service_client {
                 http::Request<tonic::body::BoxBody>,
             >>::Error: Into<StdError> + Send + Sync,
         {
-            DataproxyServiceClient::new(InterceptedService::new(inner, interceptor))
+            DataproxyReplicationServiceClient::new(
+                InterceptedService::new(inner, interceptor),
+            )
         }
         /// Compress requests with the given encoding.
         ///
@@ -896,12 +1000,14 @@ pub mod dataproxy_service_client {
         ///
         /// Status: ALPHA
         ///
-        /// Creates a replication request
-        pub async fn request_replication(
+        /// Creates a replication stream
+        pub async fn pull_replication(
             &mut self,
-            request: impl tonic::IntoRequest<super::RequestReplicationRequest>,
+            request: impl tonic::IntoStreamingRequest<
+                Message = super::PullReplicationRequest,
+            >,
         ) -> std::result::Result<
-            tonic::Response<super::RequestReplicationResponse>,
+            tonic::Response<tonic::codec::Streaming<super::PullReplicationResponse>>,
             tonic::Status,
         > {
             self.inner
@@ -915,28 +1021,28 @@ pub mod dataproxy_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.dataproxy.services.v2.DataproxyService/RequestReplication",
+                "/aruna.api.dataproxy.services.v2.DataproxyReplicationService/PullReplication",
             );
-            let mut req = request.into_request();
+            let mut req = request.into_streaming_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.dataproxy.services.v2.DataproxyService",
-                        "RequestReplication",
+                        "aruna.api.dataproxy.services.v2.DataproxyReplicationService",
+                        "PullReplication",
                     ),
                 );
-            self.inner.unary(req, path, codec).await
+            self.inner.streaming(req, path, codec).await
         }
         /// InitReplication
         ///
         /// Status: ALPHA
         ///
         /// Provides the necessary url to init replication
-        pub async fn init_replication(
+        pub async fn push_replication(
             &mut self,
-            request: impl tonic::IntoRequest<super::InitReplicationRequest>,
+            request: impl tonic::IntoRequest<super::PushReplicationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::InitReplicationResponse>,
+            tonic::Response<super::PushReplicationResponse>,
             tonic::Status,
         > {
             self.inner
@@ -950,14 +1056,14 @@ pub mod dataproxy_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.dataproxy.services.v2.DataproxyService/InitReplication",
+                "/aruna.api.dataproxy.services.v2.DataproxyReplicationService/PushReplication",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "aruna.api.dataproxy.services.v2.DataproxyService",
-                        "InitReplication",
+                        "aruna.api.dataproxy.services.v2.DataproxyReplicationService",
+                        "PushReplication",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -1582,22 +1688,28 @@ pub mod dataproxy_user_service_client {
     }
 }
 /// Generated server implementations.
-pub mod dataproxy_service_server {
+pub mod dataproxy_replication_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with DataproxyServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with DataproxyReplicationServiceServer.
     #[async_trait]
-    pub trait DataproxyService: Send + Sync + 'static {
+    pub trait DataproxyReplicationService: Send + Sync + 'static {
+        /// Server streaming response type for the PullReplication method.
+        type PullReplicationStream: tonic::codegen::tokio_stream::Stream<
+                Item = std::result::Result<super::PullReplicationResponse, tonic::Status>,
+            >
+            + Send
+            + 'static;
         /// RequestReplication
         ///
         /// Status: ALPHA
         ///
-        /// Creates a replication request
-        async fn request_replication(
+        /// Creates a replication stream
+        async fn pull_replication(
             &self,
-            request: tonic::Request<super::RequestReplicationRequest>,
+            request: tonic::Request<tonic::Streaming<super::PullReplicationRequest>>,
         ) -> std::result::Result<
-            tonic::Response<super::RequestReplicationResponse>,
+            tonic::Response<Self::PullReplicationStream>,
             tonic::Status,
         >;
         /// InitReplication
@@ -1605,11 +1717,11 @@ pub mod dataproxy_service_server {
         /// Status: ALPHA
         ///
         /// Provides the necessary url to init replication
-        async fn init_replication(
+        async fn push_replication(
             &self,
-            request: tonic::Request<super::InitReplicationRequest>,
+            request: tonic::Request<super::PushReplicationRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::InitReplicationResponse>,
+            tonic::Response<super::PushReplicationResponse>,
             tonic::Status,
         >;
     }
@@ -1619,7 +1731,7 @@ pub mod dataproxy_service_server {
     ///
     /// Service for data replication between data-proxies
     #[derive(Debug)]
-    pub struct DataproxyServiceServer<T: DataproxyService> {
+    pub struct DataproxyReplicationServiceServer<T: DataproxyReplicationService> {
         inner: _Inner<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
@@ -1627,7 +1739,7 @@ pub mod dataproxy_service_server {
         max_encoding_message_size: Option<usize>,
     }
     struct _Inner<T>(Arc<T>);
-    impl<T: DataproxyService> DataproxyServiceServer<T> {
+    impl<T: DataproxyReplicationService> DataproxyReplicationServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -1679,9 +1791,10 @@ pub mod dataproxy_service_server {
             self
         }
     }
-    impl<T, B> tonic::codegen::Service<http::Request<B>> for DataproxyServiceServer<T>
+    impl<T, B> tonic::codegen::Service<http::Request<B>>
+    for DataproxyReplicationServiceServer<T>
     where
-        T: DataproxyService,
+        T: DataproxyReplicationService,
         B: Body + Send + 'static,
         B::Error: Into<StdError> + Send + 'static,
     {
@@ -1697,25 +1810,30 @@ pub mod dataproxy_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/aruna.api.dataproxy.services.v2.DataproxyService/RequestReplication" => {
+                "/aruna.api.dataproxy.services.v2.DataproxyReplicationService/PullReplication" => {
                     #[allow(non_camel_case_types)]
-                    struct RequestReplicationSvc<T: DataproxyService>(pub Arc<T>);
+                    struct PullReplicationSvc<T: DataproxyReplicationService>(
+                        pub Arc<T>,
+                    );
                     impl<
-                        T: DataproxyService,
-                    > tonic::server::UnaryService<super::RequestReplicationRequest>
-                    for RequestReplicationSvc<T> {
-                        type Response = super::RequestReplicationResponse;
+                        T: DataproxyReplicationService,
+                    > tonic::server::StreamingService<super::PullReplicationRequest>
+                    for PullReplicationSvc<T> {
+                        type Response = super::PullReplicationResponse;
+                        type ResponseStream = T::PullReplicationStream;
                         type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
+                            tonic::Response<Self::ResponseStream>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::RequestReplicationRequest>,
+                            request: tonic::Request<
+                                tonic::Streaming<super::PullReplicationRequest>,
+                            >,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as DataproxyService>::request_replication(
+                                <T as DataproxyReplicationService>::pull_replication(
                                         &inner,
                                         request,
                                     )
@@ -1731,7 +1849,7 @@ pub mod dataproxy_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = RequestReplicationSvc(inner);
+                        let method = PullReplicationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1742,30 +1860,35 @@ pub mod dataproxy_service_server {
                                 max_decoding_message_size,
                                 max_encoding_message_size,
                             );
-                        let res = grpc.unary(method, req).await;
+                        let res = grpc.streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
                 }
-                "/aruna.api.dataproxy.services.v2.DataproxyService/InitReplication" => {
+                "/aruna.api.dataproxy.services.v2.DataproxyReplicationService/PushReplication" => {
                     #[allow(non_camel_case_types)]
-                    struct InitReplicationSvc<T: DataproxyService>(pub Arc<T>);
+                    struct PushReplicationSvc<T: DataproxyReplicationService>(
+                        pub Arc<T>,
+                    );
                     impl<
-                        T: DataproxyService,
-                    > tonic::server::UnaryService<super::InitReplicationRequest>
-                    for InitReplicationSvc<T> {
-                        type Response = super::InitReplicationResponse;
+                        T: DataproxyReplicationService,
+                    > tonic::server::UnaryService<super::PushReplicationRequest>
+                    for PushReplicationSvc<T> {
+                        type Response = super::PushReplicationResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::InitReplicationRequest>,
+                            request: tonic::Request<super::PushReplicationRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as DataproxyService>::init_replication(&inner, request)
+                                <T as DataproxyReplicationService>::push_replication(
+                                        &inner,
+                                        request,
+                                    )
                                     .await
                             };
                             Box::pin(fut)
@@ -1778,7 +1901,7 @@ pub mod dataproxy_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = InitReplicationSvc(inner);
+                        let method = PushReplicationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1809,7 +1932,7 @@ pub mod dataproxy_service_server {
             }
         }
     }
-    impl<T: DataproxyService> Clone for DataproxyServiceServer<T> {
+    impl<T: DataproxyReplicationService> Clone for DataproxyReplicationServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -1821,7 +1944,7 @@ pub mod dataproxy_service_server {
             }
         }
     }
-    impl<T: DataproxyService> Clone for _Inner<T> {
+    impl<T: DataproxyReplicationService> Clone for _Inner<T> {
         fn clone(&self) -> Self {
             Self(Arc::clone(&self.0))
         }
@@ -1831,8 +1954,9 @@ pub mod dataproxy_service_server {
             write!(f, "{:?}", self.0)
         }
     }
-    impl<T: DataproxyService> tonic::server::NamedService for DataproxyServiceServer<T> {
-        const NAME: &'static str = "aruna.api.dataproxy.services.v2.DataproxyService";
+    impl<T: DataproxyReplicationService> tonic::server::NamedService
+    for DataproxyReplicationServiceServer<T> {
+        const NAME: &'static str = "aruna.api.dataproxy.services.v2.DataproxyReplicationService";
     }
 }
 /// Generated server implementations.
