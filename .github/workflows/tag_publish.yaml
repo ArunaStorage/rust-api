@@ -27,6 +27,11 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - name: Git Submodule Update
+        run: |
+          git pull --recurse-submodules
+          git submodule update --init --recursive
+          git submodule update --remote --recursive
       - name: Compile protofiles with rust
         run: cargo build --release
       - name: Commit files
