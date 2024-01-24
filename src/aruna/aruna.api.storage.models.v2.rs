@@ -241,6 +241,7 @@ pub struct DataEndpoint {
     pub status: ::core::option::Option<i32>,
     /// Hint if the objects' project
     /// is fully synced to the endpoint
+    /// If partial_sync = true -> Objects inherit partial sync
     #[prost(oneof = "data_endpoint::Variant", tags = "2, 3")]
     pub variant: ::core::option::Option<data_endpoint::Variant>,
 }
@@ -248,46 +249,21 @@ pub struct DataEndpoint {
 pub mod data_endpoint {
     /// Hint if the objects' project
     /// is fully synced to the endpoint
+    /// If partial_sync = true -> Objects inherit partial sync
     #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Variant {
         #[prost(message, tag = "2")]
         FullSync(super::FullSync),
-        #[prost(message, tag = "3")]
-        PartialSync(super::PartialSync),
+        #[prost(bool, tag = "3")]
+        PartialSync(bool),
     }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FullSync {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PartialSync {
-    #[prost(oneof = "partial_sync::Origin", tags = "1, 2, 3, 4")]
-    pub origin: ::core::option::Option<partial_sync::Origin>,
-}
-/// Nested message and enum types in `PartialSync`.
-pub mod partial_sync {
-    #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Origin {
-        #[prost(string, tag = "1")]
-        ProjectId(::prost::alloc::string::String),
-        #[prost(string, tag = "2")]
-        CollectionId(::prost::alloc::string::String),
-        #[prost(string, tag = "3")]
-        DatasetId(::prost::alloc::string::String),
-        #[prost(string, tag = "4")]
-        ObjectId(::prost::alloc::string::String),
-    }
-}
+pub struct FullSync {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
