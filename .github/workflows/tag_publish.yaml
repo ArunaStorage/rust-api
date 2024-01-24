@@ -29,6 +29,7 @@ jobs:
           toolchain: stable
       - name: Git Submodule Update
         run: |
+          git fetch --no-recurse-submodules
           git pull --all --recurse-submodules
           git submodule update --init --recursive
           git submodule update --remote --recursive
