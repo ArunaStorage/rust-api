@@ -18,6 +18,11 @@ pub struct User {
     /// User attributes
     #[prost(message, optional, tag = "6")]
     pub attributes: ::core::option::Option<UserAttributes>,
+    /// First and Last name
+    #[prost(string, tag = "7")]
+    pub first_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "8")]
+    pub last_name: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -241,6 +246,7 @@ pub struct DataEndpoint {
     pub status: ::core::option::Option<i32>,
     /// Hint if the objects' project
     /// is fully synced to the endpoint
+    /// If partial_sync = true -> Objects inherit partial sync
     #[prost(oneof = "data_endpoint::Variant", tags = "2, 3")]
     pub variant: ::core::option::Option<data_endpoint::Variant>,
 }
@@ -248,46 +254,21 @@ pub struct DataEndpoint {
 pub mod data_endpoint {
     /// Hint if the objects' project
     /// is fully synced to the endpoint
+    /// If partial_sync = true -> Objects inherit partial sync
     #[derive(serde::Deserialize, serde::Serialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Variant {
         #[prost(message, tag = "2")]
         FullSync(super::FullSync),
-        #[prost(message, tag = "3")]
-        PartialSync(super::PartialSync),
+        #[prost(bool, tag = "3")]
+        PartialSync(bool),
     }
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FullSync {
-    #[prost(string, tag = "1")]
-    pub project_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PartialSync {
-    #[prost(oneof = "partial_sync::Origin", tags = "1, 2, 3, 4")]
-    pub origin: ::core::option::Option<partial_sync::Origin>,
-}
-/// Nested message and enum types in `PartialSync`.
-pub mod partial_sync {
-    #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
-    pub enum Origin {
-        #[prost(string, tag = "1")]
-        ProjectId(::prost::alloc::string::String),
-        #[prost(string, tag = "2")]
-        CollectionId(::prost::alloc::string::String),
-        #[prost(string, tag = "3")]
-        DatasetId(::prost::alloc::string::String),
-        #[prost(string, tag = "4")]
-        ObjectId(::prost::alloc::string::String),
-    }
-}
+pub struct FullSync {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -339,6 +320,30 @@ pub struct License {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Author {
+    #[prost(string, tag = "1")]
+    pub first_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub last_name: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "3")]
+    pub email: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "4")]
+    pub orcid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "5")]
+    pub id: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RuleBinding {
+    #[prost(string, tag = "1")]
+    pub rule_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub origin: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenericResource {
     #[prost(oneof = "generic_resource::Resource", tags = "1, 2, 3, 4")]
     pub resource: ::core::option::Option<generic_resource::Resource>,
@@ -369,6 +374,9 @@ pub struct Project {
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
     /// Long name
+    #[prost(string, tag = "15")]
+    pub title: ::prost::alloc::string::String,
+    /// Long name
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
     /// Project specific labels / hooks
@@ -385,6 +393,8 @@ pub struct Project {
     pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "16")]
+    pub authors: ::prost::alloc::vec::Vec<Author>,
     #[prost(enumeration = "Status", tag = "10")]
     pub status: i32,
     #[prost(bool, tag = "11")]
@@ -395,6 +405,8 @@ pub struct Project {
     pub metadata_license_tag: ::prost::alloc::string::String,
     #[prost(string, tag = "14")]
     pub default_data_license_tag: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "17")]
+    pub rule_bindings: ::prost::alloc::vec::Vec<RuleBinding>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -406,6 +418,8 @@ pub struct Collection {
     /// my_mags
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "15")]
+    pub title: ::prost::alloc::string::String,
     /// ENA asda234928349028 MAG 1293819203819028i V1
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
@@ -423,6 +437,8 @@ pub struct Collection {
     pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "16")]
+    pub authors: ::prost::alloc::vec::Vec<Author>,
     #[prost(enumeration = "Status", tag = "10")]
     pub status: i32,
     #[prost(bool, tag = "11")]
@@ -433,6 +449,8 @@ pub struct Collection {
     pub metadata_license_tag: ::prost::alloc::string::String,
     #[prost(string, tag = "14")]
     pub default_data_license_tag: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "17")]
+    pub rule_bindings: ::prost::alloc::vec::Vec<RuleBinding>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -442,6 +460,9 @@ pub struct Dataset {
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
+    /// Long name
+    #[prost(string, tag = "15")]
+    pub title: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
     /// Dataset specific labels / hooks
@@ -458,6 +479,8 @@ pub struct Dataset {
     pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "16")]
+    pub authors: ::prost::alloc::vec::Vec<Author>,
     #[prost(enumeration = "Status", tag = "10")]
     pub status: i32,
     #[prost(bool, tag = "11")]
@@ -468,6 +491,8 @@ pub struct Dataset {
     pub metadata_license_tag: ::prost::alloc::string::String,
     #[prost(string, tag = "14")]
     pub default_data_license_tag: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "17")]
+    pub rule_bindings: ::prost::alloc::vec::Vec<RuleBinding>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -477,6 +502,9 @@ pub struct Object {
     pub id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
+    /// Long name
+    #[prost(string, tag = "16")]
+    pub title: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub description: ::prost::alloc::string::String,
     /// Collection specific labels / hooks
@@ -494,6 +522,8 @@ pub struct Object {
     pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
     #[prost(string, tag = "9")]
     pub created_by: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "17")]
+    pub authors: ::prost::alloc::vec::Vec<Author>,
     #[prost(enumeration = "Status", tag = "10")]
     pub status: i32,
     #[prost(bool, tag = "11")]
@@ -507,6 +537,8 @@ pub struct Object {
     pub metadata_license_tag: ::prost::alloc::string::String,
     #[prost(string, tag = "15")]
     pub data_license_tag: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "18")]
+    pub rule_bindings: ::prost::alloc::vec::Vec<RuleBinding>,
 }
 /// Dataclass defines the confidentiality of the object
 #[derive(serde::Deserialize, serde::Serialize)]
