@@ -10,6 +10,9 @@ pub struct CreateBundleRequest {
     /// Default 1 Month
     #[prost(message, optional, tag = "3")]
     pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
+    /// Default false (expires after first download)
+    #[prost(bool, tag = "4")]
+    pub once: bool,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -534,12 +537,13 @@ pub mod pull_replication_request {
 pub struct ObjectInfo {
     #[prost(string, tag = "1")]
     pub object_id: ::prost::alloc::string::String,
+    /// == (Compressed_size / (65536 + 28)) + 1
     #[prost(int64, tag = "2")]
     pub chunks: i64,
     #[prost(int64, tag = "3")]
     pub raw_size: i64,
-    #[prost(uint32, repeated, tag = "4")]
-    pub block_list: ::prost::alloc::vec::Vec<u32>,
+    #[prost(int64, tag = "4")]
+    pub compressed_size: i64,
     /// JSON encoded proxy specific extra fields
     #[prost(string, optional, tag = "5")]
     pub extra: ::core::option::Option<::prost::alloc::string::String>,
@@ -639,6 +643,14 @@ pub struct CreateOrUpdateCredentialsResponse {
     #[prost(string, tag = "2")]
     pub secret_key: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RevokeCredentialsRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RevokeCredentialsResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1711,6 +1723,42 @@ pub mod dataproxy_user_service_client {
                     GrpcMethod::new(
                         "aruna.api.dataproxy.services.v2.DataproxyUserService",
                         "CreateOrUpdateCredentials",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// RevokeCredentials
+        ///
+        /// Status: BETA
+        ///
+        /// Authorized method that needs a aruna-token
+        /// Revokes the current credentials
+        pub async fn revoke_credentials(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RevokeCredentialsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RevokeCredentialsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.dataproxy.services.v2.DataproxyUserService/RevokeCredentials",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.dataproxy.services.v2.DataproxyUserService",
+                        "RevokeCredentials",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -2953,6 +3001,19 @@ pub mod dataproxy_user_service_server {
             tonic::Response<super::CreateOrUpdateCredentialsResponse>,
             tonic::Status,
         >;
+        /// RevokeCredentials
+        ///
+        /// Status: BETA
+        ///
+        /// Authorized method that needs a aruna-token
+        /// Revokes the current credentials
+        async fn revoke_credentials(
+            &self,
+            request: tonic::Request<super::RevokeCredentialsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RevokeCredentialsResponse>,
+            tonic::Status,
+        >;
         /// PushReplica
         ///
         /// Status: UNIMPLEMENTED
@@ -3160,6 +3221,56 @@ pub mod dataproxy_user_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = CreateOrUpdateCredentialsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.dataproxy.services.v2.DataproxyUserService/RevokeCredentials" => {
+                    #[allow(non_camel_case_types)]
+                    struct RevokeCredentialsSvc<T: DataproxyUserService>(pub Arc<T>);
+                    impl<
+                        T: DataproxyUserService,
+                    > tonic::server::UnaryService<super::RevokeCredentialsRequest>
+                    for RevokeCredentialsSvc<T> {
+                        type Response = super::RevokeCredentialsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::RevokeCredentialsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DataproxyUserService>::revoke_credentials(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RevokeCredentialsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

@@ -79,11 +79,24 @@ pub struct Pubkey {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CustomAttributes {
+pub struct CustomAttribute {
     #[prost(string, tag = "1")]
     pub attribute_name: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub attribute_value: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DataProxyAttribute {
+    #[prost(string, tag = "1")]
+    pub attribute_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub attribute_value: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub signature: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub proxy_id: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -107,11 +120,15 @@ pub struct UserAttributes {
     #[prost(string, repeated, tag = "4")]
     pub trusted_endpoints: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "5")]
-    pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttributes>,
+    pub custom_attributes: ::prost::alloc::vec::Vec<CustomAttribute>,
     #[prost(message, repeated, tag = "6")]
     pub personal_permissions: ::prost::alloc::vec::Vec<Permission>,
     #[prost(message, repeated, tag = "7")]
     pub external_ids: ::prost::alloc::vec::Vec<OidcMapping>,
+    #[prost(string, tag = "8")]
+    pub pubkey: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "9")]
+    pub data_proxy_attributes: ::prost::alloc::vec::Vec<DataProxyAttribute>,
 }
 /// A key value pair for hooks and labels
 #[derive(serde::Deserialize, serde::Serialize)]
