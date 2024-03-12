@@ -17077,8 +17077,8 @@ pub struct DeleteServiceAccountTokensResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteServiceAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "1")]
+    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -17088,8 +17088,8 @@ pub struct DeleteServiceAccountResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateS3CredentialsSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "1")]
+    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, tag = "2")]
     pub endpoint_id: ::prost::alloc::string::String,
 }
