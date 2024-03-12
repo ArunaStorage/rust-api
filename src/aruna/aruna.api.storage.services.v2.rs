@@ -17296,12 +17296,14 @@ pub struct DeleteS3CredentialsSvcAccountResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDataproxyTokenSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
+    /// Needs to be provided by project admins
+    #[prost(string, optional, tag = "1")]
+    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// optional context to limit the scope
     #[prost(message, optional, tag = "3")]
     pub context: ::core::option::Option<super::super::models::v2::Context>,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
