@@ -10433,2247 +10433,6 @@ pub mod workspace_service_server {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateServiceAccountRequest {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub permission: ::core::option::Option<super::super::models::v2::Permission>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ServiceAccount {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
-    pub permission: ::core::option::Option<super::super::models::v2::Permission>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateServiceAccountResponse {
-    #[prost(message, optional, tag = "1")]
-    pub service_account: ::core::option::Option<ServiceAccount>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateServiceAccountTokenRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    /// Identify the associated project (should always be provided)
-    #[prost(message, optional, tag = "2")]
-    pub permission: ::core::option::Option<super::super::models::v2::Permission>,
-    /// (optional) Token name
-    #[prost(string, tag = "3")]
-    pub name: ::prost::alloc::string::String,
-    /// (optional) Token expiry
-    #[prost(message, optional, tag = "4")]
-    pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateServiceAccountTokenResponse {
-    /// This contains only the token description
-    #[prost(message, optional, tag = "1")]
-    pub token: ::core::option::Option<super::super::models::v2::Token>,
-    /// This is the actual secret API token
-    #[prost(string, tag = "2")]
-    pub token_secret: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SetServiceAccountPermissionRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub permission: ::core::option::Option<super::super::models::v2::Permission>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SetServiceAccountPermissionResponse {
-    #[prost(message, optional, tag = "1")]
-    pub service_account: ::core::option::Option<ServiceAccount>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetServiceAccountTokenRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub token_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetServiceAccountTokenResponse {
-    /// This contains only the token description
-    #[prost(message, optional, tag = "1")]
-    pub token: ::core::option::Option<super::super::models::v2::Token>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetServiceAccountTokensRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetServiceAccountTokensResponse {
-    /// This contains only the token description
-    #[prost(message, repeated, tag = "1")]
-    pub tokens: ::prost::alloc::vec::Vec<super::super::models::v2::Token>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteServiceAccountTokenRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub token_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteServiceAccountTokenResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteServiceAccountTokensRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteServiceAccountTokensResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteServiceAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteServiceAccountResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateS3CredentialsSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateS3CredentialsSvcAccountResponse {
-    #[prost(string, tag = "1")]
-    pub s3_access_key: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub s3_secret_key: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub s3_endpoint_url: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetS3CredentialsSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetS3CredentialsSvcAccountResponse {
-    #[prost(string, tag = "1")]
-    pub s3_access_key: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub s3_secret_key: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub s3_endpoint_url: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteS3CredentialsSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteS3CredentialsSvcAccountResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateDataproxyTokenSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
-    pub context: ::core::option::Option<super::super::models::v2::Context>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateDataproxyTokenSvcAccountResponse {
-    #[prost(string, tag = "1")]
-    pub token: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddPubkeySvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub public_key: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddPubkeySvcAccountResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddTrustedEndpointsSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddTrustedEndpointsSvcAccountResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveTrustedEndpointsSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub endpoint_id: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveTrustedEndpointsSvcAccountResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddDataProxyAttributeSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub attribute: ::core::option::Option<super::super::models::v2::DataProxyAttribute>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddDataProxyAttributeSvcAccountResponse {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveDataProxyAttributeSvcAccountRequest {
-    #[prost(string, tag = "1")]
-    pub svc_account_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub dataproxy_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub attribute_name: ::prost::alloc::string::String,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveDataProxyAttributeSvcAccountResponse {}
-/// Generated client implementations.
-pub mod service_account_service_client {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    use tonic::codegen::http::Uri;
-    /// ServiceAccountService
-    ///
-    /// Status: BETA
-    ///
-    /// Service that contains CRUD operations for service_accounts.
-    /// Service accounts are project specific accounts that can be used for automation.
-    #[derive(Debug, Clone)]
-    pub struct ServiceAccountServiceClient<T> {
-        inner: tonic::client::Grpc<T>,
-    }
-    impl ServiceAccountServiceClient<tonic::transport::Channel> {
-        /// Attempt to create a new client by connecting to a given endpoint.
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
-        where
-            D: TryInto<tonic::transport::Endpoint>,
-            D::Error: Into<StdError>,
-        {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
-        }
-    }
-    impl<T> ServiceAccountServiceClient<T>
-    where
-        T: tonic::client::GrpcService<tonic::body::BoxBody>,
-        T::Error: Into<StdError>,
-        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
-        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
-    {
-        pub fn new(inner: T) -> Self {
-            let inner = tonic::client::Grpc::new(inner);
-            Self { inner }
-        }
-        pub fn with_origin(inner: T, origin: Uri) -> Self {
-            let inner = tonic::client::Grpc::with_origin(inner, origin);
-            Self { inner }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> ServiceAccountServiceClient<InterceptedService<T, F>>
-        where
-            F: tonic::service::Interceptor,
-            T::ResponseBody: Default,
-            T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
-                >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
-        {
-            ServiceAccountServiceClient::new(InterceptedService::new(inner, interceptor))
-        }
-        /// Compress requests with the given encoding.
-        ///
-        /// This requires the server to support it otherwise it might respond with an
-        /// error.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.send_compressed(encoding);
-            self
-        }
-        /// Enable decompressing responses.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.inner = self.inner.accept_compressed(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_decoding_message_size(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.inner = self.inner.max_encoding_message_size(limit);
-            self
-        }
-        /// CreateServiceAccount
-        ///
-        /// Status: BETA
-        ///
-        /// Creates a service account for a given project
-        /// If the service account has permissions for the global Admin project
-        /// it will be a global service account that can interact with any resource
-        pub async fn create_service_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateServiceAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateServiceAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "CreateServiceAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// CreateServiceAccountToken
-        ///
-        /// Status: BETA
-        ///
-        /// Creates a token for a service account
-        /// Each service account can only have one permission -> The token will have the same permission as the
-        /// service account or a subset of it.
-        pub async fn create_service_account_token(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateServiceAccountTokenRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateServiceAccountTokenResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccountToken",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "CreateServiceAccountToken",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// SetServiceAccountPermission
-        ///
-        /// Status: BETA
-        ///
-        /// Overwrites the project specific permissions for a service account
-        pub async fn set_service_account_permission(
-            &mut self,
-            request: impl tonic::IntoRequest<super::SetServiceAccountPermissionRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::SetServiceAccountPermissionResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/SetServiceAccountPermission",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "SetServiceAccountPermission",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// GetServiceAccountToken
-        ///
-        /// Status: BETA
-        ///
-        /// This requests the overall information about a specifc service account token (by id)
-        /// it will not contain the token itself.
-        pub async fn get_service_account_token(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetServiceAccountTokenRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetServiceAccountTokenResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountToken",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "GetServiceAccountToken",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// GetServiceAccountTokens
-        ///
-        /// Status: BETA
-        ///
-        /// This requests the overall information about all service account tokens
-        /// it will not contain the token itself.
-        pub async fn get_service_account_tokens(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetServiceAccountTokensRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetServiceAccountTokensResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountTokens",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "GetServiceAccountTokens",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// DeleteServiceAccountToken
-        ///
-        /// Status: BETA
-        ///
-        /// Deletes one service account token by ID
-        pub async fn delete_service_account_token(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteServiceAccountTokenRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteServiceAccountTokenResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountToken",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "DeleteServiceAccountToken",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// DeleteServiceAccountTokens
-        ///
-        /// Status: BETA
-        ///
-        /// Deletes all service account tokens
-        pub async fn delete_service_account_tokens(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteServiceAccountTokensRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteServiceAccountTokensResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountTokens",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "DeleteServiceAccountTokens",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// DeleteServiceAccount
-        ///
-        /// Status: BETA
-        ///
-        /// Deletes a service account (by id)
-        pub async fn delete_service_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteServiceAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteServiceAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "DeleteServiceAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// CreateS3CredentialsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Creates or updates S3 credentials for a specific SvcAccount and data_proxy
-        pub async fn create_s3_credentials_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::CreateS3CredentialsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateS3CredentialsSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateS3CredentialsSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "CreateS3CredentialsSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// GetS3CredentialsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Gets S3 credentials for a specific svc_account and data_proxy
-        pub async fn get_s3_credentials_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::GetS3CredentialsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetS3CredentialsSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/GetS3CredentialsSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "GetS3CredentialsSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// DeleteS3CredentialsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Revokes existing S3 credentials for a specific user and data_proxy
-        pub async fn delete_s3_credentials_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::DeleteS3CredentialsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteS3CredentialsSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteS3CredentialsSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "DeleteS3CredentialsSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// GetDataproxyToken
-        ///
-        /// Status: ALPHA
-        ///
-        /// Gets token for a specific SvcAccount and data_proxy
-        pub async fn create_dataproxy_token_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<
-                super::CreateDataproxyTokenSvcAccountRequest,
-            >,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateDataproxyTokenSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateDataproxyTokenSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "CreateDataproxyTokenSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// AddPubkeySvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Adds an ED25519 public key for the SvcAccount
-        pub async fn add_pubkey_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::AddPubkeySvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AddPubkeySvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/AddPubkeySvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "AddPubkeySvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// AddTrustedEndpointsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Adds an endpoint to the trusted endpoints list of the SvcAccount
-        pub async fn add_trusted_endpoints_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<super::AddTrustedEndpointsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AddTrustedEndpointsSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/AddTrustedEndpointsSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "AddTrustedEndpointsSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// RemoveTrustedEndpointsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Removes an endpoint from the trusted endpoints list of the SvcAccount
-        pub async fn remove_trusted_endpoints_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<
-                super::RemoveTrustedEndpointsSvcAccountRequest,
-            >,
-        ) -> std::result::Result<
-            tonic::Response<super::RemoveTrustedEndpointsSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveTrustedEndpointsSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "RemoveTrustedEndpointsSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// AddDataProxyAttributeSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Adds an data proxy specific attribute to the SvcAccount
-        pub async fn add_data_proxy_attribute_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<
-                super::AddDataProxyAttributeSvcAccountRequest,
-            >,
-        ) -> std::result::Result<
-            tonic::Response<super::AddDataProxyAttributeSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/AddDataProxyAttributeSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "AddDataProxyAttributeSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-        /// RemoveDataProxyAttributeSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Removes an data proxy specific attribute from the SvcAccount
-        pub async fn remove_data_proxy_attribute_svc_account(
-            &mut self,
-            request: impl tonic::IntoRequest<
-                super::RemoveDataProxyAttributeSvcAccountRequest,
-            >,
-        ) -> std::result::Result<
-            tonic::Response<super::RemoveDataProxyAttributeSvcAccountResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveDataProxyAttributeSvcAccount",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new(
-                        "aruna.api.storage.services.v2.ServiceAccountService",
-                        "RemoveDataProxyAttributeSvcAccount",
-                    ),
-                );
-            self.inner.unary(req, path, codec).await
-        }
-    }
-}
-/// Generated server implementations.
-pub mod service_account_service_server {
-    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with ServiceAccountServiceServer.
-    #[async_trait]
-    pub trait ServiceAccountService: Send + Sync + 'static {
-        /// CreateServiceAccount
-        ///
-        /// Status: BETA
-        ///
-        /// Creates a service account for a given project
-        /// If the service account has permissions for the global Admin project
-        /// it will be a global service account that can interact with any resource
-        async fn create_service_account(
-            &self,
-            request: tonic::Request<super::CreateServiceAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateServiceAccountResponse>,
-            tonic::Status,
-        >;
-        /// CreateServiceAccountToken
-        ///
-        /// Status: BETA
-        ///
-        /// Creates a token for a service account
-        /// Each service account can only have one permission -> The token will have the same permission as the
-        /// service account or a subset of it.
-        async fn create_service_account_token(
-            &self,
-            request: tonic::Request<super::CreateServiceAccountTokenRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateServiceAccountTokenResponse>,
-            tonic::Status,
-        >;
-        /// SetServiceAccountPermission
-        ///
-        /// Status: BETA
-        ///
-        /// Overwrites the project specific permissions for a service account
-        async fn set_service_account_permission(
-            &self,
-            request: tonic::Request<super::SetServiceAccountPermissionRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::SetServiceAccountPermissionResponse>,
-            tonic::Status,
-        >;
-        /// GetServiceAccountToken
-        ///
-        /// Status: BETA
-        ///
-        /// This requests the overall information about a specifc service account token (by id)
-        /// it will not contain the token itself.
-        async fn get_service_account_token(
-            &self,
-            request: tonic::Request<super::GetServiceAccountTokenRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetServiceAccountTokenResponse>,
-            tonic::Status,
-        >;
-        /// GetServiceAccountTokens
-        ///
-        /// Status: BETA
-        ///
-        /// This requests the overall information about all service account tokens
-        /// it will not contain the token itself.
-        async fn get_service_account_tokens(
-            &self,
-            request: tonic::Request<super::GetServiceAccountTokensRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetServiceAccountTokensResponse>,
-            tonic::Status,
-        >;
-        /// DeleteServiceAccountToken
-        ///
-        /// Status: BETA
-        ///
-        /// Deletes one service account token by ID
-        async fn delete_service_account_token(
-            &self,
-            request: tonic::Request<super::DeleteServiceAccountTokenRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteServiceAccountTokenResponse>,
-            tonic::Status,
-        >;
-        /// DeleteServiceAccountTokens
-        ///
-        /// Status: BETA
-        ///
-        /// Deletes all service account tokens
-        async fn delete_service_account_tokens(
-            &self,
-            request: tonic::Request<super::DeleteServiceAccountTokensRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteServiceAccountTokensResponse>,
-            tonic::Status,
-        >;
-        /// DeleteServiceAccount
-        ///
-        /// Status: BETA
-        ///
-        /// Deletes a service account (by id)
-        async fn delete_service_account(
-            &self,
-            request: tonic::Request<super::DeleteServiceAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteServiceAccountResponse>,
-            tonic::Status,
-        >;
-        /// CreateS3CredentialsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Creates or updates S3 credentials for a specific SvcAccount and data_proxy
-        async fn create_s3_credentials_svc_account(
-            &self,
-            request: tonic::Request<super::CreateS3CredentialsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateS3CredentialsSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// GetS3CredentialsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Gets S3 credentials for a specific svc_account and data_proxy
-        async fn get_s3_credentials_svc_account(
-            &self,
-            request: tonic::Request<super::GetS3CredentialsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::GetS3CredentialsSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// DeleteS3CredentialsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Revokes existing S3 credentials for a specific user and data_proxy
-        async fn delete_s3_credentials_svc_account(
-            &self,
-            request: tonic::Request<super::DeleteS3CredentialsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::DeleteS3CredentialsSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// GetDataproxyToken
-        ///
-        /// Status: ALPHA
-        ///
-        /// Gets token for a specific SvcAccount and data_proxy
-        async fn create_dataproxy_token_svc_account(
-            &self,
-            request: tonic::Request<super::CreateDataproxyTokenSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::CreateDataproxyTokenSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// AddPubkeySvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Adds an ED25519 public key for the SvcAccount
-        async fn add_pubkey_svc_account(
-            &self,
-            request: tonic::Request<super::AddPubkeySvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AddPubkeySvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// AddTrustedEndpointsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Adds an endpoint to the trusted endpoints list of the SvcAccount
-        async fn add_trusted_endpoints_svc_account(
-            &self,
-            request: tonic::Request<super::AddTrustedEndpointsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AddTrustedEndpointsSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// RemoveTrustedEndpointsSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Removes an endpoint from the trusted endpoints list of the SvcAccount
-        async fn remove_trusted_endpoints_svc_account(
-            &self,
-            request: tonic::Request<super::RemoveTrustedEndpointsSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::RemoveTrustedEndpointsSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// AddDataProxyAttributeSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Adds an data proxy specific attribute to the SvcAccount
-        async fn add_data_proxy_attribute_svc_account(
-            &self,
-            request: tonic::Request<super::AddDataProxyAttributeSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AddDataProxyAttributeSvcAccountResponse>,
-            tonic::Status,
-        >;
-        /// RemoveDataProxyAttributeSvcAccount
-        ///
-        /// Status: ALPHA
-        ///
-        /// Removes an data proxy specific attribute from the SvcAccount
-        async fn remove_data_proxy_attribute_svc_account(
-            &self,
-            request: tonic::Request<super::RemoveDataProxyAttributeSvcAccountRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::RemoveDataProxyAttributeSvcAccountResponse>,
-            tonic::Status,
-        >;
-    }
-    /// ServiceAccountService
-    ///
-    /// Status: BETA
-    ///
-    /// Service that contains CRUD operations for service_accounts.
-    /// Service accounts are project specific accounts that can be used for automation.
-    #[derive(Debug)]
-    pub struct ServiceAccountServiceServer<T: ServiceAccountService> {
-        inner: _Inner<T>,
-        accept_compression_encodings: EnabledCompressionEncodings,
-        send_compression_encodings: EnabledCompressionEncodings,
-        max_decoding_message_size: Option<usize>,
-        max_encoding_message_size: Option<usize>,
-    }
-    struct _Inner<T>(Arc<T>);
-    impl<T: ServiceAccountService> ServiceAccountServiceServer<T> {
-        pub fn new(inner: T) -> Self {
-            Self::from_arc(Arc::new(inner))
-        }
-        pub fn from_arc(inner: Arc<T>) -> Self {
-            let inner = _Inner(inner);
-            Self {
-                inner,
-                accept_compression_encodings: Default::default(),
-                send_compression_encodings: Default::default(),
-                max_decoding_message_size: None,
-                max_encoding_message_size: None,
-            }
-        }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
-        where
-            F: tonic::service::Interceptor,
-        {
-            InterceptedService::new(Self::new(inner), interceptor)
-        }
-        /// Enable decompressing requests with the given encoding.
-        #[must_use]
-        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.accept_compression_encodings.enable(encoding);
-            self
-        }
-        /// Compress responses with the given encoding, if the client supports it.
-        #[must_use]
-        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
-            self.send_compression_encodings.enable(encoding);
-            self
-        }
-        /// Limits the maximum size of a decoded message.
-        ///
-        /// Default: `4MB`
-        #[must_use]
-        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
-            self.max_decoding_message_size = Some(limit);
-            self
-        }
-        /// Limits the maximum size of an encoded message.
-        ///
-        /// Default: `usize::MAX`
-        #[must_use]
-        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
-            self.max_encoding_message_size = Some(limit);
-            self
-        }
-    }
-    impl<T, B> tonic::codegen::Service<http::Request<B>>
-    for ServiceAccountServiceServer<T>
-    where
-        T: ServiceAccountService,
-        B: Body + Send + 'static,
-        B::Error: Into<StdError> + Send + 'static,
-    {
-        type Response = http::Response<tonic::body::BoxBody>;
-        type Error = std::convert::Infallible;
-        type Future = BoxFuture<Self::Response, Self::Error>;
-        fn poll_ready(
-            &mut self,
-            _cx: &mut Context<'_>,
-        ) -> Poll<std::result::Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, req: http::Request<B>) -> Self::Future {
-            let inner = self.inner.clone();
-            match req.uri().path() {
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateServiceAccountSvc<T: ServiceAccountService>(pub Arc<T>);
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<super::CreateServiceAccountRequest>
-                    for CreateServiceAccountSvc<T> {
-                        type Response = super::CreateServiceAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::CreateServiceAccountRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::create_service_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateServiceAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccountToken" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateServiceAccountTokenSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::CreateServiceAccountTokenRequest,
-                    > for CreateServiceAccountTokenSvc<T> {
-                        type Response = super::CreateServiceAccountTokenResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::CreateServiceAccountTokenRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::create_service_account_token(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateServiceAccountTokenSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/SetServiceAccountPermission" => {
-                    #[allow(non_camel_case_types)]
-                    struct SetServiceAccountPermissionSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::SetServiceAccountPermissionRequest,
-                    > for SetServiceAccountPermissionSvc<T> {
-                        type Response = super::SetServiceAccountPermissionResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::SetServiceAccountPermissionRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::set_service_account_permission(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = SetServiceAccountPermissionSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountToken" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetServiceAccountTokenSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<super::GetServiceAccountTokenRequest>
-                    for GetServiceAccountTokenSvc<T> {
-                        type Response = super::GetServiceAccountTokenResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::GetServiceAccountTokenRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::get_service_account_token(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetServiceAccountTokenSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountTokens" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetServiceAccountTokensSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<super::GetServiceAccountTokensRequest>
-                    for GetServiceAccountTokensSvc<T> {
-                        type Response = super::GetServiceAccountTokensResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::GetServiceAccountTokensRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::get_service_account_tokens(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetServiceAccountTokensSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountToken" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteServiceAccountTokenSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::DeleteServiceAccountTokenRequest,
-                    > for DeleteServiceAccountTokenSvc<T> {
-                        type Response = super::DeleteServiceAccountTokenResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::DeleteServiceAccountTokenRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::delete_service_account_token(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteServiceAccountTokenSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountTokens" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteServiceAccountTokensSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::DeleteServiceAccountTokensRequest,
-                    > for DeleteServiceAccountTokensSvc<T> {
-                        type Response = super::DeleteServiceAccountTokensResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::DeleteServiceAccountTokensRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::delete_service_account_tokens(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteServiceAccountTokensSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteServiceAccountSvc<T: ServiceAccountService>(pub Arc<T>);
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<super::DeleteServiceAccountRequest>
-                    for DeleteServiceAccountSvc<T> {
-                        type Response = super::DeleteServiceAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::DeleteServiceAccountRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::delete_service_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteServiceAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateS3CredentialsSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::CreateS3CredentialsSvcAccountRequest,
-                    > for CreateS3CredentialsSvcAccountSvc<T> {
-                        type Response = super::CreateS3CredentialsSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::CreateS3CredentialsSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::create_s3_credentials_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateS3CredentialsSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/GetS3CredentialsSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct GetS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::GetS3CredentialsSvcAccountRequest,
-                    > for GetS3CredentialsSvcAccountSvc<T> {
-                        type Response = super::GetS3CredentialsSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::GetS3CredentialsSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::get_s3_credentials_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = GetS3CredentialsSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteS3CredentialsSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct DeleteS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::DeleteS3CredentialsSvcAccountRequest,
-                    > for DeleteS3CredentialsSvcAccountSvc<T> {
-                        type Response = super::DeleteS3CredentialsSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::DeleteS3CredentialsSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::delete_s3_credentials_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DeleteS3CredentialsSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/CreateDataproxyTokenSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct CreateDataproxyTokenSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::CreateDataproxyTokenSvcAccountRequest,
-                    > for CreateDataproxyTokenSvcAccountSvc<T> {
-                        type Response = super::CreateDataproxyTokenSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::CreateDataproxyTokenSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::create_dataproxy_token_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CreateDataproxyTokenSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/AddPubkeySvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct AddPubkeySvcAccountSvc<T: ServiceAccountService>(pub Arc<T>);
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<super::AddPubkeySvcAccountRequest>
-                    for AddPubkeySvcAccountSvc<T> {
-                        type Response = super::AddPubkeySvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::AddPubkeySvcAccountRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::add_pubkey_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AddPubkeySvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/AddTrustedEndpointsSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct AddTrustedEndpointsSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::AddTrustedEndpointsSvcAccountRequest,
-                    > for AddTrustedEndpointsSvcAccountSvc<T> {
-                        type Response = super::AddTrustedEndpointsSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::AddTrustedEndpointsSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::add_trusted_endpoints_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AddTrustedEndpointsSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveTrustedEndpointsSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct RemoveTrustedEndpointsSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::RemoveTrustedEndpointsSvcAccountRequest,
-                    > for RemoveTrustedEndpointsSvcAccountSvc<T> {
-                        type Response = super::RemoveTrustedEndpointsSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::RemoveTrustedEndpointsSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::remove_trusted_endpoints_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = RemoveTrustedEndpointsSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/AddDataProxyAttributeSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct AddDataProxyAttributeSvcAccountSvc<T: ServiceAccountService>(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::AddDataProxyAttributeSvcAccountRequest,
-                    > for AddDataProxyAttributeSvcAccountSvc<T> {
-                        type Response = super::AddDataProxyAttributeSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::AddDataProxyAttributeSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::add_data_proxy_attribute_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AddDataProxyAttributeSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveDataProxyAttributeSvcAccount" => {
-                    #[allow(non_camel_case_types)]
-                    struct RemoveDataProxyAttributeSvcAccountSvc<
-                        T: ServiceAccountService,
-                    >(
-                        pub Arc<T>,
-                    );
-                    impl<
-                        T: ServiceAccountService,
-                    > tonic::server::UnaryService<
-                        super::RemoveDataProxyAttributeSvcAccountRequest,
-                    > for RemoveDataProxyAttributeSvcAccountSvc<T> {
-                        type Response = super::RemoveDataProxyAttributeSvcAccountResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::RemoveDataProxyAttributeSvcAccountRequest,
-                            >,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as ServiceAccountService>::remove_data_proxy_attribute_svc_account(
-                                        &inner,
-                                        request,
-                                    )
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = RemoveDataProxyAttributeSvcAccountSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
-            }
-        }
-    }
-    impl<T: ServiceAccountService> Clone for ServiceAccountServiceServer<T> {
-        fn clone(&self) -> Self {
-            let inner = self.inner.clone();
-            Self {
-                inner,
-                accept_compression_encodings: self.accept_compression_encodings,
-                send_compression_encodings: self.send_compression_encodings,
-                max_decoding_message_size: self.max_decoding_message_size,
-                max_encoding_message_size: self.max_encoding_message_size,
-            }
-        }
-    }
-    impl<T: ServiceAccountService> Clone for _Inner<T> {
-        fn clone(&self) -> Self {
-            Self(Arc::clone(&self.0))
-        }
-    }
-    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{:?}", self.0)
-        }
-    }
-    impl<T: ServiceAccountService> tonic::server::NamedService
-    for ServiceAccountServiceServer<T> {
-        const NAME: &'static str = "aruna.api.storage.services.v2.ServiceAccountService";
-    }
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RegisterUserRequest {
     /// user_displayname
     #[prost(string, tag = "1")]
@@ -19354,5 +17113,2131 @@ pub mod project_service_server {
     }
     impl<T: ProjectService> tonic::server::NamedService for ProjectServiceServer<T> {
         const NAME: &'static str = "aruna.api.storage.services.v2.ProjectService";
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateServiceAccountRequest {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::super::models::v2::PermissionLevel", tag = "3")]
+    pub permission_level: i32,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ServiceAccount {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub permission: ::core::option::Option<super::super::models::v2::Permission>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateServiceAccountResponse {
+    #[prost(message, optional, tag = "1")]
+    pub service_account: ::core::option::Option<ServiceAccount>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateServiceAccountTokenRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    /// Token permissions
+    #[prost(message, optional, tag = "2")]
+    pub permission: ::core::option::Option<super::super::models::v2::Permission>,
+    /// (optional) Token name
+    #[prost(string, tag = "3")]
+    pub name: ::prost::alloc::string::String,
+    /// (optional) Token expiry
+    #[prost(message, optional, tag = "4")]
+    pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateServiceAccountTokenResponse {
+    /// This contains only the token description
+    #[prost(message, optional, tag = "1")]
+    pub token: ::core::option::Option<super::super::models::v2::Token>,
+    /// This is the actual secret API token
+    #[prost(string, tag = "2")]
+    pub token_secret: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetServiceAccountTokenRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub token_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetServiceAccountTokenResponse {
+    /// This contains only the token description
+    #[prost(message, optional, tag = "1")]
+    pub token: ::core::option::Option<super::super::models::v2::Token>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetServiceAccountTokensRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetServiceAccountTokensResponse {
+    /// This contains only the token description
+    #[prost(message, repeated, tag = "1")]
+    pub tokens: ::prost::alloc::vec::Vec<super::super::models::v2::Token>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteServiceAccountTokenRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub token_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteServiceAccountTokenResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteServiceAccountTokensRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteServiceAccountTokensResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteServiceAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteServiceAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateS3CredentialsSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateS3CredentialsSvcAccountResponse {
+    #[prost(string, tag = "1")]
+    pub s3_access_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub s3_secret_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub s3_endpoint_url: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetS3CredentialsSvcAccountRequest {
+    /// If called as admin, an id must be provided
+    #[prost(string, optional, tag = "1")]
+    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetS3CredentialsSvcAccountResponse {
+    #[prost(string, tag = "1")]
+    pub s3_access_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub s3_secret_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub s3_endpoint_url: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteS3CredentialsSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteS3CredentialsSvcAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDataproxyTokenSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub context: ::core::option::Option<super::super::models::v2::Context>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateDataproxyTokenSvcAccountResponse {
+    #[prost(string, tag = "1")]
+    pub token: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddPubkeySvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub public_key: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddPubkeySvcAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddTrustedEndpointsSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddTrustedEndpointsSvcAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveTrustedEndpointsSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub endpoint_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveTrustedEndpointsSvcAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddDataProxyAttributeSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub attribute: ::core::option::Option<super::super::models::v2::DataProxyAttribute>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddDataProxyAttributeSvcAccountResponse {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveDataProxyAttributeSvcAccountRequest {
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub dataproxy_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub attribute_name: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveDataProxyAttributeSvcAccountResponse {}
+/// Generated client implementations.
+pub mod service_account_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// ServiceAccountService
+    ///
+    /// Status: BETA
+    ///
+    /// Service that contains CRUD operations for service_accounts.
+    /// Service accounts are project specific accounts that can be used for automation.
+    #[derive(Debug, Clone)]
+    pub struct ServiceAccountServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl ServiceAccountServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> ServiceAccountServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> ServiceAccountServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            ServiceAccountServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        /// CreateServiceAccount
+        ///
+        /// Status: BETA
+        ///
+        /// Creates a service account for a given project
+        /// If the service account has permissions for the global Admin project
+        /// it will be a global service account that can interact with any resource
+        pub async fn create_service_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateServiceAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateServiceAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "CreateServiceAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// CreateServiceAccountToken
+        ///
+        /// Status: BETA
+        ///
+        /// Creates a token for a service account
+        /// Each service account can only have one permission -> The token will have the same permission as the
+        /// service account or a subset of it.
+        pub async fn create_service_account_token(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateServiceAccountTokenRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateServiceAccountTokenResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccountToken",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "CreateServiceAccountToken",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetServiceAccountToken
+        ///
+        /// Status: BETA
+        ///
+        /// This requests the overall information about a specifc service account token (by id)
+        /// it will not contain the token itself.
+        pub async fn get_service_account_token(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetServiceAccountTokenRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetServiceAccountTokenResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountToken",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "GetServiceAccountToken",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetServiceAccountTokens
+        ///
+        /// Status: BETA
+        ///
+        /// This requests the overall information about all service account tokens
+        /// it will not contain the token itself.
+        pub async fn get_service_account_tokens(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetServiceAccountTokensRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetServiceAccountTokensResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountTokens",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "GetServiceAccountTokens",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// DeleteServiceAccountToken
+        ///
+        /// Status: BETA
+        ///
+        /// Deletes one service account token by ID
+        pub async fn delete_service_account_token(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteServiceAccountTokenRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteServiceAccountTokenResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountToken",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "DeleteServiceAccountToken",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// DeleteServiceAccountTokens
+        ///
+        /// Status: BETA
+        ///
+        /// Deletes all service account tokens
+        pub async fn delete_service_account_tokens(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteServiceAccountTokensRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteServiceAccountTokensResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountTokens",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "DeleteServiceAccountTokens",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// DeleteServiceAccount
+        ///
+        /// Status: BETA
+        ///
+        /// Deletes a service account (by id)
+        pub async fn delete_service_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteServiceAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteServiceAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "DeleteServiceAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// CreateS3CredentialsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Creates or updates S3 credentials for a specific SvcAccount and data_proxy
+        pub async fn create_s3_credentials_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateS3CredentialsSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "CreateS3CredentialsSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetS3CredentialsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets S3 credentials for a specific svc_account and data_proxy
+        pub async fn get_s3_credentials_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetS3CredentialsSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "GetS3CredentialsSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// DeleteS3CredentialsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Revokes existing S3 credentials for a specific user and data_proxy
+        pub async fn delete_s3_credentials_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteS3CredentialsSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "DeleteS3CredentialsSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetDataproxyToken
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets token for a specific SvcAccount and data_proxy
+        pub async fn create_dataproxy_token_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::CreateDataproxyTokenSvcAccountRequest,
+            >,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateDataproxyTokenSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateDataproxyTokenSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "CreateDataproxyTokenSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// AddPubkeySvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Adds an ED25519 public key for the SvcAccount
+        pub async fn add_pubkey_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AddPubkeySvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddPubkeySvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/AddPubkeySvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "AddPubkeySvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// AddTrustedEndpointsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Adds an endpoint to the trusted endpoints list of the SvcAccount
+        pub async fn add_trusted_endpoints_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AddTrustedEndpointsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddTrustedEndpointsSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/AddTrustedEndpointsSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "AddTrustedEndpointsSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// RemoveTrustedEndpointsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Removes an endpoint from the trusted endpoints list of the SvcAccount
+        pub async fn remove_trusted_endpoints_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::RemoveTrustedEndpointsSvcAccountRequest,
+            >,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveTrustedEndpointsSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveTrustedEndpointsSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "RemoveTrustedEndpointsSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// AddDataProxyAttributeSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Adds an data proxy specific attribute to the SvcAccount
+        pub async fn add_data_proxy_attribute_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::AddDataProxyAttributeSvcAccountRequest,
+            >,
+        ) -> std::result::Result<
+            tonic::Response<super::AddDataProxyAttributeSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/AddDataProxyAttributeSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "AddDataProxyAttributeSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// RemoveDataProxyAttributeSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Removes an data proxy specific attribute from the SvcAccount
+        pub async fn remove_data_proxy_attribute_svc_account(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::RemoveDataProxyAttributeSvcAccountRequest,
+            >,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveDataProxyAttributeSvcAccountResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveDataProxyAttributeSvcAccount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.ServiceAccountService",
+                        "RemoveDataProxyAttributeSvcAccount",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated server implementations.
+pub mod service_account_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    /// Generated trait containing gRPC methods that should be implemented for use with ServiceAccountServiceServer.
+    #[async_trait]
+    pub trait ServiceAccountService: Send + Sync + 'static {
+        /// CreateServiceAccount
+        ///
+        /// Status: BETA
+        ///
+        /// Creates a service account for a given project
+        /// If the service account has permissions for the global Admin project
+        /// it will be a global service account that can interact with any resource
+        async fn create_service_account(
+            &self,
+            request: tonic::Request<super::CreateServiceAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateServiceAccountResponse>,
+            tonic::Status,
+        >;
+        /// CreateServiceAccountToken
+        ///
+        /// Status: BETA
+        ///
+        /// Creates a token for a service account
+        /// Each service account can only have one permission -> The token will have the same permission as the
+        /// service account or a subset of it.
+        async fn create_service_account_token(
+            &self,
+            request: tonic::Request<super::CreateServiceAccountTokenRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateServiceAccountTokenResponse>,
+            tonic::Status,
+        >;
+        /// GetServiceAccountToken
+        ///
+        /// Status: BETA
+        ///
+        /// This requests the overall information about a specifc service account token (by id)
+        /// it will not contain the token itself.
+        async fn get_service_account_token(
+            &self,
+            request: tonic::Request<super::GetServiceAccountTokenRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetServiceAccountTokenResponse>,
+            tonic::Status,
+        >;
+        /// GetServiceAccountTokens
+        ///
+        /// Status: BETA
+        ///
+        /// This requests the overall information about all service account tokens
+        /// it will not contain the token itself.
+        async fn get_service_account_tokens(
+            &self,
+            request: tonic::Request<super::GetServiceAccountTokensRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetServiceAccountTokensResponse>,
+            tonic::Status,
+        >;
+        /// DeleteServiceAccountToken
+        ///
+        /// Status: BETA
+        ///
+        /// Deletes one service account token by ID
+        async fn delete_service_account_token(
+            &self,
+            request: tonic::Request<super::DeleteServiceAccountTokenRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteServiceAccountTokenResponse>,
+            tonic::Status,
+        >;
+        /// DeleteServiceAccountTokens
+        ///
+        /// Status: BETA
+        ///
+        /// Deletes all service account tokens
+        async fn delete_service_account_tokens(
+            &self,
+            request: tonic::Request<super::DeleteServiceAccountTokensRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteServiceAccountTokensResponse>,
+            tonic::Status,
+        >;
+        /// DeleteServiceAccount
+        ///
+        /// Status: BETA
+        ///
+        /// Deletes a service account (by id)
+        async fn delete_service_account(
+            &self,
+            request: tonic::Request<super::DeleteServiceAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteServiceAccountResponse>,
+            tonic::Status,
+        >;
+        /// CreateS3CredentialsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Creates or updates S3 credentials for a specific SvcAccount and data_proxy
+        async fn create_s3_credentials_svc_account(
+            &self,
+            request: tonic::Request<super::CreateS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// GetS3CredentialsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets S3 credentials for a specific svc_account and data_proxy
+        async fn get_s3_credentials_svc_account(
+            &self,
+            request: tonic::Request<super::GetS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// DeleteS3CredentialsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Revokes existing S3 credentials for a specific user and data_proxy
+        async fn delete_s3_credentials_svc_account(
+            &self,
+            request: tonic::Request<super::DeleteS3CredentialsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteS3CredentialsSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// GetDataproxyToken
+        ///
+        /// Status: ALPHA
+        ///
+        /// Gets token for a specific SvcAccount and data_proxy
+        async fn create_dataproxy_token_svc_account(
+            &self,
+            request: tonic::Request<super::CreateDataproxyTokenSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateDataproxyTokenSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// AddPubkeySvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Adds an ED25519 public key for the SvcAccount
+        async fn add_pubkey_svc_account(
+            &self,
+            request: tonic::Request<super::AddPubkeySvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddPubkeySvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// AddTrustedEndpointsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Adds an endpoint to the trusted endpoints list of the SvcAccount
+        async fn add_trusted_endpoints_svc_account(
+            &self,
+            request: tonic::Request<super::AddTrustedEndpointsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddTrustedEndpointsSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// RemoveTrustedEndpointsSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Removes an endpoint from the trusted endpoints list of the SvcAccount
+        async fn remove_trusted_endpoints_svc_account(
+            &self,
+            request: tonic::Request<super::RemoveTrustedEndpointsSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveTrustedEndpointsSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// AddDataProxyAttributeSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Adds an data proxy specific attribute to the SvcAccount
+        async fn add_data_proxy_attribute_svc_account(
+            &self,
+            request: tonic::Request<super::AddDataProxyAttributeSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddDataProxyAttributeSvcAccountResponse>,
+            tonic::Status,
+        >;
+        /// RemoveDataProxyAttributeSvcAccount
+        ///
+        /// Status: ALPHA
+        ///
+        /// Removes an data proxy specific attribute from the SvcAccount
+        async fn remove_data_proxy_attribute_svc_account(
+            &self,
+            request: tonic::Request<super::RemoveDataProxyAttributeSvcAccountRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveDataProxyAttributeSvcAccountResponse>,
+            tonic::Status,
+        >;
+    }
+    /// ServiceAccountService
+    ///
+    /// Status: BETA
+    ///
+    /// Service that contains CRUD operations for service_accounts.
+    /// Service accounts are project specific accounts that can be used for automation.
+    #[derive(Debug)]
+    pub struct ServiceAccountServiceServer<T: ServiceAccountService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
+        max_decoding_message_size: Option<usize>,
+        max_encoding_message_size: Option<usize>,
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: ServiceAccountService> ServiceAccountServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            Self::from_arc(Arc::new(inner))
+        }
+        pub fn from_arc(inner: Arc<T>) -> Self {
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+                max_decoding_message_size: None,
+                max_encoding_message_size: None,
+            }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.max_decoding_message_size = Some(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.max_encoding_message_size = Some(limit);
+            self
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>>
+    for ServiceAccountServiceServer<T>
+    where
+        T: ServiceAccountService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = std::convert::Infallible;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(
+            &mut self,
+            _cx: &mut Context<'_>,
+        ) -> Poll<std::result::Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateServiceAccountSvc<T: ServiceAccountService>(pub Arc<T>);
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<super::CreateServiceAccountRequest>
+                    for CreateServiceAccountSvc<T> {
+                        type Response = super::CreateServiceAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CreateServiceAccountRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::create_service_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateServiceAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateServiceAccountToken" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateServiceAccountTokenSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::CreateServiceAccountTokenRequest,
+                    > for CreateServiceAccountTokenSvc<T> {
+                        type Response = super::CreateServiceAccountTokenResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::CreateServiceAccountTokenRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::create_service_account_token(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateServiceAccountTokenSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountToken" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetServiceAccountTokenSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<super::GetServiceAccountTokenRequest>
+                    for GetServiceAccountTokenSvc<T> {
+                        type Response = super::GetServiceAccountTokenResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetServiceAccountTokenRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::get_service_account_token(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetServiceAccountTokenSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetServiceAccountTokens" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetServiceAccountTokensSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<super::GetServiceAccountTokensRequest>
+                    for GetServiceAccountTokensSvc<T> {
+                        type Response = super::GetServiceAccountTokensResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::GetServiceAccountTokensRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::get_service_account_tokens(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetServiceAccountTokensSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountToken" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteServiceAccountTokenSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::DeleteServiceAccountTokenRequest,
+                    > for DeleteServiceAccountTokenSvc<T> {
+                        type Response = super::DeleteServiceAccountTokenResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::DeleteServiceAccountTokenRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::delete_service_account_token(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteServiceAccountTokenSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccountTokens" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteServiceAccountTokensSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::DeleteServiceAccountTokensRequest,
+                    > for DeleteServiceAccountTokensSvc<T> {
+                        type Response = super::DeleteServiceAccountTokensResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::DeleteServiceAccountTokensRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::delete_service_account_tokens(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteServiceAccountTokensSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteServiceAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteServiceAccountSvc<T: ServiceAccountService>(pub Arc<T>);
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<super::DeleteServiceAccountRequest>
+                    for DeleteServiceAccountSvc<T> {
+                        type Response = super::DeleteServiceAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::DeleteServiceAccountRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::delete_service_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteServiceAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateS3CredentialsSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::CreateS3CredentialsSvcAccountRequest,
+                    > for CreateS3CredentialsSvcAccountSvc<T> {
+                        type Response = super::CreateS3CredentialsSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::CreateS3CredentialsSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::create_s3_credentials_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateS3CredentialsSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/GetS3CredentialsSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::GetS3CredentialsSvcAccountRequest,
+                    > for GetS3CredentialsSvcAccountSvc<T> {
+                        type Response = super::GetS3CredentialsSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::GetS3CredentialsSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::get_s3_credentials_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetS3CredentialsSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/DeleteS3CredentialsSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct DeleteS3CredentialsSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::DeleteS3CredentialsSvcAccountRequest,
+                    > for DeleteS3CredentialsSvcAccountSvc<T> {
+                        type Response = super::DeleteS3CredentialsSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::DeleteS3CredentialsSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::delete_s3_credentials_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DeleteS3CredentialsSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/CreateDataproxyTokenSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateDataproxyTokenSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::CreateDataproxyTokenSvcAccountRequest,
+                    > for CreateDataproxyTokenSvcAccountSvc<T> {
+                        type Response = super::CreateDataproxyTokenSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::CreateDataproxyTokenSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::create_dataproxy_token_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateDataproxyTokenSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/AddPubkeySvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddPubkeySvcAccountSvc<T: ServiceAccountService>(pub Arc<T>);
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<super::AddPubkeySvcAccountRequest>
+                    for AddPubkeySvcAccountSvc<T> {
+                        type Response = super::AddPubkeySvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::AddPubkeySvcAccountRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::add_pubkey_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AddPubkeySvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/AddTrustedEndpointsSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddTrustedEndpointsSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::AddTrustedEndpointsSvcAccountRequest,
+                    > for AddTrustedEndpointsSvcAccountSvc<T> {
+                        type Response = super::AddTrustedEndpointsSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::AddTrustedEndpointsSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::add_trusted_endpoints_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AddTrustedEndpointsSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveTrustedEndpointsSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveTrustedEndpointsSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::RemoveTrustedEndpointsSvcAccountRequest,
+                    > for RemoveTrustedEndpointsSvcAccountSvc<T> {
+                        type Response = super::RemoveTrustedEndpointsSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::RemoveTrustedEndpointsSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::remove_trusted_endpoints_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveTrustedEndpointsSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/AddDataProxyAttributeSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddDataProxyAttributeSvcAccountSvc<T: ServiceAccountService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::AddDataProxyAttributeSvcAccountRequest,
+                    > for AddDataProxyAttributeSvcAccountSvc<T> {
+                        type Response = super::AddDataProxyAttributeSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::AddDataProxyAttributeSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::add_data_proxy_attribute_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AddDataProxyAttributeSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.ServiceAccountService/RemoveDataProxyAttributeSvcAccount" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveDataProxyAttributeSvcAccountSvc<
+                        T: ServiceAccountService,
+                    >(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: ServiceAccountService,
+                    > tonic::server::UnaryService<
+                        super::RemoveDataProxyAttributeSvcAccountRequest,
+                    > for RemoveDataProxyAttributeSvcAccountSvc<T> {
+                        type Response = super::RemoveDataProxyAttributeSvcAccountResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::RemoveDataProxyAttributeSvcAccountRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ServiceAccountService>::remove_data_proxy_attribute_svc_account(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveDataProxyAttributeSvcAccountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
+            }
+        }
+    }
+    impl<T: ServiceAccountService> Clone for ServiceAccountServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+                max_decoding_message_size: self.max_decoding_message_size,
+                max_encoding_message_size: self.max_encoding_message_size,
+            }
+        }
+    }
+    impl<T: ServiceAccountService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(Arc::clone(&self.0))
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: ServiceAccountService> tonic::server::NamedService
+    for ServiceAccountServiceServer<T> {
+        const NAME: &'static str = "aruna.api.storage.services.v2.ServiceAccountService";
     }
 }
