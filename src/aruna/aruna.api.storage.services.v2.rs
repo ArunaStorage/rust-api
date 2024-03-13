@@ -17242,8 +17242,8 @@ pub struct DeleteServiceAccountResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateS3CredentialsSvcAccountRequest {
-    #[prost(string, optional, tag = "1")]
-    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub endpoint_id: ::prost::alloc::string::String,
 }
@@ -17263,8 +17263,8 @@ pub struct CreateS3CredentialsSvcAccountResponse {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetS3CredentialsSvcAccountRequest {
     /// If called as admin, an id must be provided
-    #[prost(string, optional, tag = "1")]
-    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub endpoint_id: ::prost::alloc::string::String,
 }
@@ -17283,8 +17283,8 @@ pub struct GetS3CredentialsSvcAccountResponse {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeleteS3CredentialsSvcAccountRequest {
-    #[prost(string, optional, tag = "1")]
-    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub endpoint_id: ::prost::alloc::string::String,
 }
@@ -17297,8 +17297,8 @@ pub struct DeleteS3CredentialsSvcAccountResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateDataproxyTokenSvcAccountRequest {
     /// Needs to be provided by project admins
-    #[prost(string, optional, tag = "1")]
-    pub svc_account_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag = "1")]
+    pub svc_account_id: ::prost::alloc::string::String,
     /// optional context to limit the scope
     #[prost(message, optional, tag = "3")]
     pub context: ::core::option::Option<super::super::models::v2::Context>,
