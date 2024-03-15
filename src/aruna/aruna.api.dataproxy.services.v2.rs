@@ -10,6 +10,9 @@ pub struct CreateBundleRequest {
     /// Default 1 Month
     #[prost(message, optional, tag = "3")]
     pub expires_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
+    /// Default false (expires after first download)
+    #[prost(bool, tag = "4")]
+    pub once: bool,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -534,12 +537,13 @@ pub mod pull_replication_request {
 pub struct ObjectInfo {
     #[prost(string, tag = "1")]
     pub object_id: ::prost::alloc::string::String,
+    /// == (Compressed_size / (65536 + 28)) + 1
     #[prost(int64, tag = "2")]
     pub chunks: i64,
     #[prost(int64, tag = "3")]
     pub raw_size: i64,
-    #[prost(uint32, repeated, tag = "4")]
-    pub block_list: ::prost::alloc::vec::Vec<u32>,
+    #[prost(int64, tag = "4")]
+    pub compressed_size: i64,
     /// JSON encoded proxy specific extra fields
     #[prost(string, optional, tag = "5")]
     pub extra: ::core::option::Option<::prost::alloc::string::String>,
@@ -626,6 +630,27 @@ pub struct GetCredentialsResponse {
     #[prost(string, tag = "2")]
     pub secret_key: ::prost::alloc::string::String,
 }
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateOrUpdateCredentialsRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateOrUpdateCredentialsResponse {
+    #[prost(string, tag = "1")]
+    pub access_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub secret_key: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RevokeCredentialsRequest {}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RevokeCredentialsResponse {}
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -869,6 +894,92 @@ pub struct InitLocationResponse {
     pub location: ::core::option::Option<ObjectLocation>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IngestResource {
+    /// object name
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    /// title
+    #[prost(string, tag = "2")]
+    pub title: ::prost::alloc::string::String,
+    /// description
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
+    /// Authors
+    #[prost(message, repeated, tag = "4")]
+    pub authors: ::prost::alloc::vec::Vec<
+        super::super::super::storage::models::v2::Author,
+    >,
+    /// object specific labels / hooks
+    #[prost(message, repeated, tag = "5")]
+    pub key_values: ::prost::alloc::vec::Vec<
+        super::super::super::storage::models::v2::KeyValue,
+    >,
+    /// Internal / External relations (URLs / IDs from external sources)
+    #[prost(message, repeated, tag = "6")]
+    pub relations: ::prost::alloc::vec::Vec<
+        super::super::super::storage::models::v2::Relation,
+    >,
+    /// DataClass
+    #[prost(
+        enumeration = "super::super::super::storage::models::v2::DataClass",
+        tag = "7"
+    )]
+    pub data_class: i32,
+    /// Ignored if Collection | Dataset
+    #[prost(message, repeated, tag = "8")]
+    pub hashes: ::prost::alloc::vec::Vec<super::super::super::storage::models::v2::Hash>,
+    #[prost(string, tag = "9")]
+    pub metadata_license_tag: ::prost::alloc::string::String,
+    #[prost(string, tag = "10")]
+    pub data_license_tag: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IngestExistingObjectRequest {
+    #[prost(string, tag = "1")]
+    pub project_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "6")]
+    pub object: ::core::option::Option<IngestResource>,
+    /// "s3://bucket/key" or "file:///foo/bar/baz.txt" must be a valid file
+    #[prost(string, tag = "7")]
+    pub path: ::prost::alloc::string::String,
+    #[prost(oneof = "ingest_existing_object_request::Collection", tags = "2, 3")]
+    pub collection: ::core::option::Option<ingest_existing_object_request::Collection>,
+    #[prost(oneof = "ingest_existing_object_request::Dataset", tags = "4, 5")]
+    pub dataset: ::core::option::Option<ingest_existing_object_request::Dataset>,
+}
+/// Nested message and enum types in `IngestExistingObjectRequest`.
+pub mod ingest_existing_object_request {
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Collection {
+        #[prost(string, tag = "2")]
+        CollectionId(::prost::alloc::string::String),
+        #[prost(message, tag = "3")]
+        CollectionResource(super::IngestResource),
+    }
+    #[derive(serde::Deserialize, serde::Serialize)]
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Dataset {
+        #[prost(string, tag = "4")]
+        DatasetId(::prost::alloc::string::String),
+        #[prost(message, tag = "5")]
+        DatasetResource(super::IngestResource),
+    }
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IngestExistingObjectResponse {
+    #[prost(string, tag = "1")]
+    pub object_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ReplicationStatus {
@@ -1035,7 +1146,7 @@ pub mod dataproxy_replication_service_client {
         }
         /// InitReplication
         ///
-        /// Status: ALPHA
+        /// Status: UNIMPLEMENTED
         ///
         /// Provides the necessary url to init replication
         pub async fn push_replication(
@@ -1580,9 +1691,81 @@ pub mod dataproxy_user_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// PushReplica
+        /// CreateOrUpdateCredentials
         ///
         /// Status: BETA
+        ///
+        /// Authorized method that needs a aruna-token to exchange for dataproxy
+        /// specific S3AccessKey and S3SecretKey
+        pub async fn create_or_update_credentials(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateOrUpdateCredentialsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateOrUpdateCredentialsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.dataproxy.services.v2.DataproxyUserService/CreateOrUpdateCredentials",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.dataproxy.services.v2.DataproxyUserService",
+                        "CreateOrUpdateCredentials",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// RevokeCredentials
+        ///
+        /// Status: BETA
+        ///
+        /// Authorized method that needs a aruna-token
+        /// Revokes the current credentials
+        pub async fn revoke_credentials(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RevokeCredentialsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RevokeCredentialsResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.dataproxy.services.v2.DataproxyUserService/RevokeCredentials",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.dataproxy.services.v2.DataproxyUserService",
+                        "RevokeCredentials",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// PushReplica
+        ///
+        /// Status: UNIMPLEMENTED
         ///
         /// Manually transfers a replica to another data-proxy
         pub async fn push_replica(
@@ -1617,7 +1800,7 @@ pub mod dataproxy_user_service_client {
         }
         /// PullReplica
         ///
-        /// Status: BETA
+        /// Status: UNIMPLEMENTED
         ///
         /// Manually request data to be transferred to this data-proxy
         pub async fn pull_replica(
@@ -1650,9 +1833,9 @@ pub mod dataproxy_user_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// PullReplica
+        /// ReplicationStatus
         ///
-        /// Status: BETA
+        /// Status: UNIMPLEMENTED
         ///
         /// Status of the previous replication request
         pub async fn replication_status(
@@ -1687,6 +1870,130 @@ pub mod dataproxy_user_service_client {
         }
     }
 }
+/// Generated client implementations.
+pub mod dataproxy_ingestion_service_client {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct DataproxyIngestionServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl DataproxyIngestionServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> DataproxyIngestionServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::BoxBody>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> DataproxyIngestionServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
+        {
+            DataproxyIngestionServiceClient::new(
+                InterceptedService::new(inner, interceptor),
+            )
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        /// IngestExistingObject
+        ///
+        /// Status: ALPHA
+        ///
+        /// Ingest an existing object into backend
+        pub async fn ingest_existing_object(
+            &mut self,
+            request: impl tonic::IntoRequest<super::IngestExistingObjectRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::IngestExistingObjectResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.dataproxy.services.v2.DataproxyIngestionService/IngestExistingObject",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.dataproxy.services.v2.DataproxyIngestionService",
+                        "IngestExistingObject",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
 /// Generated server implementations.
 pub mod dataproxy_replication_service_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -1714,7 +2021,7 @@ pub mod dataproxy_replication_service_server {
         >;
         /// InitReplication
         ///
-        /// Status: ALPHA
+        /// Status: UNIMPLEMENTED
         ///
         /// Provides the necessary url to init replication
         async fn push_replication(
@@ -2681,9 +2988,35 @@ pub mod dataproxy_user_service_server {
             tonic::Response<super::GetCredentialsResponse>,
             tonic::Status,
         >;
-        /// PushReplica
+        /// CreateOrUpdateCredentials
         ///
         /// Status: BETA
+        ///
+        /// Authorized method that needs a aruna-token to exchange for dataproxy
+        /// specific S3AccessKey and S3SecretKey
+        async fn create_or_update_credentials(
+            &self,
+            request: tonic::Request<super::CreateOrUpdateCredentialsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CreateOrUpdateCredentialsResponse>,
+            tonic::Status,
+        >;
+        /// RevokeCredentials
+        ///
+        /// Status: BETA
+        ///
+        /// Authorized method that needs a aruna-token
+        /// Revokes the current credentials
+        async fn revoke_credentials(
+            &self,
+            request: tonic::Request<super::RevokeCredentialsRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RevokeCredentialsResponse>,
+            tonic::Status,
+        >;
+        /// PushReplica
+        ///
+        /// Status: UNIMPLEMENTED
         ///
         /// Manually transfers a replica to another data-proxy
         async fn push_replica(
@@ -2695,7 +3028,7 @@ pub mod dataproxy_user_service_server {
         >;
         /// PullReplica
         ///
-        /// Status: BETA
+        /// Status: UNIMPLEMENTED
         ///
         /// Manually request data to be transferred to this data-proxy
         async fn pull_replica(
@@ -2705,9 +3038,9 @@ pub mod dataproxy_user_service_server {
             tonic::Response<super::PullReplicaResponse>,
             tonic::Status,
         >;
-        /// PullReplica
+        /// ReplicationStatus
         ///
-        /// Status: BETA
+        /// Status: UNIMPLEMENTED
         ///
         /// Status of the previous replication request
         async fn replication_status(
@@ -2833,6 +3166,111 @@ pub mod dataproxy_user_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetCredentialsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.dataproxy.services.v2.DataproxyUserService/CreateOrUpdateCredentials" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateOrUpdateCredentialsSvc<T: DataproxyUserService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: DataproxyUserService,
+                    > tonic::server::UnaryService<
+                        super::CreateOrUpdateCredentialsRequest,
+                    > for CreateOrUpdateCredentialsSvc<T> {
+                        type Response = super::CreateOrUpdateCredentialsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::CreateOrUpdateCredentialsRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DataproxyUserService>::create_or_update_credentials(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateOrUpdateCredentialsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.dataproxy.services.v2.DataproxyUserService/RevokeCredentials" => {
+                    #[allow(non_camel_case_types)]
+                    struct RevokeCredentialsSvc<T: DataproxyUserService>(pub Arc<T>);
+                    impl<
+                        T: DataproxyUserService,
+                    > tonic::server::UnaryService<super::RevokeCredentialsRequest>
+                    for RevokeCredentialsSvc<T> {
+                        type Response = super::RevokeCredentialsResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::RevokeCredentialsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DataproxyUserService>::revoke_credentials(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RevokeCredentialsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -3032,5 +3470,199 @@ pub mod dataproxy_user_service_server {
     impl<T: DataproxyUserService> tonic::server::NamedService
     for DataproxyUserServiceServer<T> {
         const NAME: &'static str = "aruna.api.dataproxy.services.v2.DataproxyUserService";
+    }
+}
+/// Generated server implementations.
+pub mod dataproxy_ingestion_service_server {
+    #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
+    use tonic::codegen::*;
+    /// Generated trait containing gRPC methods that should be implemented for use with DataproxyIngestionServiceServer.
+    #[async_trait]
+    pub trait DataproxyIngestionService: Send + Sync + 'static {
+        /// IngestExistingObject
+        ///
+        /// Status: ALPHA
+        ///
+        /// Ingest an existing object into backend
+        async fn ingest_existing_object(
+            &self,
+            request: tonic::Request<super::IngestExistingObjectRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::IngestExistingObjectResponse>,
+            tonic::Status,
+        >;
+    }
+    #[derive(Debug)]
+    pub struct DataproxyIngestionServiceServer<T: DataproxyIngestionService> {
+        inner: _Inner<T>,
+        accept_compression_encodings: EnabledCompressionEncodings,
+        send_compression_encodings: EnabledCompressionEncodings,
+        max_decoding_message_size: Option<usize>,
+        max_encoding_message_size: Option<usize>,
+    }
+    struct _Inner<T>(Arc<T>);
+    impl<T: DataproxyIngestionService> DataproxyIngestionServiceServer<T> {
+        pub fn new(inner: T) -> Self {
+            Self::from_arc(Arc::new(inner))
+        }
+        pub fn from_arc(inner: Arc<T>) -> Self {
+            let inner = _Inner(inner);
+            Self {
+                inner,
+                accept_compression_encodings: Default::default(),
+                send_compression_encodings: Default::default(),
+                max_decoding_message_size: None,
+                max_encoding_message_size: None,
+            }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
+        where
+            F: tonic::service::Interceptor,
+        {
+            InterceptedService::new(Self::new(inner), interceptor)
+        }
+        /// Enable decompressing requests with the given encoding.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.accept_compression_encodings.enable(encoding);
+            self
+        }
+        /// Compress responses with the given encoding, if the client supports it.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.send_compression_encodings.enable(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.max_decoding_message_size = Some(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.max_encoding_message_size = Some(limit);
+            self
+        }
+    }
+    impl<T, B> tonic::codegen::Service<http::Request<B>>
+    for DataproxyIngestionServiceServer<T>
+    where
+        T: DataproxyIngestionService,
+        B: Body + Send + 'static,
+        B::Error: Into<StdError> + Send + 'static,
+    {
+        type Response = http::Response<tonic::body::BoxBody>;
+        type Error = std::convert::Infallible;
+        type Future = BoxFuture<Self::Response, Self::Error>;
+        fn poll_ready(
+            &mut self,
+            _cx: &mut Context<'_>,
+        ) -> Poll<std::result::Result<(), Self::Error>> {
+            Poll::Ready(Ok(()))
+        }
+        fn call(&mut self, req: http::Request<B>) -> Self::Future {
+            let inner = self.inner.clone();
+            match req.uri().path() {
+                "/aruna.api.dataproxy.services.v2.DataproxyIngestionService/IngestExistingObject" => {
+                    #[allow(non_camel_case_types)]
+                    struct IngestExistingObjectSvc<T: DataproxyIngestionService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: DataproxyIngestionService,
+                    > tonic::server::UnaryService<super::IngestExistingObjectRequest>
+                    for IngestExistingObjectSvc<T> {
+                        type Response = super::IngestExistingObjectResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::IngestExistingObjectRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as DataproxyIngestionService>::ingest_existing_object(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = IngestExistingObjectSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
+            }
+        }
+    }
+    impl<T: DataproxyIngestionService> Clone for DataproxyIngestionServiceServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self {
+                inner,
+                accept_compression_encodings: self.accept_compression_encodings,
+                send_compression_encodings: self.send_compression_encodings,
+                max_decoding_message_size: self.max_decoding_message_size,
+                max_encoding_message_size: self.max_encoding_message_size,
+            }
+        }
+    }
+    impl<T: DataproxyIngestionService> Clone for _Inner<T> {
+        fn clone(&self) -> Self {
+            Self(Arc::clone(&self.0))
+        }
+    }
+    impl<T: std::fmt::Debug> std::fmt::Debug for _Inner<T> {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{:?}", self.0)
+        }
+    }
+    impl<T: DataproxyIngestionService> tonic::server::NamedService
+    for DataproxyIngestionServiceServer<T> {
+        const NAME: &'static str = "aruna.api.dataproxy.services.v2.DataproxyIngestionService";
     }
 }
