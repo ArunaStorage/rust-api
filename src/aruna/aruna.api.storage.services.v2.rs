@@ -4610,27 +4610,41 @@ pub struct GetPubkeysResponse {
     #[prost(message, repeated, tag = "1")]
     pub pubkeys: ::prost::alloc::vec::Vec<super::super::models::v2::Pubkey>,
 }
+/// -------------------------------------
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Announcement {
+    /// Announcement id
     #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
+    pub announcement_id: ::prost::alloc::string::String,
+    /// Announcement type
+    #[prost(enumeration = "super::super::models::v2::AnnouncementType", tag = "2")]
+    pub announcement_type: i32,
+    /// Announcement title
+    #[prost(string, tag = "3")]
+    pub title: ::prost::alloc::string::String,
+    /// Short announcement summary
+    #[prost(string, tag = "4")]
+    pub teaser: ::prost::alloc::string::String,
+    /// URL for announcement preview image
+    #[prost(string, tag = "5")]
+    pub image_url: ::prost::alloc::string::String,
+    /// Announcement content text
+    #[prost(string, tag = "6")]
     pub content: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
+    /// Initial announcement author
+    #[prost(string, tag = "7")]
+    pub created_by: ::prost::alloc::string::String,
+    /// Initial creation timestamp
+    #[prost(message, optional, tag = "8")]
     pub created_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
-}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetAnnouncementsRequest {}
-#[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetAnnouncementsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub announcements: ::prost::alloc::vec::Vec<Announcement>,
+    /// Author responsible for the last modification
+    #[prost(string, tag = "9")]
+    pub modified_by: ::prost::alloc::string::String,
+    /// Last modification timestamp
+    #[prost(message, optional, tag = "10")]
+    pub modified_at: ::core::option::Option<::prost_wkt_types::Timestamp>,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -4647,6 +4661,52 @@ pub struct SetAnnouncementsRequest {
 pub struct SetAnnouncementsResponse {
     #[prost(message, repeated, tag = "1")]
     pub announcements: ::prost::alloc::vec::Vec<Announcement>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnouncementsRequest {
+    #[prost(string, repeated, tag = "1")]
+    pub announcement_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "2")]
+    pub page: ::core::option::Option<super::super::models::v2::PageRequest>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnouncementsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub announcements: ::prost::alloc::vec::Vec<Announcement>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnouncementsByTypeRequest {
+    #[prost(enumeration = "super::super::models::v2::AnnouncementType", tag = "1")]
+    pub announcement_type: i32,
+    #[prost(message, optional, tag = "2")]
+    pub page: ::core::option::Option<super::super::models::v2::PageRequest>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnouncementsByTypeResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub announcements: ::prost::alloc::vec::Vec<Announcement>,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnouncementRequest {
+    #[prost(string, tag = "1")]
+    pub announcement_id: ::prost::alloc::string::String,
+}
+#[derive(serde::Deserialize, serde::Serialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnouncementResponse {
+    #[prost(message, optional, tag = "1")]
+    pub announcement: ::core::option::Option<Announcement>,
 }
 /// Generated client implementations.
 pub mod storage_status_service_client {
@@ -4846,11 +4906,13 @@ pub mod storage_status_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// GetAnnouncements
+        /// Get Announcements
         ///
         /// Status: BETA
         ///
-        /// Query global announcements
+        /// Query global announcements optionally filtered by specific ids.
+        ///  - Returns all announcements if no ids are provided
+        ///  - Returns only the specific announcements if ids are provided
         pub async fn get_announcements(
             &mut self,
             request: impl tonic::IntoRequest<super::GetAnnouncementsRequest>,
@@ -4877,6 +4939,76 @@ pub mod storage_status_service_client {
                     GrpcMethod::new(
                         "aruna.api.storage.services.v2.StorageStatusService",
                         "GetAnnouncements",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// GetAnnouncementsByType
+        ///
+        /// Status: BETA
+        ///
+        /// Query global announcements by type
+        pub async fn get_announcements_by_type(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetAnnouncementsByTypeRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAnnouncementsByTypeResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.StorageStatusService/GetAnnouncementsByType",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.StorageStatusService",
+                        "GetAnnouncementsByType",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// Get a specific Announcement
+        ///
+        /// Status: BETA
+        ///
+        /// Query a specific global announcement by its id
+        pub async fn get_announcement(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetAnnouncementRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAnnouncementResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/aruna.api.storage.services.v2.StorageStatusService/GetAnnouncement",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "aruna.api.storage.services.v2.StorageStatusService",
+                        "GetAnnouncement",
                     ),
                 );
             self.inner.unary(req, path, codec).await
@@ -4962,16 +5094,42 @@ pub mod storage_status_service_server {
             tonic::Response<super::GetPubkeysResponse>,
             tonic::Status,
         >;
-        /// GetAnnouncements
+        /// Get Announcements
         ///
         /// Status: BETA
         ///
-        /// Query global announcements
+        /// Query global announcements optionally filtered by specific ids.
+        ///  - Returns all announcements if no ids are provided
+        ///  - Returns only the specific announcements if ids are provided
         async fn get_announcements(
             &self,
             request: tonic::Request<super::GetAnnouncementsRequest>,
         ) -> std::result::Result<
             tonic::Response<super::GetAnnouncementsResponse>,
+            tonic::Status,
+        >;
+        /// GetAnnouncementsByType
+        ///
+        /// Status: BETA
+        ///
+        /// Query global announcements by type
+        async fn get_announcements_by_type(
+            &self,
+            request: tonic::Request<super::GetAnnouncementsByTypeRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAnnouncementsByTypeResponse>,
+            tonic::Status,
+        >;
+        /// Get a specific Announcement
+        ///
+        /// Status: BETA
+        ///
+        /// Query a specific global announcement by its id
+        async fn get_announcement(
+            &self,
+            request: tonic::Request<super::GetAnnouncementRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetAnnouncementResponse>,
             tonic::Status,
         >;
         /// SetAnnouncements
@@ -5256,6 +5414,108 @@ pub mod storage_status_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetAnnouncementsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.StorageStatusService/GetAnnouncementsByType" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetAnnouncementsByTypeSvc<T: StorageStatusService>(
+                        pub Arc<T>,
+                    );
+                    impl<
+                        T: StorageStatusService,
+                    > tonic::server::UnaryService<super::GetAnnouncementsByTypeRequest>
+                    for GetAnnouncementsByTypeSvc<T> {
+                        type Response = super::GetAnnouncementsByTypeResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetAnnouncementsByTypeRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as StorageStatusService>::get_announcements_by_type(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetAnnouncementsByTypeSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/aruna.api.storage.services.v2.StorageStatusService/GetAnnouncement" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetAnnouncementSvc<T: StorageStatusService>(pub Arc<T>);
+                    impl<
+                        T: StorageStatusService,
+                    > tonic::server::UnaryService<super::GetAnnouncementRequest>
+                    for GetAnnouncementSvc<T> {
+                        type Response = super::GetAnnouncementResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetAnnouncementRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as StorageStatusService>::get_announcement(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetAnnouncementSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

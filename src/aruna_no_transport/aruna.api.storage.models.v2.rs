@@ -558,6 +558,47 @@ pub struct Object {
     #[prost(message, repeated, tag = "18")]
     pub rule_bindings: ::prost::alloc::vec::Vec<RuleBinding>,
 }
+/// --------------- ENUMS ------------------------
+/// Defines the public announcement type
+#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AnnouncementType {
+    Unspecified = 0,
+    Orga = 1,
+    Release = 2,
+    Update = 3,
+    Maintenance = 4,
+    Blog = 5,
+}
+impl AnnouncementType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            AnnouncementType::Unspecified => "ANNOUNCEMENT_TYPE_UNSPECIFIED",
+            AnnouncementType::Orga => "ANNOUNCEMENT_TYPE_ORGA",
+            AnnouncementType::Release => "ANNOUNCEMENT_TYPE_RELEASE",
+            AnnouncementType::Update => "ANNOUNCEMENT_TYPE_UPDATE",
+            AnnouncementType::Maintenance => "ANNOUNCEMENT_TYPE_MAINTENANCE",
+            AnnouncementType::Blog => "ANNOUNCEMENT_TYPE_BLOG",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ANNOUNCEMENT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "ANNOUNCEMENT_TYPE_ORGA" => Some(Self::Orga),
+            "ANNOUNCEMENT_TYPE_RELEASE" => Some(Self::Release),
+            "ANNOUNCEMENT_TYPE_UPDATE" => Some(Self::Update),
+            "ANNOUNCEMENT_TYPE_MAINTENANCE" => Some(Self::Maintenance),
+            "ANNOUNCEMENT_TYPE_BLOG" => Some(Self::Blog),
+            _ => None,
+        }
+    }
+}
 /// Dataclass defines the confidentiality of the object
 #[derive(serde::Deserialize, serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
