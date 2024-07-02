@@ -31,7 +31,6 @@ jobs:
         run: |
           git submodule deinit --force --all
           git submodule update --init --remote --recursive
-          git pull --prune --recurse-submodules --force
       - name: Compile protofiles with rust
         run: cargo build --release
       - name: Commit files
