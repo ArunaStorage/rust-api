@@ -4,7 +4,7 @@ description = "The Rust API build for the Aruna Object Storage (AOS)"
 edition = "2021"
 license = "Apache-2.0"
 name = "aruna-rust-api"
-version = "2.0.0-beta.15.1"
+version = "2.0.0"
 include = ["src/aruna", "src/aruna_no_transport", "src/lib.rs"]
 
 
