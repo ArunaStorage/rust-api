@@ -11,15 +11,15 @@ include = ["src/aruna", "src/aruna_no_transport", "src/lib.rs"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-prost = "0.12.3"
-prost-types = "0.12.3"
-prost-wkt-types = "0.5.0"
-serde = {version="1.0.197", features = ["derive"]}
-serde_json = "1.0.114"
-tonic = {version="0.11.0", default-features = false, features=["codegen", "prost"]}
+prost = "0.13.2"
+prost-types = "0.13.2"
+prost-wkt-types = "0.6.0"
+serde = {version="1.0.209", features = ["derive"]}
+serde_json = "1.0.127"
+tonic = {version="0.12.2", default-features = false, features=["codegen", "prost"]}
 
 [build-dependencies]
-tonic-build = "0.11.0"
+tonic-build = "0.12.2"
 
 [features]
 default = ["transport"]

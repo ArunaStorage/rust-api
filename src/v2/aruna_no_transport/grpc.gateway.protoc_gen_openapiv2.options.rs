@@ -28,7 +28,6 @@
 ///   };
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Swagger {
     /// Specifies the OpenAPI Specification version being used. It can be
@@ -123,7 +122,6 @@ pub struct Swagger {
 ///     }
 ///   }
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Operation {
     /// A list of tags for API documentation control. Tags can be used for logical
@@ -189,7 +187,6 @@ pub struct Operation {
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#headerObject>
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Header {
     /// `Description` is a short description of the header.
@@ -220,7 +217,6 @@ pub struct Header {
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#responseObject>
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {
     /// `Description` is a short description of the response.
@@ -278,7 +274,6 @@ pub struct Response {
 ///   };
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Info {
     /// The title of the application.
@@ -328,7 +323,6 @@ pub struct Info {
 ///   };
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contact {
     /// The identifying name of the contact person/organization.
@@ -364,7 +358,6 @@ pub struct Contact {
 ///   };
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct License {
     /// The license name used for the API.
@@ -392,7 +385,6 @@ pub struct License {
 ///   };
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExternalDocumentation {
     /// A short description of the target documentation. GFM syntax can be used for
@@ -410,7 +402,6 @@ pub struct ExternalDocumentation {
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject>
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Schema {
     #[prost(message, optional, tag = "1")]
@@ -467,7 +458,6 @@ pub struct Schema {
 ///   }
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct JsonSchema {
     /// Ref is used to define an external reference to include in the message.
@@ -554,7 +544,6 @@ pub mod json_schema {
     /// generating the OpenAPI v2 file. These properties are not defined by
     /// OpenAPIv2, but they are used to control the generation.
     #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct FieldConfiguration {
         /// Alternative parameter name when used as path parameter. If set, this will
@@ -626,7 +615,6 @@ pub mod json_schema {
 /// <https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#tagObject>
 ///
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Tag {
     /// A short description for the tag. GFM syntax can be used for rich text
@@ -647,7 +635,6 @@ pub struct Tag {
 /// specification. This does not enforce the security schemes on the operations
 /// and only serves to provide the relevant details for each scheme.
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SecurityDefinitions {
     /// A single security scheme definition, mapping a "name" to the scheme it
@@ -669,7 +656,6 @@ pub struct SecurityDefinitions {
 /// a header or as a query parameter) and OAuth2's common flows (implicit,
 /// password, application and access code).
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SecurityScheme {
     /// The type of the security scheme. Valid values are "basic",
@@ -863,7 +849,6 @@ pub mod security_scheme {
 /// The name used for each property MUST correspond to a security scheme
 /// declared in the Security Definitions.
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SecurityRequirement {
     /// Each name must correspond to a security scheme which is declared in
@@ -882,7 +867,6 @@ pub mod security_requirement {
     /// scope names required for the execution. For other security scheme types,
     /// the array MUST be empty.
     #[derive(serde::Deserialize, serde::Serialize)]
-    #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct SecurityRequirementValue {
         #[prost(string, repeated, tag = "1")]
@@ -896,7 +880,6 @@ pub mod security_requirement {
 ///
 /// Lists the available scopes for an OAuth2 security scheme.
 #[derive(serde::Deserialize, serde::Serialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Scopes {
     /// Maps between a name of a scope to a short description of it (as the value
