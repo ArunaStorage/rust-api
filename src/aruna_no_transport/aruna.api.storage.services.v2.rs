@@ -5713,6 +5713,11 @@ pub struct FinishObjectStagingRequest {
     /// (optional)
     #[prost(message, repeated, tag = "4")]
     pub completed_parts: ::prost::alloc::vec::Vec<CompletedPart>,
+    /// If the upload was multipart, this is the upload id which should be completed.
+    /// Should be empty if the upload was not multipart.
+    /// (optional)
+    #[prost(string, tag = "5")]
+    pub upload_id: ::prost::alloc::string::String,
 }
 #[derive(serde::Deserialize, serde::Serialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
